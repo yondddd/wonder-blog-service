@@ -1,0 +1,627 @@
+2024-05-02 00:00:00.014  INFO 14088 --- [quartzScheduler_Worker-1] com.yond.util.quartz.ScheduleJobInfo     : 任务准备执行，任务ID：2
+2024-05-02 00:00:00.029 DEBUG 14088 --- [pool-1-thread-1] c.y.m.V.getUUIDAndCreateTimeByYesterday  : ==>  Preparing: select uuid, create_time from visit_log where date(create_time)=date_sub(curdate(), interval 1 day) order by create_time desc
+2024-05-02 00:00:00.029 DEBUG 14088 --- [pool-1-thread-1] c.y.m.V.getUUIDAndCreateTimeByYesterday  : ==> Parameters: 
+2024-05-02 00:00:00.030 DEBUG 14088 --- [pool-1-thread-1] c.y.m.V.getUUIDAndCreateTimeByYesterday  : <==      Total: 0
+2024-05-02 00:00:00.036 DEBUG 14088 --- [pool-1-thread-1] c.y.m.VisitRecordMapper.saveVisitRecord  : ==>  Preparing: insert into visit_record (pv, uv, date) values (?, ?, ?)
+2024-05-02 00:00:00.037 DEBUG 14088 --- [pool-1-thread-1] c.y.m.VisitRecordMapper.saveVisitRecord  : ==> Parameters: 0(Integer), 0(Integer), 05-01(String)
+2024-05-02 00:00:00.038 DEBUG 14088 --- [pool-1-thread-1] c.y.m.VisitRecordMapper.saveVisitRecord  : <==    Updates: 1
+2024-05-02 00:00:00.041 DEBUG 14088 --- [pool-1-thread-1] c.y.m.V.getNewVisitorIpSourceByYesterday : ==>  Preparing: select ip_source from visitor where date(create_time)=date_sub(curdate(), interval 1 day)
+2024-05-02 00:00:00.041 DEBUG 14088 --- [pool-1-thread-1] c.y.m.V.getNewVisitorIpSourceByYesterday : ==> Parameters: 
+2024-05-02 00:00:00.042 DEBUG 14088 --- [pool-1-thread-1] c.y.m.V.getNewVisitorIpSourceByYesterday : <==      Total: 0
+2024-05-02 00:00:00.042  INFO 14088 --- [quartzScheduler_Worker-1] com.yond.util.quartz.ScheduleJobInfo     : 任务执行成功，任务ID：2，总共耗时：28 毫秒
+2024-05-02 00:00:00.043 DEBUG 14088 --- [quartzScheduler_Worker-1] c.y.m.ScheduleJobLogMapper.saveJobLog    : ==>  Preparing: insert into schedule_job_log (job_id, bean_name, method_name, params, status, error, times, create_time) values (?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 00:00:00.043 DEBUG 14088 --- [quartzScheduler_Worker-1] c.y.m.ScheduleJobLogMapper.saveJobLog    : ==> Parameters: 2(Long), visitorSyncScheduleTask(String), syncVisitInfoToDatabase(String), (String), true(Boolean), null, 28(Integer), 2024-05-02 00:00:00.014(Timestamp)
+2024-05-02 00:00:00.044 DEBUG 14088 --- [quartzScheduler_Worker-1] c.y.m.ScheduleJobLogMapper.saveJobLog    : <==    Updates: 1
+2024-05-02 01:00:00.005  INFO 14088 --- [quartzScheduler_Worker-2] com.yond.util.quartz.ScheduleJobInfo     : 任务准备执行，任务ID：1
+2024-05-02 01:00:00.012 DEBUG 14088 --- [pool-3-thread-1] com.yond.mapper.BlogMapper.updateViews   : ==>  Preparing: update blog set views=? where id=?
+2024-05-02 01:00:00.012 DEBUG 14088 --- [pool-3-thread-1] com.yond.mapper.BlogMapper.updateViews   : ==> Parameters: 1(Integer), 1(Long)
+2024-05-02 01:00:00.014 DEBUG 14088 --- [pool-3-thread-1] com.yond.mapper.BlogMapper.updateViews   : <==    Updates: 1
+2024-05-02 01:00:00.018  INFO 14088 --- [quartzScheduler_Worker-2] com.yond.util.quartz.ScheduleJobInfo     : 任务执行成功，任务ID：1，总共耗时：13 毫秒
+2024-05-02 01:00:00.019 DEBUG 14088 --- [quartzScheduler_Worker-2] c.y.m.ScheduleJobLogMapper.saveJobLog    : ==>  Preparing: insert into schedule_job_log (job_id, bean_name, method_name, params, status, error, times, create_time) values (?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 01:00:00.021 DEBUG 14088 --- [quartzScheduler_Worker-2] c.y.m.ScheduleJobLogMapper.saveJobLog    : ==> Parameters: 1(Long), redisSyncScheduleTask(String), syncBlogViewsToDatabase(String), (String), true(Boolean), null, 13(Integer), 2024-05-02 01:00:00.005(Timestamp)
+2024-05-02 01:00:00.022 DEBUG 14088 --- [quartzScheduler_Worker-2] c.y.m.ScheduleJobLogMapper.saveJobLog    : <==    Updates: 1
+2024-05-02 07:54:22.996  INFO 10780 --- [restartedMain] com.yond.BlogApiApplication              : Starting BlogApiApplication on DESKTOP-IUV66QC with PID 10780 (F:\back\blog\blog-service\blog-server\target\classes started by yond in F:\back\blog\blog-service)
+2024-05-02 07:54:22.998 DEBUG 10780 --- [restartedMain] com.yond.BlogApiApplication              : Running with Spring Boot v2.2.7.RELEASE, Spring v5.2.6.RELEASE
+2024-05-02 07:54:22.998  INFO 10780 --- [restartedMain] com.yond.BlogApiApplication              : The following profiles are active: dev
+2024-05-02 07:54:23.052  INFO 10780 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-02 07:54:23.052  INFO 10780 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-02 07:54:24.634  INFO 10780 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2024-05-02 07:54:24.636  INFO 10780 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-05-02 07:54:24.668  INFO 10780 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19ms. Found 0 Redis repository interfaces.
+2024-05-02 07:54:25.032  INFO 10780 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.retry.annotation.RetryConfiguration' of type [org.springframework.retry.annotation.RetryConfiguration$$EnhancerBySpringCGLIB$$b61baa3b] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2024-05-02 07:54:25.796  INFO 10780 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8090 (http)
+2024-05-02 07:54:25.805  INFO 10780 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-02 07:54:25.806  INFO 10780 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.34]
+2024-05-02 07:54:25.808  INFO 10780 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : Loaded APR based Apache Tomcat Native library [1.2.26] using APR version [1.7.0].
+2024-05-02 07:54:25.808  INFO 10780 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+2024-05-02 07:54:25.808  INFO 10780 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2024-05-02 07:54:25.815  INFO 10780 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 1.1.1i  8 Dec 2020]
+2024-05-02 07:54:25.876  INFO 10780 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-02 07:54:25.876  INFO 10780 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 2824 ms
+2024-05-02 07:54:26.480  INFO 10780 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : 
+2024-05-02 07:54:26.482  INFO 10780 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : /-----------------------------------------------------------\
+2024-05-02 07:54:26.482  INFO 10780 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : | Yauaa 7.11.0 (v7.11.0 @ 2023-01-24T21:50:03Z)             |
+2024-05-02 07:54:26.482  INFO 10780 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : +-----------------------------------------------------------+
+2024-05-02 07:54:26.482  INFO 10780 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : | For more information: https://yauaa.basjes.nl             |
+2024-05-02 07:54:26.482  INFO 10780 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : | Copyright (C) 2013-2023 Niels Basjes - License Apache 2.0 |
+2024-05-02 07:54:26.482  INFO 10780 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : \-----------------------------------------------------------/
+2024-05-02 07:54:26.482  INFO 10780 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : 
+2024-05-02 07:54:26.553  INFO 10780 --- [restartedMain] n.b.parse.useragent.config.ConfigLoader  : - Loaded 111 files in   65 ms using expression: classpath*:UserAgents/**/*.yaml
+2024-05-02 07:54:27.000  INFO 10780 --- [restartedMain] n.b.p.u.a.UserAgentStringMatchMaker      : Building all needed matchers for the requested 11 fields.
+2024-05-02 07:54:27.670  INFO 10780 --- [restartedMain] io.lettuce.core.EpollProvider            : Starting without optional epoll library
+2024-05-02 07:54:27.671  INFO 10780 --- [restartedMain] io.lettuce.core.KqueueProvider           : Starting without optional kqueue library
+2024-05-02 07:54:28.202  INFO 10780 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Using default implementation for ThreadExecutor
+2024-05-02 07:54:28.219  INFO 10780 --- [restartedMain] org.quartz.core.SchedulerSignalerImpl    : Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2024-05-02 07:54:28.219  INFO 10780 --- [restartedMain] org.quartz.core.QuartzScheduler          : Quartz Scheduler v.2.3.2 created.
+2024-05-02 07:54:28.220  INFO 10780 --- [restartedMain] org.quartz.simpl.RAMJobStore             : RAMJobStore initialized.
+2024-05-02 07:54:28.220  INFO 10780 --- [restartedMain] org.quartz.core.QuartzScheduler          : Scheduler meta-data: Quartz Scheduler (v2.3.2) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2024-05-02 07:54:28.220  INFO 10780 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2024-05-02 07:54:28.221  INFO 10780 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler version: 2.3.2
+2024-05-02 07:54:28.221  INFO 10780 --- [restartedMain] org.quartz.core.QuartzScheduler          : JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@7182276d
+2024-05-02 07:54:28.260  INFO 10780 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-05-02 07:54:28.530  INFO 10780 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-05-02 07:54:28.535 DEBUG 10780 --- [restartedMain] c.y.mapper.ScheduleJobMapper.getJobList  : ==>  Preparing: select job_id, bean_name, method_name, params, cron, status, remark, create_time from schedule_job
+2024-05-02 07:54:28.552 DEBUG 10780 --- [restartedMain] c.y.mapper.ScheduleJobMapper.getJobList  : ==> Parameters: 
+2024-05-02 07:54:28.568 DEBUG 10780 --- [restartedMain] c.y.mapper.ScheduleJobMapper.getJobList  : <==      Total: 2
+2024-05-02 07:54:28.901  INFO 10780 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2024-05-02 07:54:29.374  INFO 10780 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6878953f, org.springframework.security.web.context.SecurityContextPersistenceFilter@70fae8a9, org.springframework.security.web.header.HeaderWriterFilter@4d9e5bd0, org.springframework.web.filter.CorsFilter@7556fe6e, org.springframework.security.web.authentication.logout.LogoutFilter@44f0f470, com.yond.config.JwtLoginFilter@49287b8c, com.yond.config.JwtFilter@235945f2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@32120df5, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@45cce77e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@f24edcb, org.springframework.security.web.session.SessionManagementFilter@6b79387d, org.springframework.security.web.access.ExceptionTranslationFilter@fb8ee4f, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@c88fee1]
+2024-05-02 07:54:29.429  INFO 10780 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-02 07:54:29.441  INFO 10780 --- [restartedMain] o.s.s.quartz.SchedulerFactoryBean        : Starting Quartz Scheduler now
+2024-05-02 07:54:29.441  INFO 10780 --- [restartedMain] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2024-05-02 07:54:29.455  INFO 10780 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8090 (http) with context path ''
+2024-05-02 07:54:29.457  INFO 10780 --- [restartedMain] com.yond.BlogApiApplication              : Started BlogApiApplication in 6.852 seconds (JVM running for 7.318)
+2024-05-02 07:54:42.077  INFO 10780 --- [http-nio-8090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-05-02 07:54:42.077  INFO 10780 --- [http-nio-8090-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-05-02 07:54:42.084  INFO 10780 --- [http-nio-8090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2024-05-02 07:54:42.178 DEBUG 10780 --- [http-nio-8090-exec-3] stByLimitNumAndIsPublishedAndIsRecommend : ==>  Preparing: select id, title, password, create_time, first_picture from blog where is_published=true and is_recommend=true order by rand() limit ?
+2024-05-02 07:54:42.179 DEBUG 10780 --- [http-nio-8090-exec-3] stByLimitNumAndIsPublishedAndIsRecommend : ==> Parameters: 5(Integer)
+2024-05-02 07:54:42.183 DEBUG 10780 --- [http-nio-8090-exec-3] stByLimitNumAndIsPublishedAndIsRecommend : <==      Total: 0
+2024-05-02 07:54:42.220 DEBUG 10780 --- [http-nio-8090-exec-4] com.yond.mapper.VisitorMapper.hasUUID    : ==>  Preparing: select ifnull((select 1 from visitor where uuid=? limit 1), 0)
+2024-05-02 07:54:42.221 DEBUG 10780 --- [http-nio-8090-exec-4] com.yond.mapper.VisitorMapper.hasUUID    : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String)
+2024-05-02 07:54:42.225 DEBUG 10780 --- [http-nio-8090-exec-4] com.yond.mapper.VisitorMapper.hasUUID    : <==      Total: 1
+2024-05-02 07:54:42.249  INFO 10780 --- [task-1] n.b.p.u.a.UserAgentStringMatchMaker      : Initializing Analyzer data structures
+2024-05-02 07:54:43.045  INFO 10780 --- [task-1] n.b.p.u.a.UserAgentStringMatchMaker      : Built in 795 msec : Hashmap 192397, Ranges map:2904
+2024-05-02 07:54:43.106 DEBUG 10780 --- [task-1] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 07:54:43.109 DEBUG 10780 --- [task-1] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /blogs(String), GET(String), {"pageNum":1}(String), 访问页面(String), 首页(String), 第1页(String), 198.18.0.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 79(Integer), 2024-05-02 07:54:42.234(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 07:54:43.112 DEBUG 10780 --- [task-1] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 07:54:43.913 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.V.countVisitLogByToday             : ==>  Preparing: select count(*) from visit_log where date(create_time)=curdate()
+2024-05-02 07:54:43.914 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.V.countVisitLogByToday             : ==> Parameters: 
+2024-05-02 07:54:43.914 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.V.countVisitLogByToday             : <==      Total: 1
+2024-05-02 07:54:43.916 DEBUG 10780 --- [http-nio-8090-exec-6] com.yond.mapper.BlogMapper.countBlog     : ==>  Preparing: select count(*) from blog
+2024-05-02 07:54:43.917 DEBUG 10780 --- [http-nio-8090-exec-6] com.yond.mapper.BlogMapper.countBlog     : ==> Parameters: 
+2024-05-02 07:54:43.971 DEBUG 10780 --- [http-nio-8090-exec-6] com.yond.mapper.BlogMapper.countBlog     : <==      Total: 1
+2024-05-02 07:54:43.972 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.mapper.CommentMapper.countComment    : ==>  Preparing: select count(*) from comment
+2024-05-02 07:54:43.972 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.mapper.CommentMapper.countComment    : ==> Parameters: 
+2024-05-02 07:54:44.020 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.mapper.CommentMapper.countComment    : <==      Total: 1
+2024-05-02 07:54:44.021 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.B.getCategoryBlogCountList         : ==>  Preparing: select category_id, count(category_id) as blog_count from blog group by category_id
+2024-05-02 07:54:44.021 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.B.getCategoryBlogCountList         : ==> Parameters: 
+2024-05-02 07:54:44.023 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.B.getCategoryBlogCountList         : <==      Total: 1
+2024-05-02 07:54:44.024 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.CategoryMapper.getCategoryList     : ==>  Preparing: select id, category_name from category order by id desc
+2024-05-02 07:54:44.024 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.CategoryMapper.getCategoryList     : ==> Parameters: 
+2024-05-02 07:54:44.026 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.CategoryMapper.getCategoryList     : <==      Total: 2
+2024-05-02 07:54:44.027 DEBUG 10780 --- [http-nio-8090-exec-6] c.yond.mapper.TagMapper.getTagBlogCount  : ==>  Preparing: select tag_id, count(tag_id) as blog_count from blog_tag group by tag_id
+2024-05-02 07:54:44.027 DEBUG 10780 --- [http-nio-8090-exec-6] c.yond.mapper.TagMapper.getTagBlogCount  : ==> Parameters: 
+2024-05-02 07:54:44.028 DEBUG 10780 --- [http-nio-8090-exec-6] c.yond.mapper.TagMapper.getTagBlogCount  : <==      Total: 1
+2024-05-02 07:54:44.028 DEBUG 10780 --- [http-nio-8090-exec-6] com.yond.mapper.TagMapper.getTagList     : ==>  Preparing: select id, tag_name, color from tag order by id desc
+2024-05-02 07:54:44.028 DEBUG 10780 --- [http-nio-8090-exec-6] com.yond.mapper.TagMapper.getTagList     : ==> Parameters: 
+2024-05-02 07:54:44.029 DEBUG 10780 --- [http-nio-8090-exec-6] com.yond.mapper.TagMapper.getTagList     : <==      Total: 1
+2024-05-02 07:54:44.030 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.V.getVisitRecordListByLimit        : ==>  Preparing: select pv, uv, date from visit_record order by id desc limit ?
+2024-05-02 07:54:44.030 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.V.getVisitRecordListByLimit        : ==> Parameters: 30(Integer)
+2024-05-02 07:54:44.031 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.V.getVisitRecordListByLimit        : <==      Total: 1
+2024-05-02 07:54:44.031 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.C.getCityVisitorList               : ==>  Preparing: select city, uv from city_visitor order by uv desc
+2024-05-02 07:54:44.031 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.C.getCityVisitorList               : ==> Parameters: 
+2024-05-02 07:54:44.032 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.C.getCityVisitorList               : <==      Total: 0
+2024-05-02 07:54:53.921 DEBUG 10780 --- [http-nio-8090-exec-8] .y.m.B.getListByTitleAndCategoryId_COUNT : ==>  Preparing: SELECT count(0) FROM blog AS b LEFT JOIN category AS c ON b.category_id = c.id
+2024-05-02 07:54:53.921 DEBUG 10780 --- [http-nio-8090-exec-8] .y.m.B.getListByTitleAndCategoryId_COUNT : ==> Parameters: 
+2024-05-02 07:54:53.922 DEBUG 10780 --- [http-nio-8090-exec-8] .y.m.B.getListByTitleAndCategoryId_COUNT : <==      Total: 1
+2024-05-02 07:54:53.925 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.B.getListByTitleAndCategoryId      : ==>  Preparing: SELECT b.id, b.title, b.first_picture, b.create_time, b.update_time, b.is_published, b.is_recommend, b.is_appreciation, b.is_comment_enabled, b.is_top, b.password, c.id AS category_id, c.category_name FROM blog AS b LEFT JOIN category AS c ON b.category_id = c.id order by create_time desc LIMIT ?
+2024-05-02 07:54:53.925 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.B.getListByTitleAndCategoryId      : ==> Parameters: 10(Integer)
+2024-05-02 07:54:53.928 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.B.getListByTitleAndCategoryId      : <==      Total: 1
+2024-05-02 07:54:53.929 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.CategoryMapper.getCategoryList     : ==>  Preparing: select id, category_name from category order by id desc
+2024-05-02 07:54:53.930 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.CategoryMapper.getCategoryList     : ==> Parameters: 
+2024-05-02 07:54:53.931 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.CategoryMapper.getCategoryList     : <==      Total: 2
+2024-05-02 07:54:54.483 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.MomentMapper.getMomentList_COUNT   : ==>  Preparing: SELECT count(0) FROM moment
+2024-05-02 07:54:54.483 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.MomentMapper.getMomentList_COUNT   : ==> Parameters: 
+2024-05-02 07:54:54.487 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.MomentMapper.getMomentList_COUNT   : <==      Total: 1
+2024-05-02 07:55:45.126 DEBUG 10780 --- [http-nio-8090-exec-3] com.yond.mapper.MomentMapper.saveMoment  : ==>  Preparing: insert into moment (content, create_time, likes, is_published) values (?, ?, ?, ?)
+2024-05-02 07:55:45.127 DEBUG 10780 --- [http-nio-8090-exec-3] com.yond.mapper.MomentMapper.saveMoment  : ==> Parameters: (String), 2024-05-02 07:55:45.125(Timestamp), 0(Integer), false(Boolean)
+2024-05-02 07:55:45.128 DEBUG 10780 --- [http-nio-8090-exec-3] com.yond.mapper.MomentMapper.saveMoment  : <==    Updates: 1
+2024-05-02 07:55:45.142 DEBUG 10780 --- [task-2] c.y.m.O.saveOperationLog                 : ==>  Preparing: insert into operation_log (username, uri, method, param, description, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 07:55:45.143 DEBUG 10780 --- [task-2] c.y.m.O.saveOperationLog                 : ==> Parameters: Admin(String), /admin/moment(String), POST(String), {"moment":{"id":1,"content":"","createTime":1714607745125,"likes":0,"published":false}}(String), 发布动态(String), 198.18.0.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 9(Integer), 2024-05-02 07:55:45.135(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 07:55:45.147 DEBUG 10780 --- [task-2] c.y.m.O.saveOperationLog                 : <==    Updates: 1
+2024-05-02 07:55:45.431 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.MomentMapper.getMomentList_COUNT   : ==>  Preparing: SELECT count(0) FROM moment
+2024-05-02 07:55:45.431 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.MomentMapper.getMomentList_COUNT   : ==> Parameters: 
+2024-05-02 07:55:45.471 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.MomentMapper.getMomentList_COUNT   : <==      Total: 1
+2024-05-02 07:55:45.472 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.mapper.MomentMapper.getMomentList    : ==>  Preparing: SELECT id, content, create_time, likes, is_published FROM moment order by create_time desc LIMIT ?
+2024-05-02 07:55:45.472 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.mapper.MomentMapper.getMomentList    : ==> Parameters: 10(Integer)
+2024-05-02 07:55:45.474 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.mapper.MomentMapper.getMomentList    : <==      Total: 1
+2024-05-02 07:55:49.670 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.MomentMapper.deleteMomentById      : ==>  Preparing: delete from moment where id=?
+2024-05-02 07:55:49.671 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.MomentMapper.deleteMomentById      : ==> Parameters: 1(Long)
+2024-05-02 07:55:49.674 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.MomentMapper.deleteMomentById      : <==    Updates: 1
+2024-05-02 07:55:49.682 DEBUG 10780 --- [task-3] c.y.m.O.saveOperationLog                 : ==>  Preparing: insert into operation_log (username, uri, method, param, description, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 07:55:49.683 DEBUG 10780 --- [task-3] c.y.m.O.saveOperationLog                 : ==> Parameters: Admin(String), /admin/moment(String), DELETE(String), {"id":1}(String), 删除动态(String), 198.18.0.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 11(Integer), 2024-05-02 07:55:49.681(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 07:55:49.685 DEBUG 10780 --- [task-3] c.y.m.O.saveOperationLog                 : <==    Updates: 1
+2024-05-02 07:55:49.692 DEBUG 10780 --- [http-nio-8090-exec-7] c.y.m.MomentMapper.getMomentList_COUNT   : ==>  Preparing: SELECT count(0) FROM moment
+2024-05-02 07:55:49.692 DEBUG 10780 --- [http-nio-8090-exec-7] c.y.m.MomentMapper.getMomentList_COUNT   : ==> Parameters: 
+2024-05-02 07:55:49.693 DEBUG 10780 --- [http-nio-8090-exec-7] c.y.m.MomentMapper.getMomentList_COUNT   : <==      Total: 1
+2024-05-02 08:04:16.023 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.C.getCategoryList_COUNT            : ==>  Preparing: SELECT count(0) FROM category
+2024-05-02 08:04:16.023 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.C.getCategoryList_COUNT            : ==> Parameters: 
+2024-05-02 08:04:16.077 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.C.getCategoryList_COUNT            : <==      Total: 1
+2024-05-02 08:04:16.078 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.CategoryMapper.getCategoryList     : ==>  Preparing: SELECT id, category_name FROM category order by id desc LIMIT ?
+2024-05-02 08:04:16.080 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.CategoryMapper.getCategoryList     : ==> Parameters: 10(Integer)
+2024-05-02 08:04:16.081 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.CategoryMapper.getCategoryList     : <==      Total: 2
+2024-05-02 08:04:16.954 DEBUG 10780 --- [http-nio-8090-exec-2] .y.m.B.getListByTitleAndCategoryId_COUNT : ==>  Preparing: SELECT count(0) FROM blog AS b LEFT JOIN category AS c ON b.category_id = c.id
+2024-05-02 08:04:16.955 DEBUG 10780 --- [http-nio-8090-exec-2] .y.m.B.getListByTitleAndCategoryId_COUNT : ==> Parameters: 
+2024-05-02 08:04:16.956 DEBUG 10780 --- [http-nio-8090-exec-2] .y.m.B.getListByTitleAndCategoryId_COUNT : <==      Total: 1
+2024-05-02 08:04:16.957 DEBUG 10780 --- [http-nio-8090-exec-2] c.y.m.B.getListByTitleAndCategoryId      : ==>  Preparing: SELECT b.id, b.title, b.first_picture, b.create_time, b.update_time, b.is_published, b.is_recommend, b.is_appreciation, b.is_comment_enabled, b.is_top, b.password, c.id AS category_id, c.category_name FROM blog AS b LEFT JOIN category AS c ON b.category_id = c.id order by create_time desc LIMIT ?
+2024-05-02 08:04:16.957 DEBUG 10780 --- [http-nio-8090-exec-2] c.y.m.B.getListByTitleAndCategoryId      : ==> Parameters: 10(Integer)
+2024-05-02 08:04:16.972 DEBUG 10780 --- [http-nio-8090-exec-2] c.y.m.B.getListByTitleAndCategoryId      : <==      Total: 1
+2024-05-02 08:04:16.973 DEBUG 10780 --- [http-nio-8090-exec-2] c.y.m.CategoryMapper.getCategoryList     : ==>  Preparing: select id, category_name from category order by id desc
+2024-05-02 08:04:16.973 DEBUG 10780 --- [http-nio-8090-exec-2] c.y.m.CategoryMapper.getCategoryList     : ==> Parameters: 
+2024-05-02 08:04:16.978 DEBUG 10780 --- [http-nio-8090-exec-2] c.y.m.CategoryMapper.getCategoryList     : <==      Total: 2
+2024-05-02 08:04:18.743 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.m.CategoryMapper.getCategoryList     : ==>  Preparing: select id, category_name from category order by id desc
+2024-05-02 08:04:18.743 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.m.CategoryMapper.getCategoryList     : ==> Parameters: 
+2024-05-02 08:04:18.744 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.m.CategoryMapper.getCategoryList     : <==      Total: 2
+2024-05-02 08:04:18.745 DEBUG 10780 --- [http-nio-8090-exec-5] com.yond.mapper.TagMapper.getTagList     : ==>  Preparing: select id, tag_name, color from tag order by id desc
+2024-05-02 08:04:18.745 DEBUG 10780 --- [http-nio-8090-exec-5] com.yond.mapper.TagMapper.getTagList     : ==> Parameters: 
+2024-05-02 08:04:18.747 DEBUG 10780 --- [http-nio-8090-exec-5] com.yond.mapper.TagMapper.getTagList     : <==      Total: 1
+2024-05-02 08:04:18.748 DEBUG 10780 --- [http-nio-8090-exec-4] com.yond.mapper.BlogMapper.getBlogById   : ==>  Preparing: select b.id, b.title, b.first_picture, b.content, b.description, b.is_recommend, b.is_published, b.is_appreciation, b.is_comment_enabled, b.is_top, b.create_time, b.update_time, b.views, b.words, b.read_time, b.password, c.id as category_id, c.category_name, bt.tag_id as tag_id, t.tag_name as tag_name, t.color from (((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id) where b.id=?
+2024-05-02 08:04:18.751 DEBUG 10780 --- [http-nio-8090-exec-4] com.yond.mapper.BlogMapper.getBlogById   : ==> Parameters: 1(Long)
+2024-05-02 08:04:18.755 DEBUG 10780 --- [http-nio-8090-exec-4] com.yond.mapper.BlogMapper.getBlogById   : <==      Total: 1
+2024-05-02 08:05:40.064 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.CategoryMapper.getCategoryById     : ==>  Preparing: select id, category_name from category where id=?
+2024-05-02 08:05:40.065 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.CategoryMapper.getCategoryById     : ==> Parameters: 1(Long)
+2024-05-02 08:05:40.065 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.CategoryMapper.getCategoryById     : <==      Total: 1
+2024-05-02 08:05:40.066 DEBUG 10780 --- [http-nio-8090-exec-9] com.yond.mapper.TagMapper.getTagById     : ==>  Preparing: select id, tag_name, color from tag where id=?
+2024-05-02 08:05:40.066 DEBUG 10780 --- [http-nio-8090-exec-9] com.yond.mapper.TagMapper.getTagById     : ==> Parameters: 1(Long)
+2024-05-02 08:05:40.067 DEBUG 10780 --- [http-nio-8090-exec-9] com.yond.mapper.TagMapper.getTagById     : <==      Total: 1
+2024-05-02 08:05:40.068 DEBUG 10780 --- [http-nio-8090-exec-9] com.yond.mapper.BlogMapper.updateBlog    : ==>  Preparing: update blog set title=?, first_picture=?, content=?, description=?, is_recommend=?, is_published=?, is_appreciation=?, is_comment_enabled=?, is_top=?, create_time=?, update_time=?, views=?, words=?, read_time=?, category_id=?, password=? where id=?
+2024-05-02 08:05:40.069 DEBUG 10780 --- [http-nio-8090-exec-9] com.yond.mapper.BlogMapper.updateBlog    : ==> Parameters: 什么是需要你(String), 12(String), 3123123(String), 23123123![wallhaven9dz1e8.jpg](1)![wallhavenj3dg1m.jpg](2)(String), false(Boolean), true(Boolean), false(Boolean), false(Boolean), false(Boolean), 2024-05-01 17:08:51.0(Timestamp), 2024-05-02 08:05:40.067(Timestamp), 1(Integer), 1510(Integer), 8(Integer), 1(Long), (String), 1(Long)
+2024-05-02 08:05:40.070 DEBUG 10780 --- [http-nio-8090-exec-9] com.yond.mapper.BlogMapper.updateBlog    : <==    Updates: 1
+2024-05-02 08:05:40.077 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.BlogMapper.deleteBlogTagByBlogId   : ==>  Preparing: delete from blog_tag where blog_id=?
+2024-05-02 08:05:40.077 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.BlogMapper.deleteBlogTagByBlogId   : ==> Parameters: 1(Long)
+2024-05-02 08:05:40.078 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.BlogMapper.deleteBlogTagByBlogId   : <==    Updates: 1
+2024-05-02 08:05:40.081 DEBUG 10780 --- [http-nio-8090-exec-9] com.yond.mapper.BlogMapper.saveBlogTag   : ==>  Preparing: insert into blog_tag (blog_id, tag_id) values (?, ?)
+2024-05-02 08:05:40.082 DEBUG 10780 --- [http-nio-8090-exec-9] com.yond.mapper.BlogMapper.saveBlogTag   : ==> Parameters: 1(Long), 1(Long)
+2024-05-02 08:05:40.082 DEBUG 10780 --- [http-nio-8090-exec-9] com.yond.mapper.BlogMapper.saveBlogTag   : <==    Updates: 1
+2024-05-02 08:05:40.093 DEBUG 10780 --- [task-4] c.y.m.O.saveOperationLog                 : ==>  Preparing: insert into operation_log (username, uri, method, param, description, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 08:05:40.094 DEBUG 10780 --- [task-4] c.y.m.O.saveOperationLog                 : ==> Parameters: Admin(String), /admin/blog(String), PUT(String), {"blog":{"id":1,"title":"什么是需要你","firstPicture":"12","content":"3123123","description":"23123123![wallhaven9dz1e8.jpg](1)![wallhavenj3dg1m.jpg](2)","published":true,"recommend":false,"appreciation":false,"commentEnabled":false,"top":false,"createTime":1714554531000,"updateTime":1714608340067,"views":1,"words":1510,"readTime":8,"password":"","user":null,"category":{"id":1,"name":"jvm","blogs":[]},"tags":null,"cate":1,"tagList":[1]}}(String), 更新博客(String), 198.18.0.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 32(Integer), 2024-05-02 08:05:40.087(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 08:05:40.095 DEBUG 10780 --- [task-4] c.y.m.O.saveOperationLog                 : <==    Updates: 1
+2024-05-02 08:05:40.425 DEBUG 10780 --- [http-nio-8090-exec-10] .y.m.B.getListByTitleAndCategoryId_COUNT : ==>  Preparing: SELECT count(0) FROM blog AS b LEFT JOIN category AS c ON b.category_id = c.id
+2024-05-02 08:05:40.425 DEBUG 10780 --- [http-nio-8090-exec-10] .y.m.B.getListByTitleAndCategoryId_COUNT : ==> Parameters: 
+2024-05-02 08:05:40.426 DEBUG 10780 --- [http-nio-8090-exec-10] .y.m.B.getListByTitleAndCategoryId_COUNT : <==      Total: 1
+2024-05-02 08:05:40.427 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.B.getListByTitleAndCategoryId      : ==>  Preparing: SELECT b.id, b.title, b.first_picture, b.create_time, b.update_time, b.is_published, b.is_recommend, b.is_appreciation, b.is_comment_enabled, b.is_top, b.password, c.id AS category_id, c.category_name FROM blog AS b LEFT JOIN category AS c ON b.category_id = c.id order by create_time desc LIMIT ?
+2024-05-02 08:05:40.428 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.B.getListByTitleAndCategoryId      : ==> Parameters: 10(Integer)
+2024-05-02 08:05:40.430 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.B.getListByTitleAndCategoryId      : <==      Total: 1
+2024-05-02 08:05:40.430 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.CategoryMapper.getCategoryList     : ==>  Preparing: select id, category_name from category order by id desc
+2024-05-02 08:05:40.431 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.CategoryMapper.getCategoryList     : ==> Parameters: 
+2024-05-02 08:05:40.433 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.CategoryMapper.getCategoryList     : <==      Total: 2
+2024-05-02 08:06:03.412 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.B.getBlogByIdAndIsPublished        : ==>  Preparing: select b.id, b.title, b.content, b.is_appreciation, b.is_comment_enabled, b.is_top, b.create_time, b.update_time, b.views, b.words, b.read_time, b.password, c.category_name, t.tag_name as tag_name, t.color from (((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id) where b.id=? and b.is_published=true
+2024-05-02 08:06:03.412 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.B.getBlogByIdAndIsPublished        : ==> Parameters: 1(Long)
+2024-05-02 08:06:03.413 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.B.getBlogByIdAndIsPublished        : <==      Total: 1
+2024-05-02 08:06:03.455 DEBUG 10780 --- [task-5] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 08:06:03.456 DEBUG 10780 --- [task-5] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /blog(String), GET(String), {"id":1}(String), 查看博客(String), 什么是需要你(String), 文章标题：什么是需要你(String), 198.18.0.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 40(Integer), 2024-05-02 08:06:03.454(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 08:06:03.458 DEBUG 10780 --- [task-5] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 08:06:05.853 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.m.B.getBlogByIdAndIsPublished        : ==>  Preparing: select b.id, b.title, b.content, b.is_appreciation, b.is_comment_enabled, b.is_top, b.create_time, b.update_time, b.views, b.words, b.read_time, b.password, c.category_name, t.tag_name as tag_name, t.color from (((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id) where b.id=? and b.is_published=true
+2024-05-02 08:06:05.855 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.m.B.getBlogByIdAndIsPublished        : ==> Parameters: 1(Long)
+2024-05-02 08:06:05.857 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.m.B.getBlogByIdAndIsPublished        : <==      Total: 1
+2024-05-02 08:06:05.858 DEBUG 10780 --- [http-nio-8090-exec-1] .y.m.B.getNewBlogListByIsPublished_COUNT : ==>  Preparing: SELECT count(0) FROM blog WHERE is_published = true
+2024-05-02 08:06:05.859 DEBUG 10780 --- [http-nio-8090-exec-1] .y.m.B.getNewBlogListByIsPublished_COUNT : ==> Parameters: 
+2024-05-02 08:06:05.860 DEBUG 10780 --- [http-nio-8090-exec-1] .y.m.B.getNewBlogListByIsPublished_COUNT : <==      Total: 1
+2024-05-02 08:06:05.861 DEBUG 10780 --- [http-nio-8090-exec-1] c.y.m.B.getNewBlogListByIsPublished      : ==>  Preparing: select id, title, password from blog where is_published=true order by create_time desc LIMIT ?
+2024-05-02 08:06:05.861 DEBUG 10780 --- [http-nio-8090-exec-1] c.y.m.B.getNewBlogListByIsPublished      : ==> Parameters: 3(Integer)
+2024-05-02 08:06:05.861 DEBUG 10780 --- [http-nio-8090-exec-1] c.y.m.B.getNewBlogListByIsPublished      : <==      Total: 1
+2024-05-02 08:06:05.864 DEBUG 10780 --- [task-6] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 08:06:05.865 DEBUG 10780 --- [task-6] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /blog(String), GET(String), {"id":1}(String), 查看博客(String), 什么是需要你(String), 文章标题：什么是需要你(String), 198.18.0.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 7(Integer), 2024-05-02 08:06:05.861(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 08:06:05.867 DEBUG 10780 --- [task-6] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 08:06:05.870 DEBUG 10780 --- [http-nio-8090-exec-1] stByLimitNumAndIsPublishedAndIsRecommend : ==>  Preparing: select id, title, password, create_time, first_picture from blog where is_published=true and is_recommend=true order by rand() limit ?
+2024-05-02 08:06:05.870 DEBUG 10780 --- [http-nio-8090-exec-1] stByLimitNumAndIsPublishedAndIsRecommend : ==> Parameters: 5(Integer)
+2024-05-02 08:06:05.871 DEBUG 10780 --- [http-nio-8090-exec-1] stByLimitNumAndIsPublishedAndIsRecommend : <==      Total: 0
+2024-05-02 08:06:08.549 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.B.getBlogByIdAndIsPublished        : ==>  Preparing: select b.id, b.title, b.content, b.is_appreciation, b.is_comment_enabled, b.is_top, b.create_time, b.update_time, b.views, b.words, b.read_time, b.password, c.category_name, t.tag_name as tag_name, t.color from (((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id) where b.id=? and b.is_published=true
+2024-05-02 08:06:08.550 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.B.getBlogByIdAndIsPublished        : ==> Parameters: 1(Long)
+2024-05-02 08:06:08.553 DEBUG 10780 --- [http-nio-8090-exec-6] c.y.m.B.getBlogByIdAndIsPublished        : <==      Total: 1
+2024-05-02 08:06:08.561 DEBUG 10780 --- [http-nio-8090-exec-4] stByLimitNumAndIsPublishedAndIsRecommend : ==>  Preparing: select id, title, password, create_time, first_picture from blog where is_published=true and is_recommend=true order by rand() limit ?
+2024-05-02 08:06:08.562 DEBUG 10780 --- [http-nio-8090-exec-4] stByLimitNumAndIsPublishedAndIsRecommend : ==> Parameters: 5(Integer)
+2024-05-02 08:06:08.562 DEBUG 10780 --- [http-nio-8090-exec-4] stByLimitNumAndIsPublishedAndIsRecommend : <==      Total: 0
+2024-05-02 08:06:08.563 DEBUG 10780 --- [task-7] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 08:06:08.564 DEBUG 10780 --- [task-7] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /blog(String), GET(String), {"id":1}(String), 查看博客(String), 什么是需要你(String), 文章标题：什么是需要你(String), 198.18.0.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 9(Integer), 2024-05-02 08:06:08.559(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 08:06:08.565 DEBUG 10780 --- [task-7] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 08:06:10.736 DEBUG 10780 --- [http-nio-8090-exec-7] c.y.m.CategoryMapper.getCategoryList     : ==>  Preparing: select id, category_name from category order by id desc
+2024-05-02 08:06:10.736 DEBUG 10780 --- [http-nio-8090-exec-7] c.y.m.CategoryMapper.getCategoryList     : ==> Parameters: 
+2024-05-02 08:06:10.737 DEBUG 10780 --- [http-nio-8090-exec-7] c.y.m.CategoryMapper.getCategoryList     : <==      Total: 2
+2024-05-02 08:06:10.738 DEBUG 10780 --- [http-nio-8090-exec-7] com.yond.mapper.TagMapper.getTagList     : ==>  Preparing: select id, tag_name, color from tag order by id desc
+2024-05-02 08:06:10.738 DEBUG 10780 --- [http-nio-8090-exec-7] com.yond.mapper.TagMapper.getTagList     : ==> Parameters: 
+2024-05-02 08:06:10.740 DEBUG 10780 --- [http-nio-8090-exec-7] com.yond.mapper.TagMapper.getTagList     : <==      Total: 1
+2024-05-02 08:06:10.749 DEBUG 10780 --- [http-nio-8090-exec-8] com.yond.mapper.BlogMapper.getBlogById   : ==>  Preparing: select b.id, b.title, b.first_picture, b.content, b.description, b.is_recommend, b.is_published, b.is_appreciation, b.is_comment_enabled, b.is_top, b.create_time, b.update_time, b.views, b.words, b.read_time, b.password, c.id as category_id, c.category_name, bt.tag_id as tag_id, t.tag_name as tag_name, t.color from (((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id) where b.id=?
+2024-05-02 08:06:10.749 DEBUG 10780 --- [http-nio-8090-exec-8] com.yond.mapper.BlogMapper.getBlogById   : ==> Parameters: 1(Long)
+2024-05-02 08:06:10.751 DEBUG 10780 --- [http-nio-8090-exec-8] com.yond.mapper.BlogMapper.getBlogById   : <==      Total: 1
+2024-05-02 08:06:16.216 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.B.getBlogByIdAndIsPublished        : ==>  Preparing: select b.id, b.title, b.content, b.is_appreciation, b.is_comment_enabled, b.is_top, b.create_time, b.update_time, b.views, b.words, b.read_time, b.password, c.category_name, t.tag_name as tag_name, t.color from (((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id) where b.id=? and b.is_published=true
+2024-05-02 08:06:16.216 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.B.getBlogByIdAndIsPublished        : ==> Parameters: 1(Long)
+2024-05-02 08:06:16.218 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.B.getBlogByIdAndIsPublished        : <==      Total: 1
+2024-05-02 08:06:16.222 DEBUG 10780 --- [http-nio-8090-exec-9] stByLimitNumAndIsPublishedAndIsRecommend : ==>  Preparing: select id, title, password, create_time, first_picture from blog where is_published=true and is_recommend=true order by rand() limit ?
+2024-05-02 08:06:16.223 DEBUG 10780 --- [http-nio-8090-exec-9] stByLimitNumAndIsPublishedAndIsRecommend : ==> Parameters: 5(Integer)
+2024-05-02 08:06:16.223 DEBUG 10780 --- [http-nio-8090-exec-9] stByLimitNumAndIsPublishedAndIsRecommend : <==      Total: 0
+2024-05-02 08:06:16.226 DEBUG 10780 --- [task-8] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 08:06:16.227 DEBUG 10780 --- [task-8] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /blog(String), GET(String), {"id":1}(String), 查看博客(String), 什么是需要你(String), 文章标题：什么是需要你(String), 198.18.0.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 8(Integer), 2024-05-02 08:06:16.223(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 08:06:16.227 DEBUG 10780 --- [task-8] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 08:06:19.980 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.B.getBlogByIdAndIsPublished        : ==>  Preparing: select b.id, b.title, b.content, b.is_appreciation, b.is_comment_enabled, b.is_top, b.create_time, b.update_time, b.views, b.words, b.read_time, b.password, c.category_name, t.tag_name as tag_name, t.color from (((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id) where b.id=? and b.is_published=true
+2024-05-02 08:06:19.980 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.B.getBlogByIdAndIsPublished        : ==> Parameters: 1(Long)
+2024-05-02 08:06:19.983 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.B.getBlogByIdAndIsPublished        : <==      Total: 1
+2024-05-02 08:06:19.983 DEBUG 10780 --- [http-nio-8090-exec-2] stByLimitNumAndIsPublishedAndIsRecommend : ==>  Preparing: select id, title, password, create_time, first_picture from blog where is_published=true and is_recommend=true order by rand() limit ?
+2024-05-02 08:06:19.984 DEBUG 10780 --- [http-nio-8090-exec-2] stByLimitNumAndIsPublishedAndIsRecommend : ==> Parameters: 5(Integer)
+2024-05-02 08:06:19.985 DEBUG 10780 --- [http-nio-8090-exec-2] stByLimitNumAndIsPublishedAndIsRecommend : <==      Total: 0
+2024-05-02 08:06:19.993 DEBUG 10780 --- [task-9] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 08:06:19.995 DEBUG 10780 --- [task-9] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /blog(String), GET(String), {"id":1}(String), 查看博客(String), 什么是需要你(String), 文章标题：什么是需要你(String), 198.18.0.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 8(Integer), 2024-05-02 08:06:19.987(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 08:06:19.996 DEBUG 10780 --- [task-9] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 09:31:06.758 DEBUG 10780 --- [task-10] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:31:06.759 DEBUG 10780 --- [task-10] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /about(String), GET(String), {}(String), 访问页面(String), 关于我(String), (String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 6(Integer), 2024-05-02 09:31:06.755(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:31:06.761 DEBUG 10780 --- [task-10] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 09:31:06.875 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.A.getAboutCommentEnabled           : ==>  Preparing: select value from about where name_en="commentEnabled"
+2024-05-02 09:31:06.876 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.A.getAboutCommentEnabled           : ==> Parameters: 
+2024-05-02 09:31:06.878 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.A.getAboutCommentEnabled           : <==      Total: 1
+2024-05-02 09:31:06.884 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.C.countByPageAndIsPublished        : ==>  Preparing: select count(*) from comment where page=?
+2024-05-02 09:31:06.884 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.C.countByPageAndIsPublished        : ==> Parameters: 1(Integer)
+2024-05-02 09:31:06.885 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.C.countByPageAndIsPublished        : <==      Total: 1
+2024-05-02 09:31:06.886 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.C.countByPageAndIsPublished        : ==>  Preparing: select count(*) from comment where page=? and is_published=?
+2024-05-02 09:31:06.886 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.C.countByPageAndIsPublished        : ==> Parameters: 1(Integer), true(Boolean)
+2024-05-02 09:31:06.887 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.C.countByPageAndIsPublished        : <==      Total: 1
+2024-05-02 09:31:06.891 DEBUG 10780 --- [http-nio-8090-exec-8] ommentListByPageAndParentCommentId_COUNT : ==>  Preparing: SELECT count(0) FROM comment AS c1 LEFT JOIN comment AS c2 ON c1.parent_comment_id = c2.id WHERE c1.page = ? AND c1.parent_comment_id = ? AND c1.is_published = true
+2024-05-02 09:31:06.892 DEBUG 10780 --- [http-nio-8090-exec-8] ommentListByPageAndParentCommentId_COUNT : ==> Parameters: 1(Integer), -1(Long)
+2024-05-02 09:31:06.893 DEBUG 10780 --- [http-nio-8090-exec-8] ommentListByPageAndParentCommentId_COUNT : <==      Total: 1
+2024-05-02 09:31:06.893 DEBUG 10780 --- [http-nio-8090-exec-8] tPageCommentListByPageAndParentCommentId : ==>  Preparing: select c1.id, c1.nickname, c1.content, c1.avatar, c1.create_time, c1.is_admin_comment, c1.website, c1.parent_comment_id as parent_comment_id, c2.nickname as parent_comment_nickname from comment as c1 left join comment as c2 on c1.parent_comment_id=c2.id where c1.page=? and c1.parent_comment_id=? and c1.is_published=true order by c1.create_time desc LIMIT ?
+2024-05-02 09:31:06.893 DEBUG 10780 --- [http-nio-8090-exec-8] tPageCommentListByPageAndParentCommentId : ==> Parameters: 1(Integer), -1(Long), 5(Integer)
+2024-05-02 09:31:06.894 DEBUG 10780 --- [http-nio-8090-exec-8] tPageCommentListByPageAndParentCommentId : <==      Total: 1
+2024-05-02 09:31:06.896 DEBUG 10780 --- [http-nio-8090-exec-8] tPageCommentListByPageAndParentCommentId : ==>  Preparing: select c1.id, c1.nickname, c1.content, c1.avatar, c1.create_time, c1.is_admin_comment, c1.website, c1.parent_comment_id as parent_comment_id, c2.nickname as parent_comment_nickname from comment as c1 left join comment as c2 on c1.parent_comment_id=c2.id where c1.page=? and c1.parent_comment_id=? and c1.is_published=true order by c1.create_time desc
+2024-05-02 09:31:06.896 DEBUG 10780 --- [http-nio-8090-exec-8] tPageCommentListByPageAndParentCommentId : ==> Parameters: 1(Integer), 1(Long)
+2024-05-02 09:31:06.897 DEBUG 10780 --- [http-nio-8090-exec-8] tPageCommentListByPageAndParentCommentId : <==      Total: 0
+2024-05-02 09:31:10.626 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.mapper.FriendMapper.getFriendVOList  : ==>  Preparing: select nickname, description, website, avatar from friend where is_published=true order by rand()
+2024-05-02 09:31:10.626 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.mapper.FriendMapper.getFriendVOList  : ==> Parameters: 
+2024-05-02 09:31:10.628 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.mapper.FriendMapper.getFriendVOList  : <==      Total: 0
+2024-05-02 09:31:10.631 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.SiteSettingMapper.getFriendInfo    : ==>  Preparing: select * from site_setting where type=4
+2024-05-02 09:31:10.631 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.SiteSettingMapper.getFriendInfo    : ==> Parameters: 
+2024-05-02 09:31:10.634 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.SiteSettingMapper.getFriendInfo    : <==      Total: 2
+2024-05-02 09:31:10.644 DEBUG 10780 --- [task-11] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:31:10.645 DEBUG 10780 --- [task-11] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /friends(String), GET(String), {}(String), 访问页面(String), 友链(String), (String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 20(Integer), 2024-05-02 09:31:10.642(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:31:10.646 DEBUG 10780 --- [task-11] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 09:31:10.681 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.C.countByPageAndIsPublished        : ==>  Preparing: select count(*) from comment where page=?
+2024-05-02 09:31:10.681 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.C.countByPageAndIsPublished        : ==> Parameters: 2(Integer)
+2024-05-02 09:31:10.682 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.C.countByPageAndIsPublished        : <==      Total: 1
+2024-05-02 09:31:10.683 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.C.countByPageAndIsPublished        : ==>  Preparing: select count(*) from comment where page=? and is_published=?
+2024-05-02 09:31:10.683 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.C.countByPageAndIsPublished        : ==> Parameters: 2(Integer), true(Boolean)
+2024-05-02 09:31:10.683 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.C.countByPageAndIsPublished        : <==      Total: 1
+2024-05-02 09:31:10.686 DEBUG 10780 --- [http-nio-8090-exec-3] ommentListByPageAndParentCommentId_COUNT : ==>  Preparing: SELECT count(0) FROM comment AS c1 LEFT JOIN comment AS c2 ON c1.parent_comment_id = c2.id WHERE c1.page = ? AND c1.parent_comment_id = ? AND c1.is_published = true
+2024-05-02 09:31:10.686 DEBUG 10780 --- [http-nio-8090-exec-3] ommentListByPageAndParentCommentId_COUNT : ==> Parameters: 2(Integer), -1(Long)
+2024-05-02 09:31:10.687 DEBUG 10780 --- [http-nio-8090-exec-3] ommentListByPageAndParentCommentId_COUNT : <==      Total: 1
+2024-05-02 09:31:27.849 DEBUG 10780 --- [http-nio-8090-exec-1] c.y.m.MomentMapper.getMomentList_COUNT   : ==>  Preparing: SELECT count(0) FROM moment
+2024-05-02 09:31:27.849 DEBUG 10780 --- [http-nio-8090-exec-1] c.y.m.MomentMapper.getMomentList_COUNT   : ==> Parameters: 
+2024-05-02 09:31:27.850 DEBUG 10780 --- [http-nio-8090-exec-1] c.y.m.MomentMapper.getMomentList_COUNT   : <==      Total: 1
+2024-05-02 09:31:27.853 DEBUG 10780 --- [task-12] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:31:27.853 DEBUG 10780 --- [task-12] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /moments(String), GET(String), {"pageNum":1}(String), 访问页面(String), 动态(String), 第1页(String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 5(Integer), 2024-05-02 09:31:27.851(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:31:27.854 DEBUG 10780 --- [task-12] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 09:31:28.563 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.B.getGroupYearMonthByIsPublished   : ==>  Preparing: select date_format(create_time, "%Y年%m月") from blog where is_published=true group by date_format(create_time, "%Y年%m月") order by date_format(create_time, "%Y年%m月") desc
+2024-05-02 09:31:28.563 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.B.getGroupYearMonthByIsPublished   : ==> Parameters: 
+2024-05-02 09:31:28.565 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.B.getGroupYearMonthByIsPublished   : <==      Total: 1
+2024-05-02 09:31:28.566 DEBUG 10780 --- [http-nio-8090-exec-4] ArchiveBlogListByYearMonthAndIsPublished : ==>  Preparing: select id, title, password, date_format(create_time, "%d日") as create_day from blog where date_format(create_time, "%Y年%m月")=? and is_published=true order by create_time desc
+2024-05-02 09:31:28.566 DEBUG 10780 --- [http-nio-8090-exec-4] ArchiveBlogListByYearMonthAndIsPublished : ==> Parameters: 2024年05月(String)
+2024-05-02 09:31:28.567 DEBUG 10780 --- [http-nio-8090-exec-4] ArchiveBlogListByYearMonthAndIsPublished : <==      Total: 1
+2024-05-02 09:31:28.567 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.BlogMapper.countBlogByIsPublished  : ==>  Preparing: select count(*) from blog where is_published=true
+2024-05-02 09:31:28.567 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.BlogMapper.countBlogByIsPublished  : ==> Parameters: 
+2024-05-02 09:31:28.568 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.BlogMapper.countBlogByIsPublished  : <==      Total: 1
+2024-05-02 09:31:28.573 DEBUG 10780 --- [task-13] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:31:28.574 DEBUG 10780 --- [task-13] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /archives(String), GET(String), {}(String), 访问页面(String), 归档(String), (String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 12(Integer), 2024-05-02 09:31:28.571(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:31:28.575 DEBUG 10780 --- [task-13] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 09:31:36.523 DEBUG 10780 --- [http-nio-8090-exec-7] c.y.m.MomentMapper.getMomentList_COUNT   : ==>  Preparing: SELECT count(0) FROM moment
+2024-05-02 09:31:36.523 DEBUG 10780 --- [http-nio-8090-exec-7] c.y.m.MomentMapper.getMomentList_COUNT   : ==> Parameters: 
+2024-05-02 09:31:36.524 DEBUG 10780 --- [http-nio-8090-exec-7] c.y.m.MomentMapper.getMomentList_COUNT   : <==      Total: 1
+2024-05-02 09:31:36.528 DEBUG 10780 --- [task-14] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:31:36.530 DEBUG 10780 --- [task-14] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /moments(String), GET(String), {"pageNum":1}(String), 访问页面(String), 动态(String), 第1页(String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 2(Integer), 2024-05-02 09:31:36.526(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:31:36.531 DEBUG 10780 --- [task-14] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 09:31:37.875 DEBUG 10780 --- [task-15] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:31:37.878 DEBUG 10780 --- [task-15] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /archives(String), GET(String), {}(String), 访问页面(String), 归档(String), (String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 2(Integer), 2024-05-02 09:31:37.873(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:31:37.879 DEBUG 10780 --- [task-15] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 09:31:55.243 DEBUG 10780 --- [http-nio-8090-exec-9] B.getSearchBlogListByQueryAndIsPublished : ==>  Preparing: select id, title, content from blog where is_published=true and password='' and content like ?
+2024-05-02 09:31:55.244 DEBUG 10780 --- [http-nio-8090-exec-9] B.getSearchBlogListByQueryAndIsPublished : ==> Parameters: %1%(String)
+2024-05-02 09:31:55.245 DEBUG 10780 --- [http-nio-8090-exec-9] B.getSearchBlogListByQueryAndIsPublished : <==      Total: 1
+2024-05-02 09:31:55.263 DEBUG 10780 --- [task-16] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:31:55.264 DEBUG 10780 --- [task-16] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /searchBlog(String), GET(String), {"query":"1"}(String), 搜索博客(String), 1(String), 搜索内容：1(String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 5(Integer), 2024-05-02 09:31:55.249(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:31:55.265 DEBUG 10780 --- [task-16] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 09:32:00.371 DEBUG 10780 --- [http-nio-8090-exec-3] B.getSearchBlogListByQueryAndIsPublished : ==>  Preparing: select id, title, content from blog where is_published=true and password='' and content like ?
+2024-05-02 09:32:00.371 DEBUG 10780 --- [http-nio-8090-exec-3] B.getSearchBlogListByQueryAndIsPublished : ==> Parameters: %是%(String)
+2024-05-02 09:32:00.372 DEBUG 10780 --- [http-nio-8090-exec-3] B.getSearchBlogListByQueryAndIsPublished : <==      Total: 0
+2024-05-02 09:32:00.376 DEBUG 10780 --- [task-17] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:32:00.378 DEBUG 10780 --- [task-17] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /searchBlog(String), GET(String), {"query":"是"}(String), 搜索博客(String), 是(String), 搜索内容：是(String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 3(Integer), 2024-05-02 09:32:00.375(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:32:00.380 DEBUG 10780 --- [task-17] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 09:33:02.312 DEBUG 10780 --- [http-nio-8090-exec-1] B.getSearchBlogListByQueryAndIsPublished : ==>  Preparing: select id, title, content from blog where is_published=true and password='' and content like ?
+2024-05-02 09:33:02.312 DEBUG 10780 --- [http-nio-8090-exec-1] B.getSearchBlogListByQueryAndIsPublished : ==> Parameters: %是%(String)
+2024-05-02 09:33:02.313 DEBUG 10780 --- [http-nio-8090-exec-1] B.getSearchBlogListByQueryAndIsPublished : <==      Total: 0
+2024-05-02 09:33:02.316 DEBUG 10780 --- [task-18] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:33:02.316 DEBUG 10780 --- [task-18] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /searchBlog(String), GET(String), {"query":"是"}(String), 搜索博客(String), 是(String), 搜索内容：是(String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 1(Integer), 2024-05-02 09:33:02.314(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:33:02.318 DEBUG 10780 --- [task-18] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 09:33:06.101 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.MomentMapper.getMomentList_COUNT   : ==>  Preparing: SELECT count(0) FROM moment
+2024-05-02 09:33:06.102 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.MomentMapper.getMomentList_COUNT   : ==> Parameters: 
+2024-05-02 09:33:06.104 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.MomentMapper.getMomentList_COUNT   : <==      Total: 1
+2024-05-02 09:33:06.418 DEBUG 10780 --- [http-nio-8090-exec-8] .y.m.B.getListByTitleAndCategoryId_COUNT : ==>  Preparing: SELECT count(0) FROM blog AS b LEFT JOIN category AS c ON b.category_id = c.id
+2024-05-02 09:33:06.418 DEBUG 10780 --- [http-nio-8090-exec-8] .y.m.B.getListByTitleAndCategoryId_COUNT : ==> Parameters: 
+2024-05-02 09:33:06.419 DEBUG 10780 --- [http-nio-8090-exec-8] .y.m.B.getListByTitleAndCategoryId_COUNT : <==      Total: 1
+2024-05-02 09:33:06.420 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.B.getListByTitleAndCategoryId      : ==>  Preparing: SELECT b.id, b.title, b.first_picture, b.create_time, b.update_time, b.is_published, b.is_recommend, b.is_appreciation, b.is_comment_enabled, b.is_top, b.password, c.id AS category_id, c.category_name FROM blog AS b LEFT JOIN category AS c ON b.category_id = c.id order by create_time desc LIMIT ?
+2024-05-02 09:33:06.420 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.B.getListByTitleAndCategoryId      : ==> Parameters: 10(Integer)
+2024-05-02 09:33:06.422 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.B.getListByTitleAndCategoryId      : <==      Total: 1
+2024-05-02 09:33:06.423 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.CategoryMapper.getCategoryList     : ==>  Preparing: select id, category_name from category order by id desc
+2024-05-02 09:33:06.423 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.CategoryMapper.getCategoryList     : ==> Parameters: 
+2024-05-02 09:33:06.424 DEBUG 10780 --- [http-nio-8090-exec-8] c.y.m.CategoryMapper.getCategoryList     : <==      Total: 2
+2024-05-02 09:33:09.467 DEBUG 10780 --- [http-nio-8090-exec-2] c.y.m.CategoryMapper.getCategoryList     : ==>  Preparing: select id, category_name from category order by id desc
+2024-05-02 09:33:09.467 DEBUG 10780 --- [http-nio-8090-exec-3] com.yond.mapper.BlogMapper.getBlogById   : ==>  Preparing: select b.id, b.title, b.first_picture, b.content, b.description, b.is_recommend, b.is_published, b.is_appreciation, b.is_comment_enabled, b.is_top, b.create_time, b.update_time, b.views, b.words, b.read_time, b.password, c.id as category_id, c.category_name, bt.tag_id as tag_id, t.tag_name as tag_name, t.color from (((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id) where b.id=?
+2024-05-02 09:33:09.467 DEBUG 10780 --- [http-nio-8090-exec-3] com.yond.mapper.BlogMapper.getBlogById   : ==> Parameters: 1(Long)
+2024-05-02 09:33:09.467 DEBUG 10780 --- [http-nio-8090-exec-2] c.y.m.CategoryMapper.getCategoryList     : ==> Parameters: 
+2024-05-02 09:33:09.469 DEBUG 10780 --- [http-nio-8090-exec-2] c.y.m.CategoryMapper.getCategoryList     : <==      Total: 2
+2024-05-02 09:33:09.469 DEBUG 10780 --- [http-nio-8090-exec-2] com.yond.mapper.TagMapper.getTagList     : ==>  Preparing: select id, tag_name, color from tag order by id desc
+2024-05-02 09:33:09.469 DEBUG 10780 --- [http-nio-8090-exec-2] com.yond.mapper.TagMapper.getTagList     : ==> Parameters: 
+2024-05-02 09:33:09.469 DEBUG 10780 --- [http-nio-8090-exec-3] com.yond.mapper.BlogMapper.getBlogById   : <==      Total: 1
+2024-05-02 09:33:09.470 DEBUG 10780 --- [http-nio-8090-exec-2] com.yond.mapper.TagMapper.getTagList     : <==      Total: 1
+2024-05-02 09:33:11.036 DEBUG 10780 --- [http-nio-8090-exec-5] .y.m.B.getListByTitleAndCategoryId_COUNT : ==>  Preparing: SELECT count(0) FROM blog AS b LEFT JOIN category AS c ON b.category_id = c.id
+2024-05-02 09:33:11.036 DEBUG 10780 --- [http-nio-8090-exec-5] .y.m.B.getListByTitleAndCategoryId_COUNT : ==> Parameters: 
+2024-05-02 09:33:11.037 DEBUG 10780 --- [http-nio-8090-exec-5] .y.m.B.getListByTitleAndCategoryId_COUNT : <==      Total: 1
+2024-05-02 09:33:11.038 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.m.B.getListByTitleAndCategoryId      : ==>  Preparing: SELECT b.id, b.title, b.first_picture, b.create_time, b.update_time, b.is_published, b.is_recommend, b.is_appreciation, b.is_comment_enabled, b.is_top, b.password, c.id AS category_id, c.category_name FROM blog AS b LEFT JOIN category AS c ON b.category_id = c.id order by create_time desc LIMIT ?
+2024-05-02 09:33:11.038 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.m.B.getListByTitleAndCategoryId      : ==> Parameters: 10(Integer)
+2024-05-02 09:33:11.040 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.m.B.getListByTitleAndCategoryId      : <==      Total: 1
+2024-05-02 09:33:11.040 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.m.CategoryMapper.getCategoryList     : ==>  Preparing: select id, category_name from category order by id desc
+2024-05-02 09:33:11.040 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.m.CategoryMapper.getCategoryList     : ==> Parameters: 
+2024-05-02 09:33:11.040 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.m.CategoryMapper.getCategoryList     : <==      Total: 2
+2024-05-02 09:33:13.807 DEBUG 10780 --- [http-nio-8090-exec-6] c.yond.mapper.SiteSettingMapper.getList  : ==>  Preparing: select * from site_setting
+2024-05-02 09:33:13.807 DEBUG 10780 --- [http-nio-8090-exec-6] c.yond.mapper.SiteSettingMapper.getList  : ==> Parameters: 
+2024-05-02 09:33:13.812 DEBUG 10780 --- [http-nio-8090-exec-6] c.yond.mapper.SiteSettingMapper.getList  : <==      Total: 32
+2024-05-02 09:33:27.007 DEBUG 10780 --- [http-nio-8090-exec-4] B.getSearchBlogListByQueryAndIsPublished : ==>  Preparing: select id, title, content from blog where is_published=true and password='' and content like ?
+2024-05-02 09:33:27.007 DEBUG 10780 --- [http-nio-8090-exec-4] B.getSearchBlogListByQueryAndIsPublished : ==> Parameters: %是%(String)
+2024-05-02 09:33:27.009 DEBUG 10780 --- [http-nio-8090-exec-4] B.getSearchBlogListByQueryAndIsPublished : <==      Total: 0
+2024-05-02 09:33:27.015 DEBUG 10780 --- [task-19] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:33:27.025 DEBUG 10780 --- [task-19] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /searchBlog(String), GET(String), {"query":"是"}(String), 搜索博客(String), 是(String), 搜索内容：是(String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 4(Integer), 2024-05-02 09:33:27.012(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:33:27.031 DEBUG 10780 --- [task-19] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 09:39:50.702 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.MomentMapper.getMomentList_COUNT   : ==>  Preparing: SELECT count(0) FROM moment
+2024-05-02 09:39:50.702 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.MomentMapper.getMomentList_COUNT   : ==> Parameters: 
+2024-05-02 09:39:50.703 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.MomentMapper.getMomentList_COUNT   : <==      Total: 1
+2024-05-02 09:39:51.496 DEBUG 10780 --- [http-nio-8090-exec-9] .y.m.B.getListByTitleAndCategoryId_COUNT : ==>  Preparing: SELECT count(0) FROM blog AS b LEFT JOIN category AS c ON b.category_id = c.id
+2024-05-02 09:39:51.496 DEBUG 10780 --- [http-nio-8090-exec-9] .y.m.B.getListByTitleAndCategoryId_COUNT : ==> Parameters: 
+2024-05-02 09:39:51.498 DEBUG 10780 --- [http-nio-8090-exec-9] .y.m.B.getListByTitleAndCategoryId_COUNT : <==      Total: 1
+2024-05-02 09:39:51.504 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.B.getListByTitleAndCategoryId      : ==>  Preparing: SELECT b.id, b.title, b.first_picture, b.create_time, b.update_time, b.is_published, b.is_recommend, b.is_appreciation, b.is_comment_enabled, b.is_top, b.password, c.id AS category_id, c.category_name FROM blog AS b LEFT JOIN category AS c ON b.category_id = c.id order by create_time desc LIMIT ?
+2024-05-02 09:39:51.505 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.B.getListByTitleAndCategoryId      : ==> Parameters: 10(Integer)
+2024-05-02 09:39:51.508 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.B.getListByTitleAndCategoryId      : <==      Total: 1
+2024-05-02 09:39:51.508 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.CategoryMapper.getCategoryList     : ==>  Preparing: select id, category_name from category order by id desc
+2024-05-02 09:39:51.508 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.CategoryMapper.getCategoryList     : ==> Parameters: 
+2024-05-02 09:39:51.509 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.CategoryMapper.getCategoryList     : <==      Total: 2
+2024-05-02 09:39:53.712 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.CategoryMapper.getCategoryList     : ==>  Preparing: select id, category_name from category order by id desc
+2024-05-02 09:39:53.712 DEBUG 10780 --- [http-nio-8090-exec-2] com.yond.mapper.BlogMapper.getBlogById   : ==>  Preparing: select b.id, b.title, b.first_picture, b.content, b.description, b.is_recommend, b.is_published, b.is_appreciation, b.is_comment_enabled, b.is_top, b.create_time, b.update_time, b.views, b.words, b.read_time, b.password, c.id as category_id, c.category_name, bt.tag_id as tag_id, t.tag_name as tag_name, t.color from (((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id) where b.id=?
+2024-05-02 09:39:53.712 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.CategoryMapper.getCategoryList     : ==> Parameters: 
+2024-05-02 09:39:53.712 DEBUG 10780 --- [http-nio-8090-exec-2] com.yond.mapper.BlogMapper.getBlogById   : ==> Parameters: 1(Long)
+2024-05-02 09:39:53.714 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.CategoryMapper.getCategoryList     : <==      Total: 2
+2024-05-02 09:39:53.714 DEBUG 10780 --- [http-nio-8090-exec-3] com.yond.mapper.TagMapper.getTagList     : ==>  Preparing: select id, tag_name, color from tag order by id desc
+2024-05-02 09:39:53.715 DEBUG 10780 --- [http-nio-8090-exec-3] com.yond.mapper.TagMapper.getTagList     : ==> Parameters: 
+2024-05-02 09:39:53.715 DEBUG 10780 --- [http-nio-8090-exec-2] com.yond.mapper.BlogMapper.getBlogById   : <==      Total: 1
+2024-05-02 09:39:53.716 DEBUG 10780 --- [http-nio-8090-exec-3] com.yond.mapper.TagMapper.getTagList     : <==      Total: 1
+2024-05-02 09:40:08.528 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.CategoryMapper.getCategoryList     : ==>  Preparing: select id, category_name from category order by id desc
+2024-05-02 09:40:08.529 DEBUG 10780 --- [http-nio-8090-exec-6] com.yond.mapper.BlogMapper.getBlogById   : ==>  Preparing: select b.id, b.title, b.first_picture, b.content, b.description, b.is_recommend, b.is_published, b.is_appreciation, b.is_comment_enabled, b.is_top, b.create_time, b.update_time, b.views, b.words, b.read_time, b.password, c.id as category_id, c.category_name, bt.tag_id as tag_id, t.tag_name as tag_name, t.color from (((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id) where b.id=?
+2024-05-02 09:40:08.529 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.CategoryMapper.getCategoryList     : ==> Parameters: 
+2024-05-02 09:40:08.529 DEBUG 10780 --- [http-nio-8090-exec-6] com.yond.mapper.BlogMapper.getBlogById   : ==> Parameters: 1(Long)
+2024-05-02 09:40:08.531 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.m.CategoryMapper.getCategoryList     : <==      Total: 2
+2024-05-02 09:40:08.531 DEBUG 10780 --- [http-nio-8090-exec-6] com.yond.mapper.BlogMapper.getBlogById   : <==      Total: 1
+2024-05-02 09:40:08.532 DEBUG 10780 --- [http-nio-8090-exec-4] com.yond.mapper.TagMapper.getTagList     : ==>  Preparing: select id, tag_name, color from tag order by id desc
+2024-05-02 09:40:08.533 DEBUG 10780 --- [http-nio-8090-exec-4] com.yond.mapper.TagMapper.getTagList     : ==> Parameters: 
+2024-05-02 09:40:08.539 DEBUG 10780 --- [http-nio-8090-exec-4] com.yond.mapper.TagMapper.getTagList     : <==      Total: 1
+2024-05-02 09:40:32.132 DEBUG 10780 --- [task-20] c.y.m.O.saveOperationLog                 : ==>  Preparing: insert into operation_log (username, uri, method, param, description, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:40:32.132 DEBUG 10780 --- [task-20] c.y.m.O.saveOperationLog                 : ==> Parameters: Admin(String), /admin/blog(String), PUT(String), {"blog":{"id":1,"title":"什么是需要你","firstPicture":"12","content":"3123123","description":"","published":true,"recommend":false,"appreciation":false,"commentEnabled":false,"top":false,"createTime":1714554531000,"updateTime":1714608340000,"views":6,"words":1510,"readTime":8,"password":"","user":null,"category":null,"tags":null,"cate":1,"tagList":[1]}}(String), 更新博客(String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 0(Integer), 2024-05-02 09:40:32.129(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:40:32.133 DEBUG 10780 --- [task-20] c.y.m.O.saveOperationLog                 : <==    Updates: 1
+2024-05-02 09:40:41.781 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.CategoryMapper.getCategoryById     : ==>  Preparing: select id, category_name from category where id=?
+2024-05-02 09:40:41.782 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.CategoryMapper.getCategoryById     : ==> Parameters: 1(Long)
+2024-05-02 09:40:41.783 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.CategoryMapper.getCategoryById     : <==      Total: 1
+2024-05-02 09:40:41.783 DEBUG 10780 --- [http-nio-8090-exec-10] com.yond.mapper.TagMapper.getTagById     : ==>  Preparing: select id, tag_name, color from tag where id=?
+2024-05-02 09:40:41.783 DEBUG 10780 --- [http-nio-8090-exec-10] com.yond.mapper.TagMapper.getTagById     : ==> Parameters: 1(Long)
+2024-05-02 09:40:41.784 DEBUG 10780 --- [http-nio-8090-exec-10] com.yond.mapper.TagMapper.getTagById     : <==      Total: 1
+2024-05-02 09:40:41.785 DEBUG 10780 --- [http-nio-8090-exec-10] com.yond.mapper.BlogMapper.updateBlog    : ==>  Preparing: update blog set title=?, first_picture=?, content=?, description=?, is_recommend=?, is_published=?, is_appreciation=?, is_comment_enabled=?, is_top=?, create_time=?, update_time=?, views=?, words=?, read_time=?, category_id=?, password=? where id=?
+2024-05-02 09:40:41.785 DEBUG 10780 --- [http-nio-8090-exec-10] com.yond.mapper.BlogMapper.updateBlog    : ==> Parameters: 什么是需要你(String), 12(String), 3123123(String), 1(String), false(Boolean), true(Boolean), false(Boolean), false(Boolean), true(Boolean), 2024-05-01 17:08:51.0(Timestamp), 2024-05-02 09:40:41.784(Timestamp), 6(Integer), 1510(Integer), 8(Integer), 1(Long), (String), 1(Long)
+2024-05-02 09:40:41.786 DEBUG 10780 --- [http-nio-8090-exec-10] com.yond.mapper.BlogMapper.updateBlog    : <==    Updates: 1
+2024-05-02 09:40:41.792 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.BlogMapper.deleteBlogTagByBlogId   : ==>  Preparing: delete from blog_tag where blog_id=?
+2024-05-02 09:40:41.792 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.BlogMapper.deleteBlogTagByBlogId   : ==> Parameters: 1(Long)
+2024-05-02 09:40:41.793 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.BlogMapper.deleteBlogTagByBlogId   : <==    Updates: 1
+2024-05-02 09:40:41.797 DEBUG 10780 --- [http-nio-8090-exec-10] com.yond.mapper.BlogMapper.saveBlogTag   : ==>  Preparing: insert into blog_tag (blog_id, tag_id) values (?, ?)
+2024-05-02 09:40:41.797 DEBUG 10780 --- [http-nio-8090-exec-10] com.yond.mapper.BlogMapper.saveBlogTag   : ==> Parameters: 1(Long), 1(Long)
+2024-05-02 09:40:41.798 DEBUG 10780 --- [http-nio-8090-exec-10] com.yond.mapper.BlogMapper.saveBlogTag   : <==    Updates: 1
+2024-05-02 09:40:41.809 DEBUG 10780 --- [task-21] c.y.m.O.saveOperationLog                 : ==>  Preparing: insert into operation_log (username, uri, method, param, description, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:40:41.810 DEBUG 10780 --- [task-21] c.y.m.O.saveOperationLog                 : ==> Parameters: Admin(String), /admin/blog(String), PUT(String), {"blog":{"id":1,"title":"什么是需要你","firstPicture":"12","content":"3123123","description":"1","published":true,"recommend":false,"appreciation":false,"commentEnabled":false,"top":true,"createTime":1714554531000,"updateTime":1714614041784,"views":6,"words":1510,"readTime":8,"password":"","user":null,"category":{"id":1,"name":"jvm","blogs":[]},"tags":null,"cate":1,"tagList":[1]}}(String), 更新博客(String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 22(Integer), 2024-05-02 09:40:41.804(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:40:41.813 DEBUG 10780 --- [task-21] c.y.m.O.saveOperationLog                 : <==    Updates: 1
+2024-05-02 09:40:42.163 DEBUG 10780 --- [http-nio-8090-exec-9] .y.m.B.getListByTitleAndCategoryId_COUNT : ==>  Preparing: SELECT count(0) FROM blog AS b LEFT JOIN category AS c ON b.category_id = c.id
+2024-05-02 09:40:42.163 DEBUG 10780 --- [http-nio-8090-exec-9] .y.m.B.getListByTitleAndCategoryId_COUNT : ==> Parameters: 
+2024-05-02 09:40:42.167 DEBUG 10780 --- [http-nio-8090-exec-9] .y.m.B.getListByTitleAndCategoryId_COUNT : <==      Total: 1
+2024-05-02 09:40:42.168 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.B.getListByTitleAndCategoryId      : ==>  Preparing: SELECT b.id, b.title, b.first_picture, b.create_time, b.update_time, b.is_published, b.is_recommend, b.is_appreciation, b.is_comment_enabled, b.is_top, b.password, c.id AS category_id, c.category_name FROM blog AS b LEFT JOIN category AS c ON b.category_id = c.id order by create_time desc LIMIT ?
+2024-05-02 09:40:42.168 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.B.getListByTitleAndCategoryId      : ==> Parameters: 10(Integer)
+2024-05-02 09:40:42.176 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.B.getListByTitleAndCategoryId      : <==      Total: 1
+2024-05-02 09:40:42.176 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.CategoryMapper.getCategoryList     : ==>  Preparing: select id, category_name from category order by id desc
+2024-05-02 09:40:42.176 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.CategoryMapper.getCategoryList     : ==> Parameters: 
+2024-05-02 09:40:42.177 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.CategoryMapper.getCategoryList     : <==      Total: 2
+2024-05-02 09:40:46.716 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.B.updateBlogRecommendById          : ==>  Preparing: update blog set is_recommend=? where id=?
+2024-05-02 09:40:46.717 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.B.updateBlogRecommendById          : ==> Parameters: true(Boolean), 1(Long)
+2024-05-02 09:40:46.717 DEBUG 10780 --- [http-nio-8090-exec-3] c.y.m.B.updateBlogRecommendById          : <==    Updates: 1
+2024-05-02 09:40:46.721 DEBUG 10780 --- [task-22] c.y.m.O.saveOperationLog                 : ==>  Preparing: insert into operation_log (username, uri, method, param, description, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:40:46.723 DEBUG 10780 --- [task-22] c.y.m.O.saveOperationLog                 : ==> Parameters: Admin(String), /admin/blog/recommend(String), PUT(String), {"id":1,"recommend":true}(String), 更新博客推荐状态(String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 4(Integer), 2024-05-02 09:40:46.72(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:40:46.726 DEBUG 10780 --- [task-22] c.y.m.O.saveOperationLog                 : <==    Updates: 1
+2024-05-02 09:40:49.709 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.mapper.BlogMapper.updateBlogTopById  : ==>  Preparing: update blog set is_top=? where id=?
+2024-05-02 09:40:49.709 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.mapper.BlogMapper.updateBlogTopById  : ==> Parameters: false(Boolean), 1(Long)
+2024-05-02 09:40:49.711 DEBUG 10780 --- [http-nio-8090-exec-5] c.y.mapper.BlogMapper.updateBlogTopById  : <==    Updates: 1
+2024-05-02 09:40:49.719 DEBUG 10780 --- [task-23] c.y.m.O.saveOperationLog                 : ==>  Preparing: insert into operation_log (username, uri, method, param, description, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:40:49.720 DEBUG 10780 --- [task-23] c.y.m.O.saveOperationLog                 : ==> Parameters: Admin(String), /admin/blog/top(String), PUT(String), {"id":1,"top":false}(String), 更新博客置顶状态(String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 9(Integer), 2024-05-02 09:40:49.716(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:40:49.721 DEBUG 10780 --- [task-23] c.y.m.O.saveOperationLog                 : <==    Updates: 1
+2024-05-02 09:40:51.106 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.mapper.BlogMapper.updateBlogTopById  : ==>  Preparing: update blog set is_top=? where id=?
+2024-05-02 09:40:51.107 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.mapper.BlogMapper.updateBlogTopById  : ==> Parameters: true(Boolean), 1(Long)
+2024-05-02 09:40:51.108 DEBUG 10780 --- [http-nio-8090-exec-4] c.y.mapper.BlogMapper.updateBlogTopById  : <==    Updates: 1
+2024-05-02 09:40:51.115 DEBUG 10780 --- [task-24] c.y.m.O.saveOperationLog                 : ==>  Preparing: insert into operation_log (username, uri, method, param, description, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:40:51.116 DEBUG 10780 --- [task-24] c.y.m.O.saveOperationLog                 : ==> Parameters: Admin(String), /admin/blog/top(String), PUT(String), {"id":1,"top":true}(String), 更新博客置顶状态(String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 8(Integer), 2024-05-02 09:40:51.114(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:40:51.118 DEBUG 10780 --- [task-24] c.y.m.O.saveOperationLog                 : <==    Updates: 1
+2024-05-02 09:41:02.618 DEBUG 10780 --- [http-nio-8090-exec-7] B.getSearchBlogListByQueryAndIsPublished : ==>  Preparing: select id, title, content from blog where is_published=true and password='' and content like ?
+2024-05-02 09:41:02.619 DEBUG 10780 --- [http-nio-8090-exec-7] B.getSearchBlogListByQueryAndIsPublished : ==> Parameters: %是%(String)
+2024-05-02 09:41:02.621 DEBUG 10780 --- [http-nio-8090-exec-7] B.getSearchBlogListByQueryAndIsPublished : <==      Total: 0
+2024-05-02 09:41:02.624 DEBUG 10780 --- [task-25] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:41:02.627 DEBUG 10780 --- [task-25] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /searchBlog(String), GET(String), {"query":"是"}(String), 搜索博客(String), 是(String), 搜索内容：是(String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 4(Integer), 2024-05-02 09:41:02.623(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:41:02.629 DEBUG 10780 --- [task-25] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 09:41:03.152 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.B.getGroupYearMonthByIsPublished   : ==>  Preparing: select date_format(create_time, "%Y年%m月") from blog where is_published=true group by date_format(create_time, "%Y年%m月") order by date_format(create_time, "%Y年%m月") desc
+2024-05-02 09:41:03.153 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.B.getGroupYearMonthByIsPublished   : ==> Parameters: 
+2024-05-02 09:41:03.154 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.B.getGroupYearMonthByIsPublished   : <==      Total: 1
+2024-05-02 09:41:03.154 DEBUG 10780 --- [http-nio-8090-exec-10] ArchiveBlogListByYearMonthAndIsPublished : ==>  Preparing: select id, title, password, date_format(create_time, "%d日") as create_day from blog where date_format(create_time, "%Y年%m月")=? and is_published=true order by create_time desc
+2024-05-02 09:41:03.154 DEBUG 10780 --- [http-nio-8090-exec-10] ArchiveBlogListByYearMonthAndIsPublished : ==> Parameters: 2024年05月(String)
+2024-05-02 09:41:03.155 DEBUG 10780 --- [http-nio-8090-exec-10] ArchiveBlogListByYearMonthAndIsPublished : <==      Total: 1
+2024-05-02 09:41:03.156 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.BlogMapper.countBlogByIsPublished  : ==>  Preparing: select count(*) from blog where is_published=true
+2024-05-02 09:41:03.156 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.BlogMapper.countBlogByIsPublished  : ==> Parameters: 
+2024-05-02 09:41:03.157 DEBUG 10780 --- [http-nio-8090-exec-10] c.y.m.BlogMapper.countBlogByIsPublished  : <==      Total: 1
+2024-05-02 09:41:03.170 DEBUG 10780 --- [task-26] c.y.mapper.VisitLogMapper.saveVisitLog   : ==>  Preparing: insert into visit_log (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time, user_agent) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-05-02 09:41:03.171 DEBUG 10780 --- [task-26] c.y.mapper.VisitLogMapper.saveVisitLog   : ==> Parameters: 424056da-dcf3-3610-a399-14f2ebf06e42(String), /archives(String), GET(String), {}(String), 访问页面(String), 归档(String), (String), 192.168.56.1(String), 内网IP|内网IP(String), Windows NT ??(String), Chrome 124(String), 8(Integer), 2024-05-02 09:41:03.161(Timestamp), Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36(String)
+2024-05-02 09:41:03.172 DEBUG 10780 --- [task-26] c.y.mapper.VisitLogMapper.saveVisitLog   : <==    Updates: 1
+2024-05-02 09:41:03.173 DEBUG 10780 --- [http-nio-8090-exec-9] .y.m.B.getNewBlogListByIsPublished_COUNT : ==>  Preparing: SELECT count(0) FROM blog WHERE is_published = true
+2024-05-02 09:41:03.174 DEBUG 10780 --- [http-nio-8090-exec-9] .y.m.B.getNewBlogListByIsPublished_COUNT : ==> Parameters: 
+2024-05-02 09:41:03.175 DEBUG 10780 --- [http-nio-8090-exec-9] .y.m.B.getNewBlogListByIsPublished_COUNT : <==      Total: 1
+2024-05-02 09:41:03.175 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.B.getNewBlogListByIsPublished      : ==>  Preparing: select id, title, password from blog where is_published=true order by create_time desc LIMIT ?
+2024-05-02 09:41:03.175 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.B.getNewBlogListByIsPublished      : ==> Parameters: 3(Integer)
+2024-05-02 09:41:03.176 DEBUG 10780 --- [http-nio-8090-exec-9] c.y.m.B.getNewBlogListByIsPublished      : <==      Total: 1
+2024-05-02 09:41:03.180 DEBUG 10780 --- [http-nio-8090-exec-9] stByLimitNumAndIsPublishedAndIsRecommend : ==>  Preparing: select id, title, password, create_time, first_picture from blog where is_published=true and is_recommend=true order by rand() limit ?
+2024-05-02 09:41:03.180 DEBUG 10780 --- [http-nio-8090-exec-9] stByLimitNumAndIsPublishedAndIsRecommend : ==> Parameters: 5(Integer)
+2024-05-02 09:41:03.181 DEBUG 10780 --- [http-nio-8090-exec-9] stByLimitNumAndIsPublishedAndIsRecommend : <==      Total: 1
+2024-05-02 13:49:42.978  INFO 10780 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2024-05-02 13:49:42.983  INFO 10780 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2024-05-02 13:49:42.983  INFO 10780 --- [SpringContextShutdownHook] o.s.s.quartz.SchedulerFactoryBean        : Shutting down Quartz Scheduler
+2024-05-02 13:49:42.984  INFO 10780 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED shutting down.
+2024-05-02 13:49:42.984  INFO 10780 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2024-05-02 13:49:42.985  INFO 10780 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED shutdown complete.
+2024-05-02 13:49:43.110  INFO 10780 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-05-02 13:49:43.115  INFO 10780 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-05-02 13:53:49.329  INFO 30028 --- [restartedMain] com.yond.BlogApiApplication              : Starting BlogApiApplication on DESKTOP-IUV66QC with PID 30028 (F:\back\blog\blog-service\blog-server\target\classes started by yond in F:\back\blog\blog-service)
+2024-05-02 13:53:49.331 DEBUG 30028 --- [restartedMain] com.yond.BlogApiApplication              : Running with Spring Boot v2.2.7.RELEASE, Spring v5.2.6.RELEASE
+2024-05-02 13:53:49.331  INFO 30028 --- [restartedMain] com.yond.BlogApiApplication              : The following profiles are active: dev
+2024-05-02 13:53:49.359  INFO 30028 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-02 13:53:49.360  INFO 30028 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-02 13:53:50.652  INFO 30028 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2024-05-02 13:53:50.653  INFO 30028 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-05-02 13:53:50.678  INFO 30028 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 18ms. Found 0 Redis repository interfaces.
+2024-05-02 13:53:50.972  INFO 30028 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.retry.annotation.RetryConfiguration' of type [org.springframework.retry.annotation.RetryConfiguration$$EnhancerBySpringCGLIB$$f816f686] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2024-05-02 13:53:51.382  INFO 30028 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8090 (http)
+2024-05-02 13:53:51.391  INFO 30028 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-02 13:53:51.392  INFO 30028 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.34]
+2024-05-02 13:53:51.394  INFO 30028 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : Loaded APR based Apache Tomcat Native library [1.2.26] using APR version [1.7.0].
+2024-05-02 13:53:51.395  INFO 30028 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+2024-05-02 13:53:51.395  INFO 30028 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2024-05-02 13:53:51.397  INFO 30028 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 1.1.1i  8 Dec 2020]
+2024-05-02 13:53:51.454  INFO 30028 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-02 13:53:51.454  INFO 30028 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 2094 ms
+2024-05-02 13:53:51.902  INFO 30028 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : 
+2024-05-02 13:53:51.905  INFO 30028 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : /-----------------------------------------------------------\
+2024-05-02 13:53:51.905  INFO 30028 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : | Yauaa 7.11.0 (v7.11.0 @ 2023-01-24T21:50:03Z)             |
+2024-05-02 13:53:51.905  INFO 30028 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : +-----------------------------------------------------------+
+2024-05-02 13:53:51.905  INFO 30028 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : | For more information: https://yauaa.basjes.nl             |
+2024-05-02 13:53:51.905  INFO 30028 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : | Copyright (C) 2013-2023 Niels Basjes - License Apache 2.0 |
+2024-05-02 13:53:51.905  INFO 30028 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : \-----------------------------------------------------------/
+2024-05-02 13:53:51.905  INFO 30028 --- [restartedMain] n.b.parse.useragent.utils.YauaaVersion   : 
+2024-05-02 13:53:51.990  INFO 30028 --- [restartedMain] n.b.parse.useragent.config.ConfigLoader  : - Loaded 111 files in   79 ms using expression: classpath*:UserAgents/**/*.yaml
+2024-05-02 13:53:52.510  INFO 30028 --- [restartedMain] n.b.p.u.a.UserAgentStringMatchMaker      : Building all needed matchers for the requested 11 fields.
+2024-05-02 13:53:53.060  INFO 30028 --- [restartedMain] io.lettuce.core.EpollProvider            : Starting without optional epoll library
+2024-05-02 13:53:53.061  INFO 30028 --- [restartedMain] io.lettuce.core.KqueueProvider           : Starting without optional kqueue library
+2024-05-02 13:53:53.286  INFO 30028 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Using default implementation for ThreadExecutor
+2024-05-02 13:53:53.295  INFO 30028 --- [restartedMain] org.quartz.core.SchedulerSignalerImpl    : Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2024-05-02 13:53:53.296  INFO 30028 --- [restartedMain] org.quartz.core.QuartzScheduler          : Quartz Scheduler v.2.3.2 created.
+2024-05-02 13:53:53.297  INFO 30028 --- [restartedMain] org.quartz.simpl.RAMJobStore             : RAMJobStore initialized.
+2024-05-02 13:53:53.297  INFO 30028 --- [restartedMain] org.quartz.core.QuartzScheduler          : Scheduler meta-data: Quartz Scheduler (v2.3.2) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2024-05-02 13:53:53.298  INFO 30028 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2024-05-02 13:53:53.298  INFO 30028 --- [restartedMain] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler version: 2.3.2
+2024-05-02 13:53:53.298  INFO 30028 --- [restartedMain] org.quartz.core.QuartzScheduler          : JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@fdee418
+2024-05-02 13:53:53.341  INFO 30028 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-05-02 13:53:53.443  INFO 30028 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-05-02 13:53:53.447 DEBUG 30028 --- [restartedMain] c.y.mapper.ScheduleJobMapper.getJobList  : ==>  Preparing: select job_id, bean_name, method_name, params, cron, status, remark, create_time from schedule_job
+2024-05-02 13:53:53.464 DEBUG 30028 --- [restartedMain] c.y.mapper.ScheduleJobMapper.getJobList  : ==> Parameters: 
+2024-05-02 13:53:53.497 DEBUG 30028 --- [restartedMain] c.y.mapper.ScheduleJobMapper.getJobList  : <==      Total: 2
+2024-05-02 13:53:53.877  INFO 30028 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2024-05-02 13:53:54.419  INFO 30028 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@499b45da, org.springframework.security.web.context.SecurityContextPersistenceFilter@1787264a, org.springframework.security.web.header.HeaderWriterFilter@486c5e88, org.springframework.web.filter.CorsFilter@4266be05, org.springframework.security.web.authentication.logout.LogoutFilter@32ba1123, com.yond.config.JwtLoginFilter@4f817bc8, com.yond.config.JwtFilter@9ff2d54, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@70fda5be, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1e97da33, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1ad91c24, org.springframework.security.web.session.SessionManagementFilter@1aee3a49, org.springframework.security.web.access.ExceptionTranslationFilter@7450884f, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@788c4395]
+2024-05-02 13:53:54.473  INFO 30028 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-02 13:53:54.483  INFO 30028 --- [restartedMain] o.s.s.quartz.SchedulerFactoryBean        : Starting Quartz Scheduler now
+2024-05-02 13:53:54.483  INFO 30028 --- [restartedMain] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2024-05-02 13:53:54.497  INFO 30028 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8090 (http) with context path ''
+2024-05-02 13:53:54.499  INFO 30028 --- [restartedMain] com.yond.BlogApiApplication              : Started BlogApiApplication in 5.521 seconds (JVM running for 5.809)
+2024-05-02 13:54:23.076  INFO 30028 --- [http-nio-8090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-05-02 13:54:23.076  INFO 30028 --- [http-nio-8090-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-05-02 13:54:23.081  INFO 30028 --- [http-nio-8090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2024-05-02 13:54:23.108 ERROR 30028 --- [http-nio-8090-exec-3] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Filter execution threw an exception] with root cause
+
+java.lang.ClassNotFoundException: javax.xml.bind.DatatypeConverter
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at io.jsonwebtoken.impl.Base64Codec.decode(Base64Codec.java:26)
+	at io.jsonwebtoken.impl.DefaultJwtParser.setSigningKey(DefaultJwtParser.java:151)
+	at com.yond.util.JwtUtils.getTokenBody(JwtUtils.java:103)
+	at com.yond.config.JwtFilter.doFilter(JwtFilter.java:41)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:200)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:92)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:92)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:77)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:56)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:358)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:271)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:373)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1590)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+2024-05-02 13:56:12.988  INFO 30028 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2024-05-02 13:56:12.991  INFO 30028 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2024-05-02 13:56:12.993  INFO 30028 --- [SpringContextShutdownHook] o.s.s.quartz.SchedulerFactoryBean        : Shutting down Quartz Scheduler
+2024-05-02 13:56:12.993  INFO 30028 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED shutting down.
+2024-05-02 13:56:12.993  INFO 30028 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2024-05-02 13:56:12.994  INFO 30028 --- [SpringContextShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED shutdown complete.
+2024-05-02 13:56:13.135  INFO 30028 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-05-02 13:56:13.140  INFO 30028 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

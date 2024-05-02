@@ -1,14 +1,10 @@
 package com.yond.controller.admin;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.yond.annotation.OperationLogger;
-import com.yond.model.vo.Result;
+import com.yond.resp.Result;
 import com.yond.service.AboutService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -20,29 +16,31 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin")
 public class AboutAdminController {
-	@Autowired
-	AboutService aboutService;
 
-	/**
-	 * 获取关于我页面配置
-	 *
-	 * @return
-	 */
-	@GetMapping("/about")
-	public Result about() {
-		return Result.ok("请求成功", aboutService.getAboutSetting());
-	}
+    @Autowired
+    AboutService aboutService;
 
-	/**
-	 * 修改关于我页面
-	 *
-	 * @param map
-	 * @return
-	 */
-	@OperationLogger("修改关于我页面")
-	@PutMapping("/about")
-	public Result updateAbout(@RequestBody Map<String, String> map) {
-		aboutService.updateAbout(map);
-		return Result.ok("修改成功");
-	}
+    /**
+     * 获取关于我页面配置
+     *
+     * @return
+     */
+    @GetMapping("/about")
+    public Result<Map<String, String>> about() {
+        return Result.success(aboutService.getAboutSetting());
+    }
+
+    /**
+     * 修改关于我页面
+     *
+     * @param map
+     * @return
+     */
+    @OperationLogger("修改关于我页面")
+    @PutMapping("/about")
+    public Result<Boolean> updateAbout(@RequestBody Map<String, String> map) {
+        aboutService.updateAbout(map);
+        return Result.success();
+    }
+
 }
