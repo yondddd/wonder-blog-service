@@ -8,7 +8,7 @@ import java.io.StringWriter;
  * @Author: Naccl
  * @Date: 2020-08-02
  */
-public class StringUtils {
+public class MyStringUtils {
 	/**
 	 * 判断字符串是否为空
 	 *

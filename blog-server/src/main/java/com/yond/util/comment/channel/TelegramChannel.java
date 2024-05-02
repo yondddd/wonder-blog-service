@@ -1,15 +1,15 @@
 package com.yond.util.comment.channel;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 import com.yond.config.properties.BlogProperties;
 import com.yond.config.properties.TelegramProperties;
 import com.yond.enums.CommentPageEnum;
 import com.yond.model.dto.Comment;
-import com.yond.util.StringUtils;
 import com.yond.util.comment.CommentUtils;
 import com.yond.util.telegram.TelegramUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -25,68 +25,68 @@ import java.util.TimeZone;
 @Lazy
 @Component
 public class TelegramChannel implements CommentNotifyChannel {
-	private TelegramUtils telegramUtils;
+    private final TelegramUtils telegramUtils;
 
-	private BlogProperties blogProperties;
+    private final BlogProperties blogProperties;
 
-	private TelegramProperties telegramProperties;
+    private final TelegramProperties telegramProperties;
 
-	private SimpleDateFormat simpleDateFormat;
+    private final SimpleDateFormat simpleDateFormat;
 
-	public TelegramChannel(TelegramUtils telegramUtils, BlogProperties blogProperties, TelegramProperties telegramProperties) {
-		this.telegramUtils = telegramUtils;
-		this.blogProperties = blogProperties;
-		this.telegramProperties = telegramProperties;
+    public TelegramChannel(TelegramUtils telegramUtils, BlogProperties blogProperties, TelegramProperties telegramProperties) {
+        this.telegramUtils = telegramUtils;
+        this.blogProperties = blogProperties;
+        this.telegramProperties = telegramProperties;
 
-		this.simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		this.simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+        this.simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        this.simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
 
-		log.info("TelegramChannel instantiating");
-		telegramUtils.setWebhook();
-	}
+        log.info("TelegramChannel instantiating");
+        telegramUtils.setWebhook();
+    }
 
-	/**
-	 * 发送Telegram消息提醒我自己
-	 *
-	 * @param comment 当前收到的评论
-	 */
-	@Override
-	public void notifyMyself(Comment comment) {
-		String url = telegramProperties.getApi() + telegramProperties.getToken() + TelegramUtils.SEND_MESSAGE;
-		String content = getContent(comment);
-		Map<String, Object> messageBody = telegramUtils.getMessageBody(content);
-		telegramUtils.sendByAutoCheckReverseProxy(url, messageBody);
-	}
+    /**
+     * 发送Telegram消息提醒我自己
+     *
+     * @param comment 当前收到的评论
+     */
+    @Override
+    public void notifyMyself(Comment comment) {
+        String url = telegramProperties.getApi() + telegramProperties.getToken() + TelegramUtils.SEND_MESSAGE;
+        String content = getContent(comment);
+        Map<String, Object> messageBody = telegramUtils.getMessageBody(content);
+        telegramUtils.sendByAutoCheckReverseProxy(url, messageBody);
+    }
 
-	private String getContent(Comment comment) {
-		CommentPageEnum commentPageEnum = CommentUtils.getCommentPageEnum(comment);
-		return String.format(
-				"<b>您的文章<a href=\"%s\">《%s》</a>有了新的评论~</b>\n" +
-						"\n" +
-						"<b>%s</b> 给您的评论：\n" +
-						"\n" +
-						"<pre>%s</pre>\n" +
-						"\n" +
-						"<b>其他信息：</b>\n" +
-						"评论ID：<code>%d</code>\n" +
-						"IP：%s\n" +
-						"%s" +
-						"时间：<u>%s</u>\n" +
-						"邮箱：<code>%s</code>\n" +
-						"%s" +
-						"状态：%s [<a href=\"%s\">管理评论</a>]\n",
-				blogProperties.getView() + commentPageEnum.getPath(),
-				commentPageEnum.getTitle(),
-				comment.getNickname(),
-				comment.getContent(),
-				comment.getId(),
-				comment.getIp(),
-				StringUtils.isEmpty(comment.getQq()) ? "" : "QQ：" + comment.getQq() + "\n",
-				simpleDateFormat.format(comment.getCreateTime()),
-				comment.getEmail(),
-				StringUtils.isEmpty(comment.getWebsite()) ? "" : "网站：" + comment.getWebsite() + "\n",
-				comment.getPublished() ? "公开" : "待审核",
-				blogProperties.getCms() + "/blog/comment/list"
-		);
-	}
+    private String getContent(Comment comment) {
+        CommentPageEnum commentPageEnum = CommentUtils.getCommentPageEnum(comment);
+        return String.format(
+                "<b>您的文章<a href=\"%s\">《%s》</a>有了新的评论~</b>\n" +
+                        "\n" +
+                        "<b>%s</b> 给您的评论：\n" +
+                        "\n" +
+                        "<pre>%s</pre>\n" +
+                        "\n" +
+                        "<b>其他信息：</b>\n" +
+                        "评论ID：<code>%d</code>\n" +
+                        "IP：%s\n" +
+                        "%s" +
+                        "时间：<u>%s</u>\n" +
+                        "邮箱：<code>%s</code>\n" +
+                        "%s" +
+                        "状态：%s [<a href=\"%s\">管理评论</a>]\n",
+                blogProperties.getView() + commentPageEnum.getPath(),
+                commentPageEnum.getTitle(),
+                comment.getNickname(),
+                comment.getContent(),
+                comment.getId(),
+                comment.getIp(),
+                StringUtils.isBlank(comment.getQq()) ? "" : "QQ：" + comment.getQq() + "\n",
+                simpleDateFormat.format(comment.getCreateTime()),
+                comment.getEmail(),
+                StringUtils.isBlank(comment.getWebsite()) ? "" : "网站：" + comment.getWebsite() + "\n",
+                comment.getPublished() ? "公开" : "待审核",
+                blogProperties.getCms() + "/blog/comment/list"
+        );
+    }
 }
