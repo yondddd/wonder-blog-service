@@ -335,8 +335,10 @@ public class BlogServiceImpl implements BlogService {
          * 这里如果出现异常，查看第 152 行注释说明
          * @see BlogServiceImpl#setBlogViewsFromRedisToPageResult
          */
-        int view = (int) redisService.getValueByHashKey(RedisKeyConstants.BLOG_VIEWS_MAP, blog.getId());
-        blog.setViews(view);
+        Object view = redisService.getValueByHashKey(RedisKeyConstants.BLOG_VIEWS_MAP, blog.getId());
+        if (view != null) {
+            blog.setViews((Integer) view);
+        }
         return blog;
     }
 
@@ -357,8 +359,10 @@ public class BlogServiceImpl implements BlogService {
          * 这里如果出现异常，查看第 152 行注释说明
          * @see BlogServiceImpl#setBlogViewsFromRedisToPageResult
          */
-        int view = (int) redisService.getValueByHashKey(RedisKeyConstants.BLOG_VIEWS_MAP, blog.getId());
-        blog.setViews(view);
+        Object view = redisService.getValueByHashKey(RedisKeyConstants.BLOG_VIEWS_MAP, blog.getId());
+        if (view != null) {
+            blog.setViews((Integer) view);
+        }
         return blog;
     }
 
