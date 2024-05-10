@@ -1,9 +1,9 @@
 package com.yond.controller.view;
 
-import com.yond.constant.JwtConstants;
+import com.yond.common.constant.JwtConstants;
+import com.yond.common.resp.Result;
 import com.yond.entity.User;
 import com.yond.model.dto.LoginInfo;
-import com.yond.resp.Result;
 import com.yond.service.UserService;
 import com.yond.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;

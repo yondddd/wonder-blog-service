@@ -2,8 +2,8 @@ package com.yond.controller.admin;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yond.common.resp.Result;
 import com.yond.entity.VisitLog;
-import com.yond.resp.Result;
 import com.yond.service.VisitLogService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

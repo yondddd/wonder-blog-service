@@ -1,10 +1,10 @@
 package com.yond.task;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import com.yond.constant.RedisKeyConstants;
+import com.yond.common.constant.RedisKeyConstants;
 import com.yond.service.BlogService;
 import com.yond.service.RedisService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Set;
@@ -16,21 +16,21 @@ import java.util.Set;
  */
 @Component
 public class RedisSyncScheduleTask {
-	@Autowired
-	RedisService redisService;
-	@Autowired
-	BlogService blogService;
+    @Autowired
+    RedisService redisService;
+    @Autowired
+    BlogService blogService;
 
-	/**
-	 * 从Redis同步博客文章浏览量到数据库
-	 */
-	public void syncBlogViewsToDatabase() {
-		String redisKey = RedisKeyConstants.BLOG_VIEWS_MAP;
-		Map blogViewsMap = redisService.getMapByHash(redisKey);
-		Set<Integer> keys = blogViewsMap.keySet();
-		for (Integer key : keys) {
-			Integer views = (Integer) blogViewsMap.get(key);
-			blogService.updateViews(key.longValue(), views);
-		}
-	}
+    /**
+     * 从Redis同步博客文章浏览量到数据库
+     */
+    public void syncBlogViewsToDatabase() {
+        String redisKey = RedisKeyConstants.BLOG_VIEWS_MAP;
+        Map blogViewsMap = redisService.getMapByHash(redisKey);
+        Set<Integer> keys = blogViewsMap.keySet();
+        for (Integer key : keys) {
+            Integer views = (Integer) blogViewsMap.get(key);
+            blogService.updateViews(key.longValue(), views);
+        }
+    }
 }

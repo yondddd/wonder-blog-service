@@ -1,8 +1,8 @@
 package com.yond.controller.admin;
 
-import com.yond.annotation.OperationLogger;
+import com.yond.common.annotation.OperationLogger;
+import com.yond.common.resp.Result;
 import com.yond.entity.SiteSetting;
-import com.yond.resp.Result;
 import com.yond.service.SiteSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

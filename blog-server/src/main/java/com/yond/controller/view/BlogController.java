@@ -1,15 +1,15 @@
 package com.yond.controller.view;
 
-import com.yond.annotation.VisitLogger;
-import com.yond.constant.JwtConstants;
+import com.yond.common.annotation.VisitLogger;
+import com.yond.common.constant.JwtConstants;
+import com.yond.common.enums.VisitBehavior;
+import com.yond.common.resp.Result;
 import com.yond.entity.User;
-import com.yond.enums.VisitBehavior;
 import com.yond.model.dto.BlogPassword;
 import com.yond.model.vo.BlogDetail;
 import com.yond.model.vo.BlogInfo;
 import com.yond.model.vo.PageResult;
 import com.yond.model.vo.SearchBlog;
-import com.yond.resp.Result;
 import com.yond.service.BlogService;
 import com.yond.service.impl.UserServiceImpl;
 import com.yond.util.JwtUtils;

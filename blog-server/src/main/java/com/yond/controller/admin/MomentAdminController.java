@@ -2,9 +2,9 @@ package com.yond.controller.admin;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.yond.annotation.OperationLogger;
+import com.yond.common.annotation.OperationLogger;
+import com.yond.common.resp.Result;
 import com.yond.entity.Moment;
-import com.yond.resp.Result;
 import com.yond.service.MomentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

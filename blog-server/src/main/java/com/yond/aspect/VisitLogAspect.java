@@ -1,13 +1,13 @@
 package com.yond.aspect;
 
-import com.yond.annotation.VisitLogger;
-import com.yond.constant.RedisKeyConstants;
+import com.yond.common.annotation.VisitLogger;
+import com.yond.common.constant.RedisKeyConstants;
+import com.yond.common.enums.VisitBehavior;
+import com.yond.common.resp.Result;
 import com.yond.entity.VisitLog;
 import com.yond.entity.Visitor;
-import com.yond.enums.VisitBehavior;
 import com.yond.model.dto.VisitLogRemark;
 import com.yond.model.vo.BlogDetail;
-import com.yond.resp.Result;
 import com.yond.service.RedisService;
 import com.yond.service.VisitLogService;
 import com.yond.service.VisitorService;

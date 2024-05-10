@@ -1,7 +1,7 @@
 package com.yond.service.impl;
 
+import com.yond.common.exception.PersistenceException;
 import com.yond.entity.ExceptionLog;
-import com.yond.exception.PersistenceException;
 import com.yond.mapper.ExceptionLogMapper;
 import com.yond.model.dto.UserAgentDTO;
 import com.yond.service.ExceptionLogService;

@@ -3,7 +3,20 @@
     <!--包含Spring boot对logback日志的默认配置-->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+    <contextListener class="com.ruijing.pearl.log.logback.LogbackContextListener"/>
+    <property name="LOG_HOME" value="/logs"/>
+    <property name="DEFAULT_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] [%logger{40}] %msg%n{}"/>
+    <property name="OPERATION_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] %msg%n{}"/>
+
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!-- To enable JMX Management -->
+    <jmxConfigurator/>
 
     <!--重写了Spring Boot框架 org/springframework/boot/logging/logback/file-appender.xml 配置-->
     <appender name="TIME_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">

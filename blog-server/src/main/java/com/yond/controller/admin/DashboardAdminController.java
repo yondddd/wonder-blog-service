@@ -1,8 +1,8 @@
 package com.yond.controller.admin;
 
-import com.yond.constant.RedisKeyConstants;
+import com.yond.common.constant.RedisKeyConstants;
+import com.yond.common.resp.Result;
 import com.yond.entity.CityVisitor;
-import com.yond.resp.Result;
 import com.yond.service.DashboardService;
 import com.yond.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;

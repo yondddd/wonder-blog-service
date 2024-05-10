@@ -1,8 +1,8 @@
 package com.yond.service.impl;
 
+import com.yond.common.exception.PersistenceException;
 import com.yond.entity.ScheduleJob;
 import com.yond.entity.ScheduleJobLog;
-import com.yond.exception.PersistenceException;
 import com.yond.mapper.ScheduleJobLogMapper;
 import com.yond.mapper.ScheduleJobMapper;
 import com.yond.service.ScheduleJobService;

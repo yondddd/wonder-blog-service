@@ -1,10 +1,10 @@
 package com.yond.controller.view;
 
-import com.yond.annotation.VisitLogger;
-import com.yond.enums.VisitBehavior;
+import com.yond.common.annotation.VisitLogger;
+import com.yond.common.enums.VisitBehavior;
+import com.yond.common.resp.Result;
 import com.yond.model.vo.Friend;
 import com.yond.model.vo.FriendInfo;
-import com.yond.resp.Result;
 import com.yond.service.FriendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

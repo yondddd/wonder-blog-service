@@ -1,11 +1,11 @@
 package com.yond.util.comment;
 
+import com.yond.common.constant.PageConstants;
+import com.yond.common.constant.RedisKeyConstants;
+import com.yond.common.enums.CommentOpenStateEnum;
+import com.yond.common.enums.CommentPageEnum;
 import com.yond.config.properties.BlogProperties;
-import com.yond.constant.PageConstants;
-import com.yond.constant.RedisKeyConstants;
 import com.yond.entity.User;
-import com.yond.enums.CommentOpenStateEnum;
-import com.yond.enums.CommentPageEnum;
 import com.yond.model.dto.Comment;
 import com.yond.model.vo.FriendInfo;
 import com.yond.service.*;

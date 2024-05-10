@@ -1,10 +1,10 @@
 package com.yond.controller.view;
 
+import com.yond.common.resp.Result;
 import com.yond.entity.Category;
 import com.yond.entity.Tag;
 import com.yond.model.vo.NewBlog;
 import com.yond.model.vo.RandomBlog;
-import com.yond.resp.Result;
 import com.yond.service.BlogService;
 import com.yond.service.CategoryService;
 import com.yond.service.SiteSettingService;

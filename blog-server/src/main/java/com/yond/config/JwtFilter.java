@@ -1,6 +1,6 @@
 package com.yond.config;
 
-import com.yond.resp.Result;
+import com.yond.common.resp.Result;
 import com.yond.util.JacksonUtils;
 import com.yond.util.JwtUtils;
 import io.jsonwebtoken.Claims;

@@ -1,7 +1,7 @@
 package com.yond.interceptor;
 
-import com.yond.annotation.AccessLimit;
-import com.yond.resp.Result;
+import com.yond.common.annotation.AccessLimit;
+import com.yond.common.resp.Result;
 import com.yond.service.RedisService;
 import com.yond.util.IpAddressUtils;
 import com.yond.util.JacksonUtils;
@@ -21,15 +21,14 @@ import java.io.PrintWriter;
  */
 @Component
 public class AccessLimitInterceptor implements HandlerInterceptor {
-    
+
     @Autowired
     RedisService redisService;
 
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
+        if (handler instanceof HandlerMethod handlerMethod) {
             AccessLimit accessLimit = handlerMethod.getMethodAnnotation(AccessLimit.class);
             //方法上没有访问控制的注解，直接通过
             if (accessLimit == null) {

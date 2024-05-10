@@ -1,14 +1,14 @@
 package com.yond.controller.view;
 
 import com.github.pagehelper.PageInfo;
-import com.yond.annotation.AccessLimit;
-import com.yond.annotation.VisitLogger;
-import com.yond.constant.JwtConstants;
+import com.yond.common.annotation.AccessLimit;
+import com.yond.common.annotation.VisitLogger;
+import com.yond.common.constant.JwtConstants;
+import com.yond.common.enums.VisitBehavior;
+import com.yond.common.resp.Result;
 import com.yond.entity.Moment;
 import com.yond.entity.User;
-import com.yond.enums.VisitBehavior;
 import com.yond.model.vo.PageResult;
-import com.yond.resp.Result;
 import com.yond.service.MomentService;
 import com.yond.service.impl.UserServiceImpl;
 import com.yond.util.JwtUtils;

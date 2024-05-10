@@ -2,10 +2,10 @@ package com.yond.controller.admin;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.yond.annotation.OperationLogger;
+import com.yond.common.annotation.OperationLogger;
+import com.yond.common.resp.Result;
 import com.yond.entity.ScheduleJob;
 import com.yond.entity.ScheduleJobLog;
-import com.yond.resp.Result;
 import com.yond.service.ScheduleJobService;
 import com.yond.util.common.ValidatorUtils;
 import org.springframework.beans.factory.annotation.Autowired;

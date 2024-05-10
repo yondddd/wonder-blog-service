@@ -1,8 +1,8 @@
 package com.yond.handler;
 
-import com.yond.exception.NotFoundException;
-import com.yond.exception.PersistenceException;
-import com.yond.resp.Result;
+import com.yond.common.exception.NotFoundException;
+import com.yond.common.exception.PersistenceException;
+import com.yond.common.resp.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

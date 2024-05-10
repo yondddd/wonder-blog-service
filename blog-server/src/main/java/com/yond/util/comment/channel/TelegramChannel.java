@@ -1,8 +1,8 @@
 package com.yond.util.comment.channel;
 
+import com.yond.common.enums.CommentPageEnum;
 import com.yond.config.properties.BlogProperties;
 import com.yond.config.properties.TelegramProperties;
-import com.yond.enums.CommentPageEnum;
 import com.yond.model.dto.Comment;
 import com.yond.util.comment.CommentUtils;
 import com.yond.util.telegram.TelegramUtils;

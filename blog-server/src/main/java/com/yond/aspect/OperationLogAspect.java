@@ -1,6 +1,6 @@
 package com.yond.aspect;
 
-import com.yond.annotation.OperationLogger;
+import com.yond.common.annotation.OperationLogger;
 import com.yond.entity.OperationLog;
 import com.yond.service.OperationLogService;
 import com.yond.util.AopUtils;

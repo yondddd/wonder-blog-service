@@ -1,9 +1,9 @@
 package com.yond.config;
 
+import com.yond.common.exception.BadRequestException;
+import com.yond.common.resp.Result;
 import com.yond.entity.LoginLog;
 import com.yond.entity.User;
-import com.yond.exception.BadRequestException;
-import com.yond.resp.Result;
 import com.yond.service.LoginLogService;
 import com.yond.util.IpAddressUtils;
 import com.yond.util.JacksonUtils;

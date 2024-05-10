@@ -1,6 +1,6 @@
 package com.yond.config;
 
-import com.yond.resp.Result;
+import com.yond.common.resp.Result;
 import com.yond.util.JacksonUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

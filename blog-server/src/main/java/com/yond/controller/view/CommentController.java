@@ -2,14 +2,14 @@ package com.yond.controller.view;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.yond.annotation.AccessLimit;
-import com.yond.constant.JwtConstants;
+import com.yond.common.annotation.AccessLimit;
+import com.yond.common.constant.JwtConstants;
+import com.yond.common.enums.CommentOpenStateEnum;
+import com.yond.common.resp.Result;
 import com.yond.entity.User;
-import com.yond.enums.CommentOpenStateEnum;
 import com.yond.model.dto.Comment;
 import com.yond.model.vo.PageComment;
 import com.yond.model.vo.PageResult;
-import com.yond.resp.Result;
 import com.yond.service.CommentService;
 import com.yond.service.impl.UserServiceImpl;
 import com.yond.util.JwtUtils;
