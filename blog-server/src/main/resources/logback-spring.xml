@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<configuration>
+<configuration scan="true" scanPeriod="30 seconds">
     <!--包含Spring boot对logback日志的默认配置-->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
@@ -8,7 +8,8 @@
         <resetJUL>true</resetJUL>
     </contextListener>
 
-    <contextListener class="com.ruijing.pearl.log.logback.LogbackContextListener"/>
+    <contextListener class="com.yond.log.logback.LogbackContextListener"/>
+
     <property name="LOG_HOME" value="/logs"/>
     <property name="DEFAULT_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] [%logger{40}] %msg%n{}"/>
     <property name="OPERATION_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] %msg%n{}"/>

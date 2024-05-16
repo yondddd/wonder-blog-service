@@ -6,8 +6,7 @@ import ch.qos.logback.classic.spi.LoggerContextListener;
 import ch.qos.logback.core.Context;
 import ch.qos.logback.core.spi.ContextAwareBase;
 import ch.qos.logback.core.spi.LifeCycle;
-import com.ruijing.fundamental.common.env.Environment;
-import com.ruijing.fundamental.common.extension.ExtensionLoader;
+import com.yond.extension.ExtensionLoader;
 import com.yond.log.LogContextLoader;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -23,6 +22,9 @@ public class LogbackContextListener extends ContextAwareBase implements LoggerCo
     private boolean isStarted = false;
 
     private final List<LogContextLoader> logContextLoaderList = ExtensionLoader.getExtensionList(LogContextLoader.class);
+
+    public LogbackContextListener() {
+    }
 
     @Override
     public boolean isResetResistant() {
@@ -53,8 +55,8 @@ public class LogbackContextListener extends ContextAwareBase implements LoggerCo
 
         synchronized (LogbackContextListener.class) {
             Context context = getContext();
-            context.putProperty("env", Environment.getEnv());
-            context.putProperty("appkey", Environment.getAppKey());
+//            context.putProperty("env", Environment.getEnv());
+//            context.putProperty("appkey", Environment.getAppKey());
             if (CollectionUtils.isNotEmpty(logContextLoaderList)) {
                 for (LogContextLoader loader : logContextLoaderList) {
                     Map<String, String> map = loader.getContext();
