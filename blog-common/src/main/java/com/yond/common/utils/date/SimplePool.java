@@ -6,7 +6,7 @@ import org.apache.commons.pool2.ObjectPool;
 /**
  * 简单对象池（实现了common-pool中的ObjectPool接口
  *
- * @author mwup
+ 
  * @version 1.0
  * @created 2018/1/7 00:31
  **/

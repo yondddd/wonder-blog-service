@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentMap;
  *
  * </pre>
  *
- * @author muweiping
+ * @author 
  * @version 创建时间：2019-12-19
  */
 public class ExtensionLoader<T> {

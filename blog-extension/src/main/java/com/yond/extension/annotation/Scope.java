@@ -3,7 +3,7 @@ package com.yond.extension.annotation;
 /**
  * BeanProperty
  *
- * @author muweiping
+ * @author 
  * @version 1.0
  * @created 2020/04/05 17:03
  **/

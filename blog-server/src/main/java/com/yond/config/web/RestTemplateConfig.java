@@ -1,4 +1,4 @@
-package com.yond.config;
+package com.yond.config.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

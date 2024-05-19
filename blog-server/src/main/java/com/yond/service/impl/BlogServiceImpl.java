@@ -154,8 +154,11 @@ public class BlogServiceImpl implements BlogService {
              *
              * 具体请查看: https://github.com/Naccl/NBlog/issues/58
              */
-            int view = (int) redisService.getValueByHashKey(redisKey, blogId);
-            blogInfo.setViews(view);
+            Object valueByHashKey = redisService.getValueByHashKey(redisKey, blogId);
+            if (valueByHashKey != null) {
+                int view = (int) redisService.getValueByHashKey(redisKey, blogId);
+                blogInfo.setViews(view);
+            }
             blogInfos.set(i, blogInfo);
         }
     }

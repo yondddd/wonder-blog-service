@@ -18,7 +18,7 @@ import java.util.Map;
 public class AboutAdminController {
 
     @Autowired
-    AboutService aboutService;
+    private AboutService aboutService;
 
     /**
      * 获取关于我页面配置

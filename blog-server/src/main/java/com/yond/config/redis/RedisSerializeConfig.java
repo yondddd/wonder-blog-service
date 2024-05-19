@@ -1,4 +1,4 @@
-package com.yond.config;
+package com.yond.config.redis;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

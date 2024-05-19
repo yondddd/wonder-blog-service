@@ -1,4 +1,4 @@
-package com.yond.config;
+package com.yond.config.login;
 
 import com.yond.common.resp.Result;
 import com.yond.util.JacksonUtils;

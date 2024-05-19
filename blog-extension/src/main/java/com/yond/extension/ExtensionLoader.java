@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * ExtensionLoader
  *
- * @author mwup
  * @version 1.0
  * @created 2018/10/19 17:18
  **/

@@ -1,4 +1,4 @@
-package com.yond.config;
+package com.yond.config.login;
 
 import com.yond.common.exception.BadRequestException;
 import com.yond.common.resp.Result;
