@@ -12,6 +12,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -29,10 +30,10 @@ import java.util.Map;
  * @Date: 2020-07-21
  */
 public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
-    LoginLogService loginLogService;
-    ThreadLocal<String> currentUsername = new ThreadLocal<>();
+    private final LoginLogService loginLogService;
+    private final ThreadLocal<String> currentUsername = new ThreadLocal<>();
 
-    protected JwtLoginFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager, LoginLogService loginLogService) {
+    public JwtLoginFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager, LoginLogService loginLogService) {
         super(new AntPathRequestMatcher(defaultFilterProcessesUrl));
         setAuthenticationManager(authenticationManager);
         this.loginLogService = loginLogService;
@@ -42,7 +43,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException {
         try {
-            if (!"POST".equals(request.getMethod())) {
+            if (!HttpMethod.POST.name().equals(request.getMethod())) {
                 throw new BadRequestException("请求方法错误");
             }
             User user = JacksonUtils.readValue(request.getInputStream(), User.class);
@@ -55,8 +56,8 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
             out.write(JacksonUtils.writeValueAsString(result));
             out.flush();
             out.close();
+            return null;
         }
-        return null;
     }
 
     @Override
@@ -83,7 +84,6 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
                                               AuthenticationException exception) throws IOException {
         response.setContentType("application/json;charset=utf-8");
         String msg = exception.getMessage();
-        //登录不成功时，会抛出对应的异常
         if (exception instanceof LockedException) {
             msg = "账号被锁定";
         } else if (exception instanceof CredentialsExpiredException) {
@@ -103,20 +103,11 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
         loginLogService.saveLoginLog(log);
     }
 
-    /**
-     * 设置LoginLog对象属性
-     *
-     * @param request     请求对象
-     * @param status      登录状态
-     * @param description 操作描述
-     * @return
-     */
     private LoginLog handleLog(HttpServletRequest request, boolean status, String description) {
         String username = currentUsername.get();
         currentUsername.remove();
         String ip = IpAddressUtils.getIpAddress(request);
         String userAgent = request.getHeader("User-Agent");
-        LoginLog log = new LoginLog(username, ip, status, description, userAgent);
-        return log;
+        return new LoginLog(username, ip, status, description, userAgent);
     }
 }

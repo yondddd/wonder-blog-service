@@ -14,10 +14,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
  * @Description: Spring Security配置类
@@ -29,14 +32,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    @Autowired
-    UserServiceImpl userService;
-    @Autowired
-    LoginLogService loginLogService;
-    @Autowired
-    MyAuthenticationEntryPoint myAuthenticationEntryPoint;
-    @Autowired
-    AuthenticationConfiguration authenticationConfiguration;
+    private final UserServiceImpl userService;
+    private final LoginLogService loginLogService;
+    private final MyAuthenticationEntryPoint myAuthenticationEntryPoint;
+    private final AuthenticationConfiguration authenticationConfiguration;
+
+    public SecurityConfig(UserServiceImpl userService, LoginLogService loginLogService, MyAuthenticationEntryPoint myAuthenticationEntryPoint, AuthenticationConfiguration authenticationConfiguration) {
+        this.userService = userService;
+        this.loginLogService = loginLogService;
+        this.myAuthenticationEntryPoint = myAuthenticationEntryPoint;
+        this.authenticationConfiguration = authenticationConfiguration;
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -51,29 +57,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                //禁用 csrf 防御
-                .csrf().disable()
-                //开启跨域支持
-                .cors().and()
-                //基于Token，不创建会话
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests()
-                //放行获取网页标题后缀的请求
-                .requestMatchers("/admin/webTitleSuffix").permitAll()
-                //任何 /admin 开头的路径下的请求都需要经过JWT验证
-                .requestMatchers(HttpMethod.GET, "/admin/**").hasAnyRole("admin", "visitor")
-                .requestMatchers("/admin/**").hasRole("admin")
-                //其它路径全部放行
-                .anyRequest().permitAll()
-                .and()
-                //自定义JWT过滤器
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(withDefaults())
+                .sessionManagement(sessionManagement ->
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers("/admin/webTitleSuffix").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/admin/**").hasAnyRole("admin", "visitor")
+                                .requestMatchers("/admin/**").hasRole("admin")
+                                .anyRequest().permitAll())
                 .addFilterBefore(new JwtLoginFilter("/admin/login", authenticationManager(authenticationConfiguration), loginLogService), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
-                //未登录时，返回json，在前端执行重定向
-                .exceptionHandling().authenticationEntryPoint(myAuthenticationEntryPoint);
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling.authenticationEntryPoint(myAuthenticationEntryPoint));
 
         return http.build();
     }
-
-
 }
+
