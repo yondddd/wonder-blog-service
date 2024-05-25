@@ -38,7 +38,7 @@ public class IndexController {
      *
      * @return
      */
-    @GetMapping("/site")
+    @GetMapping("/view/site")
     public Result site() {
         Map<String, Object> map = siteSettingService.getSiteInfo();
         List<NewBlog> newBlogList = blogService.getNewBlogListByIsPublished();

@@ -46,7 +46,7 @@ public class CommentController {
      * @param jwt      若文章受密码保护，需要获取访问Token
      * @return
      */
-    @GetMapping("/comments")
+    @GetMapping("/view/comments")
     public Result comments(@RequestParam Integer page,
                            @RequestParam(defaultValue = "") Long blogId,
                            @RequestParam(defaultValue = "1") Integer pageNum,
@@ -113,7 +113,7 @@ public class CommentController {
      * @return
      */
     @AccessLimit(seconds = 30, maxCount = 1, msg = "30秒内只能提交一次评论")
-    @PostMapping("/comment")
+    @PostMapping("/view/comment")
     public Result postComment(@RequestBody Comment comment,
                               HttpServletRequest request,
                               @RequestHeader(value = "Authorization", defaultValue = "") String jwt) {

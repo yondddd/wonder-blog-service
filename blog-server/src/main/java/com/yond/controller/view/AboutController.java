@@ -24,7 +24,7 @@ public class AboutController {
      * @return
      */
     @VisitLogger(VisitBehavior.ABOUT)
-    @GetMapping("/about")
+    @GetMapping("/view/about")
     public Result about() {
         return Result.ok("获取成功", aboutService.getAboutInfo());
     }

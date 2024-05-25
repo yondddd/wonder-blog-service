@@ -29,7 +29,7 @@ public class TagController {
      * @return
      */
     @VisitLogger(VisitBehavior.TAG)
-    @GetMapping("/tag")
+    @GetMapping("/view/tag")
     public Result tag(@RequestParam String tagName,
                       @RequestParam(defaultValue = "1") Integer pageNum) {
         PageResult<BlogInfo> pageResult = blogService.getBlogInfoListByTagNameAndIsPublished(tagName, pageNum);

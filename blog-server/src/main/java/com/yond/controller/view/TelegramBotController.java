@@ -32,7 +32,7 @@ public class TelegramBotController {
      *
      * @param message 新消息
      */
-    @PostMapping("/tg/${tg.bot.token}")
+    @PostMapping("/view/tg/${tg.bot.token}")
     public void getUpdate(@RequestBody TgMessage message) {
         log.info("Telegram bot receive message: {}", message);
         //判断消息是否是自己发出的

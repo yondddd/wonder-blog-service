@@ -39,7 +39,7 @@ public class BlogController {
      * @return
      */
     @VisitLogger(VisitBehavior.INDEX)
-    @GetMapping("/blogs")
+    @GetMapping("/view/blogs")
     public Result blogs(@RequestParam(defaultValue = "1") Integer pageNum) {
         PageResult<BlogInfo> pageResult = blogService.getBlogInfoListByIsPublished(pageNum);
         return Result.ok("请求成功", pageResult);
@@ -53,7 +53,7 @@ public class BlogController {
      * @return
      */
     @VisitLogger(VisitBehavior.BLOG)
-    @GetMapping("/blog")
+    @GetMapping("/view/blog")
     public Result getBlog(@RequestParam Long id,
                           @RequestHeader(value = "Authorization", defaultValue = "") String jwt) {
         BlogDetail blog = blogService.getBlogByIdAndIsPublished(id);
@@ -97,7 +97,7 @@ public class BlogController {
      * @return
      */
     @VisitLogger(VisitBehavior.CHECK_PASSWORD)
-    @PostMapping("/checkBlogPassword")
+    @PostMapping("/view/checkBlogPassword")
     public Result checkBlogPassword(@RequestBody BlogPassword blogPassword) {
         String password = blogService.getBlogPassword(blogPassword.getBlogId());
         if (password.equals(blogPassword.getPassword())) {
@@ -116,7 +116,7 @@ public class BlogController {
      * @return
      */
     @VisitLogger(VisitBehavior.SEARCH)
-    @GetMapping("/searchBlog")
+    @GetMapping("/view/searchBlog")
     public Result searchBlog(@RequestParam String query) {
         //校验关键字字符串合法性
         if (StringUtils.isBlank(query) || MyStringUtils.hasSpecialChar(query) || query.trim().length() > 20) {

@@ -30,7 +30,7 @@ public class LoginController {
      * @param loginInfo
      * @return
      */
-    @PostMapping("/login")
+    @PostMapping("/view/login")
     public Result login(@RequestBody LoginInfo loginInfo) {
         User user = userService.findUserByUsernameAndPassword(loginInfo.getUsername(), loginInfo.getPassword());
         if (!"ROLE_admin".equals(user.getRole())) {

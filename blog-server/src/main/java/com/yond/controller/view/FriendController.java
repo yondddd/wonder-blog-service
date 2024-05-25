@@ -32,7 +32,7 @@ public class FriendController {
      * @return
      */
     @VisitLogger(VisitBehavior.FRIEND)
-    @GetMapping("/friends")
+    @GetMapping("/view/friends")
     public Result friends() {
         List<Friend> friendList = friendService.getFriendVOList();
         FriendInfo friendInfo = friendService.getFriendInfo(true, true);
@@ -49,7 +49,7 @@ public class FriendController {
      * @return
      */
     @VisitLogger(VisitBehavior.CLICK_FRIEND)
-    @PostMapping("/friend")
+    @PostMapping("/view/friend")
     public Result addViews(@RequestParam String nickname) {
         friendService.updateViewsByNickname(nickname);
         return Result.ok("请求成功");

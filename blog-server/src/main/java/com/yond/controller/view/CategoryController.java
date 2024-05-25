@@ -29,7 +29,7 @@ public class CategoryController {
      * @return
      */
     @VisitLogger(VisitBehavior.CATEGORY)
-    @GetMapping("/category")
+    @GetMapping("/view/category")
     public Result category(@RequestParam String categoryName,
                            @RequestParam(defaultValue = "1") Integer pageNum) {
         PageResult<BlogInfo> pageResult = blogService.getBlogInfoListByCategoryNameAndIsPublished(categoryName, pageNum);

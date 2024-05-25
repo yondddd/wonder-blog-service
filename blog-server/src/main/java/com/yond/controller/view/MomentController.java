@@ -35,7 +35,7 @@ public class MomentController {
      * @return
      */
     @VisitLogger(VisitBehavior.MOMENT)
-    @GetMapping("/moments")
+    @GetMapping("/view/moments")
     public Result moments(@RequestParam(defaultValue = "1") Integer pageNum,
                           @RequestHeader(value = "Authorization", defaultValue = "") String jwt) {
         boolean adminIdentity = false;
@@ -68,7 +68,7 @@ public class MomentController {
      */
     @AccessLimit(seconds = 86400, maxCount = 1, msg = "不可以重复点赞哦")
     @VisitLogger(VisitBehavior.LIKE_MOMENT)
-    @PostMapping("/moment/like/{id}")
+    @PostMapping("/view/moment/like/{id}")
     public Result like(@PathVariable Long id) {
         momentService.addLikeByMomentId(id);
         return Result.ok("点赞成功");
