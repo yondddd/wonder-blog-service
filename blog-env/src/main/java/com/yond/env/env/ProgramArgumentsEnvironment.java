@@ -6,7 +6,6 @@ import java.util.Map;
 /**
  * ProgramArgumentsEnvironment
  *
- * @author mwup
  * @version 1.0
  * @created 2019/12/12 17:03
  * @since 1.3.5

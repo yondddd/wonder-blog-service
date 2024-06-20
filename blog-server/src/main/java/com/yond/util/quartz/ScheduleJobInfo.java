@@ -19,7 +19,6 @@ import java.util.concurrent.Future;
  */
 @Slf4j
 public class ScheduleJobInfo extends QuartzJobBean {
-	private ExecutorService service = Executors.newSingleThreadExecutor();
 
 	@Override
 	protected void executeInternal(JobExecutionContext context) {
@@ -39,8 +38,9 @@ public class ScheduleJobInfo extends QuartzJobBean {
 		log.info("任务准备执行，任务ID：{}", scheduleJob.getJobId());
 		try {
 			ScheduleRunnable task = new ScheduleRunnable(scheduleJob.getBeanName(), scheduleJob.getMethodName(), scheduleJob.getParams());
-			Future<?> future = service.submit(task);
-			future.get();
+            try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
+				executor.submit(task).get();
+            }
 			//任务执行总时长
 			long times = System.currentTimeMillis() - startTime;
 			jobLog.setTimes((int) times);
