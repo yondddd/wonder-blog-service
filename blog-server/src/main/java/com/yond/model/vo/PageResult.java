@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,12 +18,16 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class PageResult<T> {
-	private Integer totalPage;//总页数
-	private List<T> list;//数据
+public class PageResult<T> implements Serializable {
 
-	public PageResult(Integer totalPage, List<T> list) {
-		this.totalPage = totalPage;
-		this.list = list;
-	}
+    @Serial
+    private static final long serialVersionUID = 6491477600133621506L;
+
+    private Integer totalPage;//总页数
+    private List<T> list;//数据
+
+    public PageResult(Integer totalPage, List<T> list) {
+        this.totalPage = totalPage;
+        this.list = list;
+    }
 }

@@ -3,6 +3,7 @@ package com.yond.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yond.cache.constant.RedisKeyConstant;
+import com.yond.cache.local.BlogCache;
 import com.yond.common.exception.NotFoundException;
 import com.yond.common.exception.PersistenceException;
 import com.yond.constant.BlogConstant;
@@ -104,9 +105,8 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum) {
-        String redisKey = RedisKeyConstant.HOME_BLOG_INFO_LIST;
         //redis已有当前页缓存
-        PageResult<BlogInfo> pageResultFromRedis = redisService.getBlogInfoPageResultByHash(redisKey, pageNum);
+        PageResult<BlogInfo> pageResultFromRedis = BlogCache.getInfoByPage(pageNum);
         if (pageResultFromRedis != null) {
             setBlogViewsFromRedisToPageResult(pageResultFromRedis);
             return pageResultFromRedis;
@@ -118,7 +118,7 @@ public class BlogServiceImpl implements BlogService {
         PageResult<BlogInfo> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
         setBlogViewsFromRedisToPageResult(pageResult);
         //添加首页缓存
-        redisService.saveKVToHash(redisKey, pageNum, pageResult);
+        BlogCache.setInfoByPage(pageNum, pageResult);
         return pageResult;
     }
 
@@ -191,8 +191,8 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public Map<String, Object> getArchiveBlogAndCountByIsPublished() {
-        String redisKey = RedisKeyConstant.ARCHIVE_BLOG_MAP;
-        Map<String, Object> mapFromRedis = redisService.getMapByValue(redisKey);
+
+        Map<String, Object> mapFromRedis = BlogCache.getBlogGroup();
         if (mapFromRedis != null) {
             return mapFromRedis;
         }
@@ -214,7 +214,7 @@ public class BlogServiceImpl implements BlogService {
         Map<String, Object> map = new HashMap<>(4);
         map.put("blogMap", archiveBlogMap);
         map.put("count", count);
-        redisService.saveMapToValue(redisKey, map);
+        BlogCache.setBlogGroup(map);
         return map;
     }
 
@@ -291,9 +291,8 @@ public class BlogServiceImpl implements BlogService {
         if (blogMapper.updateBlogVisibilityById(blogId, blogVisibility) != 1) {
             throw new PersistenceException("操作失败");
         }
-        redisService.deleteCacheByKey(RedisKeyConstant.HOME_BLOG_INFO_LIST);
-        redisService.deleteCacheByKey(RedisKeyConstant.NEW_BLOG_LIST);
-        redisService.deleteCacheByKey(RedisKeyConstant.ARCHIVE_BLOG_MAP);
+        BlogCache.delInfo();
+        BlogCache.delBlogGroup();
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -302,7 +301,7 @@ public class BlogServiceImpl implements BlogService {
         if (blogMapper.updateBlogTopById(blogId, top) != 1) {
             throw new PersistenceException("操作失败");
         }
-        redisService.deleteCacheByKey(RedisKeyConstant.HOME_BLOG_INFO_LIST);
+        BlogCache.delInfo();
     }
 
     @Override
@@ -414,8 +413,8 @@ public class BlogServiceImpl implements BlogService {
      * 删除首页缓存、最新推荐缓存、归档页面缓存、博客浏览量缓存
      */
     private void deleteBlogRedisCache() {
-        redisService.deleteCacheByKey(RedisKeyConstant.HOME_BLOG_INFO_LIST);
+        BlogCache.delInfo();
         redisService.deleteCacheByKey(RedisKeyConstant.NEW_BLOG_LIST);
-        redisService.deleteCacheByKey(RedisKeyConstant.ARCHIVE_BLOG_MAP);
+        BlogCache.delBlogGroup();
     }
 }

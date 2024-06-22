@@ -2,6 +2,8 @@ package com.yond.model.vo;
 
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -9,7 +11,9 @@ import java.util.Map;
  * @date 2024-01-19 9:54:53
  */
 @Data
-public class QqResultVO {
+public class QqResultVO implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 4454455192459503846L;
     private String success;
 
     private String msg;
@@ -18,5 +22,5 @@ public class QqResultVO {
 
     private String time;
 
-    private  String api_vers;
+    private String api_vers;
 }

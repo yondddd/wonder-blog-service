@@ -1,6 +1,6 @@
 package com.yond.service.impl;
 
-import com.yond.cache.constant.RedisKeyConstant;
+import com.yond.cache.local.SiteSettingCache;
 import com.yond.common.constant.SiteSettingConstants;
 import com.yond.common.exception.PersistenceException;
 import com.yond.entity.SiteSetting;
@@ -9,10 +9,8 @@ import com.yond.model.vo.Badge;
 import com.yond.model.vo.Copyright;
 import com.yond.model.vo.Favorite;
 import com.yond.model.vo.Introduction;
-import com.yond.service.RedisService;
 import com.yond.service.SiteSettingService;
 import com.yond.util.JacksonUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,10 +25,12 @@ import java.util.regex.Pattern;
  */
 @Service
 public class SiteSettingServiceImpl implements SiteSettingService {
-    @Autowired
-    SiteSettingMapper siteSettingMapper;
-    @Autowired
-    RedisService redisService;
+
+    private final SiteSettingMapper siteSettingMapper;
+
+    public SiteSettingServiceImpl(SiteSettingMapper siteSettingMapper) {
+        this.siteSettingMapper = siteSettingMapper;
+    }
 
     private static final Pattern PATTERN = Pattern.compile("\"(.*?)\"");
 
@@ -64,8 +64,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 
     @Override
     public Map<String, Object> getSiteInfo() {
-        String redisKey = RedisKeyConstant.SITE_INFO_MAP;
-        Map<String, Object> siteInfoMapFromRedis = redisService.getMapByValue(redisKey);
+        Map<String, Object> siteInfoMapFromRedis = SiteSettingCache.get();
         if (siteInfoMapFromRedis != null) {
             return siteInfoMapFromRedis;
         }
@@ -139,7 +138,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
         map.put("introduction", introduction);
         map.put("siteInfo", siteInfo);
         map.put("badges", badges);
-        redisService.saveMapToValue(redisKey, map);
+        SiteSettingCache.set(map);
         return map;
     }
 
@@ -205,6 +204,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
      * 删除站点信息缓存
      */
     private void deleteSiteInfoRedisCache() {
-        redisService.deleteCacheByKey(RedisKeyConstant.SITE_INFO_MAP);
+        SiteSettingCache.del();
     }
+
 }

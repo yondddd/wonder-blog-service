@@ -1,7 +1,7 @@
 package com.yond.service.impl;
 
-import com.yond.cache.BlogInfoCache;
-import com.yond.cache.CategoryCache;
+import com.yond.cache.local.BlogCache;
+import com.yond.cache.local.CategoryCache;
 import com.yond.common.exception.PersistenceException;
 import com.yond.entity.CategoryDO;
 import com.yond.mapper.CategoryMapper;
@@ -19,23 +19,19 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryMapper categoryMapper;
-    private final BlogInfoCache blogInfoCache;
-    private final CategoryCache categoryCache;
 
-    public CategoryServiceImpl(CategoryMapper categoryMapper, BlogInfoCache blogInfoCache, CategoryCache categoryCache) {
+    public CategoryServiceImpl(CategoryMapper categoryMapper) {
         this.categoryMapper = categoryMapper;
-        this.blogInfoCache = blogInfoCache;
-        this.categoryCache = categoryCache;
     }
 
     @Override
     public List<CategoryDO> listAll() {
-        List<CategoryDO> data = categoryCache.get();
+        List<CategoryDO> data = CategoryCache.get();
         if (data != null) {
             return data;
         }
         data = categoryMapper.listAll();
-        categoryCache.set(data);
+        CategoryCache.set(data);
         return data;
     }
 
@@ -45,7 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryMapper.save(category) != 1) {
             throw new PersistenceException("分类添加失败");
         }
-        categoryCache.del();
+        CategoryCache.del();
     }
 
     @Override
@@ -65,7 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryMapper.deleteById(id) != 1) {
             throw new PersistenceException("删除分类失败");
         }
-        categoryCache.del();
+        CategoryCache.del();
     }
 
     @Override
@@ -73,9 +69,9 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryMapper.update(category) != 1) {
             throw new PersistenceException("分类更新失败");
         }
-        categoryCache.del();
+        CategoryCache.del();
         // 修改了分类名，可能有首页文章关联了分类，也要更新首页缓存
-        blogInfoCache.delete();
+        BlogCache.delInfo();
     }
 
 }

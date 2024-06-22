@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +20,11 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class Blog {
+public class Blog implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 5799826828777919864L;
+
     private Long id;
     private String title;//文章标题
     private String firstPicture;//文章首图，用于随机文章展示

@@ -1,6 +1,6 @@
 package com.yond.service.impl;
 
-import com.yond.cache.AboutCache;
+import com.yond.cache.local.AboutCache;
 import com.yond.common.exception.util.PersistenceExceptionUtil;
 import com.yond.constant.AboutConstant;
 import com.yond.entity.AboutDO;
@@ -23,11 +23,9 @@ import java.util.stream.Collectors;
 public class AboutServiceImpl implements AboutService {
 
     private final AboutMapper aboutMapper;
-    private final AboutCache aboutCache;
 
-    public AboutServiceImpl(AboutMapper aboutMapper, AboutCache aboutCache) {
+    public AboutServiceImpl(AboutMapper aboutMapper) {
         this.aboutMapper = aboutMapper;
-        this.aboutCache = aboutCache;
     }
 
     @Override
@@ -45,7 +43,7 @@ public class AboutServiceImpl implements AboutService {
             int updated = aboutMapper.updateAbout(entry.getKey(), entry.getValue());
             PersistenceExceptionUtil.isTrue(updated == 1, "关于我修改失败");
         }
-        aboutCache.del();
+        AboutCache.del();
     }
 
     @Override
@@ -67,7 +65,7 @@ public class AboutServiceImpl implements AboutService {
      */
     private Map<String, String> getAboutInfoFromCache() {
 
-        Map<String, String> data = aboutCache.get();
+        Map<String, String> data = AboutCache.get();
         if (data != null) {
             return data;
         }
@@ -80,7 +78,7 @@ public class AboutServiceImpl implements AboutService {
             }
             data.put(aboutDO.getNameEn(), aboutDO.getValue());
         }
-        aboutCache.set(data);
+        AboutCache.set(data);
         return data;
     }
 

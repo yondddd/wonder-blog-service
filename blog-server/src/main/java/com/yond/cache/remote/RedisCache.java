@@ -1,4 +1,4 @@
-package com.yond.cache;
+package com.yond.cache.remote;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -36,5 +36,15 @@ public class RedisCache<T> {
         redisTemplate.delete(key);
     }
 
-    
+    /**
+     * hash
+     */
+    public T hget(String key, Object field) {
+        return (T) redisTemplate.opsForHash().get(key, field);
+    }
+
+    public void hset(String key, Object field, T value) {
+        redisTemplate.opsForHash().put(key, field, value);
+    }
+
 }

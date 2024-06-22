@@ -1,14 +1,13 @@
 package com.yond.service.impl;
 
-import com.yond.cache.constant.RedisKeyConstant;
+import com.yond.cache.local.BlogCache;
+import com.yond.cache.local.TagCache;
 import com.yond.common.exception.NotFoundException;
 import com.yond.common.exception.PersistenceException;
 import com.yond.entity.Tag;
 import com.yond.mapper.TagMapper;
 import com.yond.model.vo.TagBlogCount;
-import com.yond.service.RedisService;
 import com.yond.service.TagService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +20,12 @@ import java.util.List;
  */
 @Service
 public class TagServiceImpl implements TagService {
-    @Autowired
-    TagMapper tagMapper;
-    @Autowired
-    RedisService redisService;
+
+    private final TagMapper tagMapper;
+
+    public TagServiceImpl(TagMapper tagMapper) {
+        this.tagMapper = tagMapper;
+    }
 
     @Override
     public List<Tag> getTagList() {
@@ -33,13 +34,12 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> getTagListNotId() {
-        String redisKey = RedisKeyConstant.TAG_CLOUD_LIST;
-        List<Tag> tagListFromRedis = redisService.getListByValue(redisKey);
+        List<Tag> tagListFromRedis = TagCache.get();
         if (tagListFromRedis != null) {
             return tagListFromRedis;
         }
         List<Tag> tagList = tagMapper.getTagListNotId();
-        redisService.saveListToValue(redisKey, tagList);
+        TagCache.set(tagList);
         return tagList;
     }
 
@@ -54,7 +54,7 @@ public class TagServiceImpl implements TagService {
         if (tagMapper.saveTag(tag) != 1) {
             throw new PersistenceException("标签添加失败");
         }
-        redisService.deleteCacheByKey(RedisKeyConstant.TAG_CLOUD_LIST);
+        TagCache.del();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class TagServiceImpl implements TagService {
         if (tagMapper.deleteTagById(id) != 1) {
             throw new PersistenceException("标签删除失败");
         }
-        redisService.deleteCacheByKey(RedisKeyConstant.TAG_CLOUD_LIST);
+        TagCache.del();
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -86,13 +86,14 @@ public class TagServiceImpl implements TagService {
         if (tagMapper.updateTag(tag) != 1) {
             throw new PersistenceException("标签更新失败");
         }
-        redisService.deleteCacheByKey(RedisKeyConstant.TAG_CLOUD_LIST);
+        TagCache.del();
         //修改了标签名或颜色，可能有首页文章关联了标签，也要更新首页缓存
-        redisService.deleteCacheByKey(RedisKeyConstant.HOME_BLOG_INFO_LIST);
+        BlogCache.delInfo();
     }
 
     @Override
     public List<TagBlogCount> getTagBlogCount() {
         return tagMapper.getTagBlogCount();
     }
+
 }

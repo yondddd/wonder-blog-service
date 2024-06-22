@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * @Description: 友链页面信息
  * @Author: Naccl
@@ -14,7 +17,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class FriendInfo {
-	private String content;
-	private Boolean commentEnabled;
+public class FriendInfo implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -3609256529138860536L;
+    private String content;
+    private Boolean commentEnabled;
 }

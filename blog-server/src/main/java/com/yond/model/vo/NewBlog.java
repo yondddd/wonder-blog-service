@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * @Description: 最新推荐博客
  * @Author: Naccl
@@ -14,9 +17,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class NewBlog {
-	private Long id;
-	private String title;
-	private String password;
-	private Boolean privacy;
+public class NewBlog implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -6188444658536941480L;
+    private Long id;
+    private String title;
+    private String password;
+    private Boolean privacy;
 }

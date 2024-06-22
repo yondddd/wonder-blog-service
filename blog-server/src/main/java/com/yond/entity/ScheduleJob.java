@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -16,15 +18,18 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class ScheduleJob {
-	public static final String JOB_PARAM_KEY = "JOB_PARAM_KEY"; //任务调度参数key
+public class ScheduleJob implements Serializable {
 
-	private Long jobId;//任务id
-	private String beanName;//spring bean名称
-	private String methodName;//方法名
-	private String params;//参数
-	private String cron;//cron表达式
-	private Boolean status;//任务状态
-	private String remark;//备注
-	private Date createTime;//创建时间
+    public static final String JOB_PARAM_KEY = "JOB_PARAM_KEY"; //任务调度参数key
+    @Serial
+    private static final long serialVersionUID = 1842150725534943656L;
+
+    private Long jobId;//任务id
+    private String beanName;//spring bean名称
+    private String methodName;//方法名
+    private String params;//参数
+    private String cron;//cron表达式
+    private Boolean status;//任务状态
+    private String remark;//备注
+    private Date createTime;//创建时间
 }
