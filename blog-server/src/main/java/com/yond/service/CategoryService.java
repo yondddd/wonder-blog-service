@@ -1,21 +1,21 @@
 package com.yond.service;
 
-import com.yond.entity.Category;
+import com.yond.entity.CategoryDO;
 
 import java.util.List;
 
 public interface CategoryService {
-	List<Category> getCategoryList();
 
-	List<Category> getCategoryNameList();
+    List<CategoryDO> listAll();
 
-	void saveCategory(Category category);
+    void save(CategoryDO category);
 
-	Category getCategoryById(Long id);
+    CategoryDO getById(Long id);
 
-	Category getCategoryByName(String name);
+    CategoryDO getByName(String name);
 
-	void deleteCategoryById(Long id);
+    void deleteById(Long id);
 
-	void updateCategory(Category category);
+    void update(CategoryDO category);
+
 }

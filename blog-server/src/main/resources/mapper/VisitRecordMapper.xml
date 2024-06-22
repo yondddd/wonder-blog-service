@@ -10,12 +10,12 @@
     </resultMap>
 
     <!--按天数查询访问记录-->
-    <select id="getVisitRecordListByLimit" resultMap="visitRecord">
+    <select id="listByLimit" resultMap="visitRecord">
         select pv, uv, date from visit_record order by id desc limit #{limit}
     </select>
 
     <!--添加访问记录-->
-    <insert id="saveVisitRecord" parameterType="com.yond.entity.VisitRecord" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.yond.entity.VisitRecord" useGeneratedKeys="true" keyProperty="id">
         insert into visit_record (pv, uv, date) values (#{pv}, #{uv}, #{date})
     </insert>
 </mapper>

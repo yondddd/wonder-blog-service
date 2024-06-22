@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.resp.Result;
 import com.yond.entity.Blog;
-import com.yond.entity.Category;
+import com.yond.entity.CategoryDO;
 import com.yond.entity.Tag;
 import com.yond.entity.User;
 import com.yond.model.dto.BlogVisibility;
@@ -53,7 +53,7 @@ public class BlogAdminController {
         String orderBy = "create_time desc";
         PageHelper.startPage(pageNum, pageSize, orderBy);
         PageInfo<Blog> pageInfo = new PageInfo<>(blogService.getListByTitleAndCategoryId(title, categoryId));
-        List<Category> categories = categoryService.getCategoryList();
+        List<CategoryDO> categories = categoryService.listAll();
         Map<String, Object> map = new HashMap<>(4);
         map.put("blogs", pageInfo);
         map.put("categories", categories);
@@ -82,7 +82,7 @@ public class BlogAdminController {
      */
     @GetMapping("/categoryAndTag")
     public Result<Map<String, Object>> categoryAndTag() {
-        List<Category> categories = categoryService.getCategoryList();
+        List<CategoryDO> categories = categoryService.listAll();
         List<Tag> tags = tagService.getTagList();
         Map<String, Object> map = new HashMap<>(4);
         map.put("categories", categories);
@@ -189,17 +189,17 @@ public class BlogAdminController {
             return Result.failure("分类不能为空");
         }
         if (cate instanceof Integer) {//选择了已存在的分类
-            Category c = categoryService.getCategoryById(((Integer) cate).longValue());
+            CategoryDO c = categoryService.getById(((Integer) cate).longValue());
             blog.setCategory(c);
         } else if (cate instanceof String) {//添加新分类
             //查询分类是否已存在
-            Category category = categoryService.getCategoryByName((String) cate);
+            CategoryDO category = categoryService.getByName((String) cate);
             if (category != null) {
                 return Result.failure("不可添加已存在的分类");
             }
-            Category c = new Category();
+            CategoryDO c = new CategoryDO();
             c.setName((String) cate);
-            categoryService.saveCategory(c);
+            categoryService.save(c);
             blog.setCategory(c);
         } else {
             return Result.failure("分类不正确");

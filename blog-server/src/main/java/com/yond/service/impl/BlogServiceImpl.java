@@ -400,6 +400,16 @@ public class BlogServiceImpl implements BlogService {
         return blogMapper.getPublishedByBlogId(blogId);
     }
 
+    @Override
+    public int countBlog() {
+        return blogMapper.countBlog();
+    }
+
+    @Override
+    public List<CategoryBlogCount> getCategoryBlogCountList() {
+        return blogMapper.getCategoryBlogCountList();
+    }
+
     /**
      * 删除首页缓存、最新推荐缓存、归档页面缓存、博客浏览量缓存
      */

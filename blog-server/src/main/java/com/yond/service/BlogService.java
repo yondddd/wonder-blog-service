@@ -64,4 +64,8 @@ public interface BlogService {
     Boolean getCommentEnabledByBlogId(Long blogId);
 
     Boolean getPublishedByBlogId(Long blogId);
+
+    int countBlog();
+
+    List<CategoryBlogCount> getCategoryBlogCountList();
 }

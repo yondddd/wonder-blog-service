@@ -6,23 +6,25 @@ import com.yond.model.vo.PageComment;
 import java.util.List;
 
 public interface CommentService {
-	List<Comment> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
+    List<Comment> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
 
-	List<PageComment> getPageCommentList(Integer page, Long blogId, Long parentCommentId);
+    List<PageComment> getPageCommentList(Integer page, Long blogId, Long parentCommentId);
 
-	Comment getCommentById(Long id);
+    Comment getCommentById(Long id);
 
-	void updateCommentPublishedById(Long commentId, Boolean published);
+    void updateCommentPublishedById(Long commentId, Boolean published);
 
-	void updateCommentNoticeById(Long commentId, Boolean notice);
+    void updateCommentNoticeById(Long commentId, Boolean notice);
 
-	void deleteCommentById(Long commentId);
+    void deleteCommentById(Long commentId);
 
-	void deleteCommentsByBlogId(Long blogId);
+    void deleteCommentsByBlogId(Long blogId);
 
-	void updateComment(Comment comment);
+    void updateComment(Comment comment);
 
-	int countByPageAndIsPublished(Integer page, Long blogId, Boolean isPublished);
+    int countByPageAndIsPublished(Integer page, Long blogId, Boolean isPublished);
 
-	void saveComment(com.yond.model.dto.Comment comment);
+    void saveComment(com.yond.model.dto.Comment comment);
+
+    int countComment();
 }

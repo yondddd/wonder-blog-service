@@ -1,11 +1,12 @@
 package com.yond.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.yond.entity.VisitRecord;
 import com.yond.mapper.VisitRecordMapper;
 import com.yond.service.VisitRecordService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @Description: 访问记录业务层实现
@@ -14,12 +15,21 @@ import com.yond.service.VisitRecordService;
  */
 @Service
 public class VisitRecordServiceImpl implements VisitRecordService {
-	@Autowired
-	VisitRecordMapper visitRecordMapper;
 
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public void saveVisitRecord(VisitRecord visitRecord) {
-		visitRecordMapper.saveVisitRecord(visitRecord);
-	}
+    private final VisitRecordMapper visitRecordMapper;
+
+    public VisitRecordServiceImpl(VisitRecordMapper visitRecordMapper) {
+        this.visitRecordMapper = visitRecordMapper;
+    }
+
+    @Override
+    public List<VisitRecord> listByLimit(Integer limit) {
+        return visitRecordMapper.listByLimit(limit);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void insert(VisitRecord visitRecord) {
+        visitRecordMapper.insert(visitRecord);
+    }
 }

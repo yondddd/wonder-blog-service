@@ -1,11 +1,12 @@
 package com.yond.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import com.yond.entity.CityVisitor;
+import com.yond.entity.CityVisitorDO;
 import com.yond.mapper.CityVisitorMapper;
 import com.yond.service.CityVisitorService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @Description: 城市访客数量统计业务层实现
@@ -14,12 +15,22 @@ import com.yond.service.CityVisitorService;
  */
 @Service
 public class CityVisitorServiceImpl implements CityVisitorService {
-	@Autowired
-	CityVisitorMapper cityVisitorMapper;
 
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public void saveCityVisitor(CityVisitor cityVisitor) {
-		cityVisitorMapper.saveCityVisitor(cityVisitor);
-	}
+    private final CityVisitorMapper cityVisitorMapper;
+
+    public CityVisitorServiceImpl(CityVisitorMapper cityVisitorMapper) {
+        this.cityVisitorMapper = cityVisitorMapper;
+    }
+
+    @Override
+    public List<CityVisitorDO> listAll() {
+        return cityVisitorMapper.listAll();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void save(CityVisitorDO cityVisitor) {
+        cityVisitorMapper.saveCityVisitor(cityVisitor);
+    }
+
 }

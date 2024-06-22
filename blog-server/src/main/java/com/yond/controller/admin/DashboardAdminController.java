@@ -2,7 +2,7 @@ package com.yond.controller.admin;
 
 import com.yond.cache.constant.RedisKeyConstant;
 import com.yond.common.resp.Result;
-import com.yond.entity.CityVisitor;
+import com.yond.entity.CityVisitorDO;
 import com.yond.service.DashboardService;
 import com.yond.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class DashboardAdminController {
         Map<String, List> categoryBlogCountMap = dashboardService.getCategoryBlogCountMap();
         Map<String, List> tagBlogCountMap = dashboardService.getTagBlogCountMap();
         Map<String, List> visitRecordMap = dashboardService.getVisitRecordMap();
-        List<CityVisitor> cityVisitorList = dashboardService.getCityVisitorList();
+        List<CityVisitorDO> cityVisitorList = dashboardService.getCityVisitorList();
 
         Map<String, Object> map = new HashMap<>(16);
         map.put("pv", todayPV);

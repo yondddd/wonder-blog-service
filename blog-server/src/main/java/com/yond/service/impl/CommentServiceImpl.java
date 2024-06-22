@@ -143,6 +143,11 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
+    @Override
+    public int countComment() {
+        return commentMapper.countComment();
+    }
+
     /**
      * 递归删除子评论
      *

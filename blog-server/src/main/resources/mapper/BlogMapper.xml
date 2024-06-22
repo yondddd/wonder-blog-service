@@ -29,7 +29,7 @@
             <result property="updateTime" column="user_update_time"/>
             <result property="role" column="role"/>
         </association>
-        <association property="category" javaType="com.yond.entity.Category">
+        <association property="category" javaType="com.yond.entity.CategoryDO">
             <id property="id" column="category_id"/>
             <result property="name" column="category_name"/>
         </association>
@@ -105,7 +105,7 @@
         <result property="readTime" column="read_time"/>
         <result property="top" column="is_top"/>
         <result property="password" column="password"/>
-        <association property="category" javaType="com.yond.entity.Category">
+        <association property="category" javaType="com.yond.entity.CategoryDO">
             <result property="name" column="category_name"/>
         </association>
     </resultMap>
@@ -249,7 +249,7 @@
         <result property="words" column="words"/>
         <result property="readTime" column="read_time"/>
         <result property="password" column="password"/>
-        <association property="category" javaType="com.yond.entity.Category">
+        <association property="category" javaType="com.yond.entity.CategoryDO">
             <result property="name" column="category_name"/>
         </association>
         <collection property="tags" javaType="com.yond.entity.Tag">

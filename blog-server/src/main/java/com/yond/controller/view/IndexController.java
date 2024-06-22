@@ -1,7 +1,7 @@
 package com.yond.controller.view;
 
 import com.yond.common.resp.Result;
-import com.yond.entity.Category;
+import com.yond.entity.CategoryDO;
 import com.yond.entity.Tag;
 import com.yond.model.vo.NewBlog;
 import com.yond.model.vo.RandomBlog;
@@ -42,7 +42,7 @@ public class IndexController {
     public Result site() {
         Map<String, Object> map = siteSettingService.getSiteInfo();
         List<NewBlog> newBlogList = blogService.getNewBlogListByIsPublished();
-        List<Category> categoryList = categoryService.getCategoryNameList();
+        List<CategoryDO> categoryList = categoryService.listAll();
         List<Tag> tagList = tagService.getTagListNotId();
         List<RandomBlog> randomBlogList = blogService.getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
         map.put("newBlogList", newBlogList);

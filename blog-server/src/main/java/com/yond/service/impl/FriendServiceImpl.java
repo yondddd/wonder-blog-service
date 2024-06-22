@@ -5,10 +5,10 @@ import com.yond.common.exception.PersistenceException;
 import com.yond.entity.Friend;
 import com.yond.entity.SiteSetting;
 import com.yond.mapper.FriendMapper;
-import com.yond.mapper.SiteSettingMapper;
 import com.yond.model.vo.FriendInfo;
 import com.yond.service.FriendService;
 import com.yond.service.RedisService;
+import com.yond.service.SiteSettingService;
 import com.yond.util.markdown.MarkdownUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class FriendServiceImpl implements FriendService {
     @Autowired
     FriendMapper friendMapper;
     @Autowired
-    SiteSettingMapper siteSettingMapper;
+    SiteSettingService siteSettingService;
     @Autowired
     RedisService redisService;
 
@@ -92,7 +92,7 @@ public class FriendServiceImpl implements FriendService {
                 return friendInfoFromRedis;
             }
         }
-        List<SiteSetting> siteSettings = siteSettingMapper.getFriendInfo();
+        List<SiteSetting> siteSettings = siteSettingService.getFriendInfo();
         FriendInfo friendInfo = new FriendInfo();
         for (SiteSetting siteSetting : siteSettings) {
             if ("friendContent".equals(siteSetting.getNameEn())) {
@@ -114,7 +114,7 @@ public class FriendServiceImpl implements FriendService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateFriendInfoContent(String content) {
-        if (siteSettingMapper.updateFriendInfoContent(content) != 1) {
+        if (siteSettingService.updateFriendInfoContent(content) != 1) {
             throw new PersistenceException("修改失败");
         }
         deleteFriendInfoRedisCache();
@@ -123,7 +123,7 @@ public class FriendServiceImpl implements FriendService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateFriendInfoCommentEnabled(Boolean commentEnabled) {
-        if (siteSettingMapper.updateFriendInfoCommentEnabled(commentEnabled) != 1) {
+        if (siteSettingService.updateFriendInfoCommentEnabled(commentEnabled) != 1) {
             throw new PersistenceException("修改失败");
         }
         deleteFriendInfoRedisCache();

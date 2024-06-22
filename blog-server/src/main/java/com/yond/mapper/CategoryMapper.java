@@ -1,8 +1,8 @@
 package com.yond.mapper;
 
+import com.yond.entity.CategoryDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.entity.Category;
 
 import java.util.List;
 
@@ -14,17 +14,17 @@ import java.util.List;
 @Mapper
 @Repository
 public interface CategoryMapper {
-	List<Category> getCategoryList();
 
-	List<Category> getCategoryNameList();
+    List<CategoryDO> listAll();
 
-	int saveCategory(Category category);
+    int save(CategoryDO category);
 
-	Category getCategoryById(Long id);
+    CategoryDO getById(Long id);
 
-	Category getCategoryByName(String name);
+    CategoryDO getByName(String name);
 
-	int deleteCategoryById(Long id);
+    int deleteById(Long id);
 
-	int updateCategory(Category category);
+    int update(CategoryDO category);
+
 }

@@ -1,7 +1,7 @@
 package com.yond.task;
 
 import com.yond.cache.constant.RedisKeyConstant;
-import com.yond.entity.CityVisitor;
+import com.yond.entity.CityVisitorDO;
 import com.yond.entity.VisitRecord;
 import com.yond.model.dto.VisitLogUuidTime;
 import com.yond.service.*;
@@ -66,7 +66,7 @@ public class VisitorSyncScheduleTask {
         //获取昨天的日期字符串
         String date = new SimpleDateFormat("MM-dd").format(DateUtils.addDays(new Date(), -1));
         //记录昨天的PV和UV
-        visitRecordService.saveVisitRecord(new VisitRecord(pv, uv, date));
+        visitRecordService.insert(new VisitRecord(pv, uv, date));
         //更新昨天所有访客的PV和最后访问时间到数据库
         PVMap.forEach((uuid, views) -> {
             VisitLogUuidTime uuidPVTimeDTO = new VisitLogUuidTime(uuid, lastTimeMap.get(uuid), views);
@@ -86,6 +86,6 @@ public class VisitorSyncScheduleTask {
             }
         });
         //更新城市新增访客UV数
-        cityVisitorMap.forEach((k, v) -> cityVisitorService.saveCityVisitor(new CityVisitor(k, v)));
+        cityVisitorMap.forEach((k, v) -> cityVisitorService.save(new CityVisitorDO(k, v)));
     }
 }

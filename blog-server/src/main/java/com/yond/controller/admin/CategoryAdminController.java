@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.resp.Result;
-import com.yond.entity.Category;
+import com.yond.entity.CategoryDO;
 import com.yond.service.BlogService;
 import com.yond.service.CategoryService;
 import org.apache.commons.lang3.StringUtils;
@@ -32,10 +32,10 @@ public class CategoryAdminController {
      * @return
      */
     @GetMapping("/categories")
-    public Result<PageInfo<Category>> categories(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
+    public Result<PageInfo<CategoryDO>> categories(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
         String orderBy = "id desc";
         PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<Category> pageInfo = new PageInfo<>(categoryService.getCategoryList());
+        PageInfo<CategoryDO> pageInfo = new PageInfo<>(categoryService.listAll());
         return Result.success(pageInfo);
     }
 
@@ -47,7 +47,7 @@ public class CategoryAdminController {
      */
     @OperationLogger("添加分类")
     @PostMapping("/category")
-    public Result saveCategory(@RequestBody Category category) {
+    public Result saveCategory(@RequestBody CategoryDO category) {
         return getResult(category, "save");
     }
 
@@ -59,7 +59,7 @@ public class CategoryAdminController {
      */
     @OperationLogger("修改分类")
     @PutMapping("/category")
-    public Result updateCategory(@RequestBody Category category) {
+    public Result updateCategory(@RequestBody CategoryDO category) {
         return getResult(category, "update");
     }
 
@@ -70,21 +70,21 @@ public class CategoryAdminController {
      * @param type     添加或更新
      * @return
      */
-    private Result getResult(Category category, String type) {
+    private Result getResult(CategoryDO category, String type) {
         if (StringUtils.isBlank(category.getName())) {
             return Result.failure("分类名称不能为空");
         }
         //查询分类是否已存在
-        Category category1 = categoryService.getCategoryByName(category.getName());
+        CategoryDO category1 = categoryService.getByName(category.getName());
         //如果 category1.getId().equals(category.getId()) == true 就是更新分类
         if (category1 != null && !category1.getId().equals(category.getId())) {
             return Result.failure("该分类已存在");
         }
         if ("save".equals(type)) {
-            categoryService.saveCategory(category);
+            categoryService.save(category);
             return Result.ok("分类添加成功");
         } else {
-            categoryService.updateCategory(category);
+            categoryService.update(category);
             return Result.ok("分类更新成功");
         }
     }
@@ -103,7 +103,7 @@ public class CategoryAdminController {
         if (num != 0) {
             return Result.<Boolean>custom().setFailure("已有博客与此分类关联，不可删除");
         }
-        categoryService.deleteCategoryById(id);
+        categoryService.deleteById(id);
         return Result.success();
     }
 

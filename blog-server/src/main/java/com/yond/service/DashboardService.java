@@ -1,22 +1,22 @@
 package com.yond.service;
 
-import com.yond.entity.CityVisitor;
+import com.yond.entity.CityVisitorDO;
 
 import java.util.List;
 import java.util.Map;
 
 public interface DashboardService {
-	int countVisitLogByToday();
+    int countVisitLogByToday();
 
-	int getBlogCount();
+    int getBlogCount();
 
-	int getCommentCount();
+    int getCommentCount();
 
-	Map<String, List> getCategoryBlogCountMap();
+    Map<String, List> getCategoryBlogCountMap();
 
-	Map<String, List> getTagBlogCountMap();
+    Map<String, List> getTagBlogCountMap();
 
-	Map<String, List> getVisitRecordMap();
+    Map<String, List> getVisitRecordMap();
 
-	List<CityVisitor> getCityVisitorList();
+    List<CityVisitorDO> getCityVisitorList();
 }

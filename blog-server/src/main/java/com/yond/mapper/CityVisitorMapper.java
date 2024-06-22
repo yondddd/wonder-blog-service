@@ -1,8 +1,8 @@
 package com.yond.mapper;
 
+import com.yond.entity.CityVisitorDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.entity.CityVisitor;
 
 import java.util.List;
 
@@ -14,7 +14,9 @@ import java.util.List;
 @Mapper
 @Repository
 public interface CityVisitorMapper {
-	List<CityVisitor> getCityVisitorList();
 
-	int saveCityVisitor(CityVisitor cityVisitor);
+    List<CityVisitorDO> listAll();
+
+    int saveCityVisitor(CityVisitorDO cityVisitor);
+
 }

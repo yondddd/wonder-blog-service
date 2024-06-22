@@ -5,6 +5,7 @@ import com.yond.common.exception.NotFoundException;
 import com.yond.common.exception.PersistenceException;
 import com.yond.entity.Tag;
 import com.yond.mapper.TagMapper;
+import com.yond.model.vo.TagBlogCount;
 import com.yond.service.RedisService;
 import com.yond.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,4 +91,8 @@ public class TagServiceImpl implements TagService {
         redisService.deleteCacheByKey(RedisKeyConstant.HOME_BLOG_INFO_LIST);
     }
 
+    @Override
+    public List<TagBlogCount> getTagBlogCount() {
+        return tagMapper.getTagBlogCount();
+    }
 }

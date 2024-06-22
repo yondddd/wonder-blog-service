@@ -1,8 +1,8 @@
 package com.yond.mapper;
 
+import com.yond.entity.VisitRecord;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.entity.VisitRecord;
 
 import java.util.List;
 
@@ -14,7 +14,8 @@ import java.util.List;
 @Mapper
 @Repository
 public interface VisitRecordMapper {
-	List<VisitRecord> getVisitRecordListByLimit(Integer limit);
 
-	int saveVisitRecord(VisitRecord visitRecord);
+    List<VisitRecord> listByLimit(Integer limit);
+
+    int insert(VisitRecord visitRecord);
 }

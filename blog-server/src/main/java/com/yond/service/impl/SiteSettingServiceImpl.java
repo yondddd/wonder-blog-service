@@ -168,6 +168,21 @@ public class SiteSettingServiceImpl implements SiteSettingService {
         deleteSiteInfoRedisCache();
     }
 
+    @Override
+    public List<SiteSetting> getFriendInfo() {
+        return siteSettingMapper.getFriendInfo();
+    }
+
+    @Override
+    public int updateFriendInfoContent(String content) {
+        return siteSettingMapper.updateFriendInfoContent(content);
+    }
+
+    @Override
+    public int updateFriendInfoCommentEnabled(Boolean commentEnabled) {
+        return siteSettingMapper.updateFriendInfoCommentEnabled(commentEnabled);
+    }
+
     public void saveOneSiteSetting(SiteSetting siteSetting) {
         if (siteSettingMapper.saveSiteSetting(siteSetting) != 1) {
             throw new PersistenceException("配置添加失败");

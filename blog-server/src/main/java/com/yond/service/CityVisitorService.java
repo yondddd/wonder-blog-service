@@ -1,7 +1,13 @@
 package com.yond.service;
 
-import com.yond.entity.CityVisitor;
+import com.yond.entity.CityVisitorDO;
+
+import java.util.List;
 
 public interface CityVisitorService {
-	void saveCityVisitor(CityVisitor cityVisitor);
+
+    List<CityVisitorDO> listAll();
+
+    void save(CityVisitorDO cityVisitor);
+
 }
