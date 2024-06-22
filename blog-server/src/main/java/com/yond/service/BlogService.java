@@ -8,59 +8,60 @@ import java.util.List;
 import java.util.Map;
 
 public interface BlogService {
-	List<Blog> getListByTitleAndCategoryId(String title, Integer categoryId);
 
-	List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query);
+    List<Blog> getListByTitleAndCategoryId(String title, Integer categoryId);
 
-	List<Blog> getIdAndTitleList();
+    List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query);
 
-	List<NewBlog> getNewBlogListByIsPublished();
+    List<Blog> getIdAndTitleList();
 
-	PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum);
+    List<NewBlog> getNewBlogListByIsPublished();
 
-	PageResult<BlogInfo> getBlogInfoListByCategoryNameAndIsPublished(String categoryName, Integer pageNum);
+    PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum);
 
-	PageResult<BlogInfo> getBlogInfoListByTagNameAndIsPublished(String tagName, Integer pageNum);
+    PageResult<BlogInfo> getBlogInfoListByCategoryNameAndIsPublished(String categoryName, Integer pageNum);
 
-	Map<String, Object> getArchiveBlogAndCountByIsPublished();
+    PageResult<BlogInfo> getBlogInfoListByTagNameAndIsPublished(String tagName, Integer pageNum);
 
-	List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
+    Map<String, Object> getArchiveBlogAndCountByIsPublished();
 
-	void deleteBlogById(Long id);
+    List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
 
-	void deleteBlogTagByBlogId(Long blogId);
+    void deleteBlogById(Long id);
 
-	void saveBlog(com.yond.model.dto.Blog blog);
+    void deleteBlogTagByBlogId(Long blogId);
 
-	void saveBlogTag(Long blogId, Long tagId);
+    void saveBlog(com.yond.model.dto.Blog blog);
 
-	void updateBlogRecommendById(Long blogId, Boolean recommend);
+    void saveBlogTag(Long blogId, Long tagId);
 
-	void updateBlogVisibilityById(Long blogId, BlogVisibility blogVisibility);
+    void updateBlogRecommendById(Long blogId, Boolean recommend);
 
-	void updateBlogTopById(Long blogId, Boolean top);
+    void updateBlogVisibilityById(Long blogId, BlogVisibility blogVisibility);
 
-	void updateViewsToRedis(Long blogId);
+    void updateBlogTopById(Long blogId, Boolean top);
 
-	void updateViews(Long blogId, Integer views);
+    void updateViewsToRedis(Long blogId);
 
-	Blog getBlogById(Long id);
+    void updateViews(Long blogId, Integer views);
 
-	String getTitleByBlogId(Long id);
+    Blog getBlogById(Long id);
 
-	BlogDetail getBlogByIdAndIsPublished(Long id);
+    String getTitleByBlogId(Long id);
 
-	String getBlogPassword(Long blogId);
+    BlogDetail getBlogByIdAndIsPublished(Long id);
 
-	void updateBlog(com.yond.model.dto.Blog blog);
+    String getBlogPassword(Long blogId);
 
-	int countBlogByIsPublished();
+    void updateBlog(com.yond.model.dto.Blog blog);
 
-	int countBlogByCategoryId(Long categoryId);
+    int countBlogByIsPublished();
 
-	int countBlogByTagId(Long tagId);
+    int countBlogByCategoryId(Long categoryId);
 
-	Boolean getCommentEnabledByBlogId(Long blogId);
+    int countBlogByTagId(Long tagId);
 
-	Boolean getPublishedByBlogId(Long blogId);
+    Boolean getCommentEnabledByBlogId(Long blogId);
+
+    Boolean getPublishedByBlogId(Long blogId);
 }

@@ -1,5 +1,7 @@
 package com.yond.common.exception;
 
+import java.io.Serial;
+
 /**
  * @Description: 持久化异常
  * @Author: Naccl
@@ -7,6 +9,10 @@ package com.yond.common.exception;
  */
 
 public class PersistenceException extends RuntimeException {
+
+    @Serial
+    private static final long serialVersionUID = -8334760132436983471L;
+
     public PersistenceException() {
     }
 

@@ -25,7 +25,6 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
     @Autowired
     RedisService redisService;
 
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (handler instanceof HandlerMethod handlerMethod) {

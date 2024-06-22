@@ -1,6 +1,6 @@
 package com.yond.task;
 
-import com.yond.common.constant.RedisKeyConstants;
+import com.yond.cache.constant.RedisKeyConstant;
 import com.yond.service.BlogService;
 import com.yond.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class RedisSyncScheduleTask {
      * 从Redis同步博客文章浏览量到数据库
      */
     public void syncBlogViewsToDatabase() {
-        String redisKey = RedisKeyConstants.BLOG_VIEWS_MAP;
+        String redisKey = RedisKeyConstant.BLOG_VIEWS_MAP;
         Map blogViewsMap = redisService.getMapByHash(redisKey);
         Set<Integer> keys = blogViewsMap.keySet();
         for (Integer key : keys) {

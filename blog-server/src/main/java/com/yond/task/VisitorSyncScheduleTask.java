@@ -1,6 +1,6 @@
 package com.yond.task;
 
-import com.yond.common.constant.RedisKeyConstants;
+import com.yond.cache.constant.RedisKeyConstant;
 import com.yond.entity.CityVisitor;
 import com.yond.entity.VisitRecord;
 import com.yond.model.dto.VisitLogUuidTime;
@@ -44,7 +44,7 @@ public class VisitorSyncScheduleTask {
      */
     public void syncVisitInfoToDatabase() {
         //清空昨天Redis的访客标识Set，以便统计每日UV
-        redisService.deleteCacheByKey(RedisKeyConstants.IDENTIFICATION_SET);
+        redisService.deleteCacheByKey(RedisKeyConstant.IDENTIFICATION_SET);
         //获取昨天的所有访问日志
         //为避免缓存击穿导致第二天的数据统计不准确，以数据库访问日志为准，而不从Redis中获取这个Set
         //比如在这个定时任务执行期间，产生大量访客的请求，而这些访客的uuid都在任务执行结束后被清空了，没有被第二天的定时任务记录到

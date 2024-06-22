@@ -1,7 +1,7 @@
 package com.yond.aspect;
 
+import com.yond.cache.constant.RedisKeyConstant;
 import com.yond.common.annotation.VisitLogger;
-import com.yond.common.constant.RedisKeyConstants;
 import com.yond.common.enums.VisitBehavior;
 import com.yond.common.resp.Result;
 import com.yond.entity.VisitLog;
@@ -90,14 +90,14 @@ public class VisitLogAspect {
             identification = saveUUID(request);
         } else {
             //校验Redis中是否存在uuid
-            boolean redisHas = redisService.hasValueInSet(RedisKeyConstants.IDENTIFICATION_SET, identification);
+            boolean redisHas = redisService.hasValueInSet(RedisKeyConstant.IDENTIFICATION_SET, identification);
             //Redis中不存在uuid
             if (!redisHas) {
                 //校验数据库中是否存在uuid
                 boolean mysqlHas = visitorService.hasUUID(identification);
                 if (mysqlHas) {
                     //数据库存在，保存至Redis
-                    redisService.saveValueToSet(RedisKeyConstants.IDENTIFICATION_SET, identification);
+                    redisService.saveValueToSet(RedisKeyConstant.IDENTIFICATION_SET, identification);
                 } else {
                     //数据库不存在，签发新的uuid
                     identification = saveUUID(request);
@@ -132,10 +132,10 @@ public class VisitLogAspect {
         //暴露自定义header供页面资源使用
         response.addHeader("Access-Control-Expose-Headers", "identification");
         //校验Redis中是否存在uuid
-        boolean redisHas = redisService.hasValueInSet(RedisKeyConstants.IDENTIFICATION_SET, uuid);
+        boolean redisHas = redisService.hasValueInSet(RedisKeyConstant.IDENTIFICATION_SET, uuid);
         if (!redisHas) {
             //保存至Redis
-            redisService.saveValueToSet(RedisKeyConstants.IDENTIFICATION_SET, uuid);
+            redisService.saveValueToSet(RedisKeyConstant.IDENTIFICATION_SET, uuid);
             //保存至数据库
             Visitor visitor = new Visitor(uuid, ip, userAgent);
             visitorService.saveVisitor(visitor);

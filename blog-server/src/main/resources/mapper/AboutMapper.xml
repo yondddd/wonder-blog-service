@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yond.mapper.AboutMapper">
-
-    <resultMap id="BASE_MAP" type="com.yond.entity.About"/>
+    <resultMap id="BASE_MAP" type="com.yond.entity.AboutDO"/>
 
     <sql id="ALL_FILED">
         id as id,
@@ -12,18 +11,17 @@
     </sql>
 
     <!--查询关于我设置-->
-    <select id="getList" resultMap="BASE_MAP">
-        select <include refid="ALL_FILED" />
-        from about
+    <select id="listAll" resultMap="BASE_MAP">
+        select
+        <include refid="ALL_FILED"/>
+        from aboutDO
     </select>
 
     <!--更新关于我设置-->
     <update id="updateAbout">
-        update about set value=#{value} where name_en=#{nameEn}
+        update aboutDO
+        set value=#{value}
+        where name_en = #{nameEn}
     </update>
 
-    <!--查询关于我页面评论开关状态-->
-    <select id="getAboutCommentEnabled" resultType="java.lang.String">
-        select value from about where name_en="commentEnabled"
-    </select>
 </mapper>

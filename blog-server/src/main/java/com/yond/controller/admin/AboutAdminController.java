@@ -27,7 +27,7 @@ public class AboutAdminController {
      */
     @GetMapping("/about")
     public Result<Map<String, String>> about() {
-        return Result.success(aboutService.getAboutSetting());
+        return Result.success(aboutService.getAbout(false));
     }
 
     /**

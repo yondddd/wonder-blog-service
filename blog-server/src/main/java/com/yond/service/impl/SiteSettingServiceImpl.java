@@ -1,6 +1,6 @@
 package com.yond.service.impl;
 
-import com.yond.common.constant.RedisKeyConstants;
+import com.yond.cache.constant.RedisKeyConstant;
 import com.yond.common.constant.SiteSettingConstants;
 import com.yond.common.exception.PersistenceException;
 import com.yond.entity.SiteSetting;
@@ -64,7 +64,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 
     @Override
     public Map<String, Object> getSiteInfo() {
-        String redisKey = RedisKeyConstants.SITE_INFO_MAP;
+        String redisKey = RedisKeyConstant.SITE_INFO_MAP;
         Map<String, Object> siteInfoMapFromRedis = redisService.getMapByValue(redisKey);
         if (siteInfoMapFromRedis != null) {
             return siteInfoMapFromRedis;
@@ -190,6 +190,6 @@ public class SiteSettingServiceImpl implements SiteSettingService {
      * 删除站点信息缓存
      */
     private void deleteSiteInfoRedisCache() {
-        redisService.deleteCacheByKey(RedisKeyConstants.SITE_INFO_MAP);
+        redisService.deleteCacheByKey(RedisKeyConstant.SITE_INFO_MAP);
     }
 }

@@ -15,7 +15,6 @@ import com.yond.service.impl.UserServiceImpl;
 import com.yond.util.JwtUtils;
 import com.yond.util.MyStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,22 +26,25 @@ import java.util.List;
  */
 @RestController
 public class BlogController {
-    @Autowired
-    BlogService blogService;
-    @Autowired
-    UserServiceImpl userService;
+
+    private final BlogService blogService;
+    private final UserServiceImpl userService;
+
+    public BlogController(BlogService blogService, UserServiceImpl userService) {
+        this.blogService = blogService;
+        this.userService = userService;
+    }
 
     /**
      * 按置顶、创建时间排序 分页查询博客简要信息列表
      *
      * @param pageNum 页码
-     * @return
      */
     @VisitLogger(VisitBehavior.INDEX)
     @GetMapping("/view/blogs")
     public Result blogs(@RequestParam(defaultValue = "1") Integer pageNum) {
         PageResult<BlogInfo> pageResult = blogService.getBlogInfoListByIsPublished(pageNum);
-        return Result.ok("请求成功", pageResult);
+        return Result.success(pageResult);
     }
 
     /**

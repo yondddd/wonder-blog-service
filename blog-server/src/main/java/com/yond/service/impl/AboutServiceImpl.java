@@ -1,20 +1,18 @@
 package com.yond.service.impl;
 
-import com.yond.common.constant.RedisKeyConstants;
-import com.yond.common.exception.PersistenceException;
-import com.yond.entity.About;
+import com.yond.cache.AboutCache;
+import com.yond.common.exception.util.PersistenceExceptionUtil;
+import com.yond.constant.AboutConstant;
+import com.yond.entity.AboutDO;
 import com.yond.mapper.AboutMapper;
 import com.yond.service.AboutService;
-import com.yond.service.RedisService;
 import com.yond.util.markdown.MarkdownUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @Description: 关于我页面业务层实现
@@ -23,66 +21,72 @@ import java.util.Set;
  */
 @Service
 public class AboutServiceImpl implements AboutService {
-    @Autowired
-    AboutMapper aboutMapper;
-    @Autowired
-    RedisService redisService;
 
-    @Override
-    public Map<String, String> getAboutInfo() {
-        String redisKey = RedisKeyConstants.ABOUT_INFO_MAP;
-        Map<String, String> aboutInfoMapFromRedis = redisService.getMapByValue(redisKey);
-        if (aboutInfoMapFromRedis != null) {
-            return aboutInfoMapFromRedis;
-        }
-        List<About> abouts = aboutMapper.getList();
-        Map<String, String> aboutInfoMap = new HashMap<>(16);
-        for (About about : abouts) {
-            if ("content".equals(about.getNameEn())) {
-                about.setValue(MarkdownUtils.markdownToHtmlExtensions(about.getValue()));
-            }
-            aboutInfoMap.put(about.getNameEn(), about.getValue());
-        }
-        redisService.saveMapToValue(redisKey, aboutInfoMap);
-        return aboutInfoMap;
+    private final AboutMapper aboutMapper;
+    private final AboutCache aboutCache;
+
+    public AboutServiceImpl(AboutMapper aboutMapper, AboutCache aboutCache) {
+        this.aboutMapper = aboutMapper;
+        this.aboutCache = aboutCache;
     }
 
     @Override
-    public Map<String, String> getAboutSetting() {
-        List<About> abouts = aboutMapper.getList();
-        Map<String, String> map = new HashMap<>(16);
-        for (About about : abouts) {
-            map.put(about.getNameEn(), about.getValue());
-        }
-        return map;
+    public Map<String, String> getAbout(boolean useCache) {
+
+        return useCache ?
+                getAboutInfoFromCache() :
+                getAboutInfoFromDb();
     }
 
     @Override
     public void updateAbout(Map<String, String> map) {
-        Set<String> keySet = map.keySet();
-        for (String key : keySet) {
-            updateOneAbout(key, map.get(key));
-        }
-        deleteAboutRedisCache();
-    }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void updateOneAbout(String nameEn, String value) {
-        if (aboutMapper.updateAbout(nameEn, value) != 1) {
-            throw new PersistenceException("修改失败");
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            int updated = aboutMapper.updateAbout(entry.getKey(), entry.getValue());
+            PersistenceExceptionUtil.isTrue(updated == 1, "关于我修改失败");
         }
+        aboutCache.del();
     }
 
     @Override
-    public boolean getAboutCommentEnabled() {
-        String commentEnabledString = aboutMapper.getAboutCommentEnabled();
-        return Boolean.parseBoolean(commentEnabledString);
+    public boolean getCommentEnabled() {
+
+        String commentEnabled = this.getAboutInfoFromCache().get(AboutConstant.COMMENT_KEY);
+        return Boolean.parseBoolean(commentEnabled);
+    }
+
+
+    private Map<String, String> getAboutInfoFromDb() {
+
+        return this.listAll().stream()
+                .collect(Collectors.toMap(AboutDO::getNameEn, AboutDO::getValue, (key1, key2) -> key1));
     }
 
     /**
-     * 删除关于我页面缓存
+     * 注意只给前台view使用
      */
-    private void deleteAboutRedisCache() {
-        redisService.deleteCacheByKey(RedisKeyConstants.ABOUT_INFO_MAP);
+    private Map<String, String> getAboutInfoFromCache() {
+
+        Map<String, String> data = aboutCache.get();
+        if (data != null) {
+            return data;
+        }
+
+        List<AboutDO> aboutDOS = this.listAll();
+        data = new HashMap<>(aboutDOS.size());
+        for (AboutDO aboutDO : aboutDOS) {
+            if (AboutConstant.CONTENT_KEY.equals(aboutDO.getNameEn())) {
+                aboutDO.setValue(MarkdownUtils.markdownToHtmlExtensions(aboutDO.getValue()));
+            }
+            data.put(aboutDO.getNameEn(), aboutDO.getValue());
+        }
+        aboutCache.set(data);
+        return data;
     }
+
+
+    private List<AboutDO> listAll() {
+        return aboutMapper.listAll();
+    }
+
 }

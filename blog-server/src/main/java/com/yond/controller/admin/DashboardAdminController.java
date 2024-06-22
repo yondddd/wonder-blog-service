@@ -1,6 +1,6 @@
 package com.yond.controller.admin;
 
-import com.yond.common.constant.RedisKeyConstants;
+import com.yond.cache.constant.RedisKeyConstant;
 import com.yond.common.resp.Result;
 import com.yond.entity.CityVisitor;
 import com.yond.service.DashboardService;
@@ -30,7 +30,7 @@ public class DashboardAdminController {
     @GetMapping("/dashboard")
     public Result dashboard() {
         int todayPV = dashboardService.countVisitLogByToday();
-        int todayUV = redisService.countBySet(RedisKeyConstants.IDENTIFICATION_SET);
+        int todayUV = redisService.countBySet(RedisKeyConstant.IDENTIFICATION_SET);
         int blogCount = dashboardService.getBlogCount();
         int commentCount = dashboardService.getCommentCount();
         Map<String, List> categoryBlogCountMap = dashboardService.getCategoryBlogCountMap();

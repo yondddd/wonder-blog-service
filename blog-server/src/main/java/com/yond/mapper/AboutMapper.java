@@ -1,8 +1,8 @@
 package com.yond.mapper;
 
+import com.yond.entity.AboutDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.entity.About;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ import java.util.List;
 @Mapper
 @Repository
 public interface AboutMapper {
-	List<About> getList();
 
-	int updateAbout(String nameEn, String value);
+    List<AboutDO> listAll();
 
-	String getAboutCommentEnabled();
+    int updateAbout(String nameEn, String value);
+
 }

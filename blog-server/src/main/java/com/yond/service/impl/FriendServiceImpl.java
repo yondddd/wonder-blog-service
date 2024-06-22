@@ -1,6 +1,6 @@
 package com.yond.service.impl;
 
-import com.yond.common.constant.RedisKeyConstants;
+import com.yond.cache.constant.RedisKeyConstant;
 import com.yond.common.exception.PersistenceException;
 import com.yond.entity.Friend;
 import com.yond.entity.SiteSetting;
@@ -85,7 +85,7 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public FriendInfo getFriendInfo(boolean cache, boolean md) {
-        String redisKey = RedisKeyConstants.FRIEND_INFO_MAP;
+        String redisKey = RedisKeyConstant.FRIEND_INFO_MAP;
         if (cache) {
             FriendInfo friendInfoFromRedis = redisService.getObjectByValue(redisKey, FriendInfo.class);
             if (friendInfoFromRedis != null) {
@@ -133,6 +133,6 @@ public class FriendServiceImpl implements FriendService {
      * 删除友链页面缓存
      */
     private void deleteFriendInfoRedisCache() {
-        redisService.deleteCacheByKey(RedisKeyConstants.FRIEND_INFO_MAP);
+        redisService.deleteCacheByKey(RedisKeyConstant.FRIEND_INFO_MAP);
     }
 }

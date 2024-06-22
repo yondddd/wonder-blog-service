@@ -37,7 +37,7 @@ public class BlogDataSourceConfig {
         dataSource.setUsername("operator");
         dataSource.setPassword(password);
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setMaximumPoolSize(10);
+        dataSource.setMaximumPoolSize(5);
         return dataSource;
     }
 

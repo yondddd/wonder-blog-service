@@ -1,7 +1,7 @@
 package com.yond.util.comment;
 
+import com.yond.cache.constant.RedisKeyConstant;
 import com.yond.common.constant.PageConstants;
-import com.yond.common.constant.RedisKeyConstants;
 import com.yond.common.enums.CommentOpenStateEnum;
 import com.yond.common.enums.CommentPageEnum;
 import com.yond.config.properties.BlogProperties;
@@ -189,7 +189,7 @@ public class CommentUtils {
                 break;
             case PageConstants.ABOUT:
                 //关于我页面
-                if (!aboutService.getAboutCommentEnabled()) {
+                if (!aboutService.getCommentEnabled()) {
                     //页面评论已关闭
                     return CommentOpenStateEnum.CLOSE;
                 }
@@ -307,10 +307,10 @@ public class CommentUtils {
      * @throws Exception 上传QQ头像时可能抛出的异常
      */
     private void setCommentQQAvatar(Comment comment, String qq) throws Exception {
-        String uploadAvatarUrl = (String) redisService.getValueByHashKey(RedisKeyConstants.QQ_AVATAR_URL_MAP, qq);
+        String uploadAvatarUrl = (String) redisService.getValueByHashKey(RedisKeyConstant.QQ_AVATAR_URL_MAP, qq);
         if (StringUtils.isBlank(uploadAvatarUrl)) {
             uploadAvatarUrl = QQInfoUtils.getQQAvatarUrl(qq);
-            redisService.saveKVToHash(RedisKeyConstants.QQ_AVATAR_URL_MAP, qq, uploadAvatarUrl);
+            redisService.saveKVToHash(RedisKeyConstant.QQ_AVATAR_URL_MAP, qq, uploadAvatarUrl);
         }
         comment.setAvatar(uploadAvatarUrl);
     }

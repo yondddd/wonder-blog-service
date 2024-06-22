@@ -2,10 +2,10 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for about
+-- Table structure for aboutDO
 -- ----------------------------
-DROP TABLE IF EXISTS `about`;
-CREATE TABLE `about`  (
+DROP TABLE IF EXISTS `aboutDO`;
+CREATE TABLE `aboutDO`  (
   `id` bigint(0) NOT NULL,
   `name_en` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `name_zh` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
@@ -14,12 +14,12 @@ CREATE TABLE `about`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of about
+-- Records of aboutDO
 -- ----------------------------
-INSERT INTO `about` VALUES (1, 'title', '标题', '关于帅气的 Naccl');
-INSERT INTO `about` VALUES (2, 'musicId', '网易云歌曲ID', '423015580');
-INSERT INTO `about` VALUES (3, 'content', '正文Markdown', '');
-INSERT INTO `about` VALUES (4, 'commentEnabled', '评论开关', 'true');
+INSERT INTO `aboutDO` VALUES (1, 'title', '标题', '关于帅气的 Naccl');
+INSERT INTO `aboutDO` VALUES (2, 'musicId', '网易云歌曲ID', '423015580');
+INSERT INTO `aboutDO` VALUES (3, 'content', '正文Markdown', '');
+INSERT INTO `aboutDO` VALUES (4, 'commentEnabled', '评论开关', 'true');
 
 -- ----------------------------
 -- Table structure for blog
