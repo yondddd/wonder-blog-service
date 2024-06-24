@@ -1,6 +1,5 @@
 package com.yond.controller.admin;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.resp.Result;
@@ -8,8 +7,11 @@ import com.yond.entity.CategoryDO;
 import com.yond.service.BlogService;
 import com.yond.service.CategoryService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Description: 博客分类后台管理
@@ -33,9 +35,9 @@ public class CategoryAdminController {
      */
     @GetMapping("/categories")
     public Result<PageInfo<CategoryDO>> categories(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
-        String orderBy = "id desc";
-        PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<CategoryDO> pageInfo = new PageInfo<>(categoryService.listAll());
+        Pair<Integer, List<CategoryDO>> pair = categoryService.page(pageNum, pageSize);
+        PageInfo<CategoryDO> pageInfo = new PageInfo<>(pair.getRight());
+        pageInfo.setTotal(pair.getLeft());
         return Result.success(pageInfo);
     }
 

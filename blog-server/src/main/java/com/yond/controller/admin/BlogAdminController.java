@@ -14,6 +14,7 @@ import com.yond.service.CategoryService;
 import com.yond.service.CommentService;
 import com.yond.service.TagService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,10 +54,11 @@ public class BlogAdminController {
         String orderBy = "create_time desc";
         PageHelper.startPage(pageNum, pageSize, orderBy);
         PageInfo<Blog> pageInfo = new PageInfo<>(blogService.getListByTitleAndCategoryId(title, categoryId));
-        List<CategoryDO> categories = categoryService.listAll();
+
+        Pair<Integer, List<CategoryDO>> pair = categoryService.page(pageNum, pageSize);
         Map<String, Object> map = new HashMap<>(4);
         map.put("blogs", pageInfo);
-        map.put("categories", categories);
+        map.put("categories", pair.getRight());
         return Result.success(map);
     }
 

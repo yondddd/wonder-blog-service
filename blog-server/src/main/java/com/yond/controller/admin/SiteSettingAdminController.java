@@ -4,7 +4,6 @@ import com.yond.common.annotation.OperationLogger;
 import com.yond.common.resp.Result;
 import com.yond.entity.SiteSetting;
 import com.yond.service.SiteSettingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
@@ -19,8 +18,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin")
 public class SiteSettingAdminController {
-    @Autowired
-    SiteSettingService siteSettingService;
+
+    private final SiteSettingService siteSettingService;
+
+    public SiteSettingAdminController(SiteSettingService siteSettingService) {
+        this.siteSettingService = siteSettingService;
+    }
 
     /**
      * 获取所有站点配置信息
@@ -28,9 +31,9 @@ public class SiteSettingAdminController {
      * @return
      */
     @GetMapping("/siteSettings")
-    public Result siteSettings() {
+    public Result<Map<String, List<SiteSetting>>> siteSettings() {
         Map<String, List<SiteSetting>> typeMap = siteSettingService.getList();
-        return Result.ok("请求成功", typeMap);
+        return Result.success(typeMap);
     }
 
     /**
@@ -41,11 +44,11 @@ public class SiteSettingAdminController {
      */
     @OperationLogger("更新站点配置信息")
     @PostMapping("/siteSettings")
-    public Result updateAll(@RequestBody Map<String, Object> map) {
+    public Result<Boolean> updateAll(@RequestBody Map<String, Object> map) {
         List<LinkedHashMap> siteSettings = (List<LinkedHashMap>) map.get("settings");
         List<Integer> deleteIds = (List<Integer>) map.get("deleteIds");
         siteSettingService.updateSiteSetting(siteSettings, deleteIds);
-        return Result.ok("更新成功");
+        return Result.success();
     }
 
     /**
@@ -54,7 +57,8 @@ public class SiteSettingAdminController {
      * @return
      */
     @GetMapping("/webTitleSuffix")
-    public Result getWebTitleSuffix() {
-        return Result.ok("请求成功", siteSettingService.getWebTitleSuffix());
+    public Result<String> getWebTitleSuffix() {
+        return Result.success(siteSettingService.getWebTitleSuffix());
     }
+
 }

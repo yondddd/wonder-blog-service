@@ -3,9 +3,11 @@ package com.yond.service.impl;
 import com.yond.cache.local.BlogCache;
 import com.yond.cache.local.CategoryCache;
 import com.yond.common.exception.PersistenceException;
+import com.yond.common.utils.page.PageUtil;
 import com.yond.entity.CategoryDO;
 import com.yond.mapper.CategoryMapper;
 import com.yond.service.CategoryService;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     public CategoryServiceImpl(CategoryMapper categoryMapper) {
         this.categoryMapper = categoryMapper;
+    }
+
+    @Override
+    public Pair<Integer, List<CategoryDO>> page(Integer pageNo, Integer pageSize) {
+        List<CategoryDO> all = this.listAll();
+        return Pair.of(all.size(), PageUtil.pageList(all, pageNo, pageSize));
     }
 
     @Override
