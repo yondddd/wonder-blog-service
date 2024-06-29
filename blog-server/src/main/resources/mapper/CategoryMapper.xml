@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yond.mapper.CategoryMapper">
+<mapper namespace="com.yond.blog.mapper.CategoryMapper">
 
-    <resultMap id="category" type="com.yond.entity.CategoryDO">
+    <resultMap id="category" type="com.yond.blog.entity.CategoryDO">
         <id property="id" column="id"/>
         <result property="name" column="category_name"/>
     </resultMap>
@@ -18,7 +18,7 @@
     </select>
 
     <!--添加分类-->
-    <insert id="save" parameterType="com.yond.entity.CategoryDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.yond.blog.entity.CategoryDO" useGeneratedKeys="true" keyProperty="id">
         insert into category (category_name) values (#{name})
     </insert>
 

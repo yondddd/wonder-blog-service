@@ -7,10 +7,13 @@ package com.yond.common.enums;
  * @date: 2022-01-22
  */
 public enum CommentPageEnum {
+
     UNKNOWN("UNKNOWN", "UNKNOWN"),
 
     BLOG("", ""),
+
     ABOUT("关于我", "/about"),
+
     FRIEND("友人帐", "/friends"),
     ;
 

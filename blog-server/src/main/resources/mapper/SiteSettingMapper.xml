@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yond.mapper.SiteSettingMapper">
+<mapper namespace="com.yond.blog.mapper.SiteSettingMapper">
 
 
     <sql id="ALL_FILED">
@@ -12,12 +12,12 @@
     </sql>
 
     <!--查询站点设置-->
-    <select id="getList" resultType="com.yond.entity.SiteSetting">
+    <select id="getList" resultType="com.yond.blog.entity.SiteSetting">
         select <include refid="ALL_FILED"/>  from site_setting
     </select>
 
     <!--查询友链页面信息-->
-    <select id="getFriendInfo" resultType="com.yond.entity.SiteSetting">
+    <select id="getFriendInfo" resultType="com.yond.blog.entity.SiteSetting">
         select <include refid="ALL_FILED"/>  from site_setting where type=4
     </select>
 
