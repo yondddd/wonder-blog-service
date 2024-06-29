@@ -23,19 +23,19 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
+            <version>2.1.0-alpha1</version>
         </dependency>
         <!-- 添加logback-classic依赖 -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+            <version>1.4.14</version>
         </dependency>
         <!-- 添加logback-core依赖 -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.2.3</version>
+            <version>1.4.14</version>
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -92,12 +92,6 @@
                     <groupId>commons-beanutils</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.36</version>
         </dependency>
 
         <dependency>
