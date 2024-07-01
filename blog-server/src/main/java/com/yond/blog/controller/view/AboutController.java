@@ -1,12 +1,14 @@
 package com.yond.blog.controller.view;
 
+import com.yond.blog.service.AboutService;
 import com.yond.common.annotation.VisitLogger;
 import com.yond.common.enums.VisitBehavior;
 import com.yond.common.resp.Result;
-import com.yond.blog.service.AboutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * @Description: 关于我页面
@@ -25,7 +27,8 @@ public class AboutController {
      */
     @VisitLogger(VisitBehavior.ABOUT)
     @GetMapping("/view/about")
-    public Result about() {
-        return Result.ok("获取成功", aboutService.getAbout(true));
+    public Result<Map<String, String>> about() {
+        return Result.success(aboutService.getAbout(true));
     }
+
 }

@@ -1,9 +1,9 @@
 package com.yond.blog.controller.view;
 
+import com.yond.blog.service.BlogService;
 import com.yond.common.annotation.VisitLogger;
 import com.yond.common.enums.VisitBehavior;
 import com.yond.common.resp.Result;
-import com.yond.blog.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +27,8 @@ public class ArchiveController {
      */
     @VisitLogger(VisitBehavior.ARCHIVE)
     @GetMapping("/view/archives")
-    public Result archives() {
+    public Result<Map<String, Object>> archives() {
         Map<String, Object> archiveBlogMap = blogService.getArchiveBlogAndCountByIsPublished();
-        return Result.ok("请求成功", archiveBlogMap);
+        return Result.success(archiveBlogMap);
     }
 }

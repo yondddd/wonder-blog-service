@@ -1,9 +1,5 @@
 package com.yond.blog.controller.view;
 
-import com.yond.common.annotation.VisitLogger;
-import com.yond.common.constant.JwtConstants;
-import com.yond.common.enums.VisitBehavior;
-import com.yond.common.resp.Result;
 import com.yond.blog.entity.User;
 import com.yond.blog.model.dto.BlogPassword;
 import com.yond.blog.model.vo.BlogDetail;
@@ -14,6 +10,10 @@ import com.yond.blog.service.BlogService;
 import com.yond.blog.service.impl.UserServiceImpl;
 import com.yond.blog.util.JwtUtils;
 import com.yond.blog.util.MyStringUtils;
+import com.yond.common.annotation.VisitLogger;
+import com.yond.common.constant.JwtConstants;
+import com.yond.common.enums.VisitBehavior;
+import com.yond.common.resp.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +42,7 @@ public class BlogController {
      */
     @VisitLogger(VisitBehavior.INDEX)
     @GetMapping("/view/blogs")
-    public Result blogs(@RequestParam(defaultValue = "1") Integer pageNum) {
+    public Result<PageResult<BlogInfo>> blogs(@RequestParam(defaultValue = "1") Integer pageNum) {
         PageResult<BlogInfo> pageResult = blogService.getBlogInfoListByIsPublished(pageNum);
         return Result.success(pageResult);
     }
