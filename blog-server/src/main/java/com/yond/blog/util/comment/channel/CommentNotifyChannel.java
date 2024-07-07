@@ -1,6 +1,6 @@
 package com.yond.blog.util.comment.channel;
 
-import com.yond.blog.model.dto.Comment;
+import com.yond.blog.web.blog.view.dto.Comment;
 
 /**
  * 评论提醒方式

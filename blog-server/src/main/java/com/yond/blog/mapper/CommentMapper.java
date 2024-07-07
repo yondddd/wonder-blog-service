@@ -2,8 +2,8 @@ package com.yond.blog.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.blog.entity.Comment;
-import com.yond.blog.model.vo.PageComment;
+import com.yond.blog.entity.CommentDO;
+import com.yond.blog.web.blog.view.vo.PageComment;
 
 import java.util.List;
 
@@ -15,13 +15,13 @@ import java.util.List;
 @Mapper
 @Repository
 public interface CommentMapper {
-	List<Comment> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
+	List<CommentDO> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
 
-	List<Comment> getListByParentCommentId(Long parentCommentId);
+	List<CommentDO> getListByParentCommentId(Long parentCommentId);
 
 	List<PageComment> getPageCommentListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
 
-	Comment getCommentById(Long id);
+	CommentDO getCommentById(Long id);
 
 	int updateCommentPublishedById(Long commentId, Boolean published);
 
@@ -31,11 +31,11 @@ public interface CommentMapper {
 
 	int deleteCommentsByBlogId(Long blogId);
 
-	int updateComment(Comment comment);
+	int updateComment(CommentDO comment);
 
 	int countByPageAndIsPublished(Integer page, Long blogId, Boolean isPublished);
 
 	int countComment();
 
-	int saveComment(com.yond.blog.model.dto.Comment comment);
+	int saveComment(com.yond.blog.web.blog.view.dto.Comment comment);
 }

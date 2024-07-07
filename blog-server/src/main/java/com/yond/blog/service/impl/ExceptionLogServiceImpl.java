@@ -2,9 +2,9 @@ package com.yond.blog.service.impl;
 
 import com.yond.blog.service.ExceptionLogService;
 import com.yond.common.exception.PersistenceException;
-import com.yond.blog.entity.ExceptionLog;
+import com.yond.blog.entity.ExceptionLogDO;
 import com.yond.blog.mapper.ExceptionLogMapper;
-import com.yond.blog.model.dto.UserAgentDTO;
+import com.yond.blog.web.blog.view.dto.UserAgentDTO;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.UserAgentUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +26,13 @@ public class ExceptionLogServiceImpl implements ExceptionLogService {
     UserAgentUtils userAgentUtils;
 
     @Override
-    public List<ExceptionLog> getExceptionLogListByDate(String startDate, String endDate) {
+    public List<ExceptionLogDO> getExceptionLogListByDate(String startDate, String endDate) {
         return exceptionLogMapper.getExceptionLogListByDate(startDate, endDate);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveExceptionLog(ExceptionLog log) {
+    public void saveExceptionLog(ExceptionLogDO log) {
         String ipSource = IpAddressUtils.getCityInfo(log.getIp());
         UserAgentDTO userAgentDTO = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
         log.setIpSource(ipSource);

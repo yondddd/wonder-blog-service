@@ -2,9 +2,9 @@ package com.yond.blog.service.impl;
 
 import com.yond.blog.service.OperationLogService;
 import com.yond.common.exception.PersistenceException;
-import com.yond.blog.entity.OperationLog;
+import com.yond.blog.entity.OperationLogDO;
 import com.yond.blog.mapper.OperationLogMapper;
-import com.yond.blog.model.dto.UserAgentDTO;
+import com.yond.blog.web.blog.view.dto.UserAgentDTO;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.UserAgentUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +26,13 @@ public class OperationLogServiceImpl implements OperationLogService {
     UserAgentUtils userAgentUtils;
 
     @Override
-    public List<OperationLog> getOperationLogListByDate(String startDate, String endDate) {
+    public List<OperationLogDO> getOperationLogListByDate(String startDate, String endDate) {
         return operationLogMapper.getOperationLogListByDate(startDate, endDate);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveOperationLog(OperationLog log) {
+    public void saveOperationLog(OperationLogDO log) {
         String ipSource = IpAddressUtils.getCityInfo(log.getIp());
         UserAgentDTO userAgentDTO = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
         log.setIpSource(ipSource);

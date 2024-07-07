@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yond.blog.mapper.FriendMapper">
-    <resultMap id="friend" type="com.yond.blog.entity.Friend">
+    <resultMap id="friend" type="com.yond.blog.entity.FriendDO">
         <id property="id" column="id"/>
         <result property="nickname" column="nickname"/>
         <result property="description" column="description"/>
@@ -17,7 +17,7 @@
         select id, nickname, description, website, avatar, is_published, views, create_time from friend
     </select>
 
-    <resultMap id="friendVO" type="com.yond.blog.model.vo.Friend">
+    <resultMap id="friendVO" type="com.yond.blog.web.blog.view.vo.Friend">
         <result property="nickname" column="nickname"/>
         <result property="description" column="description"/>
         <result property="website" column="website"/>
@@ -35,7 +35,7 @@
     </update>
 
     <!--添加友链-->
-    <insert id="saveFriend" parameterType="com.yond.blog.entity.Friend" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveFriend" parameterType="com.yond.blog.entity.FriendDO" useGeneratedKeys="true" keyProperty="id">
         insert into friend (nickname, description, website, avatar, is_published, views, create_time)
         values (#{nickname}, #{description}, #{website}, #{avatar}, #{published}, #{views}, #{createTime})
     </insert>

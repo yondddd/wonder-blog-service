@@ -4,7 +4,7 @@ import com.yond.blog.util.telegram.TelegramUtils;
 import com.yond.common.enums.CommentPageEnum;
 import com.yond.blog.config.properties.BlogProperties;
 import com.yond.blog.config.properties.TelegramProperties;
-import com.yond.blog.model.dto.Comment;
+import com.yond.blog.web.blog.view.dto.Comment;
 import com.yond.blog.util.comment.CommentUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

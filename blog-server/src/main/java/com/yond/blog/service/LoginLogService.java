@@ -1,15 +1,15 @@
 package com.yond.blog.service;
 
 import org.springframework.scheduling.annotation.Async;
-import com.yond.blog.entity.LoginLog;
+import com.yond.blog.entity.LoginLogDO;
 
 import java.util.List;
 
 public interface LoginLogService {
-	List<LoginLog> getLoginLogListByDate(String startDate, String endDate);
+	List<LoginLogDO> getLoginLogListByDate(String startDate, String endDate);
 
 	@Async
-	void saveLoginLog(LoginLog log);
+	void saveLoginLog(LoginLogDO log);
 
 	void deleteLoginLogById(Long id);
 }

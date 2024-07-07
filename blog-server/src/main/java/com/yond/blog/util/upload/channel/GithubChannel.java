@@ -1,13 +1,14 @@
 package com.yond.blog.util.upload.channel;
 
+import com.yond.blog.config.properties.GithubProperties;
+import com.yond.blog.util.upload.UploadUtils;
+import com.yond.common.constant.JwtConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import com.yond.blog.config.properties.GithubProperties;
-import com.yond.blog.util.upload.UploadUtils;
 
 import java.util.Base64;
 import java.util.HashMap;
@@ -49,7 +50,7 @@ public class GithubChannel implements FileUploadChannel {
         String imgBase64 = Base64.getEncoder().encodeToString(image.getData());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "token " + githubProperties.getToken());
+        headers.add(JwtConstant.TOKEN_HEADER, "token " + githubProperties.getToken());
 
         HashMap<String, String> body = new HashMap<>(4);
         body.put("message", "Add files via NBlog");

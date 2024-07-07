@@ -1,18 +1,18 @@
 package com.yond.blog.service;
 
-import com.yond.blog.entity.VisitLog;
-import com.yond.blog.model.dto.VisitLogUuidTime;
+import com.yond.blog.entity.VisitLogDO;
+import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.List;
 
 public interface VisitLogService {
-    List<VisitLog> getVisitLogListByUUIDAndDate(String uuid, String startDate, String endDate);
+    List<VisitLogDO> getVisitLogListByUUIDAndDate(String uuid, String startDate, String endDate);
 
     List<VisitLogUuidTime> getUUIDAndCreateTimeByYesterday();
 
     @Async
-    void saveVisitLog(VisitLog log);
+    void saveVisitLog(VisitLogDO log);
 
     void deleteVisitLogById(Long id);
 

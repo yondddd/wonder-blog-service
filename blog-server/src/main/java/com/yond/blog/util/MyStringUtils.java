@@ -9,20 +9,6 @@ import java.io.StringWriter;
  * @Date: 2020-08-02
  */
 public class MyStringUtils {
-    /**
-     * 判断字符串是否为空
-     *
-     * @param str 待校验字符串
-     * @return
-     */
-    public static boolean isEmpty(String... str) {
-        for (String s : str) {
-            if (s == null || "".equals(s.trim())) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * 判断字符串中是否包含特殊字符
@@ -37,30 +23,6 @@ public class MyStringUtils {
             }
         }
         return false;
-    }
-
-    /**
-     * 截取字符串
-     *
-     * @param str   原始字符串
-     * @param start 起始位置
-     * @param end   结束位置
-     * @return
-     */
-    public static String substring(String str, int start, int end) {
-        if (str == null || "".equals(str)) {
-            return "";
-        }
-        if (start < 0 || end < 0) {
-            return str;
-        }
-        if (end > str.length()) {
-            end = str.length();
-        }
-        if (start >= end) {
-            return "";
-        }
-        return str.substring(start, end);
     }
 
     /**

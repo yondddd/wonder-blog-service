@@ -1,12 +1,12 @@
 package com.yond.blog.service.impl;
 
-import com.yond.common.exception.PersistenceException;
-import com.yond.blog.entity.ScheduleJob;
-import com.yond.blog.entity.ScheduleJobLog;
+import com.yond.blog.entity.ScheduleJobDO;
+import com.yond.blog.entity.ScheduleJobLogDO;
 import com.yond.blog.mapper.ScheduleJobLogMapper;
 import com.yond.blog.mapper.ScheduleJobMapper;
 import com.yond.blog.service.ScheduleJobService;
 import com.yond.blog.util.quartz.ScheduleUtils;
+import com.yond.common.exception.PersistenceException;
 import jakarta.annotation.PostConstruct;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
@@ -23,20 +23,21 @@ import java.util.List;
  */
 @Service
 public class ScheduleJobServiceImpl implements ScheduleJobService {
-    @Autowired
-    Scheduler scheduler;
+
     @Autowired
     ScheduleJobMapper schedulerJobMapper;
     @Autowired
     ScheduleJobLogMapper scheduleJobLogMapper;
+    @Autowired
+    Scheduler scheduler;
 
     /**
      * 项目启动时，初始化定时器
      */
     @PostConstruct
     public void init() {
-        List<ScheduleJob> scheduleJobList = getJobList();
-        for (ScheduleJob scheduleJob : scheduleJobList) {
+        List<ScheduleJobDO> scheduleJobList = getJobList();
+        for (ScheduleJobDO scheduleJob : scheduleJobList) {
             CronTrigger cronTrigger = ScheduleUtils.getCronTrigger(scheduler, scheduleJob.getJobId());
             //如果不存在，则创建
             if (cronTrigger == null) {
@@ -48,13 +49,13 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     }
 
     @Override
-    public List<ScheduleJob> getJobList() {
+    public List<ScheduleJobDO> getJobList() {
         return schedulerJobMapper.getJobList();
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveJob(ScheduleJob scheduleJob) {
+    public void saveJob(ScheduleJobDO scheduleJob) {
         if (schedulerJobMapper.saveJob(scheduleJob) != 1) {
             throw new PersistenceException("添加失败");
         }
@@ -63,7 +64,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateJob(ScheduleJob scheduleJob) {
+    public void updateJob(ScheduleJobDO scheduleJob) {
         if (schedulerJobMapper.updateJob(scheduleJob) != 1) {
             throw new PersistenceException("更新失败");
         }
@@ -98,13 +99,13 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     }
 
     @Override
-    public List<ScheduleJobLog> getJobLogListByDate(String startDate, String endDate) {
+    public List<ScheduleJobLogDO> getJobLogListByDate(String startDate, String endDate) {
         return scheduleJobLogMapper.getJobLogListByDate(startDate, endDate);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveJobLog(ScheduleJobLog jobLog) {
+    public void saveJobLog(ScheduleJobLogDO jobLog) {
         if (scheduleJobLogMapper.saveJobLog(jobLog) != 1) {
             throw new PersistenceException("日志添加失败");
         }

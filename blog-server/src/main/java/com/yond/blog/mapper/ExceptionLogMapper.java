@@ -2,7 +2,7 @@ package com.yond.blog.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.blog.entity.ExceptionLog;
+import com.yond.blog.entity.ExceptionLogDO;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ExceptionLogMapper {
-	List<ExceptionLog> getExceptionLogListByDate(String startDate, String endDate);
+	List<ExceptionLogDO> getExceptionLogListByDate(String startDate, String endDate);
 
-	int saveExceptionLog(ExceptionLog log);
+	int saveExceptionLog(ExceptionLogDO log);
 
 	int deleteExceptionLogById(Long id);
 }

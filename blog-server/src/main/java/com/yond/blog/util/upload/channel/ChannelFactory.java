@@ -1,7 +1,7 @@
 package com.yond.blog.util.upload.channel;
 
-import com.yond.common.constant.UploadConstants;
 import com.yond.blog.util.common.SpringContextUtils;
+import com.yond.common.constant.UploadConstant;
 
 /**
  * 文件上传方式
@@ -18,11 +18,11 @@ public class ChannelFactory {
      */
     public static FileUploadChannel getChannel(String channelName) {
         switch (channelName.toLowerCase()) {
-            case UploadConstants.LOCAL:
+            case UploadConstant.LOCAL:
                 return SpringContextUtils.getBean(LocalChannel.class);
-            case UploadConstants.GITHUB:
+            case UploadConstant.GITHUB:
                 return SpringContextUtils.getBean(GithubChannel.class);
-            case UploadConstants.UPYUN:
+            case UploadConstant.UPYUN:
                 return SpringContextUtils.getBean(UpyunChannel.class);
         }
         throw new RuntimeException("Unsupported value in [application.properties]: [upload.channel]");

@@ -3,8 +3,8 @@ package com.yond.blog.util.telegram;
 import com.yond.common.enums.CommentPageEnum;
 import com.yond.blog.config.properties.BlogProperties;
 import com.yond.blog.config.properties.TelegramProperties;
-import com.yond.blog.entity.Comment;
-import com.yond.blog.entity.Moment;
+import com.yond.blog.entity.CommentDO;
+import com.yond.blog.entity.MomentDO;
 import com.yond.blog.service.CommentService;
 import com.yond.blog.service.MomentService;
 import com.yond.blog.util.comment.CommentUtils;
@@ -192,9 +192,9 @@ public class TelegramBotMsgHandler {
 
             long commentId = Long.parseLong(commentIdString);
             //先找到要回复的评论
-            Comment parentComment = commentService.getCommentById(commentId);
+            CommentDO parentComment = commentService.getCommentById(commentId);
 
-            com.yond.blog.model.dto.Comment comment = new com.yond.blog.model.dto.Comment();
+            com.yond.blog.web.blog.view.dto.Comment comment = new com.yond.blog.web.blog.view.dto.Comment();
             comment.setContent(commentContent);
             comment.setParentCommentId(parentComment.getId());
             //父评论所在页面
@@ -244,7 +244,7 @@ public class TelegramBotMsgHandler {
      * @param content 动态内容
      */
     private String newMoment(String content) {
-        Moment moment = new Moment();
+        MomentDO moment = new MomentDO();
         moment.setCreateTime(new Date());
         moment.setContent(content);
         moment.setLikes(0);

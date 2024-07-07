@@ -2,8 +2,8 @@ package com.yond.blog.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.blog.entity.VisitLog;
-import com.yond.blog.model.dto.VisitLogUuidTime;
+import com.yond.blog.entity.VisitLogDO;
+import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
 
 import java.util.List;
 
@@ -15,11 +15,11 @@ import java.util.List;
 @Mapper
 @Repository
 public interface VisitLogMapper {
-	List<VisitLog> getVisitLogListByUUIDAndDate(String uuid, String startDate, String endDate);
+	List<VisitLogDO> getVisitLogListByUUIDAndDate(String uuid, String startDate, String endDate);
 
 	List<VisitLogUuidTime> getUUIDAndCreateTimeByYesterday();
 
-	int saveVisitLog(VisitLog log);
+	int saveVisitLog(VisitLogDO log);
 
 	int deleteVisitLogById(Long id);
 

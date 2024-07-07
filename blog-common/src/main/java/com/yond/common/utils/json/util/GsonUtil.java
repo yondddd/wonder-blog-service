@@ -5,8 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.yond.common.resp.PageableResult;
-import com.yond.common.resp.Result;
+import com.yond.common.resp.PageResult;
+import com.yond.common.resp.Response;
 import com.yond.common.utils.json.adapter.DateInitManager;
 import com.yond.common.utils.json.adapter.gson.DateTypeAdapter;
 import com.yond.common.utils.json.adapter.gson.LocalDateTimeTypeAdapter;
@@ -53,13 +53,13 @@ public class GsonUtil {
         return gson.fromJson(json, typeOfT);
     }
 
-    public static <T> Result<T> toResponse(String json, Class<T> clazz) {
-        Type typeToken = TypeToken.getParameterized(Result.class, clazz).getType();
+    public static <T> Response<T> toResponse(String json, Class<T> clazz) {
+        Type typeToken = TypeToken.getParameterized(Response.class, clazz).getType();
         return gson.fromJson(json, typeToken);
     }
 
-    public static <T> PageableResult<T> toPageableResponse(String json, Class<T> clazz) {
-        Type typeToken = TypeToken.getParameterized(Result.class, clazz).getType();
+    public static <T> PageResult<T> toPageableResponse(String json, Class<T> clazz) {
+        Type typeToken = TypeToken.getParameterized(Response.class, clazz).getType();
         return gson.fromJson(json, typeToken);
     }
 

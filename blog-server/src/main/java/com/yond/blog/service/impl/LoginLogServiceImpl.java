@@ -1,9 +1,9 @@
 package com.yond.blog.service.impl;
 
 import com.yond.common.exception.PersistenceException;
-import com.yond.blog.entity.LoginLog;
+import com.yond.blog.entity.LoginLogDO;
 import com.yond.blog.mapper.LoginLogMapper;
-import com.yond.blog.model.dto.UserAgentDTO;
+import com.yond.blog.web.blog.view.dto.UserAgentDTO;
 import com.yond.blog.service.LoginLogService;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.UserAgentUtils;
@@ -26,13 +26,13 @@ public class LoginLogServiceImpl implements LoginLogService {
     UserAgentUtils userAgentUtils;
 
     @Override
-    public List<LoginLog> getLoginLogListByDate(String startDate, String endDate) {
+    public List<LoginLogDO> getLoginLogListByDate(String startDate, String endDate) {
         return loginLogMapper.getLoginLogListByDate(startDate, endDate);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveLoginLog(LoginLog log) {
+    public void saveLoginLog(LoginLogDO log) {
         String ipSource = IpAddressUtils.getCityInfo(log.getIp());
         UserAgentDTO userAgentDTO = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
         log.setIpSource(ipSource);

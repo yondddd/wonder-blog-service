@@ -3,6 +3,7 @@
 <mapper namespace="com.yond.blog.mapper.UserMapper">
     <sql id="ALL_FILED">
           id AS id,
+          guid as guid,
           username AS username,
           password AS password,
           nickname AS nickname,
@@ -14,25 +15,29 @@
     </sql>
 
     <!--按用户名查询User-->
-    <select id="findByUsername" resultType="com.yond.blog.entity.User">
+    <select id="getByUserName" resultType="com.yond.blog.entity.UserDO">
         select
         <include refid="ALL_FILED"/>
         from user where username=#{username} limit 1
     </select>
 
     <!--按id查询User，实际上这个User就应该是博主-->
-    <select id="findById" resultType="com.yond.blog.entity.User">
+    <select id="getById" resultType="com.yond.blog.entity.UserDO">
         select
         <include refid="ALL_FILED"/>
         from user where id=#{id} limit 1
     </select>
 
-    <!--按username修改-->
-    <update id="updateUserByUsername">
+    <select id="getByGuid" resultType="com.yond.blog.entity.UserDO">
+        select
+        <include refid="ALL_FILED"/>
+        from user where guid =#{guid} limit 1
+    </select>
+
+    <update id="updatePassword">
         update user
-        set username=#{user.username},
-            password=#{user.password},
-            update_time=now()
-        where username = #{username}
+        set password=#{password}
+        where id =#{id}
     </update>
+
 </mapper>

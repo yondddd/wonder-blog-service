@@ -12,12 +12,12 @@
     </sql>
 
     <!--查询站点设置-->
-    <select id="getList" resultType="com.yond.blog.entity.SiteSetting">
+    <select id="getList" resultType="com.yond.blog.entity.SiteSettingDO">
         select <include refid="ALL_FILED"/>  from site_setting
     </select>
 
     <!--查询友链页面信息-->
-    <select id="getFriendInfo" resultType="com.yond.blog.entity.SiteSetting">
+    <select id="getFriendInfo" resultType="com.yond.blog.entity.SiteSettingDO">
         select <include refid="ALL_FILED"/>  from site_setting where type=4
     </select>
 

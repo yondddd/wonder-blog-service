@@ -2,7 +2,7 @@ package com.yond.blog.util.upload;
 
 import com.yond.blog.util.upload.channel.ChannelFactory;
 import com.yond.blog.util.upload.channel.FileUploadChannel;
-import com.yond.common.constant.UploadConstants;
+import com.yond.common.constant.UploadConstant;
 import com.yond.common.exception.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -61,7 +61,7 @@ public class UploadUtils {
      */
     public static ImageResource getImageByRequest(String url) {
         ResponseEntity<byte[]> responseEntity = restTemplate.getForEntity(url, byte[].class);
-        if (UploadConstants.IMAGE.equals(responseEntity.getHeaders().getContentType().getType())) {
+        if (UploadConstant.IMAGE.equals(responseEntity.getHeaders().getContentType().getType())) {
             return new ImageResource(responseEntity.getBody(), responseEntity.getHeaders().getContentType().getSubtype());
         }
         throw new BadRequestException("response contentType unlike image");

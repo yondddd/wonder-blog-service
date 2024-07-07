@@ -2,10 +2,10 @@ package com.yond.blog.service.impl;
 
 import com.yond.blog.cache.local.FriendCache;
 import com.yond.common.exception.PersistenceException;
-import com.yond.blog.entity.Friend;
-import com.yond.blog.entity.SiteSetting;
+import com.yond.blog.entity.FriendDO;
+import com.yond.blog.entity.SiteSettingDO;
 import com.yond.blog.mapper.FriendMapper;
-import com.yond.blog.model.vo.FriendInfo;
+import com.yond.blog.web.blog.view.vo.FriendInfo;
 import com.yond.blog.service.FriendService;
 import com.yond.blog.service.SiteSettingService;
 import com.yond.blog.util.markdown.MarkdownUtils;
@@ -32,12 +32,12 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public List<Friend> getFriendList() {
+    public List<FriendDO> getFriendList() {
         return friendMapper.getFriendList();
     }
 
     @Override
-    public List<com.yond.blog.model.vo.Friend> getFriendVOList() {
+    public List<com.yond.blog.web.blog.view.vo.Friend> getFriendVOList() {
         return friendMapper.getFriendVOList();
     }
 
@@ -51,7 +51,7 @@ public class FriendServiceImpl implements FriendService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveFriend(Friend friend) {
+    public void saveFriend(FriendDO friend) {
         friend.setViews(0);
         friend.setCreateTime(new Date());
         if (friendMapper.saveFriend(friend) != 1) {
@@ -61,7 +61,7 @@ public class FriendServiceImpl implements FriendService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateFriend(com.yond.blog.model.dto.Friend friend) {
+    public void updateFriend(com.yond.blog.web.blog.view.dto.Friend friend) {
         if (friendMapper.updateFriend(friend) != 1) {
             throw new PersistenceException("修改失败");
         }
@@ -91,9 +91,9 @@ public class FriendServiceImpl implements FriendService {
                 return friendInfo;
             }
         }
-        List<SiteSetting> siteSettings = siteSettingService.getFriendInfo();
+        List<SiteSettingDO> siteSettings = siteSettingService.getFriendInfo();
         FriendInfo friendInfo = new FriendInfo();
-        for (SiteSetting siteSetting : siteSettings) {
+        for (SiteSettingDO siteSetting : siteSettings) {
             if ("friendContent".equals(siteSetting.getNameEn())) {
                 if (md) {
                     friendInfo.setContent(MarkdownUtils.markdownToHtmlExtensions(siteSetting.getValue()));

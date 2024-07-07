@@ -2,16 +2,16 @@ package com.yond.blog.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.blog.entity.Blog;
-import com.yond.blog.model.dto.BlogView;
-import com.yond.blog.model.dto.BlogVisibility;
-import com.yond.blog.model.vo.ArchiveBlog;
-import com.yond.blog.model.vo.BlogDetail;
-import com.yond.blog.model.vo.BlogInfo;
-import com.yond.blog.model.vo.CategoryBlogCount;
-import com.yond.blog.model.vo.NewBlog;
-import com.yond.blog.model.vo.RandomBlog;
-import com.yond.blog.model.vo.SearchBlog;
+import com.yond.blog.entity.BlogDO;
+import com.yond.blog.web.blog.view.dto.BlogView;
+import com.yond.blog.web.blog.view.dto.BlogVisibility;
+import com.yond.blog.web.blog.view.vo.ArchiveBlog;
+import com.yond.blog.web.blog.view.vo.BlogDetail;
+import com.yond.blog.web.blog.view.vo.BlogInfo;
+import com.yond.blog.web.blog.view.vo.CategoryBlogCount;
+import com.yond.blog.web.blog.view.vo.NewBlog;
+import com.yond.blog.web.blog.view.vo.RandomBlog;
+import com.yond.blog.web.blog.view.vo.SearchBlog;
 
 import java.util.List;
 
@@ -23,11 +23,11 @@ import java.util.List;
 @Mapper
 @Repository
 public interface BlogMapper {
-	List<Blog> getListByTitleAndCategoryId(String title, Integer categoryId);
+	List<BlogDO> getListByTitleAndCategoryId(String title, Integer categoryId);
 
 	List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query);
 
-	List<Blog> getIdAndTitleList();
+	List<BlogDO> getIdAndTitleList();
 
 	List<NewBlog> getNewBlogListByIsPublished();
 
@@ -49,7 +49,7 @@ public interface BlogMapper {
 
 	int deleteBlogTagByBlogId(Long blogId);
 
-	int saveBlog(com.yond.blog.model.dto.Blog blog);
+	int saveBlog(com.yond.blog.web.blog.view.dto.Blog blog);
 
 	int saveBlogTag(Long blogId, Long tagId);
 
@@ -61,7 +61,7 @@ public interface BlogMapper {
 
 	int updateViews(Long blogId, Integer views);
 
-	Blog getBlogById(Long id);
+	BlogDO getBlogById(Long id);
 
 	String getTitleByBlogId(Long id);
 
@@ -69,7 +69,7 @@ public interface BlogMapper {
 
 	String getBlogPassword(Long blogId);
 
-	int updateBlog(com.yond.blog.model.dto.Blog blog);
+	int updateBlog(com.yond.blog.web.blog.view.dto.Blog blog);
 
 	int countBlog();
 

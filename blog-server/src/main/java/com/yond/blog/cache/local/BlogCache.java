@@ -1,9 +1,9 @@
 package com.yond.blog.cache.local;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import com.yond.blog.model.vo.BlogInfo;
-import com.yond.blog.model.vo.NewBlog;
-import com.yond.blog.model.vo.PageResult;
+import com.yond.blog.web.blog.view.vo.BlogInfo;
+import com.yond.blog.web.blog.view.vo.NewBlog;
+import com.yond.blog.web.blog.view.vo.PageResult;
 
 import java.util.List;
 import java.util.Map;

@@ -4,18 +4,18 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yond.blog.cache.local.BlogCache;
 import com.yond.blog.cache.remote.BlogViewCache;
-import com.yond.blog.model.vo.*;
+import com.yond.blog.entity.BlogDO;
+import com.yond.blog.mapper.BlogMapper;
 import com.yond.blog.service.BlogService;
 import com.yond.blog.service.TagService;
-import com.yond.common.exception.NotFoundException;
-import com.yond.common.exception.PersistenceException;
-import com.yond.blog.constant.BlogConstant;
-import com.yond.blog.entity.Blog;
-import com.yond.blog.mapper.BlogMapper;
-import com.yond.blog.model.dto.BlogView;
-import com.yond.blog.model.dto.BlogVisibility;
 import com.yond.blog.util.JacksonUtils;
 import com.yond.blog.util.markdown.MarkdownUtils;
+import com.yond.blog.web.blog.view.dto.BlogView;
+import com.yond.blog.web.blog.view.dto.BlogVisibility;
+import com.yond.blog.web.blog.view.vo.*;
+import com.yond.common.constant.BlogConstant;
+import com.yond.common.exception.NotFoundException;
+import com.yond.common.exception.PersistenceException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,7 +54,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<Blog> getListByTitleAndCategoryId(String title, Integer categoryId) {
+    public List<BlogDO> getListByTitleAndCategoryId(String title, Integer categoryId) {
         return blogMapper.getListByTitleAndCategoryId(title, categoryId);
     }
 
@@ -76,7 +76,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<Blog> getIdAndTitleList() {
+    public List<BlogDO> getIdAndTitleList() {
         return blogMapper.getIdAndTitleList();
     }
 
@@ -256,7 +256,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveBlog(com.yond.blog.model.dto.Blog blog) {
+    public void saveBlog(com.yond.blog.web.blog.view.dto.Blog blog) {
         if (blogMapper.saveBlog(blog) != 1) {
             throw new PersistenceException("添加博客失败");
         }
@@ -313,8 +313,8 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Blog getBlogById(Long id) {
-        Blog blog = blogMapper.getBlogById(id);
+    public BlogDO getBlogById(Long id) {
+        BlogDO blog = blogMapper.getBlogById(id);
         if (blog == null) {
             throw new NotFoundException("博客不存在");
         }
@@ -361,7 +361,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateBlog(com.yond.blog.model.dto.Blog blog) {
+    public void updateBlog(com.yond.blog.web.blog.view.dto.Blog blog) {
         if (blogMapper.updateBlog(blog) != 1) {
             throw new PersistenceException("更新博客失败");
         }

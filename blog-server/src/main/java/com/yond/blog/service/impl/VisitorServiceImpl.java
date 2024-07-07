@@ -3,10 +3,10 @@ package com.yond.blog.service.impl;
 import com.yond.blog.cache.remote.VisitCache;
 import com.yond.blog.service.VisitorService;
 import com.yond.common.exception.PersistenceException;
-import com.yond.blog.entity.Visitor;
+import com.yond.blog.entity.VisitorDO;
 import com.yond.blog.mapper.VisitorMapper;
-import com.yond.blog.model.dto.UserAgentDTO;
-import com.yond.blog.model.dto.VisitLogUuidTime;
+import com.yond.blog.web.blog.view.dto.UserAgentDTO;
+import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.UserAgentUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class VisitorServiceImpl implements VisitorService {
     VisitCache visitCache;
 
     @Override
-    public List<Visitor> getVisitorListByDate(String startDate, String endDate) {
+    public List<VisitorDO> getVisitorListByDate(String startDate, String endDate) {
         return visitorMapper.getVisitorListByDate(startDate, endDate);
     }
 
@@ -46,7 +46,7 @@ public class VisitorServiceImpl implements VisitorService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveVisitor(Visitor visitor) {
+    public void saveVisitor(VisitorDO visitor) {
         String ipSource = IpAddressUtils.getCityInfo(visitor.getIp());
         UserAgentDTO userAgentDTO = userAgentUtils.parseOsAndBrowser(visitor.getUserAgent());
         visitor.setIpSource(ipSource);

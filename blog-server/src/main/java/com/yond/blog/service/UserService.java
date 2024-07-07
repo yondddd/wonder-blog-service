@@ -1,11 +1,14 @@
 package com.yond.blog.service;
 
-import com.yond.blog.entity.User;
+import com.yond.blog.entity.UserDO;
 
 public interface UserService {
-	User findUserByUsernameAndPassword(String username, String password);
 
-	User findUserById(Long id);
+    UserDO getByNameAndPassword(String username, String password);
 
-	boolean changeAccount(User user, String jwt);
+    UserDO getById(Long id);
+
+    boolean changeAccount(UserDO user, String jwt);
+
+    UserDO getByGuid(String guid);
 }

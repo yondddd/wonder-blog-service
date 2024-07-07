@@ -1,6 +1,6 @@
 package com.yond.blog.util.quartz;
 
-import com.yond.blog.entity.ScheduleJob;
+import com.yond.blog.entity.ScheduleJobDO;
 import org.quartz.*;
 
 /**
@@ -39,7 +39,7 @@ public class ScheduleUtils {
     /**
      * 创建定时任务
      */
-    public static void createScheduleJob(Scheduler scheduler, ScheduleJob ScheduleJob) {
+    public static void createScheduleJob(Scheduler scheduler, ScheduleJobDO ScheduleJob) {
         try {
             //构建job信息
             JobDetail jobDetail = JobBuilder.newJob(ScheduleJobInfo.class).withIdentity(getJobKey(ScheduleJob.getJobId())).build();
@@ -48,7 +48,7 @@ public class ScheduleUtils {
             //按新的cronExpression表达式构建一个新的trigger
             CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(getTriggerKey(ScheduleJob.getJobId())).withSchedule(scheduleBuilder).build();
             //放入参数，运行时的方法可以获取
-            jobDetail.getJobDataMap().put(ScheduleJob.JOB_PARAM_KEY, ScheduleJob);
+            jobDetail.getJobDataMap().put(ScheduleJobDO.JOB_PARAM_KEY, ScheduleJob);
             scheduler.scheduleJob(jobDetail, trigger);
             if (!ScheduleJob.getStatus()) {
                 pauseJob(scheduler, ScheduleJob.getJobId());
@@ -61,7 +61,7 @@ public class ScheduleUtils {
     /**
      * 更新定时任务
      */
-    public static void updateScheduleJob(Scheduler scheduler, ScheduleJob ScheduleJob) {
+    public static void updateScheduleJob(Scheduler scheduler, ScheduleJobDO ScheduleJob) {
         try {
             TriggerKey triggerKey = getTriggerKey(ScheduleJob.getJobId());
             //表达式调度构建器
@@ -70,7 +70,7 @@ public class ScheduleUtils {
             //按新的cronExpression表达式重新构建trigger
             trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
             //参数
-            trigger.getJobDataMap().put(ScheduleJob.JOB_PARAM_KEY, ScheduleJob);
+            trigger.getJobDataMap().put(ScheduleJobDO.JOB_PARAM_KEY, ScheduleJob);
             scheduler.rescheduleJob(triggerKey, trigger);
             if (!ScheduleJob.getStatus()) {
                 pauseJob(scheduler, ScheduleJob.getJobId());
@@ -83,11 +83,11 @@ public class ScheduleUtils {
     /**
      * 立即执行任务
      */
-    public static void run(Scheduler scheduler, ScheduleJob ScheduleJob) {
+    public static void run(Scheduler scheduler, ScheduleJobDO ScheduleJob) {
         try {
             //参数
             JobDataMap dataMap = new JobDataMap();
-            dataMap.put(ScheduleJob.JOB_PARAM_KEY, ScheduleJob);
+            dataMap.put(ScheduleJobDO.JOB_PARAM_KEY, ScheduleJob);
             scheduler.triggerJob(getJobKey(ScheduleJob.getJobId()), dataMap);
         } catch (SchedulerException e) {
             throw new RuntimeException("立即执行定时任务失败", e);

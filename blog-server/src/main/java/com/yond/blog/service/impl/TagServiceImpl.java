@@ -5,9 +5,9 @@ import com.yond.blog.cache.local.TagCache;
 import com.yond.blog.service.TagService;
 import com.yond.common.exception.NotFoundException;
 import com.yond.common.exception.PersistenceException;
-import com.yond.blog.entity.Tag;
+import com.yond.blog.entity.TagDO;
 import com.yond.blog.mapper.TagMapper;
-import com.yond.blog.model.vo.TagBlogCount;
+import com.yond.blog.web.blog.view.vo.TagBlogCount;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,29 +28,29 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getTagList() {
+    public List<TagDO> getTagList() {
         return tagMapper.getTagList();
     }
 
     @Override
-    public List<Tag> getTagListNotId() {
-        List<Tag> tagListFromRedis = TagCache.get();
+    public List<TagDO> getTagListNotId() {
+        List<TagDO> tagListFromRedis = TagCache.get();
         if (tagListFromRedis != null) {
             return tagListFromRedis;
         }
-        List<Tag> tagList = tagMapper.getTagListNotId();
+        List<TagDO> tagList = tagMapper.getTagListNotId();
         TagCache.set(tagList);
         return tagList;
     }
 
     @Override
-    public List<Tag> getTagListByBlogId(Long blogId) {
+    public List<TagDO> getTagListByBlogId(Long blogId) {
         return tagMapper.getTagListByBlogId(blogId);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveTag(Tag tag) {
+    public void saveTag(TagDO tag) {
         if (tagMapper.saveTag(tag) != 1) {
             throw new PersistenceException("标签添加失败");
         }
@@ -58,8 +58,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag getTagById(Long id) {
-        Tag tag = tagMapper.getTagById(id);
+    public TagDO getTagById(Long id) {
+        TagDO tag = tagMapper.getTagById(id);
         if (tag == null) {
             throw new NotFoundException("标签不存在");
         }
@@ -67,7 +67,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag getTagByName(String name) {
+    public TagDO getTagByName(String name) {
         return tagMapper.getTagByName(name);
     }
 
@@ -82,7 +82,7 @@ public class TagServiceImpl implements TagService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateTag(Tag tag) {
+    public void updateTag(TagDO tag) {
         if (tagMapper.updateTag(tag) != 1) {
             throw new PersistenceException("标签更新失败");
         }

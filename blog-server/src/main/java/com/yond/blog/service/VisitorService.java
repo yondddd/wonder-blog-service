@@ -1,20 +1,20 @@
 package com.yond.blog.service;
 
 import org.springframework.scheduling.annotation.Async;
-import com.yond.blog.entity.Visitor;
-import com.yond.blog.model.dto.VisitLogUuidTime;
+import com.yond.blog.entity.VisitorDO;
+import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
 
 import java.util.List;
 
 public interface VisitorService {
-	List<Visitor> getVisitorListByDate(String startDate, String endDate);
+	List<VisitorDO> getVisitorListByDate(String startDate, String endDate);
 
 	List<String> getNewVisitorIpSourceByYesterday();
 
 	boolean hasUUID(String uuid);
 
 	@Async
-	void saveVisitor(Visitor visitor);
+	void saveVisitor(VisitorDO visitor);
 
 	void updatePVAndLastTimeByUUID(VisitLogUuidTime dto);
 

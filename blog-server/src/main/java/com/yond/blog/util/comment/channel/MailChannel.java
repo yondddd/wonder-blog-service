@@ -2,7 +2,7 @@ package com.yond.blog.util.comment.channel;
 
 import com.yond.common.enums.CommentPageEnum;
 import com.yond.blog.config.properties.BlogProperties;
-import com.yond.blog.model.dto.Comment;
+import com.yond.blog.web.blog.view.dto.Comment;
 import com.yond.blog.util.MailUtils;
 import com.yond.blog.util.comment.CommentUtils;
 import org.springframework.beans.factory.annotation.Autowired;

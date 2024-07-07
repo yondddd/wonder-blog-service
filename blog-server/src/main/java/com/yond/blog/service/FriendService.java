@@ -1,20 +1,20 @@
 package com.yond.blog.service;
 
-import com.yond.blog.entity.Friend;
-import com.yond.blog.model.vo.FriendInfo;
+import com.yond.blog.entity.FriendDO;
+import com.yond.blog.web.blog.view.vo.FriendInfo;
 
 import java.util.List;
 
 public interface FriendService {
-    List<Friend> getFriendList();
+    List<FriendDO> getFriendList();
 
-    List<com.yond.blog.model.vo.Friend> getFriendVOList();
+    List<com.yond.blog.web.blog.view.vo.Friend> getFriendVOList();
 
     void updateFriendPublishedById(Long friendId, Boolean published);
 
-    void saveFriend(Friend friend);
+    void saveFriend(FriendDO friend);
 
-    void updateFriend(com.yond.blog.model.dto.Friend friend);
+    void updateFriend(com.yond.blog.web.blog.view.dto.Friend friend);
 
     void deleteFriend(Long id);
 
