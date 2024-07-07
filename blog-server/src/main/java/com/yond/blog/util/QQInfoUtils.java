@@ -2,8 +2,8 @@ package com.yond.blog.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.client.RestTemplate;
-import com.yond.blog.model.vo.QqResultVO;
-import com.yond.blog.model.vo.QqVO;
+import com.yond.blog.web.blog.view.vo.QqResultVO;
+import com.yond.blog.web.blog.view.vo.QqVO;
 import com.yond.blog.util.upload.UploadUtils;
 
 /**

@@ -1,6 +1,6 @@
 package com.yond.blog.service.impl;
 
-import com.yond.blog.entity.VisitRecord;
+import com.yond.blog.entity.VisitRecordDO;
 import com.yond.blog.mapper.VisitRecordMapper;
 import com.yond.blog.service.VisitRecordService;
 import org.springframework.stereotype.Service;
@@ -23,13 +23,13 @@ public class VisitRecordServiceImpl implements VisitRecordService {
     }
 
     @Override
-    public List<VisitRecord> listByLimit(Integer limit) {
+    public List<VisitRecordDO> listByLimit(Integer limit) {
         return visitRecordMapper.listByLimit(limit);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void insert(VisitRecord visitRecord) {
+    public void insert(VisitRecordDO visitRecord) {
         visitRecordMapper.insert(visitRecord);
     }
 }

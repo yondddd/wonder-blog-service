@@ -1,10 +1,10 @@
 package com.yond.blog.util.quartz;
 
-import com.yond.blog.entity.ScheduleJob;
+import com.yond.blog.entity.ScheduleJobDO;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
-import com.yond.blog.entity.ScheduleJobLog;
+import com.yond.blog.entity.ScheduleJobLogDO;
 import com.yond.blog.service.ScheduleJobService;
 import com.yond.blog.util.common.SpringContextUtils;
 
@@ -22,11 +22,11 @@ public class ScheduleJobInfo extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) {
-        ScheduleJob scheduleJob = (ScheduleJob) context.getMergedJobDataMap().get(ScheduleJob.JOB_PARAM_KEY);
+        ScheduleJobDO scheduleJob = (ScheduleJobDO) context.getMergedJobDataMap().get(ScheduleJobDO.JOB_PARAM_KEY);
         //获取spring bean
         ScheduleJobService scheduleJobService = (ScheduleJobService) SpringContextUtils.getBean("scheduleJobServiceImpl");
         //数据库保存任务执行记录
-        ScheduleJobLog jobLog = new ScheduleJobLog();
+        ScheduleJobLogDO jobLog = new ScheduleJobLogDO();
         jobLog.setJobId(scheduleJob.getJobId());
         jobLog.setBeanName(scheduleJob.getBeanName());
         jobLog.setMethodName(scheduleJob.getMethodName());

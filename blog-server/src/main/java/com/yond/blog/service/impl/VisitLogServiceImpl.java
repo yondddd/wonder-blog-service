@@ -2,10 +2,10 @@ package com.yond.blog.service.impl;
 
 import com.yond.blog.service.VisitLogService;
 import com.yond.common.exception.PersistenceException;
-import com.yond.blog.entity.VisitLog;
+import com.yond.blog.entity.VisitLogDO;
 import com.yond.blog.mapper.VisitLogMapper;
-import com.yond.blog.model.dto.UserAgentDTO;
-import com.yond.blog.model.dto.VisitLogUuidTime;
+import com.yond.blog.web.blog.view.dto.UserAgentDTO;
+import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.UserAgentUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class VisitLogServiceImpl implements VisitLogService {
     UserAgentUtils userAgentUtils;
 
     @Override
-    public List<VisitLog> getVisitLogListByUUIDAndDate(String uuid, String startDate, String endDate) {
+    public List<VisitLogDO> getVisitLogListByUUIDAndDate(String uuid, String startDate, String endDate) {
         return visitLogMapper.getVisitLogListByUUIDAndDate(uuid, startDate, endDate);
     }
 
@@ -38,7 +38,7 @@ public class VisitLogServiceImpl implements VisitLogService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveVisitLog(VisitLog log) {
+    public void saveVisitLog(VisitLogDO log) {
         String ipSource = IpAddressUtils.getCityInfo(log.getIp());
         UserAgentDTO userAgentDTO = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
         log.setIpSource(ipSource);

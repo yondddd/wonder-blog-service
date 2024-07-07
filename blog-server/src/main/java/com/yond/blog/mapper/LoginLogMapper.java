@@ -2,7 +2,7 @@ package com.yond.blog.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.blog.entity.LoginLog;
+import com.yond.blog.entity.LoginLogDO;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ import java.util.List;
 @Mapper
 @Repository
 public interface LoginLogMapper {
-	List<LoginLog> getLoginLogListByDate(String startDate, String endDate);
+	List<LoginLogDO> getLoginLogListByDate(String startDate, String endDate);
 
-	int saveLoginLog(LoginLog log);
+	int saveLoginLog(LoginLogDO log);
 
 	int deleteLoginLogById(Long id);
 }

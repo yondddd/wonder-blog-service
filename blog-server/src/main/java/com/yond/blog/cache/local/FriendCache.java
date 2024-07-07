@@ -1,7 +1,7 @@
 package com.yond.blog.cache.local;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import com.yond.blog.model.vo.FriendInfo;
+import com.yond.blog.web.blog.view.vo.FriendInfo;
 
 /**
  * @author yond

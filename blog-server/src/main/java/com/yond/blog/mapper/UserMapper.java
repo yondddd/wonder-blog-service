@@ -1,8 +1,8 @@
 package com.yond.blog.mapper;
 
+import com.yond.blog.entity.UserDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.blog.entity.User;
 
 /**
  * @Description: 用户持久层接口
@@ -12,9 +12,12 @@ import com.yond.blog.entity.User;
 @Mapper
 @Repository
 public interface UserMapper {
-	User findByUsername(String username);
 
-	User findById(Long id);
+    UserDO getByUserName(String username);
 
-	int updateUserByUsername(String username, User user);
+    UserDO getById(Long id);
+
+    UserDO getByGuid(String guid);
+
+    void updatePassword(Long id, String password);
 }

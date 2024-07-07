@@ -2,7 +2,7 @@ package com.yond.blog.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.blog.entity.SiteSetting;
+import com.yond.blog.entity.SiteSettingDO;
 
 import java.util.List;
 
@@ -14,17 +14,17 @@ import java.util.List;
 @Mapper
 @Repository
 public interface SiteSettingMapper {
-	List<SiteSetting> getList();
+	List<SiteSettingDO> getList();
 
-	List<SiteSetting> getFriendInfo();
+	List<SiteSettingDO> getFriendInfo();
 
 	String getWebTitleSuffix();
 
-	int updateSiteSetting(SiteSetting siteSetting);
+	int updateSiteSetting(SiteSettingDO siteSetting);
 
 	int deleteSiteSettingById(Integer id);
 
-	int saveSiteSetting(SiteSetting siteSetting);
+	int saveSiteSetting(SiteSettingDO siteSetting);
 
 	int updateFriendInfoContent(String content);
 

@@ -3,7 +3,7 @@ package com.yond.blog.util;
 import nl.basjes.parse.useragent.UserAgent;
 import nl.basjes.parse.useragent.UserAgentAnalyzer;
 import org.springframework.stereotype.Component;
-import com.yond.blog.model.dto.UserAgentDTO;
+import com.yond.blog.web.blog.view.dto.UserAgentDTO;
 
 /**
  * @Description: UserAgent解析工具类

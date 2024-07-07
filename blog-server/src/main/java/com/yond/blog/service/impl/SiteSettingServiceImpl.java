@@ -1,16 +1,16 @@
 package com.yond.blog.service.impl;
 
 import com.yond.blog.cache.local.SiteSettingCache;
-import com.yond.common.constant.SiteSettingConstants;
-import com.yond.common.exception.PersistenceException;
-import com.yond.blog.entity.SiteSetting;
+import com.yond.blog.entity.SiteSettingDO;
 import com.yond.blog.mapper.SiteSettingMapper;
-import com.yond.blog.model.vo.Badge;
-import com.yond.blog.model.vo.Copyright;
-import com.yond.blog.model.vo.Favorite;
-import com.yond.blog.model.vo.Introduction;
 import com.yond.blog.service.SiteSettingService;
 import com.yond.blog.util.JacksonUtils;
+import com.yond.blog.web.blog.view.vo.Badge;
+import com.yond.blog.web.blog.view.vo.Copyright;
+import com.yond.blog.web.blog.view.vo.Favorite;
+import com.yond.blog.web.blog.view.vo.Introduction;
+import com.yond.common.constant.SiteSettingConstant;
+import com.yond.common.exception.PersistenceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,12 +35,12 @@ public class SiteSettingServiceImpl implements SiteSettingService {
     private static final Pattern PATTERN = Pattern.compile("\"(.*?)\"");
 
     @Override
-    public Map<String, List<SiteSetting>> getList() {
-        List<SiteSetting> siteSettings = siteSettingMapper.getList();
-        List<SiteSetting> type1 = new ArrayList<>();
-        List<SiteSetting> type2 = new ArrayList<>();
-        List<SiteSetting> type3 = new ArrayList<>();
-        for (SiteSetting s : siteSettings) {
+    public Map<String, List<SiteSettingDO>> getList() {
+        List<SiteSettingDO> siteSettings = siteSettingMapper.getList();
+        List<SiteSettingDO> type1 = new ArrayList<>();
+        List<SiteSettingDO> type2 = new ArrayList<>();
+        List<SiteSettingDO> type3 = new ArrayList<>();
+        for (SiteSettingDO s : siteSettings) {
             switch (s.getType()) {
                 case 1:
                     type1.add(s);
@@ -55,7 +55,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
                     break;
             }
         }
-        Map<String, List<SiteSetting>> map = new HashMap<>(8);
+        Map<String, List<SiteSettingDO>> map = new HashMap<>(8);
         map.put("type1", type1);
         map.put("type2", type2);
         map.put("type3", type3);
@@ -68,16 +68,16 @@ public class SiteSettingServiceImpl implements SiteSettingService {
         if (siteInfoMapFromRedis != null) {
             return siteInfoMapFromRedis;
         }
-        List<SiteSetting> siteSettings = siteSettingMapper.getList();
+        List<SiteSettingDO> siteSettings = siteSettingMapper.getList();
         Map<String, Object> siteInfo = new HashMap<>(2);
         List<Badge> badges = new ArrayList<>();
         Introduction introduction = new Introduction();
         List<Favorite> favorites = new ArrayList<>();
         List<String> rollTexts = new ArrayList<>();
-        for (SiteSetting s : siteSettings) {
+        for (SiteSettingDO s : siteSettings) {
             switch (s.getType()) {
                 case 1:
-                    if (SiteSettingConstants.COPYRIGHT.equals(s.getNameEn())) {
+                    if (SiteSettingConstant.COPYRIGHT.equals(s.getNameEn())) {
                         Copyright copyright = JacksonUtils.readValue(s.getValue(), Copyright.class);
                         siteInfo.put(s.getNameEn(), copyright);
                     } else {
@@ -86,35 +86,35 @@ public class SiteSettingServiceImpl implements SiteSettingService {
                     break;
                 case 2:
                     switch (s.getNameEn()) {
-                        case SiteSettingConstants.AVATAR:
+                        case SiteSettingConstant.AVATAR:
                             introduction.setAvatar(s.getValue());
                             break;
-                        case SiteSettingConstants.NAME:
+                        case SiteSettingConstant.NAME:
                             introduction.setName(s.getValue());
                             break;
-                        case SiteSettingConstants.GITHUB:
+                        case SiteSettingConstant.GITHUB:
                             introduction.setGithub(s.getValue());
                             break;
-                        case SiteSettingConstants.TELEGRAM:
+                        case SiteSettingConstant.TELEGRAM:
                             introduction.setTelegram(s.getValue());
                             break;
-                        case SiteSettingConstants.QQ:
+                        case SiteSettingConstant.QQ:
                             introduction.setQq(s.getValue());
                             break;
-                        case SiteSettingConstants.BILIBILI:
+                        case SiteSettingConstant.BILIBILI:
                             introduction.setBilibili(s.getValue());
                             break;
-                        case SiteSettingConstants.NETEASE:
+                        case SiteSettingConstant.NETEASE:
                             introduction.setNetease(s.getValue());
                             break;
-                        case SiteSettingConstants.EMAIL:
+                        case SiteSettingConstant.EMAIL:
                             introduction.setEmail(s.getValue());
                             break;
-                        case SiteSettingConstants.FAVORITE:
+                        case SiteSettingConstant.FAVORITE:
                             Favorite favorite = JacksonUtils.readValue(s.getValue(), Favorite.class);
                             favorites.add(favorite);
                             break;
-                        case SiteSettingConstants.ROLL_TEXT:
+                        case SiteSettingConstant.ROLL_TEXT:
                             Matcher m = PATTERN.matcher(s.getValue());
                             while (m.find()) {
                                 rollTexts.add(m.group(1));
@@ -155,7 +155,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
             deleteOneSiteSettingById(id);
         }
         for (LinkedHashMap s : siteSettings) {
-            SiteSetting siteSetting = JacksonUtils.convertValue(s, SiteSetting.class);
+            SiteSettingDO siteSetting = JacksonUtils.convertValue(s, SiteSettingDO.class);
             if (siteSetting.getId() != null) {
                 //修改
                 updateOneSiteSetting(siteSetting);
@@ -168,7 +168,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
     }
 
     @Override
-    public List<SiteSetting> getFriendInfo() {
+    public List<SiteSettingDO> getFriendInfo() {
         return siteSettingMapper.getFriendInfo();
     }
 
@@ -182,13 +182,13 @@ public class SiteSettingServiceImpl implements SiteSettingService {
         return siteSettingMapper.updateFriendInfoCommentEnabled(commentEnabled);
     }
 
-    public void saveOneSiteSetting(SiteSetting siteSetting) {
+    public void saveOneSiteSetting(SiteSettingDO siteSetting) {
         if (siteSettingMapper.saveSiteSetting(siteSetting) != 1) {
             throw new PersistenceException("配置添加失败");
         }
     }
 
-    public void updateOneSiteSetting(SiteSetting siteSetting) {
+    public void updateOneSiteSetting(SiteSettingDO siteSetting) {
         if (siteSettingMapper.updateSiteSetting(siteSetting) != 1) {
             throw new PersistenceException("配置修改失败");
         }

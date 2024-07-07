@@ -1,5 +1,10 @@
 package com.yond.blog.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -8,6 +13,10 @@ import java.io.Serializable;
  * @Author: Naccl
  * @Date: 2021-02-26
  */
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class CityVisitorDO implements Serializable {
 
     @Serial
@@ -25,30 +34,6 @@ public class CityVisitorDO implements Serializable {
     public CityVisitorDO(String city, Integer uv) {
         this.city = city;
         this.uv = uv;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public Integer getUv() {
-        return uv;
-    }
-
-    public void setUv(Integer uv) {
-        this.uv = uv;
-    }
-
-    @Override
-    public String toString() {
-        return "CityVisitor{" +
-                "city='" + city + '\'' +
-                ", uv=" + uv +
-                '}';
     }
 
 }

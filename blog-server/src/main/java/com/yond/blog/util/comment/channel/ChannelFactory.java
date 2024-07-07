@@ -1,7 +1,7 @@
 package com.yond.blog.util.comment.channel;
 
-import com.yond.common.constant.CommentConstants;
 import com.yond.blog.util.common.SpringContextUtils;
+import com.yond.common.constant.CommentConstant;
 
 /**
  * 评论提醒方式
@@ -17,9 +17,9 @@ public class ChannelFactory {
      * @return
      */
     public static CommentNotifyChannel getChannel(String channelName) {
-        if (CommentConstants.TELEGRAM.equalsIgnoreCase(channelName)) {
+        if (CommentConstant.TELEGRAM.equalsIgnoreCase(channelName)) {
             return SpringContextUtils.getBean("telegramChannel", CommentNotifyChannel.class);
-        } else if (CommentConstants.MAIL.equalsIgnoreCase(channelName)) {
+        } else if (CommentConstant.MAIL.equalsIgnoreCase(channelName)) {
             return SpringContextUtils.getBean("mailChannel", CommentNotifyChannel.class);
         }
         throw new RuntimeException("Unsupported value in [application.properties]: [comment.notify.channel]");

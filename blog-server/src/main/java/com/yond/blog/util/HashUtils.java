@@ -33,4 +33,5 @@ public class HashUtils {
     public static void main(String[] args) {
         System.out.println(getBC("123456"));
     }
+
 }

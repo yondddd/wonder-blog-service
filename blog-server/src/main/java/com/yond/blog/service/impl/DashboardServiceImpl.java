@@ -2,10 +2,10 @@ package com.yond.blog.service.impl;
 
 import com.yond.blog.entity.CategoryDO;
 import com.yond.blog.entity.CityVisitorDO;
-import com.yond.blog.entity.Tag;
-import com.yond.blog.entity.VisitRecord;
-import com.yond.blog.model.vo.CategoryBlogCount;
-import com.yond.blog.model.vo.TagBlogCount;
+import com.yond.blog.entity.TagDO;
+import com.yond.blog.entity.VisitRecordDO;
+import com.yond.blog.web.blog.view.vo.CategoryBlogCount;
+import com.yond.blog.web.blog.view.vo.TagBlogCount;
 import com.yond.blog.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -105,17 +105,17 @@ public class DashboardServiceImpl implements DashboardService {
         //查询标签id对应的博客数量
         List<TagBlogCount> tagBlogCountList = tagService.getTagBlogCount();
         //查询所有标签的id和名称
-        List<Tag> tagList = tagService.getTagList();
+        List<TagDO> tagList = tagService.getTagList();
         //所有标签名称的List
         List<String> legend = new ArrayList<>();
-        for (Tag tag : tagList) {
+        for (TagDO tag : tagList) {
             legend.add(tag.getName());
         }
         //标签对应的博客数量List
         List<TagBlogCount> series = new ArrayList<>();
         if (tagBlogCountList.size() == tagList.size()) {
             Map<Long, String> m = new HashMap<>(64);
-            for (Tag t : tagList) {
+            for (TagDO t : tagList) {
                 m.put(t.getId(), t.getName());
             }
             for (TagBlogCount t : tagBlogCountList) {
@@ -127,7 +127,7 @@ public class DashboardServiceImpl implements DashboardService {
             for (TagBlogCount t : tagBlogCountList) {
                 m.put(t.getId(), t.getValue());
             }
-            for (Tag t : tagList) {
+            for (TagDO t : tagList) {
                 TagBlogCount tagBlogCount = new TagBlogCount();
                 tagBlogCount.setName(t.getName());
                 Integer count = m.get(t.getId());
@@ -147,12 +147,12 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     public Map<String, List> getVisitRecordMap() {
-        List<VisitRecord> visitRecordList = visitRecordService.listByLimit(visitRecordLimitNum);
+        List<VisitRecordDO> visitRecordList = visitRecordService.listByLimit(visitRecordLimitNum);
         List<String> date = new ArrayList<>(visitRecordList.size());
         List<Integer> pv = new ArrayList<>(visitRecordList.size());
         List<Integer> uv = new ArrayList<>(visitRecordList.size());
         for (int i = visitRecordList.size() - 1; i >= 0; i--) {
-            VisitRecord visitRecord = visitRecordList.get(i);
+            VisitRecordDO visitRecord = visitRecordList.get(i);
             date.add(visitRecord.getDate());
             pv.add(visitRecord.getPv());
             uv.add(visitRecord.getUv());

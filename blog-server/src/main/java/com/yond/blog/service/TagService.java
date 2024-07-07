@@ -1,26 +1,26 @@
 package com.yond.blog.service;
 
-import com.yond.blog.entity.Tag;
-import com.yond.blog.model.vo.TagBlogCount;
+import com.yond.blog.entity.TagDO;
+import com.yond.blog.web.blog.view.vo.TagBlogCount;
 
 import java.util.List;
 
 public interface TagService {
-    List<Tag> getTagList();
+    List<TagDO> getTagList();
 
-    List<Tag> getTagListNotId();
+    List<TagDO> getTagListNotId();
 
-    List<Tag> getTagListByBlogId(Long blogId);
+    List<TagDO> getTagListByBlogId(Long blogId);
 
-    void saveTag(Tag tag);
+    void saveTag(TagDO tag);
 
-    Tag getTagById(Long id);
+    TagDO getTagById(Long id);
 
-    Tag getTagByName(String name);
+    TagDO getTagByName(String name);
 
     void deleteTagById(Long id);
 
-    void updateTag(Tag tag);
+    void updateTag(TagDO tag);
 
     List<TagBlogCount> getTagBlogCount();
 

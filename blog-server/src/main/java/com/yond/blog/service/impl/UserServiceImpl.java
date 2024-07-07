@@ -1,17 +1,14 @@
 package com.yond.blog.service.impl;
 
-import com.yond.blog.service.UserService;
-import com.yond.common.exception.NotFoundException;
-import com.yond.blog.entity.User;
+import com.yond.blog.entity.UserDO;
 import com.yond.blog.mapper.UserMapper;
+import com.yond.blog.service.UserService;
 import com.yond.blog.util.HashUtils;
-import com.yond.blog.util.JwtUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import com.yond.blog.util.jwt.JwtUtil;
+import com.yond.common.constant.JwtConstant;
+import com.yond.common.exception.NotFoundException;
+import io.jsonwebtoken.Claims;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 /**
  * @Description: 用户业务层接口实现类
@@ -19,34 +16,30 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
  * @Date: 2020-07-19
  */
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
-    @Autowired
-    private UserMapper userMapper;
+public class UserServiceImpl implements UserService {
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userMapper.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("用户不存在");
-        }
-        return user;
+    private final UserMapper userMapper;
+
+    public UserServiceImpl(UserMapper userMapper) {
+        this.userMapper = userMapper;
     }
 
+
     @Override
-    public User findUserByUsernameAndPassword(String username, String password) {
-        User user = userMapper.findByUsername(username);
+    public UserDO getByNameAndPassword(String username, String password) {
+        UserDO user = userMapper.getByUserName(username);
         if (user == null) {
-            throw new UsernameNotFoundException("用户不存在");
+            return null;
         }
         if (!HashUtils.matchBC(password, user.getPassword())) {
-            throw new UsernameNotFoundException("密码错误");
+            return null;
         }
         return user;
     }
 
     @Override
-    public User findUserById(Long id) {
-        User user = userMapper.findById(id);
+    public UserDO getById(Long id) {
+        UserDO user = userMapper.getById(id);
         if (user == null) {
             throw new NotFoundException("用户不存在");
         }
@@ -54,13 +47,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public boolean changeAccount(User user, String jwt) {
-        String username = JwtUtils.getTokenBody(jwt).getSubject();
-        user.setPassword(HashUtils.getBC(user.getPassword()));
-        if (userMapper.updateUserByUsername(username, user) != 1) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+    public boolean changeAccount(UserDO user, String jwt) {
+        Claims claims = JwtUtil.validateJwt(jwt, JwtConstant.DEFAULT_SECRET);
+        String guid = claims.getSubject();
+        UserDO currentUser = userMapper.getByGuid(guid);
+        if (currentUser == null) {
             return false;
         }
+        if (!currentUser.getUsername().equals(user.getUsername())) {
+            return false;
+        }
+        userMapper.updatePassword(currentUser.getId(), HashUtils.getBC(user.getPassword()));
         return true;
     }
+
+    @Override
+    public UserDO getByGuid(String guid) {
+        return userMapper.getByGuid(guid);
+    }
+
 }

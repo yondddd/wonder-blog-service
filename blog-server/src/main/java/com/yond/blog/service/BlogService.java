@@ -1,19 +1,19 @@
 package com.yond.blog.service;
 
-import com.yond.blog.entity.Blog;
-import com.yond.blog.model.dto.BlogVisibility;
-import com.yond.blog.model.vo.*;
+import com.yond.blog.entity.BlogDO;
+import com.yond.blog.web.blog.view.dto.BlogVisibility;
+import com.yond.blog.web.blog.view.vo.*;
 
 import java.util.List;
 import java.util.Map;
 
 public interface BlogService {
 
-    List<Blog> getListByTitleAndCategoryId(String title, Integer categoryId);
+    List<BlogDO> getListByTitleAndCategoryId(String title, Integer categoryId);
 
     List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query);
 
-    List<Blog> getIdAndTitleList();
+    List<BlogDO> getIdAndTitleList();
 
     List<NewBlog> getNewBlogListByIsPublished();
 
@@ -31,7 +31,7 @@ public interface BlogService {
 
     void deleteBlogTagByBlogId(Long blogId);
 
-    void saveBlog(com.yond.blog.model.dto.Blog blog);
+    void saveBlog(com.yond.blog.web.blog.view.dto.Blog blog);
 
     void saveBlogTag(Long blogId, Long tagId);
 
@@ -45,7 +45,7 @@ public interface BlogService {
 
     void updateViews(Long blogId, Integer views);
 
-    Blog getBlogById(Long id);
+    BlogDO getBlogById(Long id);
 
     String getTitleByBlogId(Long id);
 
@@ -53,7 +53,7 @@ public interface BlogService {
 
     String getBlogPassword(Long blogId);
 
-    void updateBlog(com.yond.blog.model.dto.Blog blog);
+    void updateBlog(com.yond.blog.web.blog.view.dto.Blog blog);
 
     int countBlogByIsPublished();
 

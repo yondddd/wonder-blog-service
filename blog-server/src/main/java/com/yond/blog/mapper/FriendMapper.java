@@ -2,7 +2,7 @@ package com.yond.blog.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.blog.entity.Friend;
+import com.yond.blog.entity.FriendDO;
 
 import java.util.List;
 
@@ -14,15 +14,15 @@ import java.util.List;
 @Mapper
 @Repository
 public interface FriendMapper {
-	List<Friend> getFriendList();
+	List<FriendDO> getFriendList();
 
-	List<com.yond.blog.model.vo.Friend> getFriendVOList();
+	List<com.yond.blog.web.blog.view.vo.Friend> getFriendVOList();
 
 	int updateFriendPublishedById(Long id, Boolean published);
 
-	int saveFriend(Friend friend);
+	int saveFriend(FriendDO friend);
 
-	int updateFriend(com.yond.blog.model.dto.Friend friend);
+	int updateFriend(com.yond.blog.web.blog.view.dto.Friend friend);
 
 	int deleteFriend(Long id);
 

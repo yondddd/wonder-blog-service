@@ -1,9 +1,9 @@
 package com.yond.blog.service.impl;
 
 import com.yond.common.exception.PersistenceException;
-import com.yond.blog.entity.Comment;
+import com.yond.blog.entity.CommentDO;
 import com.yond.blog.mapper.CommentMapper;
-import com.yond.blog.model.vo.PageComment;
+import com.yond.blog.web.blog.view.vo.PageComment;
 import com.yond.blog.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,11 +24,11 @@ public class CommentServiceImpl implements CommentService {
     CommentMapper commentMapper;
 
     @Override
-    public List<Comment> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId) {
-        List<Comment> comments = commentMapper.getListByPageAndParentCommentId(page, blogId, parentCommentId);
-        for (Comment c : comments) {
+    public List<CommentDO> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId) {
+        List<CommentDO> comments = commentMapper.getListByPageAndParentCommentId(page, blogId, parentCommentId);
+        for (CommentDO c : comments) {
             //递归查询子评论及其子评论
-            List<Comment> replyComments = getListByPageAndParentCommentId(page, blogId, c.getId());
+            List<CommentDO> replyComments = getListByPageAndParentCommentId(page, blogId, c.getId());
             c.setReplyComments(replyComments);
         }
         return comments;
@@ -51,8 +51,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment getCommentById(Long id) {
-        Comment comment = commentMapper.getCommentById(id);
+    public CommentDO getCommentById(Long id) {
+        CommentDO comment = commentMapper.getCommentById(id);
         if (comment == null) {
             throw new PersistenceException("评论不存在");
         }
@@ -85,8 +85,8 @@ public class CommentServiceImpl implements CommentService {
     public void updateCommentPublishedById(Long commentId, Boolean published) {
         //如果是隐藏评论，则所有子评论都要修改成隐藏状态
         if (!published) {
-            List<Comment> comments = getAllReplyComments(commentId);
-            for (Comment c : comments) {
+            List<CommentDO> comments = getAllReplyComments(commentId);
+            for (CommentDO c : comments) {
                 hideComment(c);
             }
         }
@@ -107,8 +107,8 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteCommentById(Long commentId) {
-        List<Comment> comments = getAllReplyComments(commentId);
-        for (Comment c : comments) {
+        List<CommentDO> comments = getAllReplyComments(commentId);
+        for (CommentDO c : comments) {
             delete(c);
         }
         if (commentMapper.deleteCommentById(commentId) != 1) {
@@ -124,7 +124,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateComment(Comment comment) {
+    public void updateComment(CommentDO comment) {
         if (commentMapper.updateComment(comment) != 1) {
             throw new PersistenceException("评论修改失败");
         }
@@ -137,7 +137,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveComment(com.yond.blog.model.dto.Comment comment) {
+    public void saveComment(com.yond.blog.web.blog.view.dto.Comment comment) {
         if (commentMapper.saveComment(comment) != 1) {
             throw new PersistenceException("评论失败");
         }
@@ -153,8 +153,8 @@ public class CommentServiceImpl implements CommentService {
      *
      * @param comment 需要删除子评论的父评论
      */
-    private void delete(Comment comment) {
-        for (Comment c : comment.getReplyComments()) {
+    private void delete(CommentDO comment) {
+        for (CommentDO c : comment.getReplyComments()) {
             delete(c);
         }
         if (commentMapper.deleteCommentById(comment.getId()) != 1) {
@@ -167,8 +167,8 @@ public class CommentServiceImpl implements CommentService {
      *
      * @param comment 需要隐藏子评论的父评论
      */
-    private void hideComment(Comment comment) {
-        for (Comment c : comment.getReplyComments()) {
+    private void hideComment(CommentDO comment) {
+        for (CommentDO c : comment.getReplyComments()) {
             hideComment(c);
         }
         if (commentMapper.updateCommentPublishedById(comment.getId(), false) != 1) {
@@ -182,10 +182,10 @@ public class CommentServiceImpl implements CommentService {
      * @param parentCommentId 需要查询子评论的父评论id
      * @return
      */
-    private List<Comment> getAllReplyComments(Long parentCommentId) {
-        List<Comment> comments = commentMapper.getListByParentCommentId(parentCommentId);
-        for (Comment c : comments) {
-            List<Comment> replyComments = getAllReplyComments(c.getId());
+    private List<CommentDO> getAllReplyComments(Long parentCommentId) {
+        List<CommentDO> comments = commentMapper.getListByParentCommentId(parentCommentId);
+        for (CommentDO c : comments) {
+            List<CommentDO> replyComments = getAllReplyComments(c.getId());
             c.setReplyComments(replyComments);
         }
         return comments;

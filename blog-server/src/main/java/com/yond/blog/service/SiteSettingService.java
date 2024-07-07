@@ -1,13 +1,13 @@
 package com.yond.blog.service;
 
-import com.yond.blog.entity.SiteSetting;
+import com.yond.blog.entity.SiteSettingDO;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public interface SiteSettingService {
-    Map<String, List<SiteSetting>> getList();
+    Map<String, List<SiteSettingDO>> getList();
 
     Map<String, Object> getSiteInfo();
 
@@ -15,7 +15,7 @@ public interface SiteSettingService {
 
     void updateSiteSetting(List<LinkedHashMap> siteSettings, List<Integer> deleteIds);
 
-    List<SiteSetting> getFriendInfo();
+    List<SiteSettingDO> getFriendInfo();
 
     int updateFriendInfoContent(String content);
 

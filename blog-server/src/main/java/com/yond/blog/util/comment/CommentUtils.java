@@ -1,23 +1,24 @@
 package com.yond.blog.util.comment;
 
 import com.yond.blog.cache.remote.QQAvatarCache;
+import com.yond.blog.config.properties.BlogProperties;
+import com.yond.blog.entity.CommentDO;
+import com.yond.blog.entity.UserDO;
+import com.yond.blog.service.AboutService;
+import com.yond.blog.service.BlogService;
+import com.yond.blog.service.FriendService;
+import com.yond.blog.service.UserService;
 import com.yond.blog.util.HashUtils;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.MailUtils;
 import com.yond.blog.util.QQInfoUtils;
 import com.yond.blog.util.comment.channel.ChannelFactory;
 import com.yond.blog.util.comment.channel.CommentNotifyChannel;
-import com.yond.common.constant.PageConstants;
+import com.yond.blog.web.blog.view.dto.Comment;
+import com.yond.blog.web.blog.view.vo.FriendInfo;
+import com.yond.common.constant.PageConstant;
 import com.yond.common.enums.CommentOpenStateEnum;
 import com.yond.common.enums.CommentPageEnum;
-import com.yond.blog.config.properties.BlogProperties;
-import com.yond.blog.entity.User;
-import com.yond.blog.model.dto.Comment;
-import com.yond.blog.model.vo.FriendInfo;
-import com.yond.blog.service.AboutService;
-import com.yond.blog.service.BlogService;
-import com.yond.blog.service.FriendService;
-import com.yond.blog.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +89,7 @@ public class CommentUtils {
      * @param isVisitorComment 是否访客评论
      * @param parentComment    父评论
      */
-    public void judgeSendNotify(Comment comment, boolean isVisitorComment, com.yond.blog.entity.Comment parentComment) {
+    public void judgeSendNotify(Comment comment, boolean isVisitorComment, CommentDO parentComment) {
         if (parentComment != null && !parentComment.getAdminComment() && parentComment.getNotice()) {
             //我回复访客的评论，且对方接收提醒，邮件提醒对方(3)
             //访客回复访客的评论(即使是他自己先前的评论)，且对方接收提醒，邮件提醒对方(6)
@@ -108,7 +109,7 @@ public class CommentUtils {
      * @param parentComment 父评论
      * @param comment       当前收到的评论
      */
-    private void sendMailToParentComment(com.yond.blog.entity.Comment parentComment, Comment comment) {
+    private void sendMailToParentComment(CommentDO parentComment, Comment comment) {
         CommentPageEnum commentPageEnum = getCommentPageEnum(comment);
         Map<String, Object> map = new HashMap<>(16);
         map.put("parentNickname", parentComment.getNickname());
@@ -170,7 +171,7 @@ public class CommentUtils {
      */
     public CommentOpenStateEnum judgeCommentState(Integer page, Long blogId) {
         switch (page) {
-            case PageConstants.BLOG:
+            case PageConstant.BLOG:
                 //普通博客
                 Boolean commentEnabled = blogService.getCommentEnabledByBlogId(blogId);
                 Boolean published = blogService.getPublishedByBlogId(blogId);
@@ -190,14 +191,14 @@ public class CommentUtils {
                     return CommentOpenStateEnum.PASSWORD;
                 }
                 break;
-            case PageConstants.ABOUT:
+            case PageConstant.ABOUT:
                 //关于我页面
                 if (!aboutService.getCommentEnabled()) {
                     //页面评论已关闭
                     return CommentOpenStateEnum.CLOSE;
                 }
                 break;
-            case PageConstants.FRIEND:
+            case PageConstant.FRIEND:
                 //友链页面
                 FriendInfo friendInfo = friendService.getFriendInfo(true, false);
                 if (!friendInfo.getCommentEnabled()) {
@@ -232,7 +233,7 @@ public class CommentUtils {
      * @param comment 评论DTO
      * @param admin   博主信息
      */
-    private void setGeneralAdminComment(Comment comment, User admin) {
+    private void setGeneralAdminComment(Comment comment, UserDO admin) {
         comment.setAdminComment(true);
         comment.setCreateTime(new Date());
         comment.setPublished(true);
@@ -250,7 +251,7 @@ public class CommentUtils {
      */
     public void setAdminCommentByTelegramAction(Comment comment) {
         //查出博主信息，默认id为1的记录就是博主
-        User admin = userService.findUserById(1L);
+        UserDO admin = userService.getById(1L);
 
         setGeneralAdminComment(comment, admin);
         comment.setIp("via Telegram");
@@ -263,7 +264,7 @@ public class CommentUtils {
      * @param request 用于获取ip
      * @param admin   博主信息
      */
-    public void setAdminComment(Comment comment, HttpServletRequest request, User admin) {
+    public void setAdminComment(Comment comment, HttpServletRequest request, UserDO admin) {
         setGeneralAdminComment(comment, admin);
         comment.setIp(IpAddressUtils.getIpAddress(request));
     }
