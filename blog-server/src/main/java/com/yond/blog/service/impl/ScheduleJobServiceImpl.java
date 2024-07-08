@@ -4,13 +4,9 @@ import com.yond.blog.entity.ScheduleJobDO;
 import com.yond.blog.entity.ScheduleJobLogDO;
 import com.yond.blog.mapper.ScheduleJobLogMapper;
 import com.yond.blog.mapper.ScheduleJobMapper;
+import com.yond.blog.schedule.BlogSchedulingConfigurer;
 import com.yond.blog.service.ScheduleJobService;
-import com.yond.blog.util.quartz.ScheduleUtils;
 import com.yond.common.exception.PersistenceException;
-import jakarta.annotation.PostConstruct;
-import org.quartz.CronTrigger;
-import org.quartz.Scheduler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,28 +20,14 @@ import java.util.List;
 @Service
 public class ScheduleJobServiceImpl implements ScheduleJobService {
 
-    @Autowired
-    ScheduleJobMapper schedulerJobMapper;
-    @Autowired
-    ScheduleJobLogMapper scheduleJobLogMapper;
-    @Autowired
-    Scheduler scheduler;
+    private final ScheduleJobMapper schedulerJobMapper;
+    private final ScheduleJobLogMapper scheduleJobLogMapper;
+    private final BlogSchedulingConfigurer blogSchedulingConfigurer;
 
-    /**
-     * 项目启动时，初始化定时器
-     */
-    @PostConstruct
-    public void init() {
-        List<ScheduleJobDO> scheduleJobList = getJobList();
-        for (ScheduleJobDO scheduleJob : scheduleJobList) {
-            CronTrigger cronTrigger = ScheduleUtils.getCronTrigger(scheduler, scheduleJob.getJobId());
-            //如果不存在，则创建
-            if (cronTrigger == null) {
-                ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
-            } else {
-                ScheduleUtils.updateScheduleJob(scheduler, scheduleJob);
-            }
-        }
+    public ScheduleJobServiceImpl(ScheduleJobMapper schedulerJobMapper, ScheduleJobLogMapper scheduleJobLogMapper, BlogSchedulingConfigurer blogSchedulingConfigurer) {
+        this.schedulerJobMapper = schedulerJobMapper;
+        this.scheduleJobLogMapper = scheduleJobLogMapper;
+        this.blogSchedulingConfigurer = blogSchedulingConfigurer;
     }
 
     @Override
@@ -59,7 +41,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         if (schedulerJobMapper.saveJob(scheduleJob) != 1) {
             throw new PersistenceException("添加失败");
         }
-        ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
+        blogSchedulingConfigurer.addJob(scheduleJob);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -68,13 +50,13 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         if (schedulerJobMapper.updateJob(scheduleJob) != 1) {
             throw new PersistenceException("更新失败");
         }
-        ScheduleUtils.updateScheduleJob(scheduler, scheduleJob);
+        blogSchedulingConfigurer.updateJob(scheduleJob);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteJobById(Long jobId) {
-        ScheduleUtils.deleteScheduleJob(scheduler, jobId);
+        blogSchedulingConfigurer.removeJob(String.valueOf(jobId));
         if (schedulerJobMapper.deleteJobById(jobId) != 1) {
             throw new PersistenceException("删除失败");
         }
@@ -82,16 +64,18 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Override
     public void runJobById(Long jobId) {
-        ScheduleUtils.run(scheduler, schedulerJobMapper.getJobById(jobId));
+        blogSchedulingConfigurer.runJob(String.valueOf(jobId));
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateJobStatusById(Long jobId, Boolean status) {
+        ScheduleJobDO job = schedulerJobMapper.getJobById(jobId);
         if (status) {
-            ScheduleUtils.resumeJob(scheduler, jobId);
+            blogSchedulingConfigurer.removeJob(String.valueOf(jobId));
+            blogSchedulingConfigurer.addJob(job);
         } else {
-            ScheduleUtils.pauseJob(scheduler, jobId);
+            blogSchedulingConfigurer.removeJob(String.valueOf(jobId));
         }
         if (schedulerJobMapper.updateJobStatusById(jobId, status) != 1) {
             throw new PersistenceException("修改失败");
@@ -117,5 +101,10 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         if (scheduleJobLogMapper.deleteJobLogByLogId(logId) != 1) {
             throw new PersistenceException("日志删除失败");
         }
+    }
+
+    @Override
+    public ScheduleJobDO getJobById(Long jobId) {
+        return schedulerJobMapper.getJobById(jobId);
     }
 }

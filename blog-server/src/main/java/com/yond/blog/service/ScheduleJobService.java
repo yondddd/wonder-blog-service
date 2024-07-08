@@ -6,21 +6,24 @@ import com.yond.blog.entity.ScheduleJobLogDO;
 import java.util.List;
 
 public interface ScheduleJobService {
-	List<ScheduleJobDO> getJobList();
 
-	void saveJob(ScheduleJobDO scheduleJob);
+    List<ScheduleJobDO> getJobList();
 
-	void updateJob(ScheduleJobDO scheduleJob);
+    void saveJob(ScheduleJobDO scheduleJob);
 
-	void deleteJobById(Long jobId);
+    void updateJob(ScheduleJobDO scheduleJob);
 
-	void runJobById(Long jobId);
+    void deleteJobById(Long jobId);
 
-	void updateJobStatusById(Long jobId, Boolean status);
+    void runJobById(Long jobId);
 
-	List<ScheduleJobLogDO> getJobLogListByDate(String startDate, String endDate);
+    void updateJobStatusById(Long jobId, Boolean status);
 
-	void saveJobLog(ScheduleJobLogDO log);
+    List<ScheduleJobLogDO> getJobLogListByDate(String startDate, String endDate);
 
-	void deleteJobLogByLogId(Long logId);
+    void saveJobLog(ScheduleJobLogDO log);
+
+    void deleteJobLogByLogId(Long logId);
+
+    ScheduleJobDO getJobById(Long jobId);
 }
