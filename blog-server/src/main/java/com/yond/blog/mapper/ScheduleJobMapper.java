@@ -1,8 +1,8 @@
 package com.yond.blog.mapper;
 
+import com.yond.blog.entity.ScheduleJobDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.blog.entity.ScheduleJobDO;
 
 import java.util.List;
 
@@ -14,15 +14,16 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ScheduleJobMapper {
-	List<ScheduleJobDO> getJobList();
 
-	ScheduleJobDO getJobById(Long jobId);
+    List<ScheduleJobDO> getJobList();
 
-	int saveJob(ScheduleJobDO scheduleJob);
+    ScheduleJobDO getJobById(Long jobId);
 
-	int updateJob(ScheduleJobDO scheduleJob);
+    int saveJob(ScheduleJobDO scheduleJob);
 
-	int deleteJobById(Long jobId);
+    int updateJob(ScheduleJobDO scheduleJob);
 
-	int updateJobStatusById(Long jobId, Boolean status);
+    int deleteJobById(Long jobId);
+
+    int updateJobStatusById(Long jobId, Boolean status);
 }

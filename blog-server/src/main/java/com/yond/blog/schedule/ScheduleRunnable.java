@@ -1,8 +1,9 @@
-package com.yond.blog.util.quartz;
+package com.yond.blog.schedule;
 
+import com.yond.blog.util.common.SpringContextUtils;
+import lombok.Getter;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
-import com.yond.blog.util.common.SpringContextUtils;
 
 import java.lang.reflect.Method;
 
@@ -11,12 +12,16 @@ import java.lang.reflect.Method;
  * @Author: Naccl
  * @Date: 2020-11-01
  */
+@Getter
 public class ScheduleRunnable implements Runnable {
-    private Object target;
-    private Method method;
-    private String params;
 
-    public ScheduleRunnable(String beanName, String methodName, String params) throws NoSuchMethodException, SecurityException {
+    private final Long jobId;
+    private final Object target;
+    private final Method method;
+    private final String params;
+
+    public ScheduleRunnable(Long jobId, String beanName, String methodName, String params) throws NoSuchMethodException, SecurityException {
+        this.jobId = jobId;
         this.target = SpringContextUtils.getBean(beanName);
         this.params = params;
         if (StringUtils.hasText(params)) {

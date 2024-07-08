@@ -1,8 +1,8 @@
 package com.yond.blog.mapper;
 
+import com.yond.blog.entity.ScheduleJobLogDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.blog.entity.ScheduleJobLogDO;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ScheduleJobLogMapper {
-	List<ScheduleJobLogDO> getJobLogListByDate(String startDate, String endDate);
+    List<ScheduleJobLogDO> getJobLogListByDate(String startDate, String endDate);
 
-	int saveJobLog(ScheduleJobLogDO jobLog);
+    int saveJobLog(ScheduleJobLogDO jobLog);
 
-	int deleteJobLogByLogId(Long logId);
+    int deleteJobLogByLogId(Long logId);
 }
