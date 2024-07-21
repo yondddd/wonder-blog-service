@@ -17,4 +17,13 @@ public class LocalCache {
                 .build();
     }
 
+    public static <K, V> Cache<K, V> buildCache(int maxSize, int expireSecond) {
+        return Caffeine.newBuilder()
+                .expireAfterWrite(expireSecond, TimeUnit.SECONDS)
+                .maximumSize(maxSize)
+                .scheduler(LocalCacheConstant.SCHEDULER)
+                .executor(LocalCacheConstant.EXECUTOR)
+                .build();
+    }
+
 }

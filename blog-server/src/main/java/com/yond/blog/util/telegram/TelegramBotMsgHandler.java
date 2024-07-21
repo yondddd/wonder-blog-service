@@ -1,6 +1,5 @@
 package com.yond.blog.util.telegram;
 
-import com.yond.common.enums.CommentPageEnum;
 import com.yond.blog.config.properties.BlogProperties;
 import com.yond.blog.config.properties.TelegramProperties;
 import com.yond.blog.entity.CommentDO;
@@ -8,7 +7,8 @@ import com.yond.blog.entity.MomentDO;
 import com.yond.blog.service.CommentService;
 import com.yond.blog.service.MomentService;
 import com.yond.blog.util.comment.CommentUtils;
-import lombok.extern.slf4j.Slf4j;
+import com.yond.common.enums.CommentPageEnum;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -24,10 +24,10 @@ import java.util.TimeZone;
  * @author: Naccl
  * @date: 2022-01-25
  */
-@Slf4j
 @Lazy
 @Component
 public class TelegramBotMsgHandler {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(TelegramBotMsgHandler.class);
     @Autowired
     private CommentService commentService;
     @Autowired

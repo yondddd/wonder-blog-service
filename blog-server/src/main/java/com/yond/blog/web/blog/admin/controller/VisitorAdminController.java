@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.VisitorDO;
 import com.yond.blog.service.VisitorService;
 import com.yond.common.resp.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -16,8 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/admin")
 public class VisitorAdminController {
-    @Autowired
-    VisitorService visitorService;
+
+    private final VisitorService visitorService;
+
+    public VisitorAdminController(VisitorService visitorService) {
+        this.visitorService = visitorService;
+    }
 
     /**
      * 分页查询访客列表

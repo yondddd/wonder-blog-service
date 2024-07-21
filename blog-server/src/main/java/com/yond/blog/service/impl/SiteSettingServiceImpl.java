@@ -36,7 +36,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 
     @Override
     public Map<String, List<SiteSettingDO>> getList() {
-        List<SiteSettingDO> siteSettings = siteSettingMapper.getList();
+        List<SiteSettingDO> siteSettings = this.listAll();
         List<SiteSettingDO> type1 = new ArrayList<>();
         List<SiteSettingDO> type2 = new ArrayList<>();
         List<SiteSettingDO> type3 = new ArrayList<>();
@@ -64,11 +64,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 
     @Override
     public Map<String, Object> getSiteInfo() {
-        Map<String, Object> siteInfoMapFromRedis = SiteSettingCache.get();
-        if (siteInfoMapFromRedis != null) {
-            return siteInfoMapFromRedis;
-        }
-        List<SiteSettingDO> siteSettings = siteSettingMapper.getList();
+        List<SiteSettingDO> siteSettings = this.listAll();
         Map<String, Object> siteInfo = new HashMap<>(2);
         List<Badge> badges = new ArrayList<>();
         Introduction introduction = new Introduction();
@@ -138,7 +134,6 @@ public class SiteSettingServiceImpl implements SiteSettingService {
         map.put("introduction", introduction);
         map.put("siteInfo", siteInfo);
         map.put("badges", badges);
-        SiteSettingCache.set(map);
         return map;
     }
 
@@ -180,6 +175,16 @@ public class SiteSettingServiceImpl implements SiteSettingService {
     @Override
     public int updateFriendInfoCommentEnabled(Boolean commentEnabled) {
         return siteSettingMapper.updateFriendInfoCommentEnabled(commentEnabled);
+    }
+
+    @Override
+    public List<SiteSettingDO> listAll() {
+        List<SiteSettingDO> siteSettings = SiteSettingCache.get();
+        if (siteSettings == null) {
+            siteSettings = siteSettingMapper.getList();
+            SiteSettingCache.set(siteSettings);
+        }
+        return siteSettings;
     }
 
     public void saveOneSiteSetting(SiteSettingDO siteSetting) {

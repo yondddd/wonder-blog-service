@@ -3,7 +3,7 @@ package com.yond.blog.service.impl;
 import com.yond.blog.entity.UserDO;
 import com.yond.blog.mapper.UserMapper;
 import com.yond.blog.service.UserService;
-import com.yond.blog.util.HashUtils;
+import com.yond.blog.util.encrypt.AesUtil;
 import com.yond.blog.util.jwt.JwtUtil;
 import com.yond.common.constant.JwtConstant;
 import com.yond.common.exception.NotFoundException;
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return null;
         }
-        if (!HashUtils.matchBC(password, user.getPassword())) {
+        if (!password.equals(AesUtil.decrypt(user.getPassword()))) {
             return null;
         }
         return user;
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
         if (!currentUser.getUsername().equals(user.getUsername())) {
             return false;
         }
-        userMapper.updatePassword(currentUser.getId(), HashUtils.getBC(user.getPassword()));
+        userMapper.updatePassword(currentUser.getId(), AesUtil.encrypt(user.getPassword()));
         return true;
     }
 

@@ -1,13 +1,13 @@
 package com.yond.blog.util.comment.channel;
 
-import com.yond.blog.util.telegram.TelegramUtils;
-import com.yond.common.enums.CommentPageEnum;
 import com.yond.blog.config.properties.BlogProperties;
 import com.yond.blog.config.properties.TelegramProperties;
-import com.yond.blog.web.blog.view.dto.Comment;
 import com.yond.blog.util.comment.CommentUtils;
-import lombok.extern.slf4j.Slf4j;
+import com.yond.blog.util.telegram.TelegramUtils;
+import com.yond.blog.web.blog.view.dto.Comment;
+import com.yond.common.enums.CommentPageEnum;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -21,10 +21,10 @@ import java.util.TimeZone;
  * @author: Naccl
  * @date: 2022-01-22
  */
-@Slf4j
 @Lazy
 @Component
 public class TelegramChannel implements CommentNotifyChannel {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(TelegramChannel.class);
     private final TelegramUtils telegramUtils;
 
     private final BlogProperties blogProperties;

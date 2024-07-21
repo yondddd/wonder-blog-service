@@ -20,4 +20,6 @@ public interface SiteSettingService {
     int updateFriendInfoContent(String content);
 
     int updateFriendInfoCommentEnabled(Boolean commentEnabled);
+
+    List<SiteSettingDO> listAll();
 }

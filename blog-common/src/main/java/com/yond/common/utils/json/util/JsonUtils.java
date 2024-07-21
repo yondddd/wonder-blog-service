@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.gson.JsonSyntaxException;
-import com.yond.common.resp.PageResult;
+import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import com.yond.common.utils.json.adapter.DateInitManager;
 import com.yond.common.utils.json.adapter.jackson.DateDeserializer;
@@ -72,12 +72,12 @@ public class JsonUtils {
         return DEFAULT_MAPPER.fromJson(json, javaType);
     }
 
-    public static <T> PageResult<T> toPageableResponse(String json, Class<T> clazz) {
-        JavaType javaType = getDefaultMapper().constructParametricType(PageResult.class, clazz);
+    public static <T> PageResponse<T> toPageableResponse(String json, Class<T> clazz) {
+        JavaType javaType = getDefaultMapper().constructParametricType(PageResponse.class, clazz);
         return DEFAULT_MAPPER.fromJson(json, javaType);
     }
 
-    public static <T> PageResult<T> toPageableResponse(String json, JavaType javaType) {
+    public static <T> PageResponse<T> toPageableResponse(String json, JavaType javaType) {
         return DEFAULT_MAPPER.fromJson(json, javaType);
     }
 

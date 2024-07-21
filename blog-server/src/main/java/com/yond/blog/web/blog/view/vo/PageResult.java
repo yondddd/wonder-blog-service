@@ -1,10 +1,5 @@
 package com.yond.blog.web.blog.view.vo;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
@@ -14,10 +9,6 @@ import java.util.List;
  * @Author: Naccl
  * @Date: 2020-08-08
  */
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 public class PageResult<T> implements Serializable {
 
     @Serial
@@ -29,5 +20,28 @@ public class PageResult<T> implements Serializable {
     public PageResult(Integer totalPage, List<T> list) {
         this.totalPage = totalPage;
         this.list = list;
+    }
+
+    public PageResult() {
+    }
+
+    public Integer getTotalPage() {
+        return this.totalPage;
+    }
+
+    public List<T> getList() {
+        return this.list;
+    }
+
+    public void setTotalPage(Integer totalPage) {
+        this.totalPage = totalPage;
+    }
+
+    public void setList(List<T> list) {
+        this.list = list;
+    }
+
+    public String toString() {
+        return "PageResult(totalPage=" + this.getTotalPage() + ", list=" + this.getList() + ")";
     }
 }

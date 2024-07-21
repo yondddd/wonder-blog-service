@@ -4,8 +4,6 @@ import com.yond.blog.util.upload.channel.ChannelFactory;
 import com.yond.blog.util.upload.channel.FileUploadChannel;
 import com.yond.common.constant.UploadConstant;
 import com.yond.common.exception.BadRequestException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
@@ -35,12 +33,23 @@ public class UploadUtils {
         UploadUtils.uploadChannel = ChannelFactory.getChannel(channelName);
     }
 
-    @AllArgsConstructor
-    @Getter
     public static class ImageResource {
         byte[] data;
         //图片拓展名 jpg png
         String type;
+
+        public ImageResource(byte[] data, String type) {
+            this.data = data;
+            this.type = type;
+        }
+
+        public byte[] getData() {
+            return this.data;
+        }
+
+        public String getType() {
+            return this.type;
+        }
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.yond.blog.schedule;
 
 import com.yond.blog.util.common.SpringContextUtils;
-import lombok.Getter;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -12,7 +11,6 @@ import java.lang.reflect.Method;
  * @Author: Naccl
  * @Date: 2020-11-01
  */
-@Getter
 public class ScheduleRunnable implements Runnable {
 
     private final Long jobId;
@@ -43,5 +41,21 @@ public class ScheduleRunnable implements Runnable {
         } catch (Exception e) {
             throw new RuntimeException("执行定时任务失败", e);
         }
+    }
+
+    public Long getJobId() {
+        return this.jobId;
+    }
+
+    public Object getTarget() {
+        return this.target;
+    }
+
+    public Method getMethod() {
+        return this.method;
+    }
+
+    public String getParams() {
+        return this.params;
     }
 }

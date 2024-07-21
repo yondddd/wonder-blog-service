@@ -1,10 +1,5 @@
 package com.yond.blog.web.blog.view.vo;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,10 +11,6 @@ import java.util.List;
  * @Author: Naccl
  * @Date: 2020-08-15
  */
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 public class PageComment implements Serializable {
     @Serial
     private static final long serialVersionUID = 2156320836527320699L;
@@ -34,4 +25,91 @@ public class PageComment implements Serializable {
     private String parentCommentNickname;//父评论昵称
 
     private List<PageComment> replyComments = new ArrayList<>();//回复该评论的评论
+
+    public PageComment() {
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getNickname() {
+        return this.nickname;
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public String getAvatar() {
+        return this.avatar;
+    }
+
+    public Date getCreateTime() {
+        return this.createTime;
+    }
+
+    public String getWebsite() {
+        return this.website;
+    }
+
+    public Boolean getAdminComment() {
+        return this.adminComment;
+    }
+
+    public String getParentCommentId() {
+        return this.parentCommentId;
+    }
+
+    public String getParentCommentNickname() {
+        return this.parentCommentNickname;
+    }
+
+    public List<PageComment> getReplyComments() {
+        return this.replyComments;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public void setAdminComment(Boolean adminComment) {
+        this.adminComment = adminComment;
+    }
+
+    public void setParentCommentId(String parentCommentId) {
+        this.parentCommentId = parentCommentId;
+    }
+
+    public void setParentCommentNickname(String parentCommentNickname) {
+        this.parentCommentNickname = parentCommentNickname;
+    }
+
+    public void setReplyComments(List<PageComment> replyComments) {
+        this.replyComments = replyComments;
+    }
+
+    public String toString() {
+        return "PageComment(id=" + this.getId() + ", nickname=" + this.getNickname() + ", content=" + this.getContent() + ", avatar=" + this.getAvatar() + ", createTime=" + this.getCreateTime() + ", website=" + this.getWebsite() + ", adminComment=" + this.getAdminComment() + ", parentCommentId=" + this.getParentCommentId() + ", parentCommentNickname=" + this.getParentCommentNickname() + ", replyComments=" + this.getReplyComments() + ")";
+    }
 }
