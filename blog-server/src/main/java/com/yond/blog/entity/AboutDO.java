@@ -1,10 +1,5 @@
 package com.yond.blog.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -13,10 +8,6 @@ import java.io.Serializable;
  * @Author: Naccl
  * @Date: 2020-08-31
  */
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 public class AboutDO implements Serializable {
 
     @Serial
@@ -26,5 +17,44 @@ public class AboutDO implements Serializable {
     private String nameEn;
     private String nameZh;
     private String value;
+
+    public AboutDO() {
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getNameEn() {
+        return this.nameEn;
+    }
+
+    public String getNameZh() {
+        return this.nameZh;
+    }
+
+    public String getValue() {
+        return this.value;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNameEn(String nameEn) {
+        this.nameEn = nameEn;
+    }
+
+    public void setNameZh(String nameZh) {
+        this.nameZh = nameZh;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String toString() {
+        return "AboutDO(id=" + this.getId() + ", nameEn=" + this.getNameEn() + ", nameZh=" + this.getNameZh() + ", value=" + this.getValue() + ")";
+    }
 
 }

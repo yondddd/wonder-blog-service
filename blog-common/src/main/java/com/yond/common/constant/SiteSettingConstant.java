@@ -18,4 +18,9 @@ public class SiteSettingConstant {
     public static final String EMAIL = "email";
     public static final String FAVORITE = "favorite";
     public static final String ROLL_TEXT = "rollText";
+
+    /**
+     * 高德地图key
+     */
+    public static final String GAO_DE_IP_KEY = "gaoDeMapIpKey";
 }

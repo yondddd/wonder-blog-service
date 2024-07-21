@@ -1,20 +1,34 @@
 package com.yond.blog.web.blog.view.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
 /**
  * @Description: 博客浏览量
  * @Author: Naccl
  * @Date: 2020-10-06
  */
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 public class BlogView {
-	private Long id;
-	private Integer views;
+    private Long id;
+    private Integer views;
+
+    public BlogView() {
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public Integer getViews() {
+        return this.views;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setViews(Integer views) {
+        this.views = views;
+    }
+
+    public String toString() {
+        return "BlogView(id=" + this.getId() + ", views=" + this.getViews() + ")";
+    }
 }

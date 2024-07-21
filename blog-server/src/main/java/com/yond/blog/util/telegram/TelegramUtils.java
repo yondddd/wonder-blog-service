@@ -1,6 +1,8 @@
 package com.yond.blog.util.telegram;
 
-import lombok.extern.slf4j.Slf4j;
+import com.yond.blog.config.properties.BlogProperties;
+import com.yond.blog.config.properties.TelegramProperties;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpEntity;
@@ -15,8 +17,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import com.yond.blog.config.properties.BlogProperties;
-import com.yond.blog.config.properties.TelegramProperties;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,12 +27,12 @@ import java.util.Map;
  * @author: Naccl
  * @date: 2022-01-22
  */
-@Slf4j
 @EnableRetry
 @EnableAsync
 @Lazy
 @Component
 public class TelegramUtils {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(TelegramUtils.class);
     @Autowired
     private RestTemplate restTemplate;
     @Autowired

@@ -1,10 +1,6 @@
 package com.yond.blog.entity;
 
 import com.yond.blog.web.blog.view.vo.BlogIdAndTitle;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -17,10 +13,6 @@ import java.util.List;
  * @Author: Naccl
  * @Date: 2020-07-27
  */
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 public class CommentDO implements Serializable {
 
     @Serial
@@ -43,4 +35,139 @@ public class CommentDO implements Serializable {
 
     private BlogIdAndTitle blog;//所属的文章
     private List<CommentDO> replyComments = new ArrayList<>();//回复该评论的评论
+
+    public CommentDO() {
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getNickname() {
+        return this.nickname;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public String getAvatar() {
+        return this.avatar;
+    }
+
+    public Date getCreateTime() {
+        return this.createTime;
+    }
+
+    public String getWebsite() {
+        return this.website;
+    }
+
+    public String getIp() {
+        return this.ip;
+    }
+
+    public Boolean getPublished() {
+        return this.published;
+    }
+
+    public Boolean getAdminComment() {
+        return this.adminComment;
+    }
+
+    public Integer getPage() {
+        return this.page;
+    }
+
+    public Boolean getNotice() {
+        return this.notice;
+    }
+
+    public Long getParentCommentId() {
+        return this.parentCommentId;
+    }
+
+    public String getQq() {
+        return this.qq;
+    }
+
+    public BlogIdAndTitle getBlog() {
+        return this.blog;
+    }
+
+    public List<CommentDO> getReplyComments() {
+        return this.replyComments;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public void setPublished(Boolean published) {
+        this.published = published;
+    }
+
+    public void setAdminComment(Boolean adminComment) {
+        this.adminComment = adminComment;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public void setNotice(Boolean notice) {
+        this.notice = notice;
+    }
+
+    public void setParentCommentId(Long parentCommentId) {
+        this.parentCommentId = parentCommentId;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
+
+    public void setBlog(BlogIdAndTitle blog) {
+        this.blog = blog;
+    }
+
+    public void setReplyComments(List<CommentDO> replyComments) {
+        this.replyComments = replyComments;
+    }
+
+    public String toString() {
+        return "CommentDO(id=" + this.getId() + ", nickname=" + this.getNickname() + ", email=" + this.getEmail() + ", content=" + this.getContent() + ", avatar=" + this.getAvatar() + ", createTime=" + this.getCreateTime() + ", website=" + this.getWebsite() + ", ip=" + this.getIp() + ", published=" + this.getPublished() + ", adminComment=" + this.getAdminComment() + ", page=" + this.getPage() + ", notice=" + this.getNotice() + ", parentCommentId=" + this.getParentCommentId() + ", qq=" + this.getQq() + ", blog=" + this.getBlog() + ", replyComments=" + this.getReplyComments() + ")";
+    }
 }

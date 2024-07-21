@@ -1,10 +1,6 @@
 package com.yond.blog.util.jwt;
 
 import com.yond.blog.entity.UserDO;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,10 +10,6 @@ import java.io.Serializable;
  * @date 2023/10/21
  * @description token
  */
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 public class TokenVO implements Serializable {
 
     @Serial
@@ -26,4 +18,27 @@ public class TokenVO implements Serializable {
     private String token;
     private UserDO user;
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public UserDO getUser() {
+        return user;
+    }
+
+    public void setUser(UserDO user) {
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "TokenVO{" +
+                "token='" + token + '\'' +
+                ", user=" + user +
+                '}';
+    }
 }

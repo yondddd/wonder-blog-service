@@ -4,7 +4,7 @@ import com.yond.blog.config.properties.TelegramProperties;
 import com.yond.blog.util.telegram.TelegramBotMsgHandler;
 import com.yond.blog.web.blog.view.dto.TgMessage;
 import com.yond.common.constant.CommentConstant;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @author: Naccl
  * @date: 2022-01-24
  */
-@Slf4j
 @ConditionalOnProperty(name = "comment.notify.channel", havingValue = CommentConstant.TELEGRAM)
 @RestController
 public class TelegramBotController {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(TelegramBotController.class);
     @Autowired
     private TelegramBotMsgHandler msgHandler;
     @Autowired

@@ -1,10 +1,6 @@
 package com.yond.blog.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,10 +10,6 @@ import java.io.Serializable;
  * @Author: Naccl
  * @Date: 2020-08-09
  */
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SiteSettingDO implements Serializable {
     @Serial
@@ -27,4 +19,51 @@ public class SiteSettingDO implements Serializable {
     private String nameZh;
     private String value;
     private Integer type;
+
+    public SiteSettingDO() {
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getNameEn() {
+        return this.nameEn;
+    }
+
+    public String getNameZh() {
+        return this.nameZh;
+    }
+
+    public String getValue() {
+        return this.value;
+    }
+
+    public Integer getType() {
+        return this.type;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNameEn(String nameEn) {
+        this.nameEn = nameEn;
+    }
+
+    public void setNameZh(String nameZh) {
+        this.nameZh = nameZh;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String toString() {
+        return "SiteSettingDO(id=" + this.getId() + ", nameEn=" + this.getNameEn() + ", nameZh=" + this.getNameZh() + ", value=" + this.getValue() + ", type=" + this.getType() + ")";
+    }
 }

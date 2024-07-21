@@ -1,10 +1,5 @@
 package com.yond.blog.web.blog.view.vo;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -13,10 +8,6 @@ import java.io.Serializable;
  * @Author: Naccl
  * @Date: 2020-09-08
  */
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 public class Friend implements Serializable {
     @Serial
     private static final long serialVersionUID = 5662086638296526186L;
@@ -24,4 +15,43 @@ public class Friend implements Serializable {
     private String description;//描述
     private String website;//站点
     private String avatar;//头像
+
+    public Friend() {
+    }
+
+    public String getNickname() {
+        return this.nickname;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public String getWebsite() {
+        return this.website;
+    }
+
+    public String getAvatar() {
+        return this.avatar;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String toString() {
+        return "Friend(nickname=" + this.getNickname() + ", description=" + this.getDescription() + ", website=" + this.getWebsite() + ", avatar=" + this.getAvatar() + ")";
+    }
 }

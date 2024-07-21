@@ -1,10 +1,12 @@
 package com.yond.blog.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 import com.yond.blog.entity.VisitorDO;
 import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,15 +17,19 @@ import java.util.List;
 @Mapper
 @Repository
 public interface VisitorMapper {
-	List<VisitorDO> getVisitorListByDate(String startDate, String endDate);
+    List<VisitorDO> getVisitorListByDate(String startDate, String endDate);
 
-	List<String> getNewVisitorIpSourceByYesterday();
+    List<String> getNewVisitorIpSourceByYesterday();
 
-	int hasUUID(String uuid);
+    int hasUUID(String uuid);
 
-	int saveVisitor(VisitorDO visitor);
+    int saveVisitor(VisitorDO visitor);
 
-	int updatePVAndLastTimeByUUID(VisitLogUuidTime dto);
+    int updatePVAndLastTimeByUUID(VisitLogUuidTime dto);
 
-	int deleteVisitorById(Long id);
+    int deleteVisitorById(Long id);
+
+    Integer countBy(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    List<VisitorDO> pageBy(@Param("offset") int offset, @Param("size") Integer size, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

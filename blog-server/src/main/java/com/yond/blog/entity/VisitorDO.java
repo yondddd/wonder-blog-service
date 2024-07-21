@@ -1,10 +1,5 @@
 package com.yond.blog.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
@@ -14,10 +9,6 @@ import java.util.Date;
  * @Author: Naccl
  * @Date: 2021-01-31
  */
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 public class VisitorDO implements Serializable {
     @Serial
     private static final long serialVersionUID = -6715140594847056682L;
@@ -40,5 +31,92 @@ public class VisitorDO implements Serializable {
         this.lastTime = date;
         this.pv = 0;
         this.userAgent = userAgent;
+    }
+
+    public VisitorDO() {
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getUuid() {
+        return this.uuid;
+    }
+
+    public String getIp() {
+        return this.ip;
+    }
+
+    public String getIpSource() {
+        return this.ipSource;
+    }
+
+    public String getOs() {
+        return this.os;
+    }
+
+    public String getBrowser() {
+        return this.browser;
+    }
+
+    public Date getCreateTime() {
+        return this.createTime;
+    }
+
+    public Date getLastTime() {
+        return this.lastTime;
+    }
+
+    public Integer getPv() {
+        return this.pv;
+    }
+
+    public String getUserAgent() {
+        return this.userAgent;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public void setIpSource(String ipSource) {
+        this.ipSource = ipSource;
+    }
+
+    public void setOs(String os) {
+        this.os = os;
+    }
+
+    public void setBrowser(String browser) {
+        this.browser = browser;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setLastTime(Date lastTime) {
+        this.lastTime = lastTime;
+    }
+
+    public void setPv(Integer pv) {
+        this.pv = pv;
+    }
+
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
+
+    public String toString() {
+        return "VisitorDO(id=" + this.getId() + ", uuid=" + this.getUuid() + ", ip=" + this.getIp() + ", ipSource=" + this.getIpSource() + ", os=" + this.getOs() + ", browser=" + this.getBrowser() + ", createTime=" + this.getCreateTime() + ", lastTime=" + this.getLastTime() + ", pv=" + this.getPv() + ", userAgent=" + this.getUserAgent() + ")";
     }
 }

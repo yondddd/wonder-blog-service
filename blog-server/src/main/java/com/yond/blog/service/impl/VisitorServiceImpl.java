@@ -1,18 +1,21 @@
 package com.yond.blog.service.impl;
 
 import com.yond.blog.cache.remote.VisitCache;
-import com.yond.blog.service.VisitorService;
-import com.yond.common.exception.PersistenceException;
 import com.yond.blog.entity.VisitorDO;
 import com.yond.blog.mapper.VisitorMapper;
-import com.yond.blog.web.blog.view.dto.UserAgentDTO;
-import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
+import com.yond.blog.service.VisitorService;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.UserAgentUtils;
+import com.yond.blog.web.blog.view.dto.UserAgentDTO;
+import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
+import com.yond.common.exception.PersistenceException;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +35,16 @@ public class VisitorServiceImpl implements VisitorService {
     @Override
     public List<VisitorDO> getVisitorListByDate(String startDate, String endDate) {
         return visitorMapper.getVisitorListByDate(startDate, endDate);
+    }
+    
+    @Override
+    public Pair<Integer, List<VisitorDO>> page(Integer pageNo, Integer pageSize, Date startDate, Date endDate) {
+        Integer count = visitorMapper.countBy(startDate, endDate);
+        if (count == 0) {
+            return Pair.of(0, new ArrayList<>());
+        }
+        List<VisitorDO> data = visitorMapper.pageBy((pageNo - 1) * pageSize, pageSize, startDate, endDate);
+        return Pair.of(count, data);
     }
 
     @Override
