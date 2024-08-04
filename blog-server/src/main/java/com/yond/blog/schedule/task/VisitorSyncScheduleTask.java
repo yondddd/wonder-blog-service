@@ -83,7 +83,7 @@ public class VisitorSyncScheduleTask {
         ipSource.forEach(i -> {
             if (i.startsWith("中国")) {
                 String[] split = i.split("\\|");
-                if (split.length == 4) {
+                if (split.length >= 3) {
                     String city = split[2];
                     cityVisitorMap.merge(city, 1, Integer::sum);
                 }

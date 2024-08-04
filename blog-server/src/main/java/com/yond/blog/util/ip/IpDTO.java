@@ -115,4 +115,5 @@ public class IpDTO {
     public void setRegionName(String regionName) {
         this.regionName = regionName;
     }
+    
 }

@@ -11,7 +11,7 @@ public class IpCache {
 
     private final static String KEY = "ip";
 
-    private final static Cache<String, String> cache = LocalCache.buildCache(100, 24 * 60 * 60);
+    private final static Cache<String, String> cache = LocalCache.buildCache(500, 24 * 60 * 60);
 
 
     public static String get(String ip) {
@@ -25,5 +25,5 @@ public class IpCache {
     private static String getKey(String ip) {
         return KEY + ip;
     }
-    
+
 }
