@@ -4,6 +4,8 @@ import com.yond.blog.cache.local.SiteSettingCache;
 import com.yond.blog.entity.SiteSettingDO;
 import com.yond.blog.mapper.SiteSettingMapper;
 import com.yond.blog.service.SiteSettingService;
+import com.yond.blog.support.env.env.EnvConstant;
+import com.yond.blog.support.env.env.Environment;
 import com.yond.blog.util.JacksonUtils;
 import com.yond.blog.web.blog.view.vo.Badge;
 import com.yond.blog.web.blog.view.vo.Copyright;
@@ -11,6 +13,7 @@ import com.yond.blog.web.blog.view.vo.Favorite;
 import com.yond.blog.web.blog.view.vo.Introduction;
 import com.yond.common.constant.SiteSettingConstant;
 import com.yond.common.exception.PersistenceException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +27,7 @@ import java.util.regex.Pattern;
  * @Date: 2020-08-09
  */
 @Service
-public class SiteSettingServiceImpl implements SiteSettingService {
+public class SiteSettingServiceImpl implements SiteSettingService, InitializingBean {
 
     private final SiteSettingMapper siteSettingMapper;
 
@@ -33,6 +36,16 @@ public class SiteSettingServiceImpl implements SiteSettingService {
     }
 
     private static final Pattern PATTERN = Pattern.compile("\"(.*?)\"");
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        List<SiteSettingDO> list = this.listAll();
+        for (SiteSettingDO setting : list) {
+            if (SiteSettingConstant.TENCENT_IP_KEY.equals(setting.getNameEn())) {
+                Environment.setProperty(EnvConstant.TENCENT_IP_KET, setting.getValue());
+            }
+        }
+    }
 
     @Override
     public Map<String, List<SiteSettingDO>> getList() {

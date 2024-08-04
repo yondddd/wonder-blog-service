@@ -20,7 +20,7 @@ public class SiteSettingConstant {
     public static final String ROLL_TEXT = "rollText";
 
     /**
-     * 高德地图key
+     * 腾讯地图key
      */
-    public static final String GAO_DE_IP_KEY = "gaoDeMapIpKey";
+    public static final String TENCENT_IP_KEY = "tencentMapIpKey";
 }

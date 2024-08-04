@@ -64,6 +64,10 @@ public class LocalAuthFilter implements LocalHttpFilter {
             return;
         }
         Claims claims = JwtUtil.validateJwt(header, JwtConstant.DEFAULT_SECRET);
+        if (claims == null) {
+            WebFilterUtil.returnFail(servletResponse, HttpServletResponse.SC_UNAUTHORIZED, Response.custom(HttpStatus.UNAUTHORIZED.value(), "claims为空"));
+            return;
+        }
         Date expiration = claims.getExpiration();
         if (expiration.before(new Date())) {
             WebFilterUtil.returnFail(servletResponse, HttpServletResponse.SC_UNAUTHORIZED, Response.custom(HttpStatus.UNAUTHORIZED.value(), "token过期"));
