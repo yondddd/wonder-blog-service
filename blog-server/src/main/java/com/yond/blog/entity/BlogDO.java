@@ -2,9 +2,7 @@ package com.yond.blog.entity;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @Description: 博客文章
@@ -17,6 +15,8 @@ public class BlogDO implements Serializable {
     private static final long serialVersionUID = 5799826828777919864L;
 
     private Long id;
+    private Integer categoryId;
+    private Integer userId;
     private String title;//文章标题
     private String firstPicture;//文章首图，用于随机文章展示
     private String content;//文章正文
@@ -33,15 +33,27 @@ public class BlogDO implements Serializable {
     private Integer readTime;//阅读时长(分钟)
     private String password;//密码保护
 
-    private UserDO user;//文章作者(因为是个人博客，也可以不加作者字段，暂且加上)
-    private CategoryDO category;//文章分类
-    private List<TagDO> tags = new ArrayList<>();//文章标签
-
     public BlogDO() {
     }
 
     public Long getId() {
         return this.id;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getTitle() {
@@ -102,18 +114,6 @@ public class BlogDO implements Serializable {
 
     public String getPassword() {
         return this.password;
-    }
-
-    public UserDO getUser() {
-        return this.user;
-    }
-
-    public CategoryDO getCategory() {
-        return this.category;
-    }
-
-    public List<TagDO> getTags() {
-        return this.tags;
     }
 
     public void setId(Long id) {
@@ -180,19 +180,27 @@ public class BlogDO implements Serializable {
         this.password = password;
     }
 
-    public void setUser(UserDO user) {
-        this.user = user;
-    }
-
-    public void setCategory(CategoryDO category) {
-        this.category = category;
-    }
-
-    public void setTags(List<TagDO> tags) {
-        this.tags = tags;
-    }
-
+    @Override
     public String toString() {
-        return "BlogDO(id=" + this.getId() + ", title=" + this.getTitle() + ", firstPicture=" + this.getFirstPicture() + ", content=" + this.getContent() + ", description=" + this.getDescription() + ", published=" + this.getPublished() + ", recommend=" + this.getRecommend() + ", appreciation=" + this.getAppreciation() + ", commentEnabled=" + this.getCommentEnabled() + ", top=" + this.getTop() + ", createTime=" + this.getCreateTime() + ", updateTime=" + this.getUpdateTime() + ", views=" + this.getViews() + ", words=" + this.getWords() + ", readTime=" + this.getReadTime() + ", password=" + this.getPassword() + ", user=" + this.getUser() + ", category=" + this.getCategory() + ", tags=" + this.getTags() + ")";
+        return "BlogDO{" +
+                "id=" + id +
+                ", categoryId=" + categoryId +
+                ", userId=" + userId +
+                ", title='" + title + '\'' +
+                ", firstPicture='" + firstPicture + '\'' +
+                ", content='" + content + '\'' +
+                ", description='" + description + '\'' +
+                ", published=" + published +
+                ", recommend=" + recommend +
+                ", appreciation=" + appreciation +
+                ", commentEnabled=" + commentEnabled +
+                ", top=" + top +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", views=" + views +
+                ", words=" + words +
+                ", readTime=" + readTime +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

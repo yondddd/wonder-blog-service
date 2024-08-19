@@ -4,9 +4,9 @@ import com.yond.blog.cache.remote.QQAvatarCache;
 import com.yond.blog.config.properties.BlogProperties;
 import com.yond.blog.entity.CommentDO;
 import com.yond.blog.entity.UserDO;
-import com.yond.blog.service.AboutService;
 import com.yond.blog.service.BlogService;
 import com.yond.blog.service.FriendService;
+import com.yond.blog.service.SiteSettingService;
 import com.yond.blog.service.UserService;
 import com.yond.blog.util.HashUtils;
 import com.yond.blog.util.IpAddressUtils;
@@ -17,9 +17,12 @@ import com.yond.blog.util.comment.channel.CommentNotifyChannel;
 import com.yond.blog.web.blog.view.dto.Comment;
 import com.yond.blog.web.blog.view.vo.FriendInfo;
 import com.yond.common.constant.PageConstant;
+import com.yond.common.constant.SiteSettingConstant;
 import com.yond.common.enums.CommentOpenStateEnum;
 import com.yond.common.enums.CommentPageEnum;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,13 +47,13 @@ public class CommentUtils {
     @Autowired
     private MailUtils mailUtils;
     @Autowired
-    private AboutService aboutService;
-    @Autowired
     private FriendService friendService;
     @Autowired
     private UserService userService;
     @Autowired
     private QQAvatarCache qqAvatarCache;
+    @Resource
+    private SiteSettingService siteSettingService;
 
     private static BlogService blogService;
 
@@ -193,7 +196,8 @@ public class CommentUtils {
                 break;
             case PageConstant.ABOUT:
                 //关于我页面
-                if (!aboutService.getCommentEnabled()) {
+                String value = siteSettingService.getValue(SiteSettingConstant.COMMENT_ENABLED);
+                if (!BooleanUtils.toBoolean(value)) {
                     //页面评论已关闭
                     return CommentOpenStateEnum.CLOSE;
                 }

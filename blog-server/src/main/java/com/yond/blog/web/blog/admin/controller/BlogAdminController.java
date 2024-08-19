@@ -53,7 +53,7 @@ public class BlogAdminController {
                                                @RequestParam(defaultValue = "10") Integer pageSize) {
         String orderBy = "create_time desc";
         PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<BlogDO> pageInfo = new PageInfo<>(blogService.getListByTitleAndCategoryId(title, categoryId));
+        PageInfo<BlogDO> pageInfo = new PageInfo<>(blogService.listByTitleLikeAndCategoryId(title, categoryId));
 
         Pair<Integer, List<CategoryDO>> pair = categoryService.page(pageNum, pageSize);
         Map<String, Object> map = new HashMap<>(4);

@@ -2,8 +2,6 @@ package com.yond.blog.entity;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Description: 博客标签
@@ -16,7 +14,6 @@ public class TagDO implements Serializable {
     private Long id;
     private String name;//标签名称
     private String color;//标签颜色(与Semantic UI提供的颜色对应，可选)
-    private List<BlogDO> blogs = new ArrayList<>();//该标签下的博客文章
 
     public TagDO() {
     }
@@ -33,10 +30,6 @@ public class TagDO implements Serializable {
         return this.color;
     }
 
-    public List<BlogDO> getBlogs() {
-        return this.blogs;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -49,11 +42,12 @@ public class TagDO implements Serializable {
         this.color = color;
     }
 
-    public void setBlogs(List<BlogDO> blogs) {
-        this.blogs = blogs;
-    }
-
+    @Override
     public String toString() {
-        return "TagDO(id=" + this.getId() + ", name=" + this.getName() + ", color=" + this.getColor() + ", blogs=" + this.getBlogs() + ")";
+        return "TagDO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                '}';
     }
 }

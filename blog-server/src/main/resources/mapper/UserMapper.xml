@@ -16,21 +16,18 @@
 
     <!--按用户名查询User-->
     <select id="getByUserName" resultType="com.yond.blog.entity.UserDO">
-        select
-        <include refid="ALL_FILED"/>
+        select <include refid="ALL_FILED"/>
         from user where username=#{username} limit 1
     </select>
 
     <!--按id查询User，实际上这个User就应该是博主-->
     <select id="getById" resultType="com.yond.blog.entity.UserDO">
-        select
-        <include refid="ALL_FILED"/>
+        select <include refid="ALL_FILED"/>
         from user where id=#{id} limit 1
     </select>
 
     <select id="getByGuid" resultType="com.yond.blog.entity.UserDO">
-        select
-        <include refid="ALL_FILED"/>
+        select <include refid="ALL_FILED"/>
         from user where guid =#{guid} limit 1
     </select>
 

@@ -15,9 +15,13 @@
         <result property="userAgent" column="user_agent"/>
     </resultMap>
 
+    <sql id="Base_Column_List">
+        id, uuid, ip, ip_source, os, browser, create_time, last_time, pv
+    </sql>
+
     <!--查询访客-->
-    <select id="getVisitorListByDate" resultMap="visitor">
-        select id, uuid, ip, ip_source, os, browser, create_time, last_time, pv
+    <select id="listByDate" resultMap="visitor">
+        select <include refid="Base_Column_List"/>
         from visitor
         <where>
             <if test="startDate!=null and startDate!='' and endDate!=null and endDate!=''">
@@ -60,7 +64,7 @@
     </select>
 
     <select id="pageBy" resultMap="visitor">
-        select id, uuid, ip, ip_source, os, browser, create_time, last_time, pv
+        select <include refid="Base_Column_List"/>
         from visitor
         <include refid="pageWhere"/>
         order by create_time desc

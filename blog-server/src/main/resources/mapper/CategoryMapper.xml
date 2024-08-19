@@ -22,16 +22,6 @@
         insert into category (category_name) values (#{name})
     </insert>
 
-    <!--按id查询分类-->
-    <select id="getById" resultMap="category">
-        select <include refid="Base_Column_List"/> from category where id=#{id}
-    </select>
-
-    <!--按name查询分类-->
-    <select id="getByName" resultMap="category">
-        select <include refid="Base_Column_List"/> from category where category_name=#{name}
-    </select>
-
     <!--按id删除分类-->
     <delete id="deleteById">
         delete from category where id=#{id}

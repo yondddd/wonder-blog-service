@@ -146,7 +146,22 @@ public class OperationLogDO implements Serializable {
         this.userAgent = userAgent;
     }
 
+    @Override
     public String toString() {
-        return "OperationLogDO(id=" + this.getId() + ", username=" + this.getUsername() + ", uri=" + this.getUri() + ", method=" + this.getMethod() + ", param=" + this.getParam() + ", description=" + this.getDescription() + ", ip=" + this.getIp() + ", ipSource=" + this.getIpSource() + ", os=" + this.getOs() + ", browser=" + this.getBrowser() + ", times=" + this.getTimes() + ", createTime=" + this.getCreateTime() + ", userAgent=" + this.getUserAgent() + ")";
+        return "OperationLogDO{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", uri='" + uri + '\'' +
+                ", method='" + method + '\'' +
+                ", param='" + param + '\'' +
+                ", description='" + description + '\'' +
+                ", ip='" + ip + '\'' +
+                ", ipSource='" + ipSource + '\'' +
+                ", os='" + os + '\'' +
+                ", browser='" + browser + '\'' +
+                ", times=" + times +
+                ", createTime=" + createTime +
+                ", userAgent='" + userAgent + '\'' +
+                '}';
     }
 }

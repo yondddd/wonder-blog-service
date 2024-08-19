@@ -53,8 +53,14 @@ public class AboutDO implements Serializable {
         this.value = value;
     }
 
+    @Override
     public String toString() {
-        return "AboutDO(id=" + this.getId() + ", nameEn=" + this.getNameEn() + ", nameZh=" + this.getNameZh() + ", value=" + this.getValue() + ")";
+        return "AboutDO{" +
+                "id=" + id +
+                ", nameEn='" + nameEn + '\'' +
+                ", nameZh='" + nameZh + '\'' +
+                ", value='" + value + '\'' +
+                '}';
     }
 
 }

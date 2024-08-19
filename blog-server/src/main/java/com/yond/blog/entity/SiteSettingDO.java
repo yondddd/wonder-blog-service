@@ -63,7 +63,14 @@ public class SiteSettingDO implements Serializable {
         this.type = type;
     }
 
+    @Override
     public String toString() {
-        return "SiteSettingDO(id=" + this.getId() + ", nameEn=" + this.getNameEn() + ", nameZh=" + this.getNameZh() + ", value=" + this.getValue() + ", type=" + this.getType() + ")";
+        return "SiteSettingDO{" +
+                "id=" + id +
+                ", nameEn='" + nameEn + '\'' +
+                ", nameZh='" + nameZh + '\'' +
+                ", value='" + value + '\'' +
+                ", type=" + type +
+                '}';
     }
 }

@@ -97,7 +97,18 @@ public class ScheduleJobLogDO implements Serializable {
         this.createTime = createTime;
     }
 
+    @Override
     public String toString() {
-        return "ScheduleJobLogDO(logId=" + this.getLogId() + ", jobId=" + this.getJobId() + ", beanName=" + this.getBeanName() + ", methodName=" + this.getMethodName() + ", params=" + this.getParams() + ", status=" + this.getStatus() + ", error=" + this.getError() + ", times=" + this.getTimes() + ", createTime=" + this.getCreateTime() + ")";
+        return "ScheduleJobLogDO{" +
+                "logId=" + logId +
+                ", jobId=" + jobId +
+                ", beanName='" + beanName + '\'' +
+                ", methodName='" + methodName + '\'' +
+                ", params='" + params + '\'' +
+                ", status=" + status +
+                ", error='" + error + '\'' +
+                ", times=" + times +
+                ", createTime=" + createTime +
+                '}';
     }
 }

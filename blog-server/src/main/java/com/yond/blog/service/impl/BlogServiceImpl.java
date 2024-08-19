@@ -1,12 +1,12 @@
 package com.yond.blog.service.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yond.blog.cache.local.BlogCache;
 import com.yond.blog.cache.remote.BlogViewCache;
 import com.yond.blog.entity.BlogDO;
 import com.yond.blog.mapper.BlogMapper;
 import com.yond.blog.service.BlogService;
+import com.yond.blog.service.CategoryService;
 import com.yond.blog.service.TagService;
 import com.yond.blog.util.JacksonUtils;
 import com.yond.blog.util.markdown.MarkdownUtils;
@@ -16,15 +16,16 @@ import com.yond.blog.web.blog.view.vo.*;
 import com.yond.common.constant.BlogConstant;
 import com.yond.common.exception.NotFoundException;
 import com.yond.common.exception.PersistenceException;
+import com.yond.common.utils.page.PageUtil;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Description: 博客文章业务层实现
@@ -39,6 +40,8 @@ public class BlogServiceImpl implements BlogService {
     TagService tagService;
     @Autowired
     BlogViewCache blogViewCache;
+    @Resource
+    private CategoryService categoryService;
 
     /**
      * 项目启动时，保存所有博客的浏览量到Redis
@@ -54,69 +57,113 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<BlogDO> getListByTitleAndCategoryId(String title, Integer categoryId) {
-        return blogMapper.getListByTitleAndCategoryId(title, categoryId);
+    public List<BlogDO> listByTitleLikeAndCategoryId(String title, Integer categoryId) {
+        return this.listAll().stream()
+                .filter(x -> StringUtils.isNotBlank(title) && x.getTitle().contains(title))
+                .filter(x -> categoryId != null && categoryId.equals(x.getCategoryId()))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query) {
-        List<SearchBlog> searchBlogs = blogMapper.getSearchBlogListByQueryAndIsPublished(query);
+    public List<SearchBlog> searchPublic(String query) {
+        String lowerCase = query.toLowerCase();
+        List<BlogDO> searchBlogs = this.listAll().stream()
+                .filter(BlogDO::getPublished)
+                .filter(x -> StringUtils.isBlank(x.getPassword()))
+                .filter(x -> x.getContent().toLowerCase().contains(lowerCase))
+                .toList();
+        List<SearchBlog> result = new ArrayList<>();
         // 数据库的处理是不区分大小写的，那么这里的匹配串处理也应该不区分大小写，否则会出现不准确的结果
-        query = query.toUpperCase();
-        for (SearchBlog searchBlog : searchBlogs) {
+        for (BlogDO searchBlog : searchBlogs) {
+            SearchBlog item = new SearchBlog();
             String content = searchBlog.getContent().toUpperCase();
             int contentLength = content.length();
             int index = content.indexOf(query) - 10;
             index = Math.max(index, 0);
             int end = index + 21;//以关键字字符串为中心返回21个字
             end = Math.min(end, contentLength - 1);
-            searchBlog.setContent(searchBlog.getContent().substring(index, end));
+            item.setContent(searchBlog.getContent().substring(index, end));
+            item.setTitle(searchBlog.getTitle());
+            item.setId(searchBlog.getId());
+            result.add(item);
         }
-        return searchBlogs;
+        return result;
     }
 
     @Override
     public List<BlogDO> getIdAndTitleList() {
-        return blogMapper.getIdAndTitleList();
+        List<BlogDO> all = this.listAll();
+        all.sort(Comparator.comparing(BlogDO::getCreateTime).reversed());
+        List<BlogDO> result = new ArrayList<>();
+        for (BlogDO blogDO : all) {
+            BlogDO item = new BlogDO();
+            item.setId(blogDO.getId());
+            item.setTitle(blogDO.getTitle());
+            result.add(item);
+        }
+        return result;
     }
 
     @Override
     public List<NewBlog> getNewBlogListByIsPublished() {
-        List<NewBlog> newBlogListFromCache = BlogCache.getNewList();
-        if (newBlogListFromCache != null) {
-            return newBlogListFromCache;
+
+        List<BlogDO> collect = this.listAll()
+                .stream().filter(BlogDO::getPublished)
+                .sorted(Comparator.comparing(BlogDO::getCreateTime).reversed())
+                .toList();
+        collect = collect.subList(0, Math.min(collect.size(), BlogConstant.NEW_BLOG_PAGE_SIZE));
+        List<NewBlog> result = new ArrayList<>();
+        for (BlogDO blogDO : collect) {
+            NewBlog item = new NewBlog();
+            item.setId(blogDO.getId());
+            item.setTitle(blogDO.getTitle());
+            item.setPrivacy(StringUtils.isNotBlank(blogDO.getPassword()));
+            result.add(item);
         }
-        PageHelper.startPage(1, BlogConstant.NEW_BLOG_PAGE_SIZE);
-        List<NewBlog> newBlogList = blogMapper.getNewBlogListByIsPublished();
-        for (NewBlog newBlog : newBlogList) {
-            if (!"".equals(newBlog.getPassword())) {
-                newBlog.setPrivacy(true);
-                newBlog.setPassword("");
-            } else {
-                newBlog.setPrivacy(false);
-            }
-        }
-        BlogCache.setNewList(newBlogList);
-        return newBlogList;
+        return result;
     }
 
     @Override
     public PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum) {
-        //redis已有当前页缓存
-        PageResult<BlogInfo> pageResultFromRedis = BlogCache.getInfoByPage(pageNum);
-        if (pageResultFromRedis != null) {
-            setBlogViewsFromRedisToPageResult(pageResultFromRedis);
-            return pageResultFromRedis;
+        List<BlogDO> collect = this.listAll().stream()
+                .filter(BlogDO::getPublished)
+                .sorted(Comparator.comparing(BlogDO::getTop).reversed())
+                .sorted(Comparator.comparing(BlogDO::getCreateTime).reversed())
+                .collect(Collectors.toList());
+
+
+        List<BlogInfo> page = PageUtil.pageList(collect, pageNum, BlogConstant.PAGE_SIZE)
+                .stream().map(this::do2BlogInfo).toList();
+
+        return new PageResult<>(collect.size(), page);
+
+    }
+
+    private BlogInfo do2BlogInfo(BlogDO blogDO) {
+        BlogInfo blogInfo = new BlogInfo();
+        blogInfo.setId(blogDO.getId());
+        blogInfo.setTitle(blogDO.getTitle());
+        blogInfo.setDescription(blogDO.getDescription());
+        blogInfo.setCreateTime(blogDO.getCreateTime());
+        // 取缓存里的
+        Integer blogView = blogViewCache.getBlogView(blogDO.getId());
+        if (blogView != null) {
+            blogInfo.setViews(blogDO.getViews());
         }
-        //redis没有缓存，从数据库查询，并添加缓存
-        PageHelper.startPage(pageNum, BlogConstant.PAGE_SIZE, BlogConstant.ORDER_BY);
-        List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByIsPublished());
-        PageInfo<BlogInfo> pageInfo = new PageInfo<>(blogInfos);
-        PageResult<BlogInfo> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
-        setBlogViewsFromRedisToPageResult(pageResult);
-        //添加首页缓存
-        BlogCache.setInfoByPage(pageNum, pageResult);
-        return pageResult;
+        blogInfo.setWords(blogDO.getWords());
+        blogInfo.setReadTime(blogDO.getReadTime());
+        blogInfo.setTop(blogDO.getTop());
+        if (StringUtils.isNotBlank(blogDO.getPassword())) {
+            blogInfo.setPrivacy(true);
+            blogInfo.setPassword("");
+            blogInfo.setDescription(BlogConstant.PRIVATE_BLOG_DESCRIPTION);
+        } else {
+            blogInfo.setPrivacy(false);
+            blogInfo.setDescription(MarkdownUtils.markdownToHtmlExtensions(blogDO.getDescription()));
+        }
+        blogInfo.setCategory(categoryService.getById(blogDO.getCategoryId().longValue()));
+        blogInfo.setTags(tagService.getTagListByBlogId(blogDO.getId()));
+        return blogInfo;
     }
 
     /**
@@ -151,8 +198,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public PageResult<BlogInfo> getBlogInfoListByCategoryNameAndIsPublished(String categoryName, Integer pageNum) {
-        PageHelper.startPage(pageNum, BlogConstant.PAGE_SIZE, BlogConstant.ORDER_BY);
-        List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByCategoryNameAndIsPublished(categoryName));
+        List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByCategoryNameAndIsPublished(pageNum, BlogConstant.PAGE_SIZE, categoryName));
         PageInfo<BlogInfo> pageInfo = new PageInfo<>(blogInfos);
         PageResult<BlogInfo> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
         setBlogViewsFromRedisToPageResult(pageResult);
@@ -161,8 +207,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public PageResult<BlogInfo> getBlogInfoListByTagNameAndIsPublished(String tagName, Integer pageNum) {
-        PageHelper.startPage(pageNum, BlogConstant.PAGE_SIZE, BlogConstant.ORDER_BY);
-        List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByTagNameAndIsPublished(tagName));
+        List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByTagNameAndIsPublished(pageNum, BlogConstant.PAGE_SIZE, tagName));
         PageInfo<BlogInfo> pageInfo = new PageInfo<>(blogInfos);
         PageResult<BlogInfo> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
         setBlogViewsFromRedisToPageResult(pageResult);
@@ -404,12 +449,17 @@ public class BlogServiceImpl implements BlogService {
         return blogMapper.getCategoryBlogCountList();
     }
 
+    @Override
+    public List<BlogDO> listAll() {
+        return blogMapper.listAll();
+    }
+
     /**
      * 删除首页缓存、最新推荐缓存、归档页面缓存、博客浏览量缓存
      */
     private void deleteBlogRedisCache() {
+        BlogCache.delAllBlogs();
         BlogCache.delInfo();
-        BlogCache.delNew();
         BlogCache.delBlogGroup();
     }
 }

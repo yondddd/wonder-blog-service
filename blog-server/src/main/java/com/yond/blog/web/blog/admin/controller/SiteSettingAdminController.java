@@ -3,6 +3,7 @@ package com.yond.blog.web.blog.admin.controller;
 import com.yond.blog.entity.SiteSettingDO;
 import com.yond.blog.service.SiteSettingService;
 import com.yond.common.annotation.OperationLogger;
+import com.yond.common.constant.SiteSettingConstant;
 import com.yond.common.resp.Response;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class SiteSettingAdminController {
      */
     @GetMapping("/siteSettings")
     public Response<Map<String, List<SiteSettingDO>>> siteSettings() {
-        Map<String, List<SiteSettingDO>> typeMap = siteSettingService.getList();
+        Map<String, List<SiteSettingDO>> typeMap = siteSettingService.getListForAdmin();
         return Response.success(typeMap);
     }
 
@@ -58,7 +59,8 @@ public class SiteSettingAdminController {
      */
     @GetMapping("/webTitleSuffix")
     public Response<String> getWebTitleSuffix() {
-        return Response.success(siteSettingService.getWebTitleSuffix());
+        String value = siteSettingService.getValue(SiteSettingConstant.WEB_TITLE_SUFFIX);
+        return Response.success(value);
     }
 
 }

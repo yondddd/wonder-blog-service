@@ -33,10 +33,10 @@ public class VisitorServiceImpl implements VisitorService {
     VisitCache visitCache;
 
     @Override
-    public List<VisitorDO> getVisitorListByDate(String startDate, String endDate) {
-        return visitorMapper.getVisitorListByDate(startDate, endDate);
+    public List<VisitorDO> listByDate(String startDate, String endDate) {
+        return visitorMapper.listByDate(startDate, endDate);
     }
-    
+
     @Override
     public Pair<Integer, List<VisitorDO>> page(Integer pageNo, Integer pageSize, Date startDate, Date endDate) {
         Integer count = visitorMapper.countBy(startDate, endDate);

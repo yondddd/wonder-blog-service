@@ -40,7 +40,7 @@ public class IndexController {
      */
     @GetMapping("/view/site")
     public Response site() {
-        Map<String, Object> map = siteSettingService.getSiteInfo();
+        Map<String, Object> map = siteSettingService.getSiteInfoForView();
         List<NewBlog> newBlogList = blogService.getNewBlogListByIsPublished();
         List<CategoryDO> categoryList = categoryService.listAll();
         List<TagDO> tagList = tagService.getTagListNotId();

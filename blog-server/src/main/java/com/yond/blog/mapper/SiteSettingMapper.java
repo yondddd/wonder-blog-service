@@ -1,8 +1,8 @@
 package com.yond.blog.mapper;
 
+import com.yond.blog.entity.SiteSettingDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.blog.entity.SiteSettingDO;
 
 import java.util.List;
 
@@ -14,19 +14,14 @@ import java.util.List;
 @Mapper
 @Repository
 public interface SiteSettingMapper {
-	List<SiteSettingDO> getList();
 
-	List<SiteSettingDO> getFriendInfo();
+    List<SiteSettingDO> listAll();
 
-	String getWebTitleSuffix();
+    int insert(SiteSettingDO siteSetting);
 
-	int updateSiteSetting(SiteSettingDO siteSetting);
+    int update(SiteSettingDO siteSetting);
 
-	int deleteSiteSettingById(Integer id);
+    int deleteById(Integer id);
 
-	int saveSiteSetting(SiteSettingDO siteSetting);
 
-	int updateFriendInfoContent(String content);
-
-	int updateFriendInfoCommentEnabled(Boolean commentEnabled);
 }

@@ -20,10 +20,6 @@ public class BlogConstant {
      */
     public static final int PAGE_SIZE = 5;
     /**
-     * 博客简介列表排序方式
-     */
-    public static final String ORDER_BY = "is_top desc, create_time desc";
-    /**
      * 私密博客提示
      */
     public static final String PRIVATE_BLOG_DESCRIPTION = "此文章受密码保护！";

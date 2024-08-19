@@ -117,7 +117,19 @@ public class LoginLogDO implements Serializable {
         this.userAgent = userAgent;
     }
 
+    @Override
     public String toString() {
-        return "LoginLogDO(id=" + this.getId() + ", username=" + this.getUsername() + ", ip=" + this.getIp() + ", ipSource=" + this.getIpSource() + ", os=" + this.getOs() + ", browser=" + this.getBrowser() + ", status=" + this.getStatus() + ", description=" + this.getDescription() + ", createTime=" + this.getCreateTime() + ", userAgent=" + this.getUserAgent() + ")";
+        return "LoginLogDO{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", ip='" + ip + '\'' +
+                ", ipSource='" + ipSource + '\'' +
+                ", os='" + os + '\'' +
+                ", browser='" + browser + '\'' +
+                ", status=" + status +
+                ", description='" + description + '\'' +
+                ", createTime=" + createTime +
+                ", userAgent='" + userAgent + '\'' +
+                '}';
     }
 }

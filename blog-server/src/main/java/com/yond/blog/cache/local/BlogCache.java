@@ -1,8 +1,8 @@
 package com.yond.blog.cache.local;
 
 import com.github.benmanes.caffeine.cache.Cache;
+import com.yond.blog.entity.BlogDO;
 import com.yond.blog.web.blog.view.vo.BlogInfo;
-import com.yond.blog.web.blog.view.vo.NewBlog;
 import com.yond.blog.web.blog.view.vo.PageResult;
 
 import java.util.List;
@@ -57,27 +57,22 @@ public class BlogCache {
         return BLOG_INFO_KEY + page;
     }
 
+    // 全部文章缓存
 
-    // 最新推荐文章
+    private final static String BLOG_ALL_KEY = "ALL";
 
-    private final static String NEW_BLOG_KEY = "newBlog";
+    private final static Cache<String, List<BlogDO>> allCache = LocalCache.buildCache(1);
 
-    private final static Cache<String, List<NewBlog>> NEW_BLOG_CACHE = LocalCache.buildCache(1);
-
-    public static void delNew() {
-        NEW_BLOG_CACHE.invalidateAll();
+    public static List<BlogDO> listAll() {
+        return allCache.getIfPresent(BLOG_ALL_KEY);
     }
 
-    public static List<NewBlog> getNewList() {
-        return NEW_BLOG_CACHE.getIfPresent(getNewBlogKey());
+    public static void setAllBlogs(List<BlogDO> blogs) {
+        allCache.put(BLOG_ALL_KEY, blogs);
     }
 
-    public static void setNewList(List<NewBlog> list) {
-        NEW_BLOG_CACHE.put(getNewBlogKey(), list);
-    }
-
-    private static String getNewBlogKey() {
-        return NEW_BLOG_KEY;
+    public static void delAllBlogs() {
+        allCache.invalidateAll();
     }
 
 }

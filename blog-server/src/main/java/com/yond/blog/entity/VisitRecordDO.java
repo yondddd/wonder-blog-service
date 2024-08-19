@@ -57,7 +57,13 @@ public class VisitRecordDO implements Serializable {
         this.date = date;
     }
 
+    @Override
     public String toString() {
-        return "VisitRecordDO(id=" + this.getId() + ", pv=" + this.getPv() + ", uv=" + this.getUv() + ", date=" + this.getDate() + ")";
+        return "VisitRecordDO{" +
+                "id=" + id +
+                ", pv=" + pv +
+                ", uv=" + uv +
+                ", date='" + date + '\'' +
+                '}';
     }
 }

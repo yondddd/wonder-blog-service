@@ -107,7 +107,19 @@ public class UserDO {
         this.role = role;
     }
 
+    @Override
     public String toString() {
-        return "UserDO(id=" + this.getId() + ", guid=" + this.getGuid() + ", username=" + this.getUsername() + ", password=" + this.getPassword() + ", nickname=" + this.getNickname() + ", avatar=" + this.getAvatar() + ", email=" + this.getEmail() + ", createTime=" + this.getCreateTime() + ", updateTime=" + this.getUpdateTime() + ", role=" + this.getRole() + ")";
+        return "UserDO{" +
+                "id=" + id +
+                ", guid='" + guid + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", email='" + email + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", role='" + role + '\'' +
+                '}';
     }
 }

@@ -63,7 +63,14 @@ public class MomentDO implements Serializable {
         this.published = published;
     }
 
+    @Override
     public String toString() {
-        return "MomentDO(id=" + this.getId() + ", content=" + this.getContent() + ", createTime=" + this.getCreateTime() + ", likes=" + this.getLikes() + ", published=" + this.getPublished() + ")";
+        return "MomentDO{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", createTime=" + createTime +
+                ", likes=" + likes +
+                ", published=" + published +
+                '}';
     }
 }

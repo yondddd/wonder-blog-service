@@ -17,7 +17,8 @@ import java.util.List;
 @Mapper
 @Repository
 public interface VisitorMapper {
-    List<VisitorDO> getVisitorListByDate(String startDate, String endDate);
+
+    List<VisitorDO> listByDate(String startDate, String endDate);
 
     List<String> getNewVisitorIpSourceByYesterday();
 

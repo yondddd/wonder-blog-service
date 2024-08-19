@@ -167,7 +167,25 @@ public class CommentDO implements Serializable {
         this.replyComments = replyComments;
     }
 
+    @Override
     public String toString() {
-        return "CommentDO(id=" + this.getId() + ", nickname=" + this.getNickname() + ", email=" + this.getEmail() + ", content=" + this.getContent() + ", avatar=" + this.getAvatar() + ", createTime=" + this.getCreateTime() + ", website=" + this.getWebsite() + ", ip=" + this.getIp() + ", published=" + this.getPublished() + ", adminComment=" + this.getAdminComment() + ", page=" + this.getPage() + ", notice=" + this.getNotice() + ", parentCommentId=" + this.getParentCommentId() + ", qq=" + this.getQq() + ", blog=" + this.getBlog() + ", replyComments=" + this.getReplyComments() + ")";
+        return "CommentDO{" +
+                "id=" + id +
+                ", nickname='" + nickname + '\'' +
+                ", email='" + email + '\'' +
+                ", content='" + content + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", createTime=" + createTime +
+                ", website='" + website + '\'' +
+                ", ip='" + ip + '\'' +
+                ", published=" + published +
+                ", adminComment=" + adminComment +
+                ", page=" + page +
+                ", notice=" + notice +
+                ", parentCommentId=" + parentCommentId +
+                ", qq='" + qq + '\'' +
+                ", blog=" + blog +
+                ", replyComments=" + replyComments +
+                '}';
     }
 }

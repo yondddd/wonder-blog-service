@@ -132,7 +132,7 @@ public class BlogController {
         if (StringUtils.isBlank(query) || MyStringUtils.hasSpecialChar(query) || query.trim().length() > 20) {
             return Response.failure("参数错误");
         }
-        List<SearchBlog> searchBlogs = blogService.getSearchBlogListByQueryAndIsPublished(query.trim());
+        List<SearchBlog> searchBlogs = blogService.searchPublic(query.trim());
         return Response.ok("获取成功", searchBlogs);
     }
 }

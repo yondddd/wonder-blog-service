@@ -46,7 +46,11 @@ public class CityVisitorDO implements Serializable {
         this.uv = uv;
     }
 
+    @Override
     public String toString() {
-        return "CityVisitorDO(city=" + this.getCity() + ", uv=" + this.getUv() + ")";
+        return "CityVisitorDO{" +
+                "city='" + city + '\'' +
+                ", uv=" + uv +
+                '}';
     }
 }

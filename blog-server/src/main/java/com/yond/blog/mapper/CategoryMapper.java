@@ -19,10 +19,6 @@ public interface CategoryMapper {
 
     int save(CategoryDO category);
 
-    CategoryDO getById(Long id);
-
-    CategoryDO getByName(String name);
-
     int deleteById(Long id);
 
     int update(CategoryDO category);

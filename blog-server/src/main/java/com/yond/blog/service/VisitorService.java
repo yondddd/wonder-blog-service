@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface VisitorService {
 
-    List<VisitorDO> getVisitorListByDate(String startDate, String endDate);
+    List<VisitorDO> listByDate(String startDate, String endDate);
 
     Pair<Integer, List<VisitorDO>> page(Integer pageNo, Integer pageSize, Date startDate, Date endDate);
 

@@ -1,14 +1,16 @@
 package com.yond.blog.service.impl;
 
 import com.yond.blog.cache.local.FriendCache;
-import com.yond.common.exception.PersistenceException;
 import com.yond.blog.entity.FriendDO;
 import com.yond.blog.entity.SiteSettingDO;
 import com.yond.blog.mapper.FriendMapper;
-import com.yond.blog.web.blog.view.vo.FriendInfo;
 import com.yond.blog.service.FriendService;
 import com.yond.blog.service.SiteSettingService;
 import com.yond.blog.util.markdown.MarkdownUtils;
+import com.yond.blog.web.blog.view.vo.FriendInfo;
+import com.yond.common.constant.SiteSettingConstant;
+import com.yond.common.enums.SiteSettingTypeEnum;
+import com.yond.common.exception.PersistenceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,7 +93,8 @@ public class FriendServiceImpl implements FriendService {
                 return friendInfo;
             }
         }
-        List<SiteSettingDO> siteSettings = siteSettingService.getFriendInfo();
+        List<SiteSettingDO> siteSettings = siteSettingService.listAll()
+                .stream().filter(x -> SiteSettingTypeEnum.FRIEND.getVal().equals(x.getType())).toList();
         FriendInfo friendInfo = new FriendInfo();
         for (SiteSettingDO siteSetting : siteSettings) {
             if ("friendContent".equals(siteSetting.getNameEn())) {
@@ -113,18 +116,14 @@ public class FriendServiceImpl implements FriendService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateFriendInfoContent(String content) {
-        if (siteSettingService.updateFriendInfoContent(content) != 1) {
-            throw new PersistenceException("修改失败");
-        }
+        siteSettingService.updateValue(SiteSettingConstant.FRIEND_CONTENT, content);
         deleteFriendInfoRedisCache();
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateFriendInfoCommentEnabled(Boolean commentEnabled) {
-        if (siteSettingService.updateFriendInfoCommentEnabled(commentEnabled) != 1) {
-            throw new PersistenceException("修改失败");
-        }
+        siteSettingService.updateValue(SiteSettingConstant.FRIEND_COMMENT_ENABLED, commentEnabled.toString());
         deleteFriendInfoRedisCache();
     }
 

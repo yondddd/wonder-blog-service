@@ -136,7 +136,21 @@ public class ExceptionLogDO implements Serializable {
         this.userAgent = userAgent;
     }
 
+    @Override
     public String toString() {
-        return "ExceptionLogDO(id=" + this.getId() + ", uri=" + this.getUri() + ", method=" + this.getMethod() + ", param=" + this.getParam() + ", description=" + this.getDescription() + ", error=" + this.getError() + ", ip=" + this.getIp() + ", ipSource=" + this.getIpSource() + ", os=" + this.getOs() + ", browser=" + this.getBrowser() + ", createTime=" + this.getCreateTime() + ", userAgent=" + this.getUserAgent() + ")";
+        return "ExceptionLogDO{" +
+                "id=" + id +
+                ", uri='" + uri + '\'' +
+                ", method='" + method + '\'' +
+                ", param='" + param + '\'' +
+                ", description='" + description + '\'' +
+                ", error='" + error + '\'' +
+                ", ip='" + ip + '\'' +
+                ", ipSource='" + ipSource + '\'' +
+                ", os='" + os + '\'' +
+                ", browser='" + browser + '\'' +
+                ", createTime=" + createTime +
+                ", userAgent='" + userAgent + '\'' +
+                '}';
     }
 }

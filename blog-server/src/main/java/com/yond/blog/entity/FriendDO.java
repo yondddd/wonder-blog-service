@@ -90,7 +90,17 @@ public class FriendDO implements Serializable {
         this.createTime = createTime;
     }
 
+    @Override
     public String toString() {
-        return "FriendDO(id=" + this.getId() + ", nickname=" + this.getNickname() + ", description=" + this.getDescription() + ", website=" + this.getWebsite() + ", avatar=" + this.getAvatar() + ", published=" + this.getPublished() + ", views=" + this.getViews() + ", createTime=" + this.getCreateTime() + ")";
+        return "FriendDO{" +
+                "id=" + id +
+                ", nickname='" + nickname + '\'' +
+                ", description='" + description + '\'' +
+                ", website='" + website + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", published=" + published +
+                ", views=" + views +
+                ", createTime=" + createTime +
+                '}';
     }
 }

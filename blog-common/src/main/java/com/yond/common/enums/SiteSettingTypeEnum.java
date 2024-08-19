@@ -5,7 +5,7 @@ package com.yond.common.enums;
  * @date 7/21/2024
  * @description
  */
-public enum SiteSettingEnum {
+public enum SiteSettingTypeEnum {
 
     BLOG_INFO(1, "博客信息"),
 
@@ -13,13 +13,17 @@ public enum SiteSettingEnum {
 
     BOTTOM_BADGE(3, "底部徽标"),
 
-    THIRD_PARTY_KEY(4, "第三方服务key"),
+    FRIEND(4, "友链信息"),
+
+    THIRD_PARTY_KEY(5, "第三方服务key"),
+
+    ABOUT(6, "about"),
     ;
 
     private final int val;
     private final String desc;
 
-    SiteSettingEnum(int val, String desc) {
+    SiteSettingTypeEnum(int val, String desc) {
         this.val = val;
         this.desc = desc;
     }
@@ -30,5 +34,14 @@ public enum SiteSettingEnum {
 
     public String getDesc() {
         return desc;
+    }
+
+    public static SiteSettingTypeEnum getEnum(int val) {
+        for (SiteSettingTypeEnum item : SiteSettingTypeEnum.values()) {
+            if (item.getVal() == val) {
+                return item;
+            }
+        }
+        return null;
     }
 }

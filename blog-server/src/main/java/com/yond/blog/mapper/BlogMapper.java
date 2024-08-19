@@ -1,17 +1,12 @@
 package com.yond.blog.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 import com.yond.blog.entity.BlogDO;
 import com.yond.blog.web.blog.view.dto.BlogView;
 import com.yond.blog.web.blog.view.dto.BlogVisibility;
-import com.yond.blog.web.blog.view.vo.ArchiveBlog;
-import com.yond.blog.web.blog.view.vo.BlogDetail;
-import com.yond.blog.web.blog.view.vo.BlogInfo;
-import com.yond.blog.web.blog.view.vo.CategoryBlogCount;
-import com.yond.blog.web.blog.view.vo.NewBlog;
-import com.yond.blog.web.blog.view.vo.RandomBlog;
-import com.yond.blog.web.blog.view.vo.SearchBlog;
+import com.yond.blog.web.blog.view.vo.*;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -23,65 +18,64 @@ import java.util.List;
 @Mapper
 @Repository
 public interface BlogMapper {
-	List<BlogDO> getListByTitleAndCategoryId(String title, Integer categoryId);
 
-	List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query);
+    List<BlogDO> listAll();
 
-	List<BlogDO> getIdAndTitleList();
+    List<BlogDO> getIdAndTitleList();
 
-	List<NewBlog> getNewBlogListByIsPublished();
+    List<NewBlog> getNewBlogListByIsPublished(@Param("limit") Integer limit);
 
-	List<BlogInfo> getBlogInfoListByIsPublished();
+    List<BlogInfo> getBlogInfoListByIsPublished(@Param("pageNo") Integer pageNo, @Param("pageSize") Integer pageSize);
 
-	List<BlogInfo> getBlogInfoListByCategoryNameAndIsPublished(String categoryName);
+    List<BlogInfo> getBlogInfoListByCategoryNameAndIsPublished(@Param("pageNo") Integer pageNo, @Param("pageSize") Integer pageSize, @Param("categoryName") String categoryName);
 
-	List<BlogInfo> getBlogInfoListByTagNameAndIsPublished(String tagName);
+    List<BlogInfo> getBlogInfoListByTagNameAndIsPublished(@Param("pageNo") Integer pageNo, @Param("pageSize") Integer pageSize, @Param("tagName") String tagName);
 
-	List<String> getGroupYearMonthByIsPublished();
+    List<String> getGroupYearMonthByIsPublished();
 
-	List<ArchiveBlog> getArchiveBlogListByYearMonthAndIsPublished(String yearMonth);
+    List<ArchiveBlog> getArchiveBlogListByYearMonthAndIsPublished(String yearMonth);
 
-	List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend(Integer limitNum);
+    List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend(Integer limitNum);
 
-	List<BlogView> getBlogViewsList();
+    List<BlogView> getBlogViewsList();
 
-	int deleteBlogById(Long id);
+    int deleteBlogById(Long id);
 
-	int deleteBlogTagByBlogId(Long blogId);
+    int deleteBlogTagByBlogId(Long blogId);
 
-	int saveBlog(com.yond.blog.web.blog.view.dto.Blog blog);
+    int saveBlog(com.yond.blog.web.blog.view.dto.Blog blog);
 
-	int saveBlogTag(Long blogId, Long tagId);
+    int saveBlogTag(Long blogId, Long tagId);
 
-	int updateBlogRecommendById(Long blogId, Boolean recommend);
+    int updateBlogRecommendById(Long blogId, Boolean recommend);
 
-	int updateBlogVisibilityById(Long blogId, BlogVisibility bv);
+    int updateBlogVisibilityById(Long blogId, BlogVisibility bv);
 
-	int updateBlogTopById(Long blogId, Boolean top);
+    int updateBlogTopById(Long blogId, Boolean top);
 
-	int updateViews(Long blogId, Integer views);
+    int updateViews(Long blogId, Integer views);
 
-	BlogDO getBlogById(Long id);
+    BlogDO getBlogById(Long id);
 
-	String getTitleByBlogId(Long id);
+    String getTitleByBlogId(Long id);
 
-	BlogDetail getBlogByIdAndIsPublished(Long id);
+    BlogDetail getBlogByIdAndIsPublished(Long id);
 
-	String getBlogPassword(Long blogId);
+    String getBlogPassword(Long blogId);
 
-	int updateBlog(com.yond.blog.web.blog.view.dto.Blog blog);
+    int updateBlog(com.yond.blog.web.blog.view.dto.Blog blog);
 
-	int countBlog();
+    int countBlog();
 
-	int countBlogByIsPublished();
+    int countBlogByIsPublished();
 
-	int countBlogByCategoryId(Long categoryId);
+    int countBlogByCategoryId(Long categoryId);
 
-	int countBlogByTagId(Long tagId);
+    int countBlogByTagId(Long tagId);
 
-	Boolean getCommentEnabledByBlogId(Long blogId);
+    Boolean getCommentEnabledByBlogId(Long blogId);
 
-	Boolean getPublishedByBlogId(Long blogId);
+    Boolean getPublishedByBlogId(Long blogId);
 
-	List<CategoryBlogCount> getCategoryBlogCountList();
+    List<CategoryBlogCount> getCategoryBlogCountList();
 }

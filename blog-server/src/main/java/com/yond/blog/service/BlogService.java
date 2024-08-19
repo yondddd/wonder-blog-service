@@ -9,9 +9,9 @@ import java.util.Map;
 
 public interface BlogService {
 
-    List<BlogDO> getListByTitleAndCategoryId(String title, Integer categoryId);
+    List<BlogDO> listByTitleLikeAndCategoryId(String title, Integer categoryId);
 
-    List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query);
+    List<SearchBlog> searchPublic(String query);
 
     List<BlogDO> getIdAndTitleList();
 
@@ -68,4 +68,6 @@ public interface BlogService {
     int countBlog();
 
     List<CategoryBlogCount> getCategoryBlogCountList();
+
+    List<BlogDO> listAll();
 }

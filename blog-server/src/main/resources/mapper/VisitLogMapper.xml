@@ -20,10 +20,14 @@
         <result property="userAgent" column="user_agent"/>
     </resultMap>
 
+    <sql id="Base_Column_List">
+        id, uuid, uri, `method`, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time
+    </sql>
+
     <!--查询日志-->
     <select id="getVisitLogListByUUIDAndDate" resultMap="log">
         <bind name="uuidPattern" value="'%' + uuid + '%'"/>
-        select id, uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time
+        select <include refid="Base_Column_List"/>
         from visit_log
         <where>
             <if test="uuid!=null and uuid!=''">

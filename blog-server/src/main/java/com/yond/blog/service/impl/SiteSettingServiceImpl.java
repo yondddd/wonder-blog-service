@@ -12,6 +12,7 @@ import com.yond.blog.web.blog.view.vo.Copyright;
 import com.yond.blog.web.blog.view.vo.Favorite;
 import com.yond.blog.web.blog.view.vo.Introduction;
 import com.yond.common.constant.SiteSettingConstant;
+import com.yond.common.enums.SiteSettingTypeEnum;
 import com.yond.common.exception.PersistenceException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @Description: 站点设置业务层实现
@@ -48,20 +50,21 @@ public class SiteSettingServiceImpl implements SiteSettingService, InitializingB
     }
 
     @Override
-    public Map<String, List<SiteSettingDO>> getList() {
+    public Map<String, List<SiteSettingDO>> getListForAdmin() {
         List<SiteSettingDO> siteSettings = this.listAll();
         List<SiteSettingDO> type1 = new ArrayList<>();
         List<SiteSettingDO> type2 = new ArrayList<>();
         List<SiteSettingDO> type3 = new ArrayList<>();
         for (SiteSettingDO s : siteSettings) {
-            switch (s.getType()) {
-                case 1:
+            SiteSettingTypeEnum typeEnum = SiteSettingTypeEnum.getEnum(s.getType());
+            switch (typeEnum) {
+                case SiteSettingTypeEnum.BLOG_INFO:
                     type1.add(s);
                     break;
-                case 2:
+                case SiteSettingTypeEnum.PERSON_INFO:
                     type2.add(s);
                     break;
-                case 3:
+                case SiteSettingTypeEnum.BOTTOM_BADGE:
                     type3.add(s);
                     break;
                 default:
@@ -76,7 +79,7 @@ public class SiteSettingServiceImpl implements SiteSettingService, InitializingB
     }
 
     @Override
-    public Map<String, Object> getSiteInfo() {
+    public Map<String, Object> getSiteInfoForView() {
         List<SiteSettingDO> siteSettings = this.listAll();
         Map<String, Object> siteInfo = new HashMap<>(2);
         List<Badge> badges = new ArrayList<>();
@@ -84,8 +87,9 @@ public class SiteSettingServiceImpl implements SiteSettingService, InitializingB
         List<Favorite> favorites = new ArrayList<>();
         List<String> rollTexts = new ArrayList<>();
         for (SiteSettingDO s : siteSettings) {
-            switch (s.getType()) {
-                case 1:
+            SiteSettingTypeEnum typeEnum = SiteSettingTypeEnum.getEnum(s.getType());
+            switch (typeEnum) {
+                case SiteSettingTypeEnum.BLOG_INFO:
                     if (SiteSettingConstant.COPYRIGHT.equals(s.getNameEn())) {
                         Copyright copyright = JacksonUtils.readValue(s.getValue(), Copyright.class);
                         siteInfo.put(s.getNameEn(), copyright);
@@ -93,7 +97,7 @@ public class SiteSettingServiceImpl implements SiteSettingService, InitializingB
                         siteInfo.put(s.getNameEn(), s.getValue());
                     }
                     break;
-                case 2:
+                case SiteSettingTypeEnum.PERSON_INFO:
                     switch (s.getNameEn()) {
                         case SiteSettingConstant.AVATAR:
                             introduction.setAvatar(s.getValue());
@@ -133,7 +137,7 @@ public class SiteSettingServiceImpl implements SiteSettingService, InitializingB
                             break;
                     }
                     break;
-                case 3:
+                case SiteSettingTypeEnum.BOTTOM_BADGE:
                     Badge badge = JacksonUtils.readValue(s.getValue(), Badge.class);
                     badges.add(badge);
                     break;
@@ -150,9 +154,30 @@ public class SiteSettingServiceImpl implements SiteSettingService, InitializingB
         return map;
     }
 
+
     @Override
-    public String getWebTitleSuffix() {
-        return siteSettingMapper.getWebTitleSuffix();
+    public String getValue(String key) {
+        SiteSettingDO exist = this.listAll()
+                .stream().filter(x -> key.equals(x.getNameEn()))
+                .findFirst()
+                .orElse(null);
+        if (exist != null) {
+            return exist.getValue();
+        }
+        return null;
+    }
+
+    @Override
+    public void updateValue(String key, String value) {
+        SiteSettingDO exist = this.listAll()
+                .stream().filter(x -> key.equals(x.getNameEn()))
+                .findFirst()
+                .orElse(null);
+        if (exist == null) {
+            throw new RuntimeException(key + "不存在");
+        }
+        exist.setValue(value);
+        this.updateOneSiteSetting(exist);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -176,46 +201,40 @@ public class SiteSettingServiceImpl implements SiteSettingService, InitializingB
     }
 
     @Override
-    public List<SiteSettingDO> getFriendInfo() {
-        return siteSettingMapper.getFriendInfo();
-    }
-
-    @Override
-    public int updateFriendInfoContent(String content) {
-        return siteSettingMapper.updateFriendInfoContent(content);
-    }
-
-    @Override
-    public int updateFriendInfoCommentEnabled(Boolean commentEnabled) {
-        return siteSettingMapper.updateFriendInfoCommentEnabled(commentEnabled);
+    public List<SiteSettingDO> listByType(SiteSettingTypeEnum typeEnum) {
+        return this.listAll().stream()
+                .filter(x -> typeEnum.getVal().equals(x.getType())).collect(Collectors.toList());
     }
 
     @Override
     public List<SiteSettingDO> listAll() {
         List<SiteSettingDO> siteSettings = SiteSettingCache.get();
         if (siteSettings == null) {
-            siteSettings = siteSettingMapper.getList();
+            siteSettings = siteSettingMapper.listAll();
             SiteSettingCache.set(siteSettings);
         }
         return siteSettings;
     }
 
-    public void saveOneSiteSetting(SiteSettingDO siteSetting) {
-        if (siteSettingMapper.saveSiteSetting(siteSetting) != 1) {
+    private void saveOneSiteSetting(SiteSettingDO siteSetting) {
+        if (siteSettingMapper.insert(siteSetting) != 1) {
             throw new PersistenceException("配置添加失败");
         }
+        this.deleteSiteInfoRedisCache();
     }
 
-    public void updateOneSiteSetting(SiteSettingDO siteSetting) {
-        if (siteSettingMapper.updateSiteSetting(siteSetting) != 1) {
+    private void updateOneSiteSetting(SiteSettingDO siteSetting) {
+        if (siteSettingMapper.update(siteSetting) != 1) {
             throw new PersistenceException("配置修改失败");
         }
+        this.deleteSiteInfoRedisCache();
     }
 
-    public void deleteOneSiteSettingById(Integer id) {
-        if (siteSettingMapper.deleteSiteSettingById(id) != 1) {
+    private void deleteOneSiteSettingById(Integer id) {
+        if (siteSettingMapper.deleteById(id) != 1) {
             throw new PersistenceException("配置删除失败");
         }
+        this.deleteSiteInfoRedisCache();
     }
 
     /**

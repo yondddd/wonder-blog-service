@@ -164,7 +164,24 @@ public class VisitLogDO implements Serializable {
         this.userAgent = userAgent;
     }
 
+    @Override
     public String toString() {
-        return "VisitLogDO(id=" + this.getId() + ", uuid=" + this.getUuid() + ", uri=" + this.getUri() + ", method=" + this.getMethod() + ", param=" + this.getParam() + ", behavior=" + this.getBehavior() + ", content=" + this.getContent() + ", remark=" + this.getRemark() + ", ip=" + this.getIp() + ", ipSource=" + this.getIpSource() + ", os=" + this.getOs() + ", browser=" + this.getBrowser() + ", times=" + this.getTimes() + ", createTime=" + this.getCreateTime() + ", userAgent=" + this.getUserAgent() + ")";
+        return "VisitLogDO{" +
+                "id=" + id +
+                ", uuid='" + uuid + '\'' +
+                ", uri='" + uri + '\'' +
+                ", method='" + method + '\'' +
+                ", param='" + param + '\'' +
+                ", behavior='" + behavior + '\'' +
+                ", content='" + content + '\'' +
+                ", remark='" + remark + '\'' +
+                ", ip='" + ip + '\'' +
+                ", ipSource='" + ipSource + '\'' +
+                ", os='" + os + '\'' +
+                ", browser='" + browser + '\'' +
+                ", times=" + times +
+                ", createTime=" + createTime +
+                ", userAgent='" + userAgent + '\'' +
+                '}';
     }
 }

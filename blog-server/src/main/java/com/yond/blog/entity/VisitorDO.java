@@ -116,7 +116,19 @@ public class VisitorDO implements Serializable {
         this.userAgent = userAgent;
     }
 
+    @Override
     public String toString() {
-        return "VisitorDO(id=" + this.getId() + ", uuid=" + this.getUuid() + ", ip=" + this.getIp() + ", ipSource=" + this.getIpSource() + ", os=" + this.getOs() + ", browser=" + this.getBrowser() + ", createTime=" + this.getCreateTime() + ", lastTime=" + this.getLastTime() + ", pv=" + this.getPv() + ", userAgent=" + this.getUserAgent() + ")";
+        return "VisitorDO{" +
+                "id=" + id +
+                ", uuid='" + uuid + '\'' +
+                ", ip='" + ip + '\'' +
+                ", ipSource='" + ipSource + '\'' +
+                ", os='" + os + '\'' +
+                ", browser='" + browser + '\'' +
+                ", createTime=" + createTime +
+                ", lastTime=" + lastTime +
+                ", pv=" + pv +
+                ", userAgent='" + userAgent + '\'' +
+                '}';
     }
 }

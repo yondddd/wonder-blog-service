@@ -41,7 +41,11 @@ public class CategoryDO implements Serializable {
         this.name = name;
     }
 
+    @Override
     public String toString() {
-        return "CategoryDO(id=" + this.getId() + ", name=" + this.getName() + ")";
+        return "CategoryDO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

@@ -42,7 +42,7 @@ public class VisitorAdminController {
         }
         String orderBy = "create_time desc";
         PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<VisitorDO> pageInfo = new PageInfo<>(visitorService.getVisitorListByDate(startDate, endDate));
+        PageInfo<VisitorDO> pageInfo = new PageInfo<>(visitorService.listByDate(startDate, endDate));
         return Response.ok("请求成功", pageInfo);
     }
 
