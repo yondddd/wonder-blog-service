@@ -6,6 +6,9 @@ import com.yond.blog.web.blog.view.vo.TagBlogCount;
 import java.util.List;
 
 public interface TagService {
+
+    List<TagDO> listAll();
+
     List<TagDO> getTagList();
 
     List<TagDO> getTagListNotId();

@@ -297,7 +297,7 @@
         select category_id, count(category_id) as blog_count from blog group by category_id
     </select>
 
-    <select id="listAll" resultMap="BlogAll">
+    <select id="listAll" resultMap="blog">
         select <include refid="Base_Column_List"/>
         from blog
     </select>

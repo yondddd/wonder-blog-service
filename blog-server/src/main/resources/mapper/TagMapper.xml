@@ -8,6 +8,15 @@
         <result property="color" column="color"/>
     </resultMap>
 
+    <sql id="ALL_FILED">
+        id, tag_name, color
+    </sql>
+
+    <select id="listAll" resultMap="tag">
+        select <include refid="ALL_FILED"/>
+        from tag order by id desc
+    </select>
+
     <!--获取所有标签List-->
     <select id="getTagList" resultMap="tag">
         select id, tag_name, color from tag order by id desc
@@ -59,4 +68,6 @@
     <select id="getTagBlogCount" resultMap="tagBlogCount">
         select tag_id, count(tag_id) as blog_count from blog_tag group by tag_id
     </select>
+
+
 </mapper>

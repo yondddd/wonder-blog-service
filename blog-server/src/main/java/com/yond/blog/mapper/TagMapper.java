@@ -1,9 +1,9 @@
 package com.yond.blog.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 import com.yond.blog.entity.TagDO;
 import com.yond.blog.web.blog.view.vo.TagBlogCount;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -15,21 +15,24 @@ import java.util.List;
 @Mapper
 @Repository
 public interface TagMapper {
-	List<TagDO> getTagList();
 
-	List<TagDO> getTagListNotId();
+    List<TagDO> listAll();
 
-	List<TagDO> getTagListByBlogId(Long blogId);
+    List<TagDO> getTagList();
 
-	int saveTag(TagDO tag);
+    List<TagDO> getTagListNotId();
 
-	TagDO getTagById(Long id);
+    List<TagDO> getTagListByBlogId(Long blogId);
 
-	TagDO getTagByName(String name);
+    int saveTag(TagDO tag);
 
-	int deleteTagById(Long id);
+    TagDO getTagById(Long id);
 
-	int updateTag(TagDO tag);
+    TagDO getTagByName(String name);
 
-	List<TagBlogCount> getTagBlogCount();
+    int deleteTagById(Long id);
+
+    int updateTag(TagDO tag);
+
+    List<TagBlogCount> getTagBlogCount();
 }

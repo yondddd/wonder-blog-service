@@ -2,14 +2,15 @@ package com.yond.blog.service.impl;
 
 import com.yond.blog.cache.local.BlogCache;
 import com.yond.blog.cache.local.CategoryCache;
+import com.yond.blog.entity.CategoryDO;
+import com.yond.blog.mapper.CategoryMapper;
 import com.yond.blog.service.CategoryService;
 import com.yond.common.exception.PersistenceException;
 import com.yond.common.utils.page.PageUtil;
-import com.yond.blog.entity.CategoryDO;
-import com.yond.blog.mapper.CategoryMapper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -45,17 +46,15 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    public void save(CategoryDO category) {
-        if (categoryMapper.save(category) != 1) {
-            throw new PersistenceException("分类添加失败");
-        }
-        CategoryCache.del();
-    }
-
-    @Override
     public CategoryDO getById(Long id) {
         return this.listAll().stream()
                 .filter(x -> id.equals(x.getId())).findFirst().orElse(null);
+    }
+
+    @Override
+    public List<CategoryDO> listBtIds(List<Long> ids) {
+        return this.listAll().stream()
+                .filter(x -> new HashSet<>(ids).contains(x.getId())).toList();
     }
 
     @Override
@@ -64,10 +63,11 @@ public class CategoryServiceImpl implements CategoryService {
                 .filter(x -> name.equals(x.getName())).findFirst().orElse(null);
     }
 
+
     @Override
-    public void deleteById(Long id) {
-        if (categoryMapper.deleteById(id) != 1) {
-            throw new PersistenceException("删除分类失败");
+    public void save(CategoryDO category) {
+        if (categoryMapper.save(category) != 1) {
+            throw new PersistenceException("分类添加失败");
         }
         CategoryCache.del();
     }
@@ -81,5 +81,14 @@ public class CategoryServiceImpl implements CategoryService {
         // 修改了分类名，可能有首页文章关联了分类，也要更新首页缓存
         BlogCache.delInfo();
     }
+
+    @Override
+    public void deleteById(Long id) {
+        if (categoryMapper.deleteById(id) != 1) {
+            throw new PersistenceException("删除分类失败");
+        }
+        CategoryCache.del();
+    }
+
 
 }

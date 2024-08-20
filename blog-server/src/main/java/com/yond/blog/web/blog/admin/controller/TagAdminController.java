@@ -5,11 +5,14 @@ import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.TagDO;
 import com.yond.blog.service.BlogService;
 import com.yond.blog.service.TagService;
+import com.yond.blog.web.blog.admin.convert.TagConvert;
+import com.yond.blog.web.blog.admin.vo.TagVO;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.resp.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Description: 博客标签后台管理
@@ -17,12 +20,23 @@ import org.springframework.web.bind.annotation.*;
  * @Date: 2020-08-02
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/tag")
 public class TagAdminController {
-    @Autowired
-    BlogService blogService;
-    @Autowired
-    TagService tagService;
+
+    private final BlogService blogService;
+    private final TagService tagService;
+
+    public TagAdminController(BlogService blogService, TagService tagService) {
+        this.blogService = blogService;
+        this.tagService = tagService;
+    }
+
+    @PostMapping("listAll")
+    public Response<List<TagVO>> listAll() {
+        List<TagVO> data = tagService.listAll().stream()
+                .map(TagConvert::do2vo).toList();
+        return Response.success(data);
+    }
 
     /**
      * 获取博客标签列表

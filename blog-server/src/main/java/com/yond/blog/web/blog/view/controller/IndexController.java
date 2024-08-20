@@ -24,6 +24,7 @@ import java.util.Map;
 
 @RestController
 public class IndexController {
+
     @Autowired
     SiteSettingService siteSettingService;
     @Autowired
@@ -51,4 +52,5 @@ public class IndexController {
         map.put("randomBlogList", randomBlogList);
         return Response.ok("请求成功", map);
     }
+
 }

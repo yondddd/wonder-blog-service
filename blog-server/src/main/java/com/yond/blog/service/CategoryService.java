@@ -11,14 +11,17 @@ public interface CategoryService {
 
     List<CategoryDO> listAll();
 
-    void save(CategoryDO category);
-
     CategoryDO getById(Long id);
 
+    List<CategoryDO> listBtIds(List<Long> ids);
+    
     CategoryDO getByName(String name);
+
+    void save(CategoryDO category);
+
+    void update(CategoryDO category);
 
     void deleteById(Long id);
 
-    void update(CategoryDO category);
 
 }

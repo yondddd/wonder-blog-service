@@ -3,13 +3,14 @@ package com.yond.blog.service;
 import com.yond.blog.entity.BlogDO;
 import com.yond.blog.web.blog.view.dto.BlogVisibility;
 import com.yond.blog.web.blog.view.vo.*;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.Map;
 
 public interface BlogService {
 
-    List<BlogDO> listByTitleLikeAndCategoryId(String title, Integer categoryId);
+    Pair<Integer, List<BlogDO>> pageByTitleLikeAndCategoryId(String title, Integer categoryId, Integer pageNo, Integer pageSize);
 
     List<SearchBlog> searchPublic(String query);
 

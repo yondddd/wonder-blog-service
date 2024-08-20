@@ -1,7 +1,5 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.BlogDO;
 import com.yond.blog.entity.CategoryDO;
 import com.yond.blog.entity.TagDO;
@@ -10,8 +8,12 @@ import com.yond.blog.service.BlogService;
 import com.yond.blog.service.CategoryService;
 import com.yond.blog.service.CommentService;
 import com.yond.blog.service.TagService;
+import com.yond.blog.web.blog.admin.convert.BlogConverter;
+import com.yond.blog.web.blog.admin.req.BlogListPageReq;
+import com.yond.blog.web.blog.admin.vo.BlogListVO;
 import com.yond.blog.web.blog.view.dto.BlogVisibility;
 import com.yond.common.annotation.OperationLogger;
+import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Description: 博客文章后台管理
@@ -26,8 +29,9 @@ import java.util.*;
  * @Date: 2020-07-29
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/blog")
 public class BlogAdminController {
+
     @Autowired
     BlogService blogService;
     @Autowired
@@ -37,29 +41,18 @@ public class BlogAdminController {
     @Autowired
     CommentService commentService;
 
-    /**
-     * 获取博客文章列表
-     *
-     * @param title      按标题模糊查询
-     * @param categoryId 按分类id查询
-     * @param pageNum    页码
-     * @param pageSize   每页个数
-     * @return
-     */
-    @GetMapping("/blogs")
-    public Response<Map<String, Object>> blogs(@RequestParam(defaultValue = "") String title,
-                                               @RequestParam(defaultValue = "") Integer categoryId,
-                                               @RequestParam(defaultValue = "1") Integer pageNum,
-                                               @RequestParam(defaultValue = "10") Integer pageSize) {
-        String orderBy = "create_time desc";
-        PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<BlogDO> pageInfo = new PageInfo<>(blogService.listByTitleLikeAndCategoryId(title, categoryId));
+    @PostMapping("/page")
+    public @ResponseBody PageResponse<List<BlogListVO>> page(@RequestBody BlogListPageReq req) {
 
-        Pair<Integer, List<CategoryDO>> pair = categoryService.page(pageNum, pageSize);
-        Map<String, Object> map = new HashMap<>(4);
-        map.put("blogs", pageInfo);
-        map.put("categories", pair.getRight());
-        return Response.success(map);
+        Pair<Integer, List<BlogDO>> pair = blogService.pageByTitleLikeAndCategoryId(req.getTitle(), req.getCategoryId(),
+                req.getPageNo(), req.getPageSize());
+        List<BlogListVO> data = pair.getRight().stream().map(BlogConverter::convert).collect(Collectors.toList());
+        List<Long> categoryIds = data.stream().map(BlogListVO::getCategoryId).map(Integer::longValue).toList();
+        Map<Long, String> map = categoryService.listBtIds(categoryIds).stream().collect(Collectors.toMap(CategoryDO::getId, CategoryDO::getName, (key1, key2) -> key1));
+        for (BlogListVO item : data) {
+            item.setCategoryName(map.get(item.getCategoryId().longValue()));
+        }
+        return PageResponse.<List<BlogListVO>>custom().setData(data).setTotal(pair.getLeft()).setSuccess();
     }
 
     /**

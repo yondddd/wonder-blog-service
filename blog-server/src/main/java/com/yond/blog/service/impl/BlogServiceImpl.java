@@ -20,6 +20,7 @@ import com.yond.common.utils.page.PageUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,11 +58,13 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<BlogDO> listByTitleLikeAndCategoryId(String title, Integer categoryId) {
-        return this.listAll().stream()
-                .filter(x -> StringUtils.isNotBlank(title) && x.getTitle().contains(title))
-                .filter(x -> categoryId != null && categoryId.equals(x.getCategoryId()))
+    public Pair<Integer, List<BlogDO>> pageByTitleLikeAndCategoryId(String title, Integer categoryId, Integer pageNo, Integer pageSize) {
+        List<BlogDO> list = this.listAll().stream()
+                .filter(x -> StringUtils.isBlank(title) || x.getTitle().contains(title))
+                .filter(x -> categoryId == null || categoryId.equals(x.getCategoryId()))
+                .sorted(Comparator.comparing(BlogDO::getCreateTime).reversed())
                 .collect(Collectors.toList());
+        return Pair.of(list.size(), PageUtil.pageList(list, pageNo, pageSize));
     }
 
     @Override

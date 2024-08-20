@@ -2,12 +2,12 @@ package com.yond.blog.service.impl;
 
 import com.yond.blog.cache.local.BlogCache;
 import com.yond.blog.cache.local.TagCache;
-import com.yond.blog.service.TagService;
-import com.yond.common.exception.NotFoundException;
-import com.yond.common.exception.PersistenceException;
 import com.yond.blog.entity.TagDO;
 import com.yond.blog.mapper.TagMapper;
+import com.yond.blog.service.TagService;
 import com.yond.blog.web.blog.view.vo.TagBlogCount;
+import com.yond.common.exception.NotFoundException;
+import com.yond.common.exception.PersistenceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +25,12 @@ public class TagServiceImpl implements TagService {
 
     public TagServiceImpl(TagMapper tagMapper) {
         this.tagMapper = tagMapper;
+    }
+
+    @Override
+    public List<TagDO> listAll() {
+        List<TagDO> data = tagMapper.listAll();
+        return List.of();
     }
 
     @Override

@@ -4,14 +4,16 @@ import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.CategoryDO;
 import com.yond.blog.service.BlogService;
 import com.yond.blog.service.CategoryService;
+import com.yond.blog.web.blog.admin.convert.CategoryConverter;
+import com.yond.blog.web.blog.admin.vo.CategoryVO;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.resp.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Description: 博客分类后台管理
@@ -19,12 +21,23 @@ import java.util.List;
  * @Date: 2020-08-02
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/category")
 public class CategoryAdminController {
-    @Autowired
-    BlogService blogService;
-    @Autowired
-    CategoryService categoryService;
+
+    private final BlogService blogService;
+    private final CategoryService categoryService;
+
+    public CategoryAdminController(BlogService blogService, CategoryService categoryService) {
+        this.blogService = blogService;
+        this.categoryService = categoryService;
+    }
+
+    @GetMapping("/listAll")
+    public Response<List<CategoryVO>> listAll() {
+        List<CategoryDO> list = categoryService.listAll();
+        List<CategoryVO> data = list.stream().map(CategoryConverter::do2vo).collect(Collectors.toList());
+        return Response.success(data);
+    }
 
     /**
      * 获取博客分类列表
