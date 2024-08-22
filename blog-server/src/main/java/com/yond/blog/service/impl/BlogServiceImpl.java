@@ -11,7 +11,6 @@ import com.yond.blog.service.TagService;
 import com.yond.blog.util.JacksonUtils;
 import com.yond.blog.util.markdown.MarkdownUtils;
 import com.yond.blog.web.blog.view.dto.BlogView;
-import com.yond.blog.web.blog.view.dto.BlogVisibility;
 import com.yond.blog.web.blog.view.vo.*;
 import com.yond.common.constant.BlogConstant;
 import com.yond.common.exception.NotFoundException;
@@ -290,7 +289,7 @@ public class BlogServiceImpl implements BlogService {
         if (blogMapper.deleteBlogById(id) != 1) {
             throw new NotFoundException("该博客不存在");
         }
-        deleteBlogRedisCache();
+        deleteBlogCache();
         blogViewCache.deleteBlogView(id);
     }
 
@@ -309,7 +308,7 @@ public class BlogServiceImpl implements BlogService {
             throw new PersistenceException("添加博客失败");
         }
         blogViewCache.setBlogView(blog.getId(), 0);
-        deleteBlogRedisCache();
+        deleteBlogCache();
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -318,33 +317,6 @@ public class BlogServiceImpl implements BlogService {
         if (blogMapper.saveBlogTag(blogId, tagId) != 1) {
             throw new PersistenceException("维护博客标签关联表失败");
         }
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void updateBlogRecommendById(Long blogId, Boolean recommend) {
-        if (blogMapper.updateBlogRecommendById(blogId, recommend) != 1) {
-            throw new PersistenceException("操作失败");
-        }
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void updateBlogVisibilityById(Long blogId, BlogVisibility blogVisibility) {
-        if (blogMapper.updateBlogVisibilityById(blogId, blogVisibility) != 1) {
-            throw new PersistenceException("操作失败");
-        }
-        BlogCache.delInfo();
-        BlogCache.delBlogGroup();
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void updateBlogTopById(Long blogId, Boolean top) {
-        if (blogMapper.updateBlogTopById(blogId, top) != 1) {
-            throw new PersistenceException("操作失败");
-        }
-        BlogCache.delInfo();
     }
 
     @Override
@@ -413,7 +385,7 @@ public class BlogServiceImpl implements BlogService {
         if (blogMapper.updateBlog(blog) != 1) {
             throw new PersistenceException("更新博客失败");
         }
-        deleteBlogRedisCache();
+        deleteBlogCache();
         blogViewCache.setBlogView(blog.getId(), blog.getViews());
     }
 
@@ -457,12 +429,21 @@ public class BlogServiceImpl implements BlogService {
         return blogMapper.listAll();
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Integer updateSelective(BlogDO blog) {
+        int updated = blogMapper.updateSelective(blog);
+        this.deleteBlogCache();
+        return updated;
+    }
+
     /**
      * 删除首页缓存、最新推荐缓存、归档页面缓存、博客浏览量缓存
      */
-    private void deleteBlogRedisCache() {
+    private void deleteBlogCache() {
         BlogCache.delAllBlogs();
         BlogCache.delInfo();
         BlogCache.delBlogGroup();
     }
+
 }

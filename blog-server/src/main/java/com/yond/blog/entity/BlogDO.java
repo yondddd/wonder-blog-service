@@ -14,6 +14,10 @@ public class BlogDO implements Serializable {
     @Serial
     private static final long serialVersionUID = 5799826828777919864L;
 
+    public static BlogDO custom() {
+        return new BlogDO();
+    }
+
     private Long id;
     private Integer categoryId;
     private Integer userId;
@@ -36,148 +40,166 @@ public class BlogDO implements Serializable {
     public BlogDO() {
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public BlogDO setTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
     public Long getId() {
-        return this.id;
+        return id;
+    }
+
+    public BlogDO setId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public Integer getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public BlogDO setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
+        return this;
     }
 
     public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public BlogDO setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    public String getTitle() {
-        return this.title;
+        return this;
     }
 
     public String getFirstPicture() {
-        return this.firstPicture;
+        return firstPicture;
+    }
+
+    public BlogDO setFirstPicture(String firstPicture) {
+        this.firstPicture = firstPicture;
+        return this;
     }
 
     public String getContent() {
-        return this.content;
+        return content;
+    }
+
+    public BlogDO setContent(String content) {
+        this.content = content;
+        return this;
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
+    }
+
+    public BlogDO setDescription(String description) {
+        this.description = description;
+        return this;
     }
 
     public Boolean getPublished() {
-        return this.published;
+        return published;
+    }
+
+    public BlogDO setPublished(Boolean published) {
+        this.published = published;
+        return this;
     }
 
     public Boolean getRecommend() {
-        return this.recommend;
+        return recommend;
+    }
+
+    public BlogDO setRecommend(Boolean recommend) {
+        this.recommend = recommend;
+        return this;
     }
 
     public Boolean getAppreciation() {
-        return this.appreciation;
+        return appreciation;
+    }
+
+    public BlogDO setAppreciation(Boolean appreciation) {
+        this.appreciation = appreciation;
+        return this;
     }
 
     public Boolean getCommentEnabled() {
-        return this.commentEnabled;
+        return commentEnabled;
+    }
+
+    public BlogDO setCommentEnabled(Boolean commentEnabled) {
+        this.commentEnabled = commentEnabled;
+        return this;
     }
 
     public Boolean getTop() {
-        return this.top;
+        return top;
+    }
+
+    public BlogDO setTop(Boolean top) {
+        this.top = top;
+        return this;
     }
 
     public Date getCreateTime() {
-        return this.createTime;
+        return createTime;
+    }
+
+    public BlogDO setCreateTime(Date createTime) {
+        this.createTime = createTime;
+        return this;
     }
 
     public Date getUpdateTime() {
-        return this.updateTime;
+        return updateTime;
+    }
+
+    public BlogDO setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+        return this;
     }
 
     public Integer getViews() {
-        return this.views;
+        return views;
+    }
+
+    public BlogDO setViews(Integer views) {
+        this.views = views;
+        return this;
     }
 
     public Integer getWords() {
-        return this.words;
+        return words;
+    }
+
+    public BlogDO setWords(Integer words) {
+        this.words = words;
+        return this;
     }
 
     public Integer getReadTime() {
-        return this.readTime;
+        return readTime;
+    }
+
+    public BlogDO setReadTime(Integer readTime) {
+        this.readTime = readTime;
+        return this;
     }
 
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setFirstPicture(String firstPicture) {
-        this.firstPicture = firstPicture;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setPublished(Boolean published) {
-        this.published = published;
-    }
-
-    public void setRecommend(Boolean recommend) {
-        this.recommend = recommend;
-    }
-
-    public void setAppreciation(Boolean appreciation) {
-        this.appreciation = appreciation;
-    }
-
-    public void setCommentEnabled(Boolean commentEnabled) {
-        this.commentEnabled = commentEnabled;
-    }
-
-    public void setTop(Boolean top) {
-        this.top = top;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public void setViews(Integer views) {
-        this.views = views;
-    }
-
-    public void setWords(Integer words) {
-        this.words = words;
-    }
-
-    public void setReadTime(Integer readTime) {
-        this.readTime = readTime;
-    }
-
-    public void setPassword(String password) {
+    public BlogDO setPassword(String password) {
         this.password = password;
+        return this;
     }
 
     @Override

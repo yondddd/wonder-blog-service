@@ -9,9 +9,8 @@ import com.yond.blog.service.CategoryService;
 import com.yond.blog.service.CommentService;
 import com.yond.blog.service.TagService;
 import com.yond.blog.web.blog.admin.convert.BlogConverter;
-import com.yond.blog.web.blog.admin.req.BlogListPageReq;
+import com.yond.blog.web.blog.admin.req.*;
 import com.yond.blog.web.blog.admin.vo.BlogListVO;
-import com.yond.blog.web.blog.view.dto.BlogVisibility;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
@@ -20,7 +19,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -55,6 +57,47 @@ public class BlogAdminController {
         return PageResponse.<List<BlogListVO>>custom().setData(data).setTotal(pair.getLeft()).setSuccess();
     }
 
+    @PostMapping("/detail")
+    public Response<BlogListVO> getBlog(@RequestBody BlogDetailReq req) {
+        return Response.success(blog);
+    }
+
+    @OperationLogger("更新博客置顶状态")
+    @PostMapping("/top")
+    public Response<Boolean> top(@RequestBody BlogTopReq req) {
+        BlogDO update = BlogDO.custom()
+                .setId(req.getId())
+                .setTop(req.getTop());
+        blogService.updateSelective(update);
+        return Response.success();
+    }
+
+    @OperationLogger("更新博客推荐状态")
+    @PostMapping("/recommend")
+    public Response<Boolean> recommend(@RequestBody BlogRecommendReq req) {
+        BlogDO update = BlogDO.custom()
+                .setId(req.getId())
+                .setRecommend(req.getRecommend());
+        blogService.updateSelective(update);
+        return Response.success();
+    }
+
+    @OperationLogger("更新博客可见性状态")
+    @PostMapping("/visible")
+    public Response<Boolean> visible(@RequestBody BlogVisibleReq req) {
+        BlogDO update = BlogDO.custom()
+                .setId(req.getId())
+                .setAppreciation(req.getAppreciation())
+                .setRecommend(req.getRecommend())
+                .setCommentEnabled(req.getCommentEnabled())
+                .setTop(req.getTop())
+                .setPublished(req.getPublished())
+                .setPassword(req.getPassword());
+        blogService.updateSelective(update);
+        return Response.success();
+    }
+
+
     /**
      * 删除博客文章、删除博客文章下的所有评论、同时维护 blog_tag 表
      *
@@ -70,74 +113,6 @@ public class BlogAdminController {
         return Response.success();
     }
 
-    /**
-     * 获取分类列表和标签列表
-     *
-     * @return
-     */
-    @GetMapping("/categoryAndTag")
-    public Response<Map<String, Object>> categoryAndTag() {
-        List<CategoryDO> categories = categoryService.listAll();
-        List<TagDO> tags = tagService.getTagList();
-        Map<String, Object> map = new HashMap<>(4);
-        map.put("categories", categories);
-        map.put("tags", tags);
-        return Response.success(map);
-    }
-
-    /**
-     * 更新博客置顶状态
-     *
-     * @param id  博客id
-     * @param top 是否置顶
-     * @return
-     */
-    @OperationLogger("更新博客置顶状态")
-    @PutMapping("/blog/top")
-    public Response<Boolean> updateTop(@RequestParam Long id, @RequestParam Boolean top) {
-        blogService.updateBlogTopById(id, top);
-        return Response.success();
-    }
-
-    /**
-     * 更新博客推荐状态
-     *
-     * @param id        博客id
-     * @param recommend 是否推荐
-     * @return
-     */
-    @OperationLogger("更新博客推荐状态")
-    @PutMapping("/blog/recommend")
-    public Response<Boolean> updateRecommend(@RequestParam Long id, @RequestParam Boolean recommend) {
-        blogService.updateBlogRecommendById(id, recommend);
-        return Response.success();
-    }
-
-    /**
-     * 更新博客可见性状态
-     *
-     * @param id             博客id
-     * @param blogVisibility 博客可见性DTO
-     * @return
-     */
-    @OperationLogger("更新博客可见性状态")
-    @PutMapping("blog/{id}/visibility")
-    public Response<Boolean> updateVisibility(@PathVariable Long id, @RequestBody BlogVisibility blogVisibility) {
-        blogService.updateBlogVisibilityById(id, blogVisibility);
-        return Response.success();
-    }
-
-    /**
-     * 按id获取博客详情
-     *
-     * @param id 博客id
-     * @return
-     */
-    @GetMapping("/blog")
-    public Response<BlogDO> getBlog(@RequestParam Long id) {
-        BlogDO blog = blogService.getBlogById(id);
-        return Response.success(blog);
-    }
 
     /**
      * 保存草稿或发布新文章

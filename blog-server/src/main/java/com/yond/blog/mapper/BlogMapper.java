@@ -2,7 +2,6 @@ package com.yond.blog.mapper;
 
 import com.yond.blog.entity.BlogDO;
 import com.yond.blog.web.blog.view.dto.BlogView;
-import com.yond.blog.web.blog.view.dto.BlogVisibility;
 import com.yond.blog.web.blog.view.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,6 +19,8 @@ import java.util.List;
 public interface BlogMapper {
 
     List<BlogDO> listAll();
+
+    Integer updateSelective(BlogDO blogDO);
 
     List<BlogDO> getIdAndTitleList();
 
@@ -46,12 +47,6 @@ public interface BlogMapper {
     int saveBlog(com.yond.blog.web.blog.view.dto.Blog blog);
 
     int saveBlogTag(Long blogId, Long tagId);
-
-    int updateBlogRecommendById(Long blogId, Boolean recommend);
-
-    int updateBlogVisibilityById(Long blogId, BlogVisibility bv);
-
-    int updateBlogTopById(Long blogId, Boolean top);
 
     int updateViews(Long blogId, Integer views);
 

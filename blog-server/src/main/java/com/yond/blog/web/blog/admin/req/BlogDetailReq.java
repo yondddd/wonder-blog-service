@@ -1,17 +1,17 @@
 package com.yond.blog.web.blog.admin.req;
 
-
 import java.io.Serial;
 import java.io.Serializable;
 
 /**
  * @author yond
- * @date 8/20/2024
+ * @date 8/22/2024
  * @description
  */
-public class BlogDelReq implements Serializable {
+public class BlogDetailReq implements Serializable {
+
     @Serial
-    private static final long serialVersionUID = -8368564315154107392L;
+    private static final long serialVersionUID = 7995935245819133598L;
 
     private Long id;
 
@@ -19,13 +19,14 @@ public class BlogDelReq implements Serializable {
         return id;
     }
 
-    public void setId(Long id) {
+    public BlogDetailReq setId(Long id) {
         this.id = id;
+        return this;
     }
 
     @Override
     public String toString() {
-        return "BlogDelReq{" +
+        return "BlogDetailReq{" +
                 "id=" + id +
                 '}';
     }

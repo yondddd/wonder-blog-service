@@ -174,23 +174,6 @@
         #{top}, #{createTime}, #{updateTime}, #{views}, #{words}, #{readTime}, #{category.id}, #{user.id}, #{password})
     </insert>
 
-    <!--更新博客推荐状态-->
-    <update id="updateBlogRecommendById">
-        update blog set is_recommend=#{recommend} where id=#{blogId}
-    </update>
-
-    <!--更新博客置顶状态-->
-    <update id="updateBlogTopById">
-        update blog set is_top=#{top} where id=#{blogId}
-    </update>
-
-    <!--更新博客可见性状态-->
-    <update id="updateBlogVisibilityById">
-        update blog set is_appreciation=#{bv.appreciation}, is_recommend=#{bv.recommend}, is_comment_enabled=#{bv.commentEnabled},
-        is_top=#{bv.top}, is_published=#{bv.published}, password=#{bv.password}
-        where id=#{blogId}
-    </update>
-
     <!--更新博客阅读次数-->
     <update id="updateViews">
         update blog set views=#{views} where id=#{blogId}
@@ -301,5 +284,29 @@
         select <include refid="Base_Column_List"/>
         from blog
     </select>
+
+    <update id="updateSelective">
+        update blog
+        <set>
+            <if test="categoryId != null">category_id=#{categoryId,jdbcType=NUMERIC},</if>
+            <if test="userId != null">user_id=#{userId,jdbcType=NUMERIC},</if>
+            <if test="title != null">title=#{title,jdbcType=VARCHAR},</if>
+            <if test="firstPicture != null">first_picture=#{firstPicture,jdbcType=VARCHAR},</if>
+            <if test="content != null">content=#{content,jdbcType=VARCHAR},</if>
+            <if test="description != null">description=#{description,jdbcType=VARCHAR},</if>
+            <if test="published != null">is_published=#{published,jdbcType=BOOLEAN},</if>
+            <if test="recommend != null">is_recommend=#{recommend,jdbcType=BOOLEAN},</if>
+            <if test="appreciation != null">is_appreciation=#{appreciation,jdbcType=BOOLEAN},</if>
+            <if test="commentEnabled != null">is_comment_enabled=#{commentEnabled,jdbcType=BOOLEAN},</if>
+            <if test="top != null">is_top=#{top,jdbcType=BOOLEAN},</if>
+            <if test="createTime != null">create_time=#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null">update_time=#{updateTime,jdbcType=TIMESTAMP},</if>
+            <if test="views != null">views=#{views,jdbcType=NUMERIC},</if>
+            <if test="words != null">words=#{words,jdbcType=NUMERIC},</if>
+            <if test="readTime != null">read_time=#{readTime,jdbcType=NUMERIC},</if>
+            <if test="password != null">password=#{password,jdbcType=VARCHAR},</if>
+        </set>
+        where id = #{id,jdbcType=NUMERIC}
+    </update>
 
 </mapper>

@@ -1,7 +1,6 @@
 package com.yond.blog.service;
 
 import com.yond.blog.entity.BlogDO;
-import com.yond.blog.web.blog.view.dto.BlogVisibility;
 import com.yond.blog.web.blog.view.vo.*;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -36,12 +35,6 @@ public interface BlogService {
 
     void saveBlogTag(Long blogId, Long tagId);
 
-    void updateBlogRecommendById(Long blogId, Boolean recommend);
-
-    void updateBlogVisibilityById(Long blogId, BlogVisibility blogVisibility);
-
-    void updateBlogTopById(Long blogId, Boolean top);
-
     void updateViewsToRedis(Long blogId);
 
     void updateViews(Long blogId, Integer views);
@@ -71,4 +64,6 @@ public interface BlogService {
     List<CategoryBlogCount> getCategoryBlogCountList();
 
     List<BlogDO> listAll();
+
+    Integer updateSelective(BlogDO blog);
 }

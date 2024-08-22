@@ -32,7 +32,7 @@ public class CategoryAdminController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/listAll")
+    @PostMapping("/listAll")
     public Response<List<CategoryVO>> listAll() {
         List<CategoryDO> list = categoryService.listAll();
         List<CategoryVO> data = list.stream().map(CategoryConverter::do2vo).collect(Collectors.toList());

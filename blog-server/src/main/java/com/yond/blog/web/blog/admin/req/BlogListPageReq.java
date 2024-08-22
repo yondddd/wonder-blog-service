@@ -16,7 +16,6 @@ public class BlogListPageReq extends PageReq implements Serializable {
     private static final long serialVersionUID = -4356438509662111734L;
 
     private String title;
-
     private Integer categoryId;
 
     public String getTitle() {
