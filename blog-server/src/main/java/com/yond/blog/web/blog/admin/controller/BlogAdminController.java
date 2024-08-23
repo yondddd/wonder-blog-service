@@ -1,13 +1,7 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.yond.blog.entity.BlogDO;
-import com.yond.blog.entity.CategoryDO;
-import com.yond.blog.entity.TagDO;
-import com.yond.blog.entity.UserDO;
-import com.yond.blog.service.BlogService;
-import com.yond.blog.service.CategoryService;
-import com.yond.blog.service.CommentService;
-import com.yond.blog.service.TagService;
+import com.yond.blog.entity.*;
+import com.yond.blog.service.*;
 import com.yond.blog.web.blog.admin.convert.BlogConverter;
 import com.yond.blog.web.blog.admin.req.*;
 import com.yond.blog.web.blog.admin.vo.BlogListVO;
@@ -34,32 +28,39 @@ import java.util.stream.Collectors;
 @RequestMapping("/admin/blog")
 public class BlogAdminController {
 
-    @Autowired
-    BlogService blogService;
-    @Autowired
-    CategoryService categoryService;
-    @Autowired
-    TagService tagService;
-    @Autowired
-    CommentService commentService;
+    private final BlogService blogService;
+    private final CategoryService categoryService;
+    private final TagService tagService;
+    private final CommentService commentService;
+    private final BlogTagService blogTagService;
+
+    public BlogAdminController(BlogService blogService, CategoryService categoryService, TagService tagService, CommentService commentService, BlogTagService blogTagService) {
+        this.blogService = blogService;
+        this.categoryService = categoryService;
+        this.tagService = tagService;
+        this.commentService = commentService;
+        this.blogTagService = blogTagService;
+    }
 
     @PostMapping("/page")
     public @ResponseBody PageResponse<List<BlogListVO>> page(@RequestBody BlogListPageReq req) {
 
         Pair<Integer, List<BlogDO>> pair = blogService.pageByTitleLikeAndCategoryId(req.getTitle(), req.getCategoryId(),
                 req.getPageNo(), req.getPageSize());
-        List<BlogListVO> data = pair.getRight().stream().map(BlogConverter::convert).collect(Collectors.toList());
-        List<Long> categoryIds = data.stream().map(BlogListVO::getCategoryId).map(Integer::longValue).toList();
-        Map<Long, String> map = categoryService.listBtIds(categoryIds).stream().collect(Collectors.toMap(CategoryDO::getId, CategoryDO::getName, (key1, key2) -> key1));
-        for (BlogListVO item : data) {
-            item.setCategoryName(map.get(item.getCategoryId().longValue()));
-        }
+        List<Long> categoryIds = pair.getRight().stream().map(BlogDO::getCategoryId).map(Integer::longValue).toList();
+        Map<Long, String> map = categoryService.listByIds(categoryIds).stream()
+                .collect(Collectors.toMap(CategoryDO::getId, CategoryDO::getName, (key1, key2) -> key1));
+        List<BlogListVO> data = pair.getRight().stream().map(x -> BlogConverter.do2vo(x, map)).toList();
         return PageResponse.<List<BlogListVO>>custom().setData(data).setTotal(pair.getLeft()).setSuccess();
     }
 
     @PostMapping("/detail")
     public Response<BlogListVO> getBlog(@RequestBody BlogDetailReq req) {
-        return Response.success(blog);
+        BlogDO blog = blogService.getBlogById(req.getId());
+        CategoryDO category = categoryService.getById(blog.getCategoryId().longValue());
+        List<BlogTagDO> blogTags = blogTagService.listByBlogId(blog.getId());
+        BlogConverter.do2detail(blog,category,blogTags)
+        return Response.success(data);
     }
 
     @OperationLogger("更新博客置顶状态")

@@ -8,10 +8,13 @@ import com.yond.blog.service.TagService;
 import com.yond.blog.web.blog.view.vo.TagBlogCount;
 import com.yond.common.exception.NotFoundException;
 import com.yond.common.exception.PersistenceException;
+import com.yond.common.utils.page.PageUtil;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Description: 博客标签业务层实现
@@ -29,24 +32,24 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<TagDO> listAll() {
-        List<TagDO> data = tagMapper.listAll();
-        return List.of();
-    }
-
-    @Override
-    public List<TagDO> getTagList() {
-        return tagMapper.getTagList();
-    }
-
-    @Override
-    public List<TagDO> getTagListNotId() {
-        List<TagDO> tagListFromRedis = TagCache.get();
-        if (tagListFromRedis != null) {
-            return tagListFromRedis;
+        List<TagDO> cache = TagCache.get();
+        if (cache == null) {
+            cache = tagMapper.listAll();
+            TagCache.set(cache);
         }
-        List<TagDO> tagList = tagMapper.getTagListNotId();
-        TagCache.set(tagList);
-        return tagList;
+        return cache;
+    }
+
+    @Override
+    public List<TagDO> listByIds(List<Long> ids) {
+        return this.listAll().stream()
+                .filter(x -> Set.copyOf(ids).contains(x)).toList();
+    }
+
+    @Override
+    public Pair<Integer, List<TagDO>> page(Integer pageNo, Integer pageSize) {
+        List<TagDO> all = this.listAll();
+        return Pair.of(all.size(), PageUtil.pageList(all, pageNo, pageSize));
     }
 
     @Override

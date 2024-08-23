@@ -22,11 +22,6 @@
         select id, tag_name, color from tag order by id desc
     </select>
 
-    <!--获取所有标签List不查询id-->
-    <select id="getTagListNotId" resultMap="tag">
-        select tag_name, color from tag order by id desc
-    </select>
-
     <!--按博客id查询List-->
     <select id="getTagListByBlogId" resultMap="tag">
         select t.tag_name, t.color

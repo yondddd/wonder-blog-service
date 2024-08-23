@@ -4,9 +4,9 @@ import com.yond.blog.entity.CategoryDO;
 import com.yond.blog.entity.CityVisitorDO;
 import com.yond.blog.entity.TagDO;
 import com.yond.blog.entity.VisitRecordDO;
+import com.yond.blog.service.*;
 import com.yond.blog.web.blog.view.vo.CategoryBlogCount;
 import com.yond.blog.web.blog.view.vo.TagBlogCount;
-import com.yond.blog.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -105,7 +105,7 @@ public class DashboardServiceImpl implements DashboardService {
         //查询标签id对应的博客数量
         List<TagBlogCount> tagBlogCountList = tagService.getTagBlogCount();
         //查询所有标签的id和名称
-        List<TagDO> tagList = tagService.getTagList();
+        List<TagDO> tagList = tagService.listAll();
         //所有标签名称的List
         List<String> legend = new ArrayList<>();
         for (TagDO tag : tagList) {

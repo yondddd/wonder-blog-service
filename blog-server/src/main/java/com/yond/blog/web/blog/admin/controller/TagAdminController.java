@@ -1,15 +1,15 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.TagDO;
 import com.yond.blog.service.BlogService;
 import com.yond.blog.service.TagService;
 import com.yond.blog.web.blog.admin.convert.TagConvert;
 import com.yond.blog.web.blog.admin.vo.TagVO;
 import com.yond.common.annotation.OperationLogger;
+import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,11 +46,10 @@ public class TagAdminController {
      * @return
      */
     @GetMapping("/tags")
-    public Response tags(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
-        String orderBy = "id desc";
-        PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<TagDO> pageInfo = new PageInfo<>(tagService.getTagList());
-        return Response.ok("请求成功", pageInfo);
+    public PageResponse<List<TagVO>> tags(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
+        Pair<Integer, List<TagDO>> pair = tagService.page(pageNum, pageSize);
+        List<TagVO> data = pair.getRight().stream().map(TagConvert::do2vo).toList();
+        return PageResponse.<List<TagVO>>custom().setData(data).setTotal(pair.getLeft()).setSuccess();
     }
 
     /**

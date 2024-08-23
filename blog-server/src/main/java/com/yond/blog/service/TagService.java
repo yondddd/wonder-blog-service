@@ -2,6 +2,7 @@ package com.yond.blog.service;
 
 import com.yond.blog.entity.TagDO;
 import com.yond.blog.web.blog.view.vo.TagBlogCount;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
@@ -9,9 +10,9 @@ public interface TagService {
 
     List<TagDO> listAll();
 
-    List<TagDO> getTagList();
+    List<TagDO> listByIds(List<Long> ids);
 
-    List<TagDO> getTagListNotId();
+    Pair<Integer, List<TagDO>> page(Integer pageNo, Integer pageSize);
 
     List<TagDO> getTagListByBlogId(Long blogId);
 

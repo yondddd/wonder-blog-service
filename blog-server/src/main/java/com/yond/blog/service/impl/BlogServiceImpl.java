@@ -6,6 +6,7 @@ import com.yond.blog.cache.remote.BlogViewCache;
 import com.yond.blog.entity.BlogDO;
 import com.yond.blog.mapper.BlogMapper;
 import com.yond.blog.service.BlogService;
+import com.yond.blog.service.BlogTagService;
 import com.yond.blog.service.CategoryService;
 import com.yond.blog.service.TagService;
 import com.yond.blog.util.JacksonUtils;
@@ -20,7 +21,6 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,14 +34,17 @@ import java.util.stream.Collectors;
  */
 @Service
 public class BlogServiceImpl implements BlogService {
-    @Autowired
-    BlogMapper blogMapper;
-    @Autowired
-    TagService tagService;
-    @Autowired
-    BlogViewCache blogViewCache;
+
+    @Resource
+    private BlogMapper blogMapper;
+    @Resource
+    private TagService tagService;
+    @Resource
+    private BlogViewCache blogViewCache;
     @Resource
     private CategoryService categoryService;
+    @Resource
+    private BlogTagService blogTagService;
 
     /**
      * 项目启动时，保存所有博客的浏览量到Redis

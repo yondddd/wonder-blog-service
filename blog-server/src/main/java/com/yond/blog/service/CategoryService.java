@@ -13,8 +13,8 @@ public interface CategoryService {
 
     CategoryDO getById(Long id);
 
-    List<CategoryDO> listBtIds(List<Long> ids);
-    
+    List<CategoryDO> listByIds(List<Long> ids);
+
     CategoryDO getByName(String name);
 
     void save(CategoryDO category);

@@ -12,8 +12,8 @@ public class TagConvert {
 
     public static TagVO do2vo(TagDO from) {
         TagVO tagVO = new TagVO();
-        tagVO.setTagId(from.getId());
-        tagVO.setTagName(from.getName());
+        tagVO.setId(from.getId());
+        tagVO.setName(from.getName());
         tagVO.setColor(from.getColor());
         return tagVO;
     }

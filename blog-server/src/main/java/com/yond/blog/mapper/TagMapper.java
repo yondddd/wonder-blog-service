@@ -20,8 +20,6 @@ public interface TagMapper {
 
     List<TagDO> getTagList();
 
-    List<TagDO> getTagListNotId();
-
     List<TagDO> getTagListByBlogId(Long blogId);
 
     int saveTag(TagDO tag);

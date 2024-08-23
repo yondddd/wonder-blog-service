@@ -13,39 +13,42 @@ public class TagVO implements Serializable {
     @Serial
     private static final long serialVersionUID = -4288642746044002755L;
 
-    private Long tagId;
-    private String tagName;
+    private Long id;
+    private String name;
     private String color;
 
-    public Long getTagId() {
-        return tagId;
+    public Long getId() {
+        return id;
     }
 
-    public void setTagId(Long tagId) {
-        this.tagId = tagId;
+    public TagVO setId(Long id) {
+        this.id = id;
+        return this;
     }
 
-    public String getTagName() {
-        return tagName;
+    public String getName() {
+        return name;
     }
 
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
+    public TagVO setName(String name) {
+        this.name = name;
+        return this;
     }
 
     public String getColor() {
         return color;
     }
 
-    public void setColor(String color) {
+    public TagVO setColor(String color) {
         this.color = color;
+        return this;
     }
 
     @Override
     public String toString() {
         return "TagVO{" +
-                "tagId=" + tagId +
-                ", tagName='" + tagName + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", color='" + color + '\'' +
                 '}';
     }

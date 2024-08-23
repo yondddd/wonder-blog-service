@@ -52,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDO> listBtIds(List<Long> ids) {
+    public List<CategoryDO> listByIds(List<Long> ids) {
         return this.listAll().stream()
                 .filter(x -> new HashSet<>(ids).contains(x.getId())).toList();
     }
