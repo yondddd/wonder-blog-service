@@ -7,13 +7,12 @@ import java.util.List;
 
 /**
  * @author yond
- * @date 8/22/2024
+ * @date 8/19/2024
  * @description
  */
-public class BlogDetailVO implements Serializable {
-
+public class BlogVO implements Serializable {
     @Serial
-    private static final long serialVersionUID = -1654007367041602585L;
+    private static final long serialVersionUID = -5934819917336555995L;
 
     private Long id;
     private Integer categoryId;
@@ -34,191 +33,172 @@ public class BlogDetailVO implements Serializable {
     private Integer words;
     private Integer readTime;
     private String password;
-    private List<TagVO> tagList;
+    private List<TagVO> tags;
 
     public Long getId() {
         return id;
     }
 
-    public BlogDetailVO setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
-        return this;
     }
 
     public Integer getCategoryId() {
         return categoryId;
     }
 
-    public BlogDetailVO setCategoryId(Integer categoryId) {
+    public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
-        return this;
     }
 
     public String getCategoryName() {
         return categoryName;
     }
 
-    public BlogDetailVO setCategoryName(String categoryName) {
+    public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
-        return this;
     }
 
     public Integer getUserId() {
         return userId;
     }
 
-    public BlogDetailVO setUserId(Integer userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
-        return this;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public BlogDetailVO setTitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
-        return this;
     }
 
     public String getFirstPicture() {
         return firstPicture;
     }
 
-    public BlogDetailVO setFirstPicture(String firstPicture) {
+    public void setFirstPicture(String firstPicture) {
         this.firstPicture = firstPicture;
-        return this;
     }
 
     public String getContent() {
         return content;
     }
 
-    public BlogDetailVO setContent(String content) {
+    public void setContent(String content) {
         this.content = content;
-        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public BlogDetailVO setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
-        return this;
     }
 
     public Boolean getPublished() {
         return published;
     }
 
-    public BlogDetailVO setPublished(Boolean published) {
+    public void setPublished(Boolean published) {
         this.published = published;
-        return this;
     }
 
     public Boolean getRecommend() {
         return recommend;
     }
 
-    public BlogDetailVO setRecommend(Boolean recommend) {
+    public void setRecommend(Boolean recommend) {
         this.recommend = recommend;
-        return this;
     }
 
     public Boolean getAppreciation() {
         return appreciation;
     }
 
-    public BlogDetailVO setAppreciation(Boolean appreciation) {
+    public void setAppreciation(Boolean appreciation) {
         this.appreciation = appreciation;
-        return this;
     }
 
     public Boolean getCommentEnabled() {
         return commentEnabled;
     }
 
-    public BlogDetailVO setCommentEnabled(Boolean commentEnabled) {
+    public void setCommentEnabled(Boolean commentEnabled) {
         this.commentEnabled = commentEnabled;
-        return this;
     }
 
     public Boolean getTop() {
         return top;
     }
 
-    public BlogDetailVO setTop(Boolean top) {
+    public void setTop(Boolean top) {
         this.top = top;
-        return this;
     }
 
     public Date getCreateTime() {
         return createTime;
     }
 
-    public BlogDetailVO setCreateTime(Date createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-        return this;
     }
 
     public Date getUpdateTime() {
         return updateTime;
     }
 
-    public BlogDetailVO setUpdateTime(Date updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-        return this;
     }
 
     public Integer getViews() {
         return views;
     }
 
-    public BlogDetailVO setViews(Integer views) {
+    public void setViews(Integer views) {
         this.views = views;
-        return this;
     }
 
     public Integer getWords() {
         return words;
     }
 
-    public BlogDetailVO setWords(Integer words) {
+    public void setWords(Integer words) {
         this.words = words;
-        return this;
     }
 
     public Integer getReadTime() {
         return readTime;
     }
 
-    public BlogDetailVO setReadTime(Integer readTime) {
+    public void setReadTime(Integer readTime) {
         this.readTime = readTime;
-        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public BlogDetailVO setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
-        return this;
     }
 
-    public List<TagVO> getTagList() {
-        return tagList;
+    public List<TagVO> getTags() {
+        return tags;
     }
 
-    public BlogDetailVO setTagList(List<TagVO> tagList) {
-        this.tagList = tagList;
+    public BlogVO setTags(List<TagVO> tags) {
+        this.tags = tags;
         return this;
     }
 
     @Override
     public String toString() {
-        return "BlogDetailVO{" +
+        return "BlogVO{" +
                 "id=" + id +
                 ", categoryId=" + categoryId +
                 ", categoryName='" + categoryName + '\'' +
@@ -238,7 +218,7 @@ public class BlogDetailVO implements Serializable {
                 ", words=" + words +
                 ", readTime=" + readTime +
                 ", password='" + password + '\'' +
-                ", tagList=" + tagList +
+                ", tags=" + tags +
                 '}';
     }
 }

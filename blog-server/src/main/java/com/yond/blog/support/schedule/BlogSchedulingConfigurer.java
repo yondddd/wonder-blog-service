@@ -1,4 +1,4 @@
-package com.yond.blog.schedule;
+package com.yond.blog.support.schedule;
 
 import com.yond.blog.entity.ScheduleJobDO;
 import com.yond.blog.entity.ScheduleJobLogDO;

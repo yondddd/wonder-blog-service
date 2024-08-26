@@ -2,16 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yond.blog.mapper.BlogMapper">
 
-    <resultMap id="BlogAll" type="com.yond.blog.entity.BlogDO">
-
-    </resultMap>
-
-    <sql id="Base_Column_List">
-        `id`, `title`, `first_picture`, `content`, `description`, `is_published`, `is_recommend`, `is_appreciation`,
-        `is_comment_enabled`, `create_time`, `update_time`, `views`, `words`, `read_time`, `category_id`, `is_top`, `password`, `user_id`
-    </sql>
-
-    <resultMap id="blog" type="com.yond.blog.entity.BlogDO">
+    <resultMap id="BaseResultMap" type="com.yond.blog.entity.BlogDO">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="firstPicture" column="first_picture"/>
@@ -30,8 +21,14 @@
         <result property="password" column="password"/>
         <result property="categoryId" column="category_id"/>
         <result property="userId" column="user_id"/>
+        <result property="status" column="status"/>
     </resultMap>
 
+    <sql id="Base_Column_List">
+        `id`, `title`, `first_picture`, `content`, `description`, `is_published`, `is_recommend`, `is_appreciation`,
+        `is_comment_enabled`, `create_time`, `update_time`, `views`, `words`, `read_time`, `category_id`, `is_top`, `password`, `user_id`
+            ,`status`
+    </sql>
 
     <resultMap id="searchBlog" type="com.yond.blog.web.blog.view.vo.SearchBlog">
         <id property="id" column="id"/>
@@ -151,36 +148,13 @@
         select id, views from blog
     </select>
 
-    <!--按id删除博客-->
-    <delete id="deleteBlogById">
-        delete from blog where id=#{id}
-    </delete>
-
-    <!--维护 blog_tag 表(删除)-->
-    <delete id="deleteBlogTagByBlogId">
-        delete from blog_tag where blog_id=#{blogId}
-    </delete>
-
-    <!--维护 blog_tag 表(添加)-->
-    <insert id="saveBlogTag">
-        insert into blog_tag (blog_id, tag_id) values (#{blogId}, #{tagId})
-    </insert>
-
-    <!--添加博客-->
-    <insert id="saveBlog" parameterType="com.yond.blog.web.blog.view.dto.Blog" useGeneratedKeys="true" keyProperty="id">
-        insert into blog (title, first_picture, content, description, is_published, is_recommend, is_appreciation, is_comment_enabled,
-        is_top, create_time, update_time, views, words, read_time, category_id, user_id, password)
-        values (#{title}, #{firstPicture}, #{content}, #{description}, #{published}, #{recommend}, #{appreciation}, #{commentEnabled},
-        #{top}, #{createTime}, #{updateTime}, #{views}, #{words}, #{readTime}, #{category.id}, #{user.id}, #{password})
-    </insert>
-
     <!--更新博客阅读次数-->
     <update id="updateViews">
         update blog set views=#{views} where id=#{blogId}
     </update>
 
     <!--按id查询博客-->
-    <select id="getBlogById" resultMap="blog">
+    <select id="getBlogById" resultMap="BaseResultMap">
         select b.id, b.title, b.first_picture, b.content, b.description, b.is_recommend, b.is_published, b.is_appreciation,
         b.is_comment_enabled, b.is_top, b.create_time, b.update_time, b.views, b.words, b.read_time, b.password,
         c.id as category_id, c.category_name,
@@ -231,14 +205,6 @@
         select password from blog where id=#{blogId}
     </select>
 
-    <!--更新博客-->
-    <update id="updateBlog">
-        update blog set title=#{title}, first_picture=#{firstPicture}, content=#{content}, description=#{description},
-        is_recommend=#{recommend}, is_published=#{published}, is_appreciation=#{appreciation}, is_comment_enabled=#{commentEnabled},
-        is_top=#{top}, create_time=#{createTime}, update_time=#{updateTime}, views=#{views},
-        words=#{words}, read_time=#{readTime}, category_id=#{category.id}, password=#{password}
-        where id=#{id}
-    </update>
 
     <!--查询博客总数-->
     <select id="countBlog" resultType="java.lang.Integer">
@@ -280,10 +246,57 @@
         select category_id, count(category_id) as blog_count from blog group by category_id
     </select>
 
-    <select id="listAll" resultMap="blog">
+    <select id="listAll" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
         from blog
     </select>
+
+    <insert id="insertSelective">
+        insert into blog
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="title != null">title,</if>
+            <if test="firstPicture != null">first_picture,</if>
+            <if test="content != null">content,</if>
+            <if test="description != null">description,</if>
+            <if test="published != null">is_published,</if>
+            <if test="recommend != null">is_recommend,</if>
+            <if test="appreciation != null">is_appreciation,</if>
+            <if test="commentEnabled != null">is_comment_enabled,</if>
+            <if test="top != null">is_top,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="views != null">views,</if>
+            <if test="words != null">words,</if>
+            <if test="readTime != null">read_time,</if>
+            <if test="password != null">password,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=NUMERIC},</if>
+            <if test="categoryId != null">#{categoryId,jdbcType=NUMERIC},</if>
+            <if test="userId != null">#{userId,jdbcType=NUMERIC},</if>
+            <if test="title != null">#{title,jdbcType=VARCHAR},</if>
+            <if test="firstPicture != null">#{firstPicture,jdbcType=VARCHAR},</if>
+            <if test="content != null">#{content,jdbcType=VARCHAR},</if>
+            <if test="description != null">#{description,jdbcType=VARCHAR},</if>
+            <if test="published != null">#{published,jdbcType=BOOLEAN},</if>
+            <if test="recommend != null">#{recommend,jdbcType=BOOLEAN},</if>
+            <if test="appreciation != null">#{appreciation,jdbcType=BOOLEAN},</if>
+            <if test="commentEnabled != null">#{commentEnabled,jdbcType=BOOLEAN},</if>
+            <if test="top != null">#{top,jdbcType=BOOLEAN},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null">#{updateTime,jdbcType=TIMESTAMP},</if>
+            <if test="views != null">#{views,jdbcType=NUMERIC},</if>
+            <if test="words != null">#{words,jdbcType=NUMERIC},</if>
+            <if test="readTime != null">#{readTime,jdbcType=NUMERIC},</if>
+            <if test="password != null">#{password,jdbcType=VARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=NUMERIC},</if>
+        </trim>
+    </insert>
 
     <update id="updateSelective">
         update blog
@@ -308,5 +321,14 @@
         </set>
         where id = #{id,jdbcType=NUMERIC}
     </update>
+
+    <select id="listByStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from blog
+        where
+        status = #{status,jdbcType=NUMERIC}
+    </select>
+
 
 </mapper>

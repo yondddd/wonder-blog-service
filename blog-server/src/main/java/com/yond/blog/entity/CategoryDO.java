@@ -22,23 +22,29 @@ public class CategoryDO implements Serializable {
      */
     private String name;
 
+    public static CategoryDO custom() {
+        return new CategoryDO();
+    }
+
     public CategoryDO() {
     }
 
     public Long getId() {
-        return this.id;
+        return id;
+    }
+
+    public CategoryDO setId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
+    public CategoryDO setName(String name) {
         this.name = name;
+        return this;
     }
 
     @Override

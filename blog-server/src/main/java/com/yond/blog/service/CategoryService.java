@@ -17,11 +17,11 @@ public interface CategoryService {
 
     CategoryDO getByName(String name);
 
-    void save(CategoryDO category);
+    Long save(CategoryDO category);
 
     void update(CategoryDO category);
 
     void deleteById(Long id);
 
-
+    Long saveIfAbsent(String name);
 }

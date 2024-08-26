@@ -18,7 +18,11 @@ import java.util.List;
 @Repository
 public interface BlogMapper {
 
+    List<BlogDO> listByStatus(@Param("status") Integer status);
+
     List<BlogDO> listAll();
+
+    int insertSelective(BlogDO blogDO);
 
     Integer updateSelective(BlogDO blogDO);
 
@@ -40,14 +44,6 @@ public interface BlogMapper {
 
     List<BlogView> getBlogViewsList();
 
-    int deleteBlogById(Long id);
-
-    int deleteBlogTagByBlogId(Long blogId);
-
-    int saveBlog(com.yond.blog.web.blog.view.dto.Blog blog);
-
-    int saveBlogTag(Long blogId, Long tagId);
-
     int updateViews(Long blogId, Integer views);
 
     BlogDO getBlogById(Long id);
@@ -57,8 +53,6 @@ public interface BlogMapper {
     BlogDetail getBlogByIdAndIsPublished(Long id);
 
     String getBlogPassword(Long blogId);
-
-    int updateBlog(com.yond.blog.web.blog.view.dto.Blog blog);
 
     int countBlog();
 

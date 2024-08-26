@@ -1,16 +1,25 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.yond.blog.entity.*;
-import com.yond.blog.service.*;
+import com.yond.blog.entity.BlogDO;
+import com.yond.blog.entity.CategoryDO;
+import com.yond.blog.entity.TagDO;
+import com.yond.blog.entity.UserDO;
+import com.yond.blog.service.BlogService;
+import com.yond.blog.service.BlogTagService;
+import com.yond.blog.service.CategoryService;
+import com.yond.blog.service.TagService;
 import com.yond.blog.web.blog.admin.convert.BlogConverter;
 import com.yond.blog.web.blog.admin.req.*;
-import com.yond.blog.web.blog.admin.vo.BlogListVO;
+import com.yond.blog.web.blog.admin.vo.BlogVO;
+import com.yond.blog.web.blog.admin.vo.CategoryVO;
+import com.yond.blog.web.blog.admin.vo.TagVO;
+import com.yond.blog.web.handler.session.UserSession;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,44 +37,41 @@ import java.util.stream.Collectors;
 @RequestMapping("/admin/blog")
 public class BlogAdminController {
 
-    private final BlogService blogService;
-    private final CategoryService categoryService;
-    private final TagService tagService;
-    private final CommentService commentService;
-    private final BlogTagService blogTagService;
+    @Resource
+    private BlogService blogService;
+    @Resource
+    private CategoryService categoryService;
+    @Resource
+    private BlogTagService blogTagService;
+    @Resource
+    private TagService tagService;
 
-    public BlogAdminController(BlogService blogService, CategoryService categoryService, TagService tagService, CommentService commentService, BlogTagService blogTagService) {
-        this.blogService = blogService;
-        this.categoryService = categoryService;
-        this.tagService = tagService;
-        this.commentService = commentService;
-        this.blogTagService = blogTagService;
-    }
 
     @PostMapping("/page")
-    public @ResponseBody PageResponse<List<BlogListVO>> page(@RequestBody BlogListPageReq req) {
+    public @ResponseBody PageResponse<List<BlogVO>> page(@RequestBody BlogListPageReq req) {
 
         Pair<Integer, List<BlogDO>> pair = blogService.pageByTitleLikeAndCategoryId(req.getTitle(), req.getCategoryId(),
                 req.getPageNo(), req.getPageSize());
         List<Long> categoryIds = pair.getRight().stream().map(BlogDO::getCategoryId).map(Integer::longValue).toList();
         Map<Long, String> map = categoryService.listByIds(categoryIds).stream()
                 .collect(Collectors.toMap(CategoryDO::getId, CategoryDO::getName, (key1, key2) -> key1));
-        List<BlogListVO> data = pair.getRight().stream().map(x -> BlogConverter.do2vo(x, map)).toList();
-        return PageResponse.<List<BlogListVO>>custom().setData(data).setTotal(pair.getLeft()).setSuccess();
+        List<BlogVO> data = pair.getRight().stream()
+                .map(x -> BlogConverter.do2vo(x, map.get(x.getCategoryId().longValue()), null)).toList();
+        return PageResponse.<List<BlogVO>>custom().setData(data).setTotal(pair.getLeft()).setSuccess();
     }
 
     @PostMapping("/detail")
-    public Response<BlogListVO> getBlog(@RequestBody BlogDetailReq req) {
+    public Response<BlogVO> getBlog(@RequestBody BlogDetailReq req) {
         BlogDO blog = blogService.getBlogById(req.getId());
         CategoryDO category = categoryService.getById(blog.getCategoryId().longValue());
-        List<BlogTagDO> blogTags = blogTagService.listByBlogId(blog.getId());
-        BlogConverter.do2detail(blog,category,blogTags)
+        List<TagDO> blogTags = blogTagService.listTagsByBlogId(blog.getId());
+        BlogVO data = BlogConverter.do2vo(blog, category.getName(), blogTags);
         return Response.success(data);
     }
 
     @OperationLogger("更新博客置顶状态")
     @PostMapping("/top")
-    public Response<Boolean> top(@RequestBody BlogTopReq req) {
+    public Response<Boolean> top(UserSession userSession, @RequestBody BlogTopReq req) {
         BlogDO update = BlogDO.custom()
                 .setId(req.getId())
                 .setTop(req.getTop());
@@ -75,7 +81,7 @@ public class BlogAdminController {
 
     @OperationLogger("更新博客推荐状态")
     @PostMapping("/recommend")
-    public Response<Boolean> recommend(@RequestBody BlogRecommendReq req) {
+    public Response<Boolean> recommend(UserSession userSession, @RequestBody BlogRecommendReq req) {
         BlogDO update = BlogDO.custom()
                 .setId(req.getId())
                 .setRecommend(req.getRecommend());
@@ -98,45 +104,36 @@ public class BlogAdminController {
         return Response.success();
     }
 
-
-    /**
-     * 删除博客文章、删除博客文章下的所有评论、同时维护 blog_tag 表
-     *
-     * @param id 文章id
-     * @return
-     */
     @OperationLogger("删除博客")
-    @DeleteMapping("/blog")
-    public Response<Boolean> delete(@RequestParam Long id) {
-        blogService.deleteBlogTagByBlogId(id);
-        blogService.deleteBlogById(id);
-        commentService.deleteCommentsByBlogId(id);
+    @DeleteMapping("/delete")
+    public Response<Boolean> delete(@RequestBody BlogDelReq req) {
+        blogService.delById(req.getId());
         return Response.success();
     }
 
-
-    /**
-     * 保存草稿或发布新文章
-     *
-     * @param blog 博客文章DTO
-     * @return
-     */
     @OperationLogger("发布博客")
-    @PostMapping("/blog")
-    public Response saveBlog(@RequestBody com.yond.blog.web.blog.view.dto.Blog blog) {
+    @PostMapping("/save")
+    public Response<Boolean> saveBlog(@RequestBody BlogSaveReq req) {
+        Long categoryId = this.geCategoryId(req.getCategory());
+        // cate、tag、blogtag、blog
         return getResult(blog, "save");
     }
 
-    /**
-     * 更新博客
-     *
-     * @param blog 博客文章DTO
-     * @return
-     */
     @OperationLogger("更新博客")
-    @PutMapping("/blog")
-    public Response updateBlog(@RequestBody com.yond.blog.web.blog.view.dto.Blog blog) {
+    @PutMapping("/update")
+    public Response<Boolean> updateBlog(@RequestBody BlogSaveReq req) {
         return getResult(blog, "update");
+    }
+
+    private Long geCategoryId(CategoryVO category) {
+        if (category.getId() != null) {
+            return category.getId();
+        }
+        return categoryService.saveIfAbsent(category.getName());
+    }
+
+    private List<Long> getTagIds(List<TagVO> tags) {
+
     }
 
     /**
@@ -146,7 +143,7 @@ public class BlogAdminController {
      * @param type 添加或更新
      * @return
      */
-    private Response getResult(com.yond.blog.web.blog.view.dto.Blog blog, String type) {
+    private Response getResult() {
         //验证普通字段
         if (StringUtils.isBlank(blog.getTitle()) || StringUtils.isBlank(blog.getFirstPicture()) || StringUtils.isBlank(blog.getContent()) ||
                 StringUtils.isBlank(blog.getDescription())

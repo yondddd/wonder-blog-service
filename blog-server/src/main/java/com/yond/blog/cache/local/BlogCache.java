@@ -33,7 +33,6 @@ public class BlogCache {
         cache.invalidate(BLOG_GROUP_KEY);
     }
 
-
     // 按页缓存首页文章
 
     private final static String BLOG_INFO_KEY = "blogInfo";
@@ -59,20 +58,20 @@ public class BlogCache {
 
     // 全部文章缓存
 
-    private final static String BLOG_ALL_KEY = "ALL";
+    private final static String BLOG_ALL_KEY = "ALL_ENABLE";
 
-    private final static Cache<String, List<BlogDO>> allCache = LocalCache.buildCache(1);
+    private final static Cache<String, List<BlogDO>> allEnableCache = LocalCache.buildCache(1);
 
-    public static List<BlogDO> listAll() {
-        return allCache.getIfPresent(BLOG_ALL_KEY);
+    public static List<BlogDO> listEnable() {
+        return allEnableCache.getIfPresent(BLOG_ALL_KEY);
     }
 
-    public static void setAllBlogs(List<BlogDO> blogs) {
-        allCache.put(BLOG_ALL_KEY, blogs);
+    public static void setAllEnable(List<BlogDO> blogs) {
+        allEnableCache.put(BLOG_ALL_KEY, blogs);
     }
 
     public static void delAllBlogs() {
-        allCache.invalidateAll();
+        allEnableCache.invalidateAll();
     }
 
 }

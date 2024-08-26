@@ -1,4 +1,4 @@
-package com.yond.blog.config.redis;
+package com.yond.blog.config;
 
 import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
 import com.yond.blog.support.env.env.Environment;

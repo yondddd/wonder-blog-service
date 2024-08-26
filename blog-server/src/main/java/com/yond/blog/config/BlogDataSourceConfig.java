@@ -1,4 +1,4 @@
-package com.yond.blog.config.mysql;
+package com.yond.blog.config;
 
 import com.yond.blog.support.env.env.Environment;
 import com.zaxxer.hikari.HikariDataSource;

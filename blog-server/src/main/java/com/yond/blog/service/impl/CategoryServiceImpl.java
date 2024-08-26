@@ -9,6 +9,7 @@ import com.yond.common.exception.PersistenceException;
 import com.yond.common.utils.page.PageUtil;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.HashSet;
 import java.util.List;
@@ -63,13 +64,11 @@ public class CategoryServiceImpl implements CategoryService {
                 .filter(x -> name.equals(x.getName())).findFirst().orElse(null);
     }
 
-
     @Override
-    public void save(CategoryDO category) {
-        if (categoryMapper.save(category) != 1) {
-            throw new PersistenceException("分类添加失败");
-        }
+    public Long save(CategoryDO category) {
+        categoryMapper.save(category);
         CategoryCache.del();
+        return category.getId();
     }
 
     @Override
@@ -79,6 +78,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
         CategoryCache.del();
         // 修改了分类名，可能有首页文章关联了分类，也要更新首页缓存
+        // todo 只缓存数据库层
         BlogCache.delInfo();
     }
 
@@ -90,5 +90,14 @@ public class CategoryServiceImpl implements CategoryService {
         CategoryCache.del();
     }
 
-
+    @Override
+    public Long saveIfAbsent(String name) {
+        Assert.hasText(name, "分类名称为空");
+        CategoryDO exist = this.getByName(name);
+        if (exist != null) {
+            return exist.getId();
+        }
+        return this.save(CategoryDO.custom().setName(name));
+    }
+    
 }

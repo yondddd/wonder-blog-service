@@ -27,13 +27,7 @@ public interface BlogService {
 
     List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
 
-    void deleteBlogById(Long id);
-
     void deleteBlogTagByBlogId(Long blogId);
-
-    void saveBlog(com.yond.blog.web.blog.view.dto.Blog blog);
-
-    void saveBlogTag(Long blogId, Long tagId);
 
     void updateViewsToRedis(Long blogId);
 
@@ -46,8 +40,6 @@ public interface BlogService {
     BlogDetail getBlogByIdAndIsPublished(Long id);
 
     String getBlogPassword(Long blogId);
-
-    void updateBlog(com.yond.blog.web.blog.view.dto.Blog blog);
 
     int countBlogByIsPublished();
 
@@ -63,7 +55,11 @@ public interface BlogService {
 
     List<CategoryBlogCount> getCategoryBlogCountList();
 
-    List<BlogDO> listAll();
+    List<BlogDO> listEnable();
 
-    Integer updateSelective(BlogDO blog);
+    Long insertSelective(BlogDO blog);
+
+    void updateSelective(BlogDO blog);
+
+    void delById(Long id);
 }

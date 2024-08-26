@@ -1,4 +1,4 @@
-package com.yond.blog.schedule;
+package com.yond.blog.support.schedule;
 
 import com.yond.blog.util.common.SpringContextUtils;
 import org.springframework.util.ReflectionUtils;

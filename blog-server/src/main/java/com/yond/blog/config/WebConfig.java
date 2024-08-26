@@ -1,4 +1,4 @@
-package com.yond.blog.config.web;
+package com.yond.blog.config;
 
 import com.yond.blog.config.properties.UploadProperties;
 import com.yond.blog.web.interceptor.AccessLimitInterceptor;

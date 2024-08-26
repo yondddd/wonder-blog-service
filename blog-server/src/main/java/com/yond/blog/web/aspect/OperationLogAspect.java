@@ -14,6 +14,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -33,6 +35,8 @@ public class OperationLogAspect {
     OperationLogService operationLogService;
 
     ThreadLocal<Long> currentTime = new ThreadLocal<>();
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OperationLogAspect.class);
 
     /**
      * 配置切入点
@@ -67,6 +71,7 @@ public class OperationLogAspect {
      * @return
      */
     private OperationLogDO handleLog(ProceedingJoinPoint joinPoint, OperationLogger operationLogger, int times) {
+        // todo 替换参数提取
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         String username = JwtUtil.validateJwt(request.getHeader(JwtConstant.TOKEN_HEADER), JwtConstant.DEFAULT_SECRET).getSubject();

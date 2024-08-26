@@ -14,6 +14,7 @@ import com.yond.blog.util.markdown.MarkdownUtils;
 import com.yond.blog.web.blog.view.dto.BlogView;
 import com.yond.blog.web.blog.view.vo.*;
 import com.yond.common.constant.BlogConstant;
+import com.yond.common.enums.EnableStatusEnum;
 import com.yond.common.exception.NotFoundException;
 import com.yond.common.exception.PersistenceException;
 import com.yond.common.utils.page.PageUtil;
@@ -61,7 +62,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public Pair<Integer, List<BlogDO>> pageByTitleLikeAndCategoryId(String title, Integer categoryId, Integer pageNo, Integer pageSize) {
-        List<BlogDO> list = this.listAll().stream()
+        List<BlogDO> list = this.listEnable().stream()
                 .filter(x -> StringUtils.isBlank(title) || x.getTitle().contains(title))
                 .filter(x -> categoryId == null || categoryId.equals(x.getCategoryId()))
                 .sorted(Comparator.comparing(BlogDO::getCreateTime).reversed())
@@ -72,7 +73,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public List<SearchBlog> searchPublic(String query) {
         String lowerCase = query.toLowerCase();
-        List<BlogDO> searchBlogs = this.listAll().stream()
+        List<BlogDO> searchBlogs = this.listEnable().stream()
                 .filter(BlogDO::getPublished)
                 .filter(x -> StringUtils.isBlank(x.getPassword()))
                 .filter(x -> x.getContent().toLowerCase().contains(lowerCase))
@@ -97,7 +98,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public List<BlogDO> getIdAndTitleList() {
-        List<BlogDO> all = this.listAll();
+        List<BlogDO> all = this.listEnable();
         all.sort(Comparator.comparing(BlogDO::getCreateTime).reversed());
         List<BlogDO> result = new ArrayList<>();
         for (BlogDO blogDO : all) {
@@ -112,7 +113,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public List<NewBlog> getNewBlogListByIsPublished() {
 
-        List<BlogDO> collect = this.listAll()
+        List<BlogDO> collect = this.listEnable()
                 .stream().filter(BlogDO::getPublished)
                 .sorted(Comparator.comparing(BlogDO::getCreateTime).reversed())
                 .toList();
@@ -130,7 +131,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum) {
-        List<BlogDO> collect = this.listAll().stream()
+        List<BlogDO> collect = this.listEnable().stream()
                 .filter(BlogDO::getPublished)
                 .sorted(Comparator.comparing(BlogDO::getTop).reversed())
                 .sorted(Comparator.comparing(BlogDO::getCreateTime).reversed())
@@ -286,38 +287,11 @@ public class BlogServiceImpl implements BlogService {
         return blogViewsMap;
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void deleteBlogById(Long id) {
-        if (blogMapper.deleteBlogById(id) != 1) {
-            throw new NotFoundException("该博客不存在");
-        }
-        deleteBlogCache();
-        blogViewCache.deleteBlogView(id);
-    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteBlogTagByBlogId(Long blogId) {
         if (blogMapper.deleteBlogTagByBlogId(blogId) == 0) {
-            throw new PersistenceException("维护博客标签关联表失败");
-        }
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void saveBlog(com.yond.blog.web.blog.view.dto.Blog blog) {
-        if (blogMapper.saveBlog(blog) != 1) {
-            throw new PersistenceException("添加博客失败");
-        }
-        blogViewCache.setBlogView(blog.getId(), 0);
-        deleteBlogCache();
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void saveBlogTag(Long blogId, Long tagId) {
-        if (blogMapper.saveBlogTag(blogId, tagId) != 1) {
             throw new PersistenceException("维护博客标签关联表失败");
         }
     }
@@ -382,16 +356,6 @@ public class BlogServiceImpl implements BlogService {
         return blogMapper.getBlogPassword(blogId);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void updateBlog(com.yond.blog.web.blog.view.dto.Blog blog) {
-        if (blogMapper.updateBlog(blog) != 1) {
-            throw new PersistenceException("更新博客失败");
-        }
-        deleteBlogCache();
-        blogViewCache.setBlogView(blog.getId(), blog.getViews());
-    }
-
     @Override
     public int countBlogByIsPublished() {
         return blogMapper.countBlogByIsPublished();
@@ -428,16 +392,36 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<BlogDO> listAll() {
-        return blogMapper.listAll();
+    public List<BlogDO> listEnable() {
+        List<BlogDO> cache = BlogCache.listEnable();
+        if (cache == null) {
+            cache = blogMapper.listByStatus(EnableStatusEnum.ENABLE.getVal());
+        }
+        return cache;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Long insertSelective(BlogDO blog) {
+        blogMapper.insertSelective(blog);
+        this.deleteBlogCache();
+        return blog.getId();
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Integer updateSelective(BlogDO blog) {
-        int updated = blogMapper.updateSelective(blog);
+    public void updateSelective(BlogDO blog) {
+        blogMapper.updateSelective(blog);
         this.deleteBlogCache();
-        return updated;
+    }
+
+    @Override
+    public void delById(Long id) {
+        BlogDO del = BlogDO.custom()
+                .setId(id)
+                .setStatus(EnableStatusEnum.DELETE.getVal());
+        this.updateSelective(del);
+        // 评论和关联tag不删除
+        blogViewCache.deleteBlogView(id);
     }
 
     /**

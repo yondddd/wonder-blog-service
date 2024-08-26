@@ -1,4 +1,4 @@
-package com.yond.blog.schedule.task;
+package com.yond.blog.support.schedule.task;
 
 import com.yond.blog.cache.remote.BlogViewCache;
 import com.yond.blog.service.BlogService;

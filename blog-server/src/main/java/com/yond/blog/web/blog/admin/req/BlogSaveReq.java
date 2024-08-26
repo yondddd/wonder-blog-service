@@ -1,22 +1,23 @@
-package com.yond.blog.web.blog.admin.vo;
+package com.yond.blog.web.blog.admin.req;
+
+import com.yond.blog.web.blog.admin.vo.CategoryVO;
+import com.yond.blog.web.blog.admin.vo.TagVO;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
 /**
  * @author yond
- * @date 8/19/2024
- * @description
+ * @date 8/25/2024
+ * @description save blog
  */
-public class BlogListVO implements Serializable {
+public class BlogSaveReq implements Serializable {
+
     @Serial
-    private static final long serialVersionUID = -5934819917336555995L;
+    private static final long serialVersionUID = 7424474185618004126L;
 
     private Long id;
-    private Integer categoryId;
-    private String categoryName;
-    private Integer userId;
     private String title;
     private String firstPicture;
     private String content;
@@ -26,172 +27,161 @@ public class BlogListVO implements Serializable {
     private Boolean appreciation;
     private Boolean commentEnabled;
     private Boolean top;
-    private Date createTime;
-    private Date updateTime;
     private Integer views;
     private Integer words;
     private Integer readTime;
     private String password;
+    private CategoryVO category;
+    private List<TagVO> tags;
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public BlogSaveReq setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+        return this;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public BlogSaveReq setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public String getFirstPicture() {
         return firstPicture;
     }
 
-    public void setFirstPicture(String firstPicture) {
+    public BlogSaveReq setFirstPicture(String firstPicture) {
         this.firstPicture = firstPicture;
+        return this;
     }
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public BlogSaveReq setContent(String content) {
         this.content = content;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public BlogSaveReq setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     public Boolean getPublished() {
         return published;
     }
 
-    public void setPublished(Boolean published) {
+    public BlogSaveReq setPublished(Boolean published) {
         this.published = published;
+        return this;
     }
 
     public Boolean getRecommend() {
         return recommend;
     }
 
-    public void setRecommend(Boolean recommend) {
+    public BlogSaveReq setRecommend(Boolean recommend) {
         this.recommend = recommend;
+        return this;
     }
 
     public Boolean getAppreciation() {
         return appreciation;
     }
 
-    public void setAppreciation(Boolean appreciation) {
+    public BlogSaveReq setAppreciation(Boolean appreciation) {
         this.appreciation = appreciation;
+        return this;
     }
 
     public Boolean getCommentEnabled() {
         return commentEnabled;
     }
 
-    public void setCommentEnabled(Boolean commentEnabled) {
+    public BlogSaveReq setCommentEnabled(Boolean commentEnabled) {
         this.commentEnabled = commentEnabled;
+        return this;
     }
 
     public Boolean getTop() {
         return top;
     }
 
-    public void setTop(Boolean top) {
+    public BlogSaveReq setTop(Boolean top) {
         this.top = top;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+        return this;
     }
 
     public Integer getViews() {
         return views;
     }
 
-    public void setViews(Integer views) {
+    public BlogSaveReq setViews(Integer views) {
         this.views = views;
+        return this;
     }
 
     public Integer getWords() {
         return words;
     }
 
-    public void setWords(Integer words) {
+    public BlogSaveReq setWords(Integer words) {
         this.words = words;
+        return this;
     }
 
     public Integer getReadTime() {
         return readTime;
     }
 
-    public void setReadTime(Integer readTime) {
+    public BlogSaveReq setReadTime(Integer readTime) {
         this.readTime = readTime;
+        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public BlogSaveReq setPassword(String password) {
         this.password = password;
+        return this;
+    }
+
+    public CategoryVO getCategory() {
+        return category;
+    }
+
+    public BlogSaveReq setCategory(CategoryVO category) {
+        this.category = category;
+        return this;
+    }
+
+    public List<TagVO> getTags() {
+        return tags;
+    }
+
+    public BlogSaveReq setTags(List<TagVO> tags) {
+        this.tags = tags;
+        return this;
     }
 
     @Override
     public String toString() {
-        return "BlogListVO{" +
+        return "BlogSaveReq{" +
                 "id=" + id +
-                ", categoryId=" + categoryId +
-                ", categoryName='" + categoryName + '\'' +
-                ", userId=" + userId +
                 ", title='" + title + '\'' +
                 ", firstPicture='" + firstPicture + '\'' +
                 ", content='" + content + '\'' +
@@ -201,12 +191,12 @@ public class BlogListVO implements Serializable {
                 ", appreciation=" + appreciation +
                 ", commentEnabled=" + commentEnabled +
                 ", top=" + top +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
                 ", views=" + views +
                 ", words=" + words +
                 ", readTime=" + readTime +
                 ", password='" + password + '\'' +
+                ", category=" + category +
+                ", tags=" + tags +
                 '}';
     }
 }

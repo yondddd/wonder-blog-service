@@ -1,4 +1,4 @@
-package com.yond.blog.config.async;
+package com.yond.blog.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.support.TaskExecutorAdapter;
@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 
 @Configuration
 @EnableAsync
-public class AsyncTaskConfiguration implements AsyncConfigurer {
+public class AsyncTaskConfig implements AsyncConfigurer {
 
     // @Async使用虚拟线程
     @Override

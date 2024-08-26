@@ -1,5 +1,7 @@
 package com.yond.blog.entity;
 
+import com.yond.common.enums.EnableStatusEnum;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
@@ -36,6 +38,10 @@ public class BlogDO implements Serializable {
     private Integer words;//文章字数
     private Integer readTime;//阅读时长(分钟)
     private String password;//密码保护
+    /**
+     * {@link EnableStatusEnum}
+     */
+    private Integer status;
 
     public BlogDO() {
     }
@@ -202,6 +208,15 @@ public class BlogDO implements Serializable {
         return this;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public BlogDO setStatus(Integer status) {
+        this.status = status;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "BlogDO{" +
@@ -223,6 +238,7 @@ public class BlogDO implements Serializable {
                 ", words=" + words +
                 ", readTime=" + readTime +
                 ", password='" + password + '\'' +
+                ", status=" + status +
                 '}';
     }
 }
