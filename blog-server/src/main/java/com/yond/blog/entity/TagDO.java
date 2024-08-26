@@ -17,31 +17,38 @@ public class TagDO implements Serializable {
 
     public TagDO() {
     }
-
+    
+    public static TagDO custom(){
+        return new TagDO();
+    }
+    
     public Long getId() {
-        return this.id;
+        return id;
     }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getColor() {
-        return this.color;
-    }
-
-    public void setId(Long id) {
+    
+    public TagDO setId(Long id) {
         this.id = id;
+        return this;
     }
-
-    public void setName(String name) {
+    
+    public String getName() {
+        return name;
+    }
+    
+    public TagDO setName(String name) {
         this.name = name;
+        return this;
     }
-
-    public void setColor(String color) {
+    
+    public String getColor() {
+        return color;
+    }
+    
+    public TagDO setColor(String color) {
         this.color = color;
+        return this;
     }
-
+    
     @Override
     public String toString() {
         return "TagDO{" +

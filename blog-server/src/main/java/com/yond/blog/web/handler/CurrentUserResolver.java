@@ -33,6 +33,7 @@ public class CurrentUserResolver implements HandlerMethodArgumentResolver {
         if (StringUtils.isNotBlank(guid)) {
             UserDO user = userService.getByGuid(guid);
             return UserSession.custom()
+                    .setUserId(user.getId())
                     .setGuid(user.getGuid())
                     .setUserName(user.getUsername());
         }

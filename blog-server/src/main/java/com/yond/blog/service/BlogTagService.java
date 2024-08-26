@@ -11,8 +11,14 @@ import java.util.List;
  * @description
  */
 public interface BlogTagService {
-
+    
+    List<BlogTagDO> listAll();
+    
     List<BlogTagDO> listByBlogId(Long blogId);
 
     List<TagDO> listTagsByBlogId(Long blogId);
+    
+    void saveBlogTag(Long blogId, List<Long> tagIds);
+    
+    void deleteByIds(List<Long> ids);
 }

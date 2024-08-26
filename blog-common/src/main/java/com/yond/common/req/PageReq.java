@@ -12,7 +12,6 @@ public class PageReq implements Serializable {
     private static final long serialVersionUID = 2760764853696416726L;
 
     private Integer pageNo;
-
     private Integer pageSize;
 
     public Integer getPageNo() {

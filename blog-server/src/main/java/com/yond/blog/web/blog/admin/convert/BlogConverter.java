@@ -2,9 +2,11 @@ package com.yond.blog.web.blog.admin.convert;
 
 import com.yond.blog.entity.BlogDO;
 import com.yond.blog.entity.TagDO;
+import com.yond.blog.web.blog.admin.req.BlogSaveReq;
 import com.yond.blog.web.blog.admin.vo.BlogVO;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author yond
@@ -39,4 +41,27 @@ public class BlogConverter {
         }
         return to;
     }
+    
+    public static BlogDO save2do(BlogSaveReq from){
+        BlogDO to = BlogDO.custom()
+                .setId(from.getId())
+                .setTitle(from.getTitle())
+                .setFirstPicture(from.getFirstPicture())
+                .setContent(from.getContent())
+                .setDescription(from.getDescription())
+                .setPublished(from.getPublished())
+                .setRecommend(from.getRecommend())
+                .setAppreciation(from.getAppreciation())
+                .setCommentEnabled(from.getCommentEnabled())
+                .setTop(from.getTop())
+                .setViews(from.getViews())
+                .setWords(from.getWords())
+                .setPassword(from.getPassword());
+        Integer readTime = Optional.ofNullable(from.getReadTime())
+                .filter(time -> time >= 0)
+                .orElse((int) Math.round(from.getWords() / 200.0));
+        to.setReadTime(readTime);
+        return to;
+    }
+    
 }

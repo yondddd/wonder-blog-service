@@ -12,6 +12,7 @@ import com.yond.common.utils.page.PageUtil;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Set;
@@ -104,5 +105,20 @@ public class TagServiceImpl implements TagService {
     public List<TagBlogCount> getTagBlogCount() {
         return tagMapper.getTagBlogCount();
     }
-
+    
+    @Override
+    public Long insertSelective(TagDO tag) {
+        tagMapper.insertSelective(tag);
+        return tag.getId();
+    }
+    
+    @Override
+    public Long saveIfAbsent(TagDO tag) {
+        Assert.hasText(tag.getName(),"标签名字不应为空");
+        TagDO exist = this.getTagByName(tag.getName());
+        if (exist!=null){
+            return exist.getId();
+        }
+        return this.insertSelective(tag);
+    }
 }

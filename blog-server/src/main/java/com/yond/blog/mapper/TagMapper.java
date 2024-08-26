@@ -1,4 +1,5 @@
 package com.yond.blog.mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.yond.blog.entity.TagDO;
 import com.yond.blog.web.blog.view.vo.TagBlogCount;
@@ -21,7 +22,9 @@ public interface TagMapper {
     List<TagDO> getTagList();
 
     List<TagDO> getTagListByBlogId(Long blogId);
-
+    
+    int insertSelective(TagDO tagDO);
+    
     int saveTag(TagDO tag);
 
     TagDO getTagById(Long id);

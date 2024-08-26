@@ -27,6 +27,8 @@ public interface TagService {
     void updateTag(TagDO tag);
 
     List<TagBlogCount> getTagBlogCount();
-
-
+    
+    Long insertSelective(TagDO tag);
+    
+    Long saveIfAbsent(TagDO tag);
 }
