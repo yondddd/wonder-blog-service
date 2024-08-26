@@ -24,7 +24,7 @@ public interface BlogMapper {
 
     int insertSelective(BlogDO blogDO);
 
-    Integer updateSelective(BlogDO blogDO);
+    int updateSelective(BlogDO blogDO);
 
     List<BlogDO> getIdAndTitleList();
 
@@ -45,8 +45,6 @@ public interface BlogMapper {
     List<BlogView> getBlogViewsList();
 
     int updateViews(Long blogId, Integer views);
-
-    BlogDO getBlogById(Long id);
 
     String getTitleByBlogId(Long id);
 

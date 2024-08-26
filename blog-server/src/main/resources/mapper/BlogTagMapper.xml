@@ -14,24 +14,12 @@
         id,blog_id,tag_id
     </sql>
 
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="listAll" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from blog_tag
-        where  id = #{id,jdbcType=BIGINT} 
     </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete from blog_tag
-        where  id = #{id,jdbcType=BIGINT} 
-    </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.yond.blog.entity.BlogTagDO" useGeneratedKeys="true">
-        insert into blog_tag
-        ( id,blog_id,tag_id
-        )
-        values (#{id,jdbcType=BIGINT},#{blogId,jdbcType=BIGINT},#{tagId,jdbcType=BIGINT}
-        )
-    </insert>
     <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.yond.blog.entity.BlogTagDO" useGeneratedKeys="true">
         insert into blog_tag
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -45,31 +33,6 @@
                 <if test="tagId != null">#{tagId,jdbcType=BIGINT},</if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.yond.blog.entity.BlogTagDO">
-        update blog_tag
-        <set>
-                <if test="blogId != null">
-                    blog_id = #{blogId,jdbcType=BIGINT},
-                </if>
-                <if test="tagId != null">
-                    tag_id = #{tagId,jdbcType=BIGINT},
-                </if>
-        </set>
-        where   id = #{id,jdbcType=BIGINT} 
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.yond.blog.entity.BlogTagDO">
-        update blog_tag
-        set 
-            blog_id =  #{blogId,jdbcType=BIGINT},
-            tag_id =  #{tagId,jdbcType=BIGINT}
-        where   id = #{id,jdbcType=BIGINT} 
-    </update>
-
-    <select id="listAll" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from blog_tag
-    </select>
 
     <delete id="deleteByIds">
         delete

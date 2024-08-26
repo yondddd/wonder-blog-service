@@ -17,8 +17,11 @@ public interface BlogTagService {
     List<BlogTagDO> listByBlogId(Long blogId);
 
     List<TagDO> listTagsByBlogId(Long blogId);
-    
+
+    Long insertSelective(BlogTagDO record);
+
     void saveBlogTag(Long blogId, List<Long> tagIds);
     
     void deleteByIds(List<Long> ids);
+
 }

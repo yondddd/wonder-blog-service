@@ -153,16 +153,6 @@
         update blog set views=#{views} where id=#{blogId}
     </update>
 
-    <!--按id查询博客-->
-    <select id="getBlogById" resultMap="BaseResultMap">
-        select b.id, b.title, b.first_picture, b.content, b.description, b.is_recommend, b.is_published, b.is_appreciation,
-        b.is_comment_enabled, b.is_top, b.create_time, b.update_time, b.views, b.words, b.read_time, b.password,
-        c.id as category_id, c.category_name,
-        bt.tag_id as tag_id, t.tag_name as tag_name, t.color
-        from (((blog as b left join category as c on b.category_id=c.id) left join blog_tag as bt on b.id=bt.blog_id) left join tag as t on bt.tag_id=t.id)
-        where b.id=#{id}
-    </select>
-
     <!--按id查询博客标题-->
     <select id="getTitleByBlogId" resultType="java.lang.String">
         select title from blog where id=#{id}
@@ -251,7 +241,7 @@
         from blog
     </select>
 
-    <insert id="insertSelective">
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
         insert into blog
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
@@ -298,6 +288,14 @@
         </trim>
     </insert>
 
+
+    <select id="listByStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from blog
+        where
+        status = #{status,jdbcType=NUMERIC}
+    </select>
     <update id="updateSelective">
         update blog
         <set>
@@ -318,17 +316,10 @@
             <if test="words != null">words=#{words,jdbcType=NUMERIC},</if>
             <if test="readTime != null">read_time=#{readTime,jdbcType=NUMERIC},</if>
             <if test="password != null">password=#{password,jdbcType=VARCHAR},</if>
+            <if test="status != null">status=#{status,jdbcType=NUMERIC},</if>
         </set>
         where id = #{id,jdbcType=NUMERIC}
     </update>
-
-    <select id="listByStatus" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from blog
-        where
-        status = #{status,jdbcType=NUMERIC}
-    </select>
 
 
 </mapper>

@@ -12,6 +12,7 @@ import com.yond.blog.web.blog.view.dto.LoginInfo;
 import com.yond.common.constant.JwtConstant;
 import com.yond.common.enums.RoleEnum;
 import com.yond.common.resp.Response;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,13 +32,10 @@ import java.util.HashMap;
 public class AdminLoginController {
 
 
-    private final UserService userService;
-    private final LoginLogService loginLogService;
-
-    public AdminLoginController(UserService userService, LoginLogService loginLogService) {
-        this.userService = userService;
-        this.loginLogService = loginLogService;
-    }
+    @Resource
+    private UserService userService;
+    @Resource
+    private LoginLogService loginLogService;
 
     /**
      * 登录成功后，签发博主身份Token

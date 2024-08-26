@@ -12,11 +12,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -27,9 +25,10 @@ import java.util.Map;
  * @Description: AOP记录异常日志
  * @Author: Naccl
  * @Date: 2020-12-03
+ * todo 修改切面日志
  */
-@Component
-@Aspect
+//@Component
+//@Aspect
 public class ExceptionLogAspect {
     @Autowired
     ExceptionLogService exceptionLogService;

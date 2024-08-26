@@ -15,8 +15,7 @@ public class BlogVO implements Serializable {
     private static final long serialVersionUID = -5934819917336555995L;
 
     private Long id;
-    private Integer categoryId;
-    private String categoryName;
+    private CategoryVO category;
     private Integer userId;
     private String title;
     private String firstPicture;
@@ -39,152 +38,162 @@ public class BlogVO implements Serializable {
         return id;
     }
 
-    public void setId(Long id) {
+    public BlogVO setId(Long id) {
         this.id = id;
+        return this;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public CategoryVO getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public BlogVO setCategory(CategoryVO category) {
+        this.category = category;
+        return this;
     }
 
     public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public BlogVO setUserId(Integer userId) {
         this.userId = userId;
+        return this;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public BlogVO setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public String getFirstPicture() {
         return firstPicture;
     }
 
-    public void setFirstPicture(String firstPicture) {
+    public BlogVO setFirstPicture(String firstPicture) {
         this.firstPicture = firstPicture;
+        return this;
     }
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public BlogVO setContent(String content) {
         this.content = content;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public BlogVO setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     public Boolean getPublished() {
         return published;
     }
 
-    public void setPublished(Boolean published) {
+    public BlogVO setPublished(Boolean published) {
         this.published = published;
+        return this;
     }
 
     public Boolean getRecommend() {
         return recommend;
     }
 
-    public void setRecommend(Boolean recommend) {
+    public BlogVO setRecommend(Boolean recommend) {
         this.recommend = recommend;
+        return this;
     }
 
     public Boolean getAppreciation() {
         return appreciation;
     }
 
-    public void setAppreciation(Boolean appreciation) {
+    public BlogVO setAppreciation(Boolean appreciation) {
         this.appreciation = appreciation;
+        return this;
     }
 
     public Boolean getCommentEnabled() {
         return commentEnabled;
     }
 
-    public void setCommentEnabled(Boolean commentEnabled) {
+    public BlogVO setCommentEnabled(Boolean commentEnabled) {
         this.commentEnabled = commentEnabled;
+        return this;
     }
 
     public Boolean getTop() {
         return top;
     }
 
-    public void setTop(Boolean top) {
+    public BlogVO setTop(Boolean top) {
         this.top = top;
+        return this;
     }
 
     public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public BlogVO setCreateTime(Date createTime) {
         this.createTime = createTime;
+        return this;
     }
 
     public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public BlogVO setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+        return this;
     }
 
     public Integer getViews() {
         return views;
     }
 
-    public void setViews(Integer views) {
+    public BlogVO setViews(Integer views) {
         this.views = views;
+        return this;
     }
 
     public Integer getWords() {
         return words;
     }
 
-    public void setWords(Integer words) {
+    public BlogVO setWords(Integer words) {
         this.words = words;
+        return this;
     }
 
     public Integer getReadTime() {
         return readTime;
     }
 
-    public void setReadTime(Integer readTime) {
+    public BlogVO setReadTime(Integer readTime) {
         this.readTime = readTime;
+        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public BlogVO setPassword(String password) {
         this.password = password;
+        return this;
     }
 
     public List<TagVO> getTags() {
@@ -200,8 +209,7 @@ public class BlogVO implements Serializable {
     public String toString() {
         return "BlogVO{" +
                 "id=" + id +
-                ", categoryId=" + categoryId +
-                ", categoryName='" + categoryName + '\'' +
+                ", category=" + category +
                 ", userId=" + userId +
                 ", title='" + title + '\'' +
                 ", firstPicture='" + firstPicture + '\'' +

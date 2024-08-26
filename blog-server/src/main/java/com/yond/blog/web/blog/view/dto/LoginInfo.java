@@ -6,6 +6,7 @@ package com.yond.blog.web.blog.view.dto;
  * @Date: 2020-09-02
  */
 public class LoginInfo {
+
     private String username;
     private String password;
 

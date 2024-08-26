@@ -1,17 +1,21 @@
 package com.yond.blog.config;
 
 import com.yond.blog.config.properties.UploadProperties;
+import com.yond.blog.web.handler.CurrentUserResolver;
 import com.yond.blog.web.interceptor.AccessLimitInterceptor;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 /**
  * @Description: 配置CORS跨域支持、拦截器
@@ -21,11 +25,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Autowired
-    AccessLimitInterceptor accessLimitInterceptor;
-    @Autowired
-    UploadProperties uploadProperties;
-
+    @Resource
+    private AccessLimitInterceptor accessLimitInterceptor;
+    @Resource
+    private UploadProperties uploadProperties;
+    @Resource
+    private CurrentUserResolver currentUserResolver;
     /**
      * 跨域请求
      *
@@ -69,4 +74,11 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(uploadProperties.getAccessPath()).addResourceLocations(uploadProperties.getResourcesLocations());
     }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(currentUserResolver);
+        WebMvcConfigurer.super.addArgumentResolvers(resolvers);
+    }
+    
 }

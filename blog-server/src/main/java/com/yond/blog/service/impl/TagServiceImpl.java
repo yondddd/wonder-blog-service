@@ -44,7 +44,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<TagDO> listByIds(List<Long> ids) {
         return this.listAll().stream()
-                .filter(x -> Set.copyOf(ids).contains(x)).toList();
+                .filter(x -> Set.copyOf(ids).contains(x.getId())).toList();
     }
 
     @Override

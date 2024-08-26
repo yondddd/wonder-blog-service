@@ -22,20 +22,26 @@ public class CategoryVO implements Serializable {
      */
     private String name;
 
+    public static CategoryVO custom() {
+        return new CategoryVO();
+    }
+
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public CategoryVO setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public CategoryVO setName(String name) {
         this.name = name;
+        return this;
     }
 
     @Override

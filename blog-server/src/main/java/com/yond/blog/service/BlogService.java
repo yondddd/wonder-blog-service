@@ -27,8 +27,6 @@ public interface BlogService {
 
     List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
 
-    void deleteBlogTagByBlogId(Long blogId);
-
     void updateViewsToRedis(Long blogId);
 
     void updateViews(Long blogId, Integer views);

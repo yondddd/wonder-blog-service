@@ -4,6 +4,7 @@ import com.yond.blog.entity.BlogDO;
 import com.yond.blog.entity.TagDO;
 import com.yond.blog.web.blog.admin.req.BlogSaveReq;
 import com.yond.blog.web.blog.admin.vo.BlogVO;
+import com.yond.blog.web.blog.admin.vo.CategoryVO;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +19,10 @@ public class BlogConverter {
     public static BlogVO do2vo(BlogDO from, String categoryName, List<TagDO> tags) {
         BlogVO to = new BlogVO();
         to.setId(from.getId());
-        to.setCategoryId(from.getCategoryId());
-        to.setCategoryName(categoryName);
+        CategoryVO categoryVO = CategoryVO.custom()
+                .setId(from.getCategoryId().longValue())
+                .setName(categoryName);
+        to.setCategory(categoryVO);
         to.setUserId(from.getUserId());
         to.setTitle(from.getTitle());
         to.setFirstPicture(from.getFirstPicture());

@@ -287,15 +287,6 @@ public class BlogServiceImpl implements BlogService {
         return blogViewsMap;
     }
 
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void deleteBlogTagByBlogId(Long blogId) {
-        if (blogMapper.deleteBlogTagByBlogId(blogId) == 0) {
-            throw new PersistenceException("维护博客标签关联表失败");
-        }
-    }
-
     @Override
     public void updateViewsToRedis(Long blogId) {
         blogViewCache.blogViewIncr(blogId, 1);
@@ -311,7 +302,8 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public BlogDO getBlogById(Long id) {
-        BlogDO blog = blogMapper.getBlogById(id);
+        BlogDO blog = this.listEnable()
+                .stream().filter(x -> id.equals(x.getId())).findFirst().orElse(null);
         if (blog == null) {
             throw new NotFoundException("博客不存在");
         }

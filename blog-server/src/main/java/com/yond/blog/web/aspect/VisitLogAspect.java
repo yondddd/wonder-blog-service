@@ -18,9 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -33,8 +31,8 @@ import java.util.UUID;
  * @Author: Naccl
  * @Date: 2020-12-04
  */
-@Component
-@Aspect
+//@Component
+//@Aspect
 public class VisitLogAspect {
 
     private final VisitLogService visitLogService;

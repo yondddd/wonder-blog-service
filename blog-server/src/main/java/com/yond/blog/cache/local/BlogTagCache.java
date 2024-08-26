@@ -22,5 +22,9 @@ public class BlogTagCache {
     public static void setAll(List<BlogTagDO> all){
         cache.put(ALL_KEY,all);
     }
-    
+
+    public static void removeAll(){
+        cache.invalidateAll();
+    }
+
 }

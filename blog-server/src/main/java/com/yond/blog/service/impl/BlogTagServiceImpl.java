@@ -6,13 +6,14 @@ import com.yond.blog.entity.TagDO;
 import com.yond.blog.mapper.BlogTagMapper;
 import com.yond.blog.service.BlogTagService;
 import com.yond.blog.service.TagService;
+import jakarta.annotation.Resource;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author yond
@@ -22,14 +23,11 @@ import java.util.Set;
 @Service
 public class BlogTagServiceImpl implements BlogTagService {
 
-    private final BlogTagMapper blogTagMapper;
-    private final TagService tagService;
+    @Resource
+    private BlogTagMapper blogTagMapper;
+    @Resource
+    private TagService tagService;
 
-    public BlogTagServiceImpl(BlogTagMapper blogTagMapper, TagService tagService) {
-        this.blogTagMapper = blogTagMapper;
-        this.tagService = tagService;
-    }
-    
     @Override
     public List<BlogTagDO> listAll() {
         List<BlogTagDO> cache = BlogTagCache.listAll();
@@ -42,36 +40,50 @@ public class BlogTagServiceImpl implements BlogTagService {
     
     @Override
     public List<BlogTagDO> listByBlogId(Long blogId) {
-        return blogTagMapper.listByBlogId(blogId);
+        return this.listAll().stream()
+                .filter(x -> blogId.equals(x.getBlogId())).toList();
     }
 
     @Override
     public List<TagDO> listTagsByBlogId(Long blogId) {
         List<BlogTagDO> blogTags = this.listByBlogId(blogId);
-        return tagService.listAll();
+        return tagService.listByIds(blogTags.stream().map(BlogTagDO::getTagId).toList());
     }
-    
+
+    @Override
+    public Long insertSelective(BlogTagDO record) {
+        blogTagMapper.insertSelective(record);
+        BlogTagCache.removeAll();
+        return record.getId();
+    }
+
     @Override
     public void saveBlogTag(Long blogId, List<Long> tagIds) {
-        List<BlogTagDO> exist = this.listByBlogId(blogId);
-        List<BlogTagDO> save=new ArrayList<>();
-        Set<Long> set = new HashSet<>(tagIds);
-        for (BlogTagDO blogTag : exist) {
-            boolean remove = set.remove(blogTag.getTagId());
-            if (remove){
+        Set<Long> existTagIds = this.listByBlogId(blogId).stream()
+                .map(BlogTagDO::getTagId).collect(Collectors.toSet());
+        List<BlogTagDO> insert = new ArrayList<>();
+        for (Long tagId : tagIds) {
+            boolean remove = existTagIds.remove(tagId);
+            if (remove) {
                 continue;
             }
-            BlogTagDO.custom()
-                    .setBlogId()
-                    .setTagId()
+            BlogTagDO item = BlogTagDO.custom()
+                    .setBlogId(blogId)
+                    .setTagId(tagId);
+            insert.add(item);
         }
-        if (CollectionUtils.isNotEmpty(set)){
-            this.deleteByIds(new ArrayList<>(set));
+        for (BlogTagDO item : insert) {
+            this.insertSelective(item);
+        }
+        if (CollectionUtils.isNotEmpty(existTagIds)) {
+            this.deleteByIds(new ArrayList<>(existTagIds));
         }
     }
     
     @Override
     public void deleteByIds(List<Long> ids) {
         blogTagMapper.deleteByIds(ids);
+        BlogTagCache.removeAll();
     }
+
 }

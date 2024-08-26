@@ -4,6 +4,7 @@ import com.yond.blog.config.properties.ProxyProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,6 +28,7 @@ public class RestTemplateConfig {
      * @return
      */
     @Bean
+    @Primary
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }

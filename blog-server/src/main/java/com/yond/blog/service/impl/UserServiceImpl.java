@@ -4,10 +4,8 @@ import com.yond.blog.entity.UserDO;
 import com.yond.blog.mapper.UserMapper;
 import com.yond.blog.service.UserService;
 import com.yond.blog.util.encrypt.AesUtil;
-import com.yond.blog.util.jwt.JwtUtil;
-import com.yond.common.constant.JwtConstant;
+import com.yond.blog.web.handler.session.UserSession;
 import com.yond.common.exception.NotFoundException;
-import io.jsonwebtoken.Claims;
 import org.springframework.stereotype.Service;
 
 /**
@@ -47,10 +45,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean changeAccount(UserDO user, String jwt) {
-        Claims claims = JwtUtil.validateJwt(jwt, JwtConstant.DEFAULT_SECRET);
-        String guid = claims.getSubject();
-        UserDO currentUser = userMapper.getByGuid(guid);
+    public boolean changeAccount(UserDO user, UserSession userSession) {
+        UserDO currentUser = userMapper.getByGuid(userSession.getGuid());
         if (currentUser == null) {
             return false;
         }

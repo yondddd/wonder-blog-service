@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 /**
  * @Description: 博客文章后台管理
- * @Author: Naccl
+ * @Author: yond
  * @Date: 2020-07-29
  */
 @RestController
@@ -103,7 +103,7 @@ public class BlogAdminController {
     }
 
     @OperationLogger("删除博客")
-    @DeleteMapping("/delete")
+    @PostMapping("/del")
     public Response<Boolean> delete(UserSession userSession,@RequestBody BlogDelReq req) {
         blogService.delById(req.getId());
         return Response.success();
@@ -125,7 +125,7 @@ public class BlogAdminController {
     }
 
     @OperationLogger("更新博客")
-    @PutMapping("/update")
+    @PostMapping("/update")
     public Response<Boolean> updateBlog(UserSession userSession,@RequestBody BlogSaveReq req) {
         Assert.notNull(userSession,"用户信息不能为null");
         Assert.notNull(req.getId(),"博客id不能为空");

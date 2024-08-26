@@ -13,18 +13,8 @@ import com.yond.blog.entity.BlogTagDO;
 public interface BlogTagMapper {
     
     List<BlogTagDO> listAll();
-    
-    int deleteByPrimaryKey(Long id);
-
-    int insert(BlogTagDO record);
 
     int insertSelective(BlogTagDO record);
-
-    BlogTagDO selectByPrimaryKey(Long id);
-
-    int updateByPrimaryKeySelective(BlogTagDO record);
-
-    int updateByPrimaryKey(BlogTagDO record);
     
     int deleteByIds(@Param("ids") List<Long> ids);
 }
