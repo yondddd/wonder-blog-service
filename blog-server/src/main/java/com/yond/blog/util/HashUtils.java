@@ -12,8 +12,7 @@ public class HashUtils {
 
     public static long getMurmurHash32(String str) {
         int i = MurmurHash.hash32(str);
-        long num = i < 0 ? Integer.MAX_VALUE - (long) i : i;
-        return num;
+        return i < 0 ? Integer.MAX_VALUE - (long) i : i;
     }
 
 

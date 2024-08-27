@@ -1,6 +1,8 @@
 package com.yond.blog.entity;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 
@@ -8,12 +10,15 @@ import java.io.Serializable;
  */
 public class BlogTagDO implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 5350459604914013492L;
+
     private Long id;
     private Long blogId;
     private Long tagId;
+    private Date createTime;
 
-    private static final long serialVersionUID = 1L;
-    
+
     public static BlogTagDO custom(){
         return new BlogTagDO();
     }
@@ -43,13 +48,23 @@ public class BlogTagDO implements Serializable {
         this.tagId = tagId;
         return this;
     }
-    
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public BlogTagDO setCreateTime(Date createTime) {
+        this.createTime = createTime;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "BlogTagDO{" +
                 "id=" + id +
                 ", blogId=" + blogId +
                 ", tagId=" + tagId +
+                ", createTime=" + createTime +
                 '}';
     }
 }

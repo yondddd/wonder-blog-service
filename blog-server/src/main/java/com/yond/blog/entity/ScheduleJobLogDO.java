@@ -12,7 +12,7 @@ import java.util.Date;
 public class ScheduleJobLogDO implements Serializable {
     @Serial
     private static final long serialVersionUID = 5752837225091432926L;
-    private Long logId;//日志id
+    private Long id;//日志id
     private Long jobId;//任务id
     private String beanName;//spring bean名称
     private String methodName;//方法名
@@ -25,8 +25,8 @@ public class ScheduleJobLogDO implements Serializable {
     public ScheduleJobLogDO() {
     }
 
-    public Long getLogId() {
-        return this.logId;
+    public Long getId() {
+        return this.id;
     }
 
     public Long getJobId() {
@@ -61,8 +61,8 @@ public class ScheduleJobLogDO implements Serializable {
         return this.createTime;
     }
 
-    public void setLogId(Long logId) {
-        this.logId = logId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setJobId(Long jobId) {
@@ -100,7 +100,7 @@ public class ScheduleJobLogDO implements Serializable {
     @Override
     public String toString() {
         return "ScheduleJobLogDO{" +
-                "logId=" + logId +
+                "logId=" + id +
                 ", jobId=" + jobId +
                 ", beanName='" + beanName + '\'' +
                 ", methodName='" + methodName + '\'' +

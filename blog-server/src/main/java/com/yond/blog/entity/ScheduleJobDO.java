@@ -15,7 +15,7 @@ public class ScheduleJobDO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1842150725534943656L;
 
-    private Long jobId;//任务id
+    private Long id;//任务id
     private String beanName;//spring bean名称
     private String methodName;//方法名
     private String params;//参数
@@ -27,8 +27,8 @@ public class ScheduleJobDO implements Serializable {
     public ScheduleJobDO() {
     }
 
-    public Long getJobId() {
-        return this.jobId;
+    public Long getId() {
+        return this.id;
     }
 
     public String getBeanName() {
@@ -59,8 +59,8 @@ public class ScheduleJobDO implements Serializable {
         return this.createTime;
     }
 
-    public void setJobId(Long jobId) {
-        this.jobId = jobId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setBeanName(String beanName) {
@@ -94,7 +94,7 @@ public class ScheduleJobDO implements Serializable {
     @Override
     public String toString() {
         return "ScheduleJobDO{" +
-                "jobId=" + jobId +
+                "id=" + id +
                 ", beanName='" + beanName + '\'' +
                 ", methodName='" + methodName + '\'' +
                 ", params='" + params + '\'' +

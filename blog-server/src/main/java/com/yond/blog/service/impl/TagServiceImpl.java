@@ -6,7 +6,6 @@ import com.yond.blog.entity.TagDO;
 import com.yond.blog.mapper.TagMapper;
 import com.yond.blog.service.TagService;
 import com.yond.blog.web.blog.view.vo.TagBlogCount;
-import com.yond.common.exception.NotFoundException;
 import com.yond.common.exception.PersistenceException;
 import com.yond.common.utils.page.PageUtil;
 import org.apache.commons.lang3.tuple.Pair;
@@ -68,15 +67,6 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDO getTagById(Long id) {
-        TagDO tag = tagMapper.getTagById(id);
-        if (tag == null) {
-            throw new NotFoundException("标签不存在");
-        }
-        return tag;
-    }
-
-    @Override
     public TagDO getTagByName(String name) {
         return tagMapper.getTagByName(name);
     }
@@ -109,6 +99,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public Long insertSelective(TagDO tag) {
         tagMapper.insertSelective(tag);
+        TagCache.del();
         return tag.getId();
     }
     

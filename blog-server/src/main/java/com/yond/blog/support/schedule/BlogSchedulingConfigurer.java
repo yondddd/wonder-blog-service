@@ -61,12 +61,12 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
     public void addJob(ScheduleJobDO job) {
         ScheduledTaskWrapper task = null;
         try {
-            task = new ScheduledTaskWrapper(new ScheduleRunnable(job.getJobId(), job.getBeanName(), job.getMethodName(), job.getParams()));
+            task = new ScheduledTaskWrapper(new ScheduleRunnable(job.getId(), job.getBeanName(), job.getMethodName(), job.getParams()));
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
         ScheduledTask scheduledTask = taskRegistrar.scheduleCronTask(new CronTask(task, job.getCron()));
-        scheduledTasks.put(String.valueOf(job.getJobId()), scheduledTask);
+        scheduledTasks.put(String.valueOf(job.getId()), scheduledTask);
         LOGGER.info("<|>BlogSchedulingConfigurer_addJob<|>job:{}<|>", JsonUtils.toJson(job));
     }
 
@@ -81,7 +81,7 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
     }
 
     public void updateJob(ScheduleJobDO job) {
-        this.removeJob(String.valueOf(job.getJobId()));
+        this.removeJob(String.valueOf(job.getId()));
         this.addJob(job);
         LOGGER.info("<|>BlogSchedulingConfigurer_updateJob<|>job:{}<|>", JsonUtils.toJson(job));
     }
@@ -108,7 +108,7 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
             ScheduleJobDO job = scheduleJobService.getJobById(task.getJobId());
             long start = System.currentTimeMillis();
             ScheduleJobLogDO jobLog = new ScheduleJobLogDO();
-            jobLog.setJobId(job.getJobId());
+            jobLog.setJobId(job.getId());
             jobLog.setBeanName(job.getBeanName());
             jobLog.setMethodName(job.getMethodName());
             jobLog.setParams(job.getParams());

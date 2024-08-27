@@ -1,12 +1,12 @@
 package com.yond.blog.service.impl;
 
-import com.yond.blog.service.OperationLogService;
-import com.yond.common.exception.PersistenceException;
 import com.yond.blog.entity.OperationLogDO;
 import com.yond.blog.mapper.OperationLogMapper;
-import com.yond.blog.web.blog.view.dto.UserAgentDTO;
+import com.yond.blog.service.OperationLogService;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.UserAgentUtils;
+import com.yond.blog.web.blog.view.dto.UserAgentDTO;
+import com.yond.common.exception.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +27,7 @@ public class OperationLogServiceImpl implements OperationLogService {
 
     @Override
     public List<OperationLogDO> getOperationLogListByDate(String startDate, String endDate) {
-        return operationLogMapper.getOperationLogListByDate(startDate, endDate);
+        return operationLogMapper.listByDate(startDate, endDate);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -38,15 +38,13 @@ public class OperationLogServiceImpl implements OperationLogService {
         log.setIpSource(ipSource);
         log.setOs(userAgentDTO.getOs());
         log.setBrowser(userAgentDTO.getBrowser());
-        if (operationLogMapper.saveOperationLog(log) != 1) {
-            throw new PersistenceException("日志添加失败");
-        }
+        operationLogMapper.insertSelective(log);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteOperationLogById(Long id) {
-        if (operationLogMapper.deleteOperationLogById(id) != 1) {
+        if (operationLogMapper.deleteById(id) != 1) {
             throw new PersistenceException("删除日志失败");
         }
     }

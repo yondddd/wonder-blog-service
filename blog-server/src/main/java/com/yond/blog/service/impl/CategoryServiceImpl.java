@@ -66,14 +66,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Long save(CategoryDO category) {
-        categoryMapper.save(category);
+        categoryMapper.insertSelective(category);
         CategoryCache.del();
         return category.getId();
     }
 
     @Override
     public void update(CategoryDO category) {
-        if (categoryMapper.update(category) != 1) {
+        if (categoryMapper.updateSelective(category) != 1) {
             throw new PersistenceException("分类更新失败");
         }
         CategoryCache.del();

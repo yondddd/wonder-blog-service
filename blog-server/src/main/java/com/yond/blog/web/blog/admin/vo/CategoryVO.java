@@ -25,7 +25,7 @@ public class CategoryVO implements Serializable {
     public static CategoryVO custom() {
         return new CategoryVO();
     }
-
+    
     public Long getId() {
         return id;
     }

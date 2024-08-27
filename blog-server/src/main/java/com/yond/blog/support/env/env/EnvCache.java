@@ -158,7 +158,7 @@ final class EnvCache {
             }
         }
 
-        System.out.printf("MSharp-Env-Config[loaded appenv: env [%s], appkey [%s]]%n", envEnum.getName(), appkey);
+        System.out.printf("Env-Config[loaded appenv: env [%s], appkey [%s]]%n", envEnum.getName(), appkey);
     }
 
     int getInt(final String key, int defaultValue) {

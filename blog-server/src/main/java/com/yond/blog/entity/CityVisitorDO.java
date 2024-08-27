@@ -13,6 +13,7 @@ public class CityVisitorDO implements Serializable {
     @Serial
     private static final long serialVersionUID = 4952990742645825000L;
 
+    private Long id;
     /**
      * 城市名称
      */
@@ -28,6 +29,15 @@ public class CityVisitorDO implements Serializable {
     }
 
     public CityVisitorDO() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public CityVisitorDO setId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public String getCity() {
@@ -49,7 +59,8 @@ public class CityVisitorDO implements Serializable {
     @Override
     public String toString() {
         return "CityVisitorDO{" +
-                "city='" + city + '\'' +
+                "id=" + id +
+                ", city='" + city + '\'' +
                 ", uv=" + uv +
                 '}';
     }

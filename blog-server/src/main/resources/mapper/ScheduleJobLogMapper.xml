@@ -3,7 +3,7 @@
 <mapper namespace="com.yond.blog.mapper.ScheduleJobLogMapper">
 
     <resultMap id="log" type="com.yond.blog.entity.ScheduleJobLogDO">
-        <id property="logId" column="log_id"/>
+        <id property="logId" column="id"/>
         <result property="jobId" column="job_id"/>
         <result property="beanName" column="bean_name"/>
         <result property="methodName" column="method_name"/>
@@ -15,7 +15,7 @@
     </resultMap>
 
     <select id="getJobLogListByDate" resultMap="log">
-        select log_id, job_id, bean_name, method_name, params, status, error, times, create_time
+        select id, job_id, bean_name, method_name, params, status, error, times, create_time
         from schedule_job_log
         <where>
             <if test="startDate!=null and startDate!='' and endDate!=null and endDate!=''">
@@ -31,6 +31,8 @@
     </insert>
 
     <delete id="deleteJobLogByLogId">
-        delete from schedule_job_log where log_id=#{logId}
+        delete
+        from schedule_job_log
+        where id = #{logId}
     </delete>
 </mapper>

@@ -8,10 +8,12 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="blogId" column="blog_id" jdbcType="BIGINT"/>
             <result property="tagId" column="tag_id" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,blog_id,tag_id
+        id
+        , blog_id, tag_id,create_time
     </sql>
 
     <select id="listAll" resultMap="BaseResultMap">
@@ -20,17 +22,20 @@
         from blog_tag
     </select>
 
-    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.yond.blog.entity.BlogTagDO" useGeneratedKeys="true">
+    <insert id="insertSelective" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
         insert into blog_tag
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="id != null">id,</if>
-                <if test="blogId != null">blog_id,</if>
-                <if test="tagId != null">tag_id,</if>
+            <if test="id != null">id,</if>
+            <if test="blogId != null">blog_id,</if>
+            <if test="tagId != null">tag_id,</if>
+            <if test="createTime != null">create_time,</if>
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="id != null">#{id,jdbcType=BIGINT},</if>
-                <if test="blogId != null">#{blogId,jdbcType=BIGINT},</if>
-                <if test="tagId != null">#{tagId,jdbcType=BIGINT},</if>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=BIGINT},</if>
+            <if test="blogId != null">#{blogId,jdbcType=BIGINT},</if>
+            <if test="tagId != null">#{tagId,jdbcType=BIGINT},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
         </trim>
     </insert>
 
@@ -41,7 +46,6 @@
         <foreach collection="ids" item="id" open="(" close=")" separator=",">
             #{id,jdbcType=NUMERIC}
         </foreach>
-
     </delete>
 
 </mapper>

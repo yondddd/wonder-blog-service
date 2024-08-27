@@ -8,8 +8,6 @@ import com.yond.blog.service.VisitorService;
 import com.yond.blog.util.AopUtils;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.common.annotation.VisitLogger;
-import com.yond.common.enums.VisitBehavior;
-import com.yond.common.utils.json.util.JsonUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,38 +42,49 @@ public class VisitLogAspect {
     @Pointcut("@annotation(visitLogger)")
     public void logPointcut(VisitLogger visitLogger) {
     }
-    
-    
+
+
     @Around(value = "logPointcut(visitLogger)", argNames = "joinPoint,visitLogger")
     public Object logAround(ProceedingJoinPoint joinPoint, VisitLogger visitLogger) throws Throwable {
         long start = System.currentTimeMillis();
         Object result = joinPoint.proceed();
         int duration = (int) (System.currentTimeMillis() - start);
+
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+
+        // Capture necessary data from the request before starting the new thread
+        String uuid = checkIdentification(request);
+        String uri = request.getRequestURI();
+        String method = request.getMethod();
+        String behavior = visitLogger.value().getBehavior();
+        String content = visitLogger.value().getContent();
+        String ip = IpAddressUtils.getIpAddress(request);
+        String userAgent = request.getHeader("User-Agent");
+        String params = StringUtils.substring(AopUtils.getRequestParams(joinPoint), 0, 2000);
+
+        // Start a virtual thread with the captured data
         Thread.startVirtualThread(() -> {
-            handleLog(joinPoint, visitLogger, request, duration);
+            handleLog(uuid, uri, method, behavior, content, ip, userAgent, params, duration);
         });
+
         return result;
     }
-    
-    
-    private void handleLog(ProceedingJoinPoint joinPoint, VisitLogger visitLogger, HttpServletRequest request,
-                           int duration) {
-        
-        VisitBehavior visitBehavior = visitLogger.value();
+
+    private void handleLog(String uuid, String uri, String method, String behavior, String content, String ip, String userAgent, String params, int duration) {
         VisitLogDO log = VisitLogDO.custom()
-                .setUuid(checkIdentification(request))
-                .setUri(request.getRequestURI())
-                .setMethod(request.getMethod())
-                .setBehavior(visitBehavior.getBehavior())
-                .setContent(visitBehavior.getContent())
-                .setIp(IpAddressUtils.getIpAddress(request))
+                .setUuid(uuid)
+                .setUri(uri)
+                .setMethod(method)
+                .setBehavior(behavior)
+                .setContent(content)
+                .setIp(ip)
                 .setTimes(duration)
-                .setUserAgent(request.getHeader("User-Agent"));
-        log.setParam(StringUtils.substring(JsonUtils.toJson(AopUtils.getRequestParams(joinPoint)), 0, 2000));
+                .setUserAgent(userAgent);
+        log.setParam(params);
         visitLogService.saveVisitLog(log);
     }
-    
+
+
     private String checkIdentification(HttpServletRequest request) {
         String identification = request.getHeader("identification");
         if (identification == null) {

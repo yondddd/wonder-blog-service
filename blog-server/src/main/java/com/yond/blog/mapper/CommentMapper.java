@@ -1,9 +1,9 @@
 package com.yond.blog.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 import com.yond.blog.entity.CommentDO;
 import com.yond.blog.web.blog.view.vo.PageComment;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -15,6 +15,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface CommentMapper {
+
 	List<CommentDO> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
 
 	List<CommentDO> getListByParentCommentId(Long parentCommentId);

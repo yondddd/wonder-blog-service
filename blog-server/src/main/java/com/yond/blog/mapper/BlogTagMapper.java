@@ -1,15 +1,14 @@
 package com.yond.blog.mapper;
-import org.apache.ibatis.annotations.Param;
-import java.util.List;
 
 import com.yond.blog.entity.BlogTagDO;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
-/**
-* @author yond
-* @description 针对表【blog_tag】的数据库操作Mapper
-* @createDate 2024-08-26 16:59:00
-* @Entity com.yond.blog.entity.BlogTag
-*/
+import java.util.List;
+
+@Mapper
+@Repository
 public interface BlogTagMapper {
     
     List<BlogTagDO> listAll();
@@ -17,4 +16,5 @@ public interface BlogTagMapper {
     int insertSelective(BlogTagDO record);
     
     int deleteByIds(@Param("ids") List<Long> ids);
+
 }

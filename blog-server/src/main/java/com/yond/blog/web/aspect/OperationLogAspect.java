@@ -7,7 +7,6 @@ import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.jwt.JwtUtil;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.constant.JwtConstant;
-import com.yond.common.utils.json.util.JsonUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
@@ -38,30 +37,43 @@ public class OperationLogAspect {
     @Pointcut("@annotation(operationLogger)")
     public void logPointcut(OperationLogger operationLogger) {
     }
-    
+
     @Around(value = "logPointcut(operationLogger)", argNames = "joinPoint,operationLogger")
     public Object logAround(ProceedingJoinPoint joinPoint, OperationLogger operationLogger) throws Throwable {
         long start = System.currentTimeMillis();
         Object result = joinPoint.proceed();
         int duration = (int) (System.currentTimeMillis() - start);
+
+        // Capture necessary data from the request before starting the new thread
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String token = request.getHeader(JwtConstant.TOKEN_HEADER);
+        String uri = request.getRequestURI();
+        String method = request.getMethod();
+        String ip = IpAddressUtils.getIpAddress(request);
+        String userAgent = request.getHeader("User-Agent");
+        String params = StringUtils.substring(AopUtils.getRequestParams(joinPoint), 0, 2000);
+        String username = JwtUtil.validateJwt(token, JwtConstant.DEFAULT_SECRET).getSubject();
+
+        // Start a virtual thread with the captured data
         Thread.startVirtualThread(() -> {
-            handleLog(joinPoint, operationLogger, duration, request);
+            handleLog(username, uri, method, ip, userAgent, duration, params, operationLogger);
         });
+
         return result;
     }
-    
-    private void handleLog(ProceedingJoinPoint joinPoint, OperationLogger operationLogger, int duration, HttpServletRequest request) {
+
+    private void handleLog(String username, String uri, String method, String ip, String userAgent, int duration, String params, OperationLogger operationLogger) {
         OperationLogDO log = OperationLogDO.custom()
-                .setUsername(JwtUtil.validateJwt(request.getHeader(JwtConstant.TOKEN_HEADER), JwtConstant.DEFAULT_SECRET).getSubject())
-                .setUri(request.getRequestURI())
-                .setMethod(request.getMethod())
+                .setUsername(username)
+                .setUri(uri)
+                .setMethod(method)
                 .setDescription(operationLogger.value())
-                .setIp(IpAddressUtils.getIpAddress(request))
+                .setIp(ip)
                 .setTimes(duration)
-                .setUserAgent(request.getHeader("User-Agent"));
-        log.setParam(StringUtils.substring(JsonUtils.toJson(AopUtils.getRequestParams(joinPoint)), 0, 2000));
+                .setUserAgent(userAgent);
+        log.setParam(params);
         operationLogService.saveOperationLog(log);
     }
-    
+
+
 }

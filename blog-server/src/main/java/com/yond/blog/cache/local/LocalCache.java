@@ -10,6 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class LocalCache {
 
+    // todo 做成系统启动时就加载所有 每次查询都必须走缓存
+
     private final static AtomicInteger NUM = new AtomicInteger(-1);
 
     private final static ThreadFactory THREAD_FACTORY = new ThreadFactoryBuilder()
@@ -26,7 +28,6 @@ public class LocalCache {
             new LinkedBlockingQueue<>(100)
             , THREAD_FACTORY,
             new ThreadPoolExecutor.DiscardOldestPolicy());
-
 
     private static final Scheduler SCHEDULER = Scheduler.forScheduledExecutorService(Executors.newScheduledThreadPool(1));
 

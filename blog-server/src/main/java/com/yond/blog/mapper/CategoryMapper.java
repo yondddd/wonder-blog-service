@@ -6,21 +6,16 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * @Description: 博客分类持久层接口
- * @Author: Naccl
- * @Date: 2020-07-29
- */
 @Mapper
 @Repository
 public interface CategoryMapper {
 
     List<CategoryDO> listAll();
 
-    int save(CategoryDO category);
+    int insertSelective(CategoryDO record);
+
+    int updateSelective(CategoryDO record);
 
     int deleteById(Long id);
-
-    int update(CategoryDO category);
 
 }

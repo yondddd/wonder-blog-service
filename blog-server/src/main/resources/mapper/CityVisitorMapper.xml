@@ -3,12 +3,14 @@
 <mapper namespace="com.yond.blog.mapper.CityVisitorMapper">
 
     <resultMap id="cityVisitor" type="com.yond.blog.entity.CityVisitorDO">
+        <result property="id" column="id"/>
         <result property="city" column="city"/>
         <result property="uv" column="uv"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        city,uv
+        id
+        ,city,uv
     </sql>
 
     <!--查询城市访客数-->
@@ -23,4 +25,5 @@
         on duplicate key update
         uv=uv+#{uv}
     </insert>
+
 </mapper>

@@ -1,8 +1,8 @@
 package com.yond.blog.mapper;
 
+import com.yond.blog.entity.OperationLogDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.blog.entity.OperationLogDO;
 
 import java.util.List;
 
@@ -14,9 +14,11 @@ import java.util.List;
 @Mapper
 @Repository
 public interface OperationLogMapper {
-	List<OperationLogDO> getOperationLogListByDate(String startDate, String endDate);
 
-	int saveOperationLog(OperationLogDO log);
+	List<OperationLogDO> listByDate(String startDate, String endDate);
 
-	int deleteOperationLogById(Long id);
+	int insertSelective(OperationLogDO operationLogDO);
+
+	int deleteById(Long id);
+
 }

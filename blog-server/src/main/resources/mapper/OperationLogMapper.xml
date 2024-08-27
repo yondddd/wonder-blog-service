@@ -19,7 +19,7 @@
     </resultMap>
 
     <!--查询日志-->
-    <select id="getOperationLogListByDate" resultMap="log">
+    <select id="listByDate" resultMap="log">
         select id, username, uri, method, param, description, ip, ip_source, os, browser, times, create_time
         from operation_log
         <where>
@@ -29,14 +29,43 @@
         </where>
     </select>
 
-    <!--添加日志-->
-    <insert id="saveOperationLog" parameterType="com.yond.blog.entity.OperationLogDO" useGeneratedKeys="true" keyProperty="id">
-        insert into operation_log (username, uri, method, param, description, ip, ip_source, os, browser, times, create_time, user_agent)
-        values (#{username}, #{uri}, #{method}, #{param}, #{description}, #{ip}, #{ipSource}, #{os}, #{browser}, #{times}, #{createTime}, #{userAgent})
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
+        insert into operation_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="username != null">username,</if>
+            <if test="uri != null">uri,</if>
+            <if test="method != null">method,</if>
+            <if test="param != null">param,</if>
+            <if test="description != null">description,</if>
+            <if test="ip != null">ip,</if>
+            <if test="ipSource != null">ip_source,</if>
+            <if test="os != null">os,</if>
+            <if test="browser != null">browser,</if>
+            <if test="times != null">times,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="userAgent != null">user_agent,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=NUMERIC},</if>
+            <if test="username != null">#{username,jdbcType=VARCHAR},</if>
+            <if test="uri != null">#{uri,jdbcType=VARCHAR},</if>
+            <if test="method != null">#{method,jdbcType=VARCHAR},</if>
+            <if test="param != null">#{param,jdbcType=VARCHAR},</if>
+            <if test="description != null">#{description,jdbcType=VARCHAR},</if>
+            <if test="ip != null">#{ip,jdbcType=VARCHAR},</if>
+            <if test="ipSource != null">#{ipSource,jdbcType=VARCHAR},</if>
+            <if test="os != null">#{os,jdbcType=VARCHAR},</if>
+            <if test="browser != null">#{browser,jdbcType=VARCHAR},</if>
+            <if test="times != null">#{times,jdbcType=NUMERIC},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="userAgent != null">#{userAgent,jdbcType=VARCHAR},</if>
+        </trim>
     </insert>
 
-    <!--删除日志-->
-    <delete id="deleteOperationLogById">
+    <delete id="deleteById">
         delete from operation_log where id=#{id}
     </delete>
+
 </mapper>

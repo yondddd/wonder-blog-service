@@ -7,7 +7,6 @@ import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.MyStringUtils;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.annotation.VisitLogger;
-import com.yond.common.utils.json.util.JsonUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -34,34 +33,43 @@ public class ExceptionLogAspect {
     
     @Autowired
     ExceptionLogService exceptionLogService;
-    
-    // 要controller 里
+
     @Pointcut("execution(* com.yond.blog.web.blog.admin.controller..*.*(..)) || execution(* com.yond.blog.web.blog.view.controller..*.*(..))")
     public void logPointcut() {
     }
-    
-    
+
+
     @AfterThrowing(value = "logPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Exception e) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+
+        // Capture necessary data from the request before starting the new thread
+        String uri = request.getRequestURI();
+        String method = request.getMethod();
+        String ip = IpAddressUtils.getIpAddress(request);
+        String userAgent = request.getHeader("User-Agent");
+        String params = StringUtils.substring(AopUtils.getRequestParams(joinPoint), 0, 2000);
+        String description = getOperate(joinPoint);
+        String error = MyStringUtils.getStackTrace(e);
+
+        // Start a virtual thread with the captured data
         Thread.startVirtualThread(() -> {
-            handleLog(joinPoint, e, request);
+            handleLog(uri, method, ip, userAgent, description, error, params);
         });
     }
-    
-    private void handleLog(JoinPoint joinPoint, Exception e, HttpServletRequest request) {
-        // !! 可能取不到
+
+    private void handleLog(String uri, String method, String ip, String userAgent, String description, String error, String params) {
         ExceptionLogDO log = ExceptionLogDO.custom()
-                .setUri(request.getRequestURI())
-                .setMethod(request.getMethod())
-                .setIp(IpAddressUtils.getIpAddress(request))
-                .setUserAgent(request.getHeader("User-Agent"))
-                .setDescription(getOperate(joinPoint))
-                .setError(MyStringUtils.getStackTrace(e))
-                .setParam(StringUtils.substring(JsonUtils.toJson(AopUtils.getRequestParams(joinPoint)), 0, 2000));
+                .setUri(uri)
+                .setMethod(method)
+                .setIp(ip)
+                .setUserAgent(userAgent)
+                .setDescription(description)
+                .setError(error)
+                .setParam(params);
         exceptionLogService.saveExceptionLog(log);
     }
-    
+
     private String getOperate(JoinPoint joinPoint) {
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         OperationLogger operationLogger = method.getAnnotation(OperationLogger.class);
@@ -74,5 +82,6 @@ public class ExceptionLogAspect {
         }
         return "";
     }
-    
+
+
 }

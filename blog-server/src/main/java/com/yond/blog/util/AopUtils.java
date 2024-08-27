@@ -1,15 +1,13 @@
 package com.yond.blog.util;
 
+import com.yond.common.utils.json.util.JsonUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Description: AOP工具类
@@ -17,48 +15,20 @@ import java.util.Set;
  * @Date: 2020-12-02
  */
 public class AopUtils {
-    
-    private static final Set<String> ignoreParams = new HashSet<>() {
-        {
-            add("jwt");
-        }
-    };
 
-    /**
-     * 获取请求参数
-     *
-     * @param joinPoint
-     * @return
-     */
-    public static Map<String, Object> getRequestParams(JoinPoint joinPoint) {
-        Map<String, Object> map = new LinkedHashMap<>();
-        String[] parameterNames = ((MethodSignature) joinPoint.getSignature()).getParameterNames();
-        Object[] args = joinPoint.getArgs();
-        for (int i = 0; i < args.length; i++) {
-            if (!isIgnoreParams(parameterNames[i]) && !isFilterObject(args[i])) {
-                map.put(parameterNames[i], args[i]);
+    public static String getRequestParams(JoinPoint joinPoint) {
+        List<Object> data = new ArrayList<>();
+        for (Object arg : joinPoint.getArgs()) {
+            if (isFilterObject(arg)) {
+                continue;
             }
+            data.add(arg);
         }
-        return map;
+        return JsonUtils.toJsonIgnoreNull(data);
     }
 
-    /**
-     * consider if the data is file, httpRequest or response
-     *
-     * @param o the data
-     * @return if match return true, else return false
-     */
     private static boolean isFilterObject(final Object o) {
         return o instanceof HttpServletRequest || o instanceof HttpServletResponse || o instanceof MultipartFile;
     }
 
-    /**
-     * 判断是否忽略参数
-     *
-     * @param params
-     * @return
-     */
-    private static boolean isIgnoreParams(String params) {
-        return ignoreParams.contains(params);
-    }
 }

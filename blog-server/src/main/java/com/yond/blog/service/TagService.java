@@ -18,8 +18,6 @@ public interface TagService {
 
     void saveTag(TagDO tag);
 
-    TagDO getTagById(Long id);
-
     TagDO getTagByName(String name);
 
     void deleteTagById(Long id);

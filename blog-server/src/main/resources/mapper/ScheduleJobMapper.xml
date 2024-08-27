@@ -3,7 +3,7 @@
 <mapper namespace="com.yond.blog.mapper.ScheduleJobMapper">
 
     <resultMap id="job" type="com.yond.blog.entity.ScheduleJobDO">
-        <id property="jobId" column="job_id"/>
+        <id property="id" column="id"/>
         <result property="beanName" column="bean_name"/>
         <result property="methodName" column="method_name"/>
         <result property="params" column="params"/>
@@ -14,11 +14,28 @@
     </resultMap>
 
     <select id="getJobList" resultMap="job">
-        select job_id, bean_name, method_name, params, cron, status, remark, create_time from schedule_job
+        select id,
+               bean_name,
+               method_name,
+               params,
+               cron,
+               status,
+               remark,
+               create_time
+        from schedule_job
     </select>
 
     <select id="getJobById" resultMap="job">
-        select job_id, bean_name, method_name, params, cron, status, remark, create_time from schedule_job where job_id=#{jobId}
+        select id,
+               bean_name,
+               method_name,
+               params,
+               cron,
+               status,
+               remark,
+               create_time
+        from schedule_job
+        where id = #{jobId}
     </select>
 
     <insert id="saveJob" parameterType="com.yond.blog.entity.ScheduleJobDO" useGeneratedKeys="true" keyProperty="jobId">
@@ -28,14 +45,19 @@
 
     <update id="updateJob">
         update schedule_job set bean_name=#{beanName}, method_name=#{methodName}, params=#{params}, cron=#{cron}, status=#{status},
-        remark=#{remark} where job_id=#{jobId}
+                                remark=#{remark}
+        where id = #{jobId}
     </update>
 
     <delete id="deleteJobById">
-        delete from schedule_job where job_id=#{jobId}
+        delete
+        from schedule_job
+        where id = #{jobId}
     </delete>
 
     <update id="updateJobStatusById">
-        update schedule_job set status=#{status} where job_id=#{jobId}
+        update schedule_job
+        set status=#{status}
+        where id = #{jobId}
     </update>
 </mapper>
