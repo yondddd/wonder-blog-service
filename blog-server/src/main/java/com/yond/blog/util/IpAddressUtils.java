@@ -75,4 +75,5 @@ public class IpAddressUtils {
         String cityInfo = IpAddressUtils.getCityInfo("14.215.177.39");
         System.out.println(cityInfo);
     }
+    
 }

@@ -10,6 +10,7 @@ import java.util.Date;
  * @Date: 2020-12-04
  */
 public class VisitLogDO implements Serializable {
+    
     @Serial
     private static final long serialVersionUID = -3567996804412972125L;
     private Long id;
@@ -27,143 +28,150 @@ public class VisitLogDO implements Serializable {
     private Integer times;//请求耗时（毫秒）
     private Date createTime;//访问时间
     private String userAgent;
-
-    public VisitLogDO(String uuid, String uri, String method, String behavior, String content, String remark, String ip, Integer times, String userAgent) {
-        this.uuid = uuid;
-        this.uri = uri;
-        this.method = method;
-        this.behavior = behavior;
-        this.content = content;
-        this.remark = remark;
-        this.ip = ip;
-        this.times = times;
-        this.createTime = new Date();
-        this.userAgent = userAgent;
+    
+    
+    public static VisitLogDO custom() {
+        return new VisitLogDO();
     }
-
+    
     public VisitLogDO() {
     }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public String getUuid() {
-        return this.uuid;
-    }
-
-    public String getUri() {
-        return this.uri;
-    }
-
-    public String getMethod() {
-        return this.method;
-    }
-
-    public String getParam() {
-        return this.param;
-    }
-
-    public String getBehavior() {
-        return this.behavior;
-    }
-
-    public String getContent() {
-        return this.content;
-    }
-
-    public String getRemark() {
-        return this.remark;
-    }
-
-    public String getIp() {
-        return this.ip;
-    }
-
+    
     public String getIpSource() {
-        return this.ipSource;
+        return ipSource;
     }
-
-    public String getOs() {
-        return this.os;
-    }
-
-    public String getBrowser() {
-        return this.browser;
-    }
-
-    public Integer getTimes() {
-        return this.times;
-    }
-
-    public Date getCreateTime() {
-        return this.createTime;
-    }
-
-    public String getUserAgent() {
-        return this.userAgent;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public void setParam(String param) {
-        this.param = param;
-    }
-
-    public void setBehavior(String behavior) {
-        this.behavior = behavior;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public void setIpSource(String ipSource) {
+    
+    public VisitLogDO setIpSource(String ipSource) {
         this.ipSource = ipSource;
+        return this;
     }
-
-    public void setOs(String os) {
+    
+    public Long getId() {
+        return id;
+    }
+    
+    public VisitLogDO setId(Long id) {
+        this.id = id;
+        return this;
+    }
+    
+    public String getUuid() {
+        return uuid;
+    }
+    
+    public VisitLogDO setUuid(String uuid) {
+        this.uuid = uuid;
+        return this;
+    }
+    
+    public String getUri() {
+        return uri;
+    }
+    
+    public VisitLogDO setUri(String uri) {
+        this.uri = uri;
+        return this;
+    }
+    
+    public String getMethod() {
+        return method;
+    }
+    
+    public VisitLogDO setMethod(String method) {
+        this.method = method;
+        return this;
+    }
+    
+    public String getParam() {
+        return param;
+    }
+    
+    public VisitLogDO setParam(String param) {
+        this.param = param;
+        return this;
+    }
+    
+    public String getBehavior() {
+        return behavior;
+    }
+    
+    public VisitLogDO setBehavior(String behavior) {
+        this.behavior = behavior;
+        return this;
+    }
+    
+    public String getContent() {
+        return content;
+    }
+    
+    public VisitLogDO setContent(String content) {
+        this.content = content;
+        return this;
+    }
+    
+    public String getRemark() {
+        return remark;
+    }
+    
+    public VisitLogDO setRemark(String remark) {
+        this.remark = remark;
+        return this;
+    }
+    
+    public String getIp() {
+        return ip;
+    }
+    
+    public VisitLogDO setIp(String ip) {
+        this.ip = ip;
+        return this;
+    }
+    
+    public String getOs() {
+        return os;
+    }
+    
+    public VisitLogDO setOs(String os) {
         this.os = os;
+        return this;
     }
-
-    public void setBrowser(String browser) {
+    
+    public String getBrowser() {
+        return browser;
+    }
+    
+    public VisitLogDO setBrowser(String browser) {
         this.browser = browser;
+        return this;
     }
-
-    public void setTimes(Integer times) {
+    
+    public Integer getTimes() {
+        return times;
+    }
+    
+    public VisitLogDO setTimes(Integer times) {
         this.times = times;
+        return this;
     }
-
-    public void setCreateTime(Date createTime) {
+    
+    public Date getCreateTime() {
+        return createTime;
+    }
+    
+    public VisitLogDO setCreateTime(Date createTime) {
         this.createTime = createTime;
+        return this;
     }
-
-    public void setUserAgent(String userAgent) {
+    
+    public String getUserAgent() {
+        return userAgent;
+    }
+    
+    public VisitLogDO setUserAgent(String userAgent) {
         this.userAgent = userAgent;
+        return this;
     }
-
+    
     @Override
     public String toString() {
         return "VisitLogDO{" +

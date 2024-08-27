@@ -5,6 +5,7 @@ import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.web.WebFilterUtil;
 import com.yond.common.annotation.AccessLimit;
 import com.yond.common.resp.Response;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.hc.core5.http.HttpStatus;
@@ -13,18 +14,15 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
- * @Description: 访问控制拦截器
+ * @Description: 限流
  * @Author: Naccl
  * @Date: 2021-04-04
  */
 @Component
 public class AccessLimitInterceptor implements HandlerInterceptor {
 
-    private final AccessLimitCache accessLimitCache;
-
-    public AccessLimitInterceptor(AccessLimitCache accessLimitCache) {
-        this.accessLimitCache = accessLimitCache;
-    }
+    @Resource
+    private AccessLimitCache accessLimitCache;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

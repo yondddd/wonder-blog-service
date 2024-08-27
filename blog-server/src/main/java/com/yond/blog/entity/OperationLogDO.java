@@ -39,113 +39,130 @@ public class OperationLogDO implements Serializable {
         this.userAgent = userAgent;
     }
 
+    public static OperationLogDO custom(){
+        return new OperationLogDO();
+    }
+    
     public OperationLogDO() {
     }
-
+    
     public Long getId() {
-        return this.id;
+        return id;
     }
-
-    public String getUsername() {
-        return this.username;
-    }
-
-    public String getUri() {
-        return this.uri;
-    }
-
-    public String getMethod() {
-        return this.method;
-    }
-
-    public String getParam() {
-        return this.param;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public String getIp() {
-        return this.ip;
-    }
-
-    public String getIpSource() {
-        return this.ipSource;
-    }
-
-    public String getOs() {
-        return this.os;
-    }
-
-    public String getBrowser() {
-        return this.browser;
-    }
-
-    public Integer getTimes() {
-        return this.times;
-    }
-
-    public Date getCreateTime() {
-        return this.createTime;
-    }
-
-    public String getUserAgent() {
-        return this.userAgent;
-    }
-
-    public void setId(Long id) {
+    
+    public OperationLogDO setId(Long id) {
         this.id = id;
+        return this;
     }
-
-    public void setUsername(String username) {
+    
+    public String getUsername() {
+        return username;
+    }
+    
+    public OperationLogDO setUsername(String username) {
         this.username = username;
+        return this;
     }
-
-    public void setUri(String uri) {
+    
+    public String getUri() {
+        return uri;
+    }
+    
+    public OperationLogDO setUri(String uri) {
         this.uri = uri;
+        return this;
     }
-
-    public void setMethod(String method) {
+    
+    public String getMethod() {
+        return method;
+    }
+    
+    public OperationLogDO setMethod(String method) {
         this.method = method;
+        return this;
     }
-
-    public void setParam(String param) {
+    
+    public String getParam() {
+        return param;
+    }
+    
+    public OperationLogDO setParam(String param) {
         this.param = param;
+        return this;
     }
-
-    public void setDescription(String description) {
+    
+    public String getDescription() {
+        return description;
+    }
+    
+    public OperationLogDO setDescription(String description) {
         this.description = description;
+        return this;
     }
-
-    public void setIp(String ip) {
+    
+    public String getIp() {
+        return ip;
+    }
+    
+    public OperationLogDO setIp(String ip) {
         this.ip = ip;
+        return this;
     }
-
-    public void setIpSource(String ipSource) {
+    
+    public String getIpSource() {
+        return ipSource;
+    }
+    
+    public OperationLogDO setIpSource(String ipSource) {
         this.ipSource = ipSource;
+        return this;
     }
-
-    public void setOs(String os) {
+    
+    public String getOs() {
+        return os;
+    }
+    
+    public OperationLogDO setOs(String os) {
         this.os = os;
+        return this;
     }
-
-    public void setBrowser(String browser) {
+    
+    public String getBrowser() {
+        return browser;
+    }
+    
+    public OperationLogDO setBrowser(String browser) {
         this.browser = browser;
+        return this;
     }
-
-    public void setTimes(Integer times) {
+    
+    public Integer getTimes() {
+        return times;
+    }
+    
+    public OperationLogDO setTimes(Integer times) {
         this.times = times;
+        return this;
     }
-
-    public void setCreateTime(Date createTime) {
+    
+    public Date getCreateTime() {
+        return createTime;
+    }
+    
+    public OperationLogDO setCreateTime(Date createTime) {
         this.createTime = createTime;
+        return this;
     }
-
-    public void setUserAgent(String userAgent) {
+    
+    public String getUserAgent() {
+        return userAgent;
+    }
+    
+    public OperationLogDO setUserAgent(String userAgent) {
         this.userAgent = userAgent;
+        return this;
     }
-
+    
     @Override
     public String toString() {
         return "OperationLogDO{" +

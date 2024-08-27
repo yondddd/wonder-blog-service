@@ -32,7 +32,7 @@ public class MyStringUtils {
      * @return
      */
     public static String getStackTrace(Throwable throwable) {
-        StringWriter sw = new StringWriter();
+        StringWriter sw = new StringWriter(1024);
         try (PrintWriter pw = new PrintWriter(sw)) {
             throwable.printStackTrace(pw);
             return sw.toString();

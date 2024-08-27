@@ -27,115 +27,121 @@ public class ExceptionLogDO implements Serializable {
     private Date createTime;//操作时间
     private String userAgent;
 
-    public ExceptionLogDO(String uri, String method, String description, String error, String ip, String userAgent) {
-        this.uri = uri;
-        this.method = method;
-        this.description = description;
-        this.error = error;
-        this.ip = ip;
-        this.createTime = new Date();
-        this.userAgent = userAgent;
+    public static ExceptionLogDO custom(){
+        return new ExceptionLogDO();
     }
-
+    
     public ExceptionLogDO() {
     }
-
+    
     public Long getId() {
-        return this.id;
+        return id;
     }
-
-    public String getUri() {
-        return this.uri;
-    }
-
-    public String getMethod() {
-        return this.method;
-    }
-
-    public String getParam() {
-        return this.param;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public String getError() {
-        return this.error;
-    }
-
-    public String getIp() {
-        return this.ip;
-    }
-
-    public String getIpSource() {
-        return this.ipSource;
-    }
-
-    public String getOs() {
-        return this.os;
-    }
-
-    public String getBrowser() {
-        return this.browser;
-    }
-
-    public Date getCreateTime() {
-        return this.createTime;
-    }
-
-    public String getUserAgent() {
-        return this.userAgent;
-    }
-
-    public void setId(Long id) {
+    
+    public ExceptionLogDO setId(Long id) {
         this.id = id;
+        return this;
     }
-
-    public void setUri(String uri) {
+    
+    public String getUri() {
+        return uri;
+    }
+    
+    public ExceptionLogDO setUri(String uri) {
         this.uri = uri;
+        return this;
     }
-
-    public void setMethod(String method) {
+    
+    public String getMethod() {
+        return method;
+    }
+    
+    public ExceptionLogDO setMethod(String method) {
         this.method = method;
+        return this;
     }
-
-    public void setParam(String param) {
+    
+    public String getParam() {
+        return param;
+    }
+    
+    public ExceptionLogDO setParam(String param) {
         this.param = param;
+        return this;
     }
-
-    public void setDescription(String description) {
+    
+    public String getDescription() {
+        return description;
+    }
+    
+    public ExceptionLogDO setDescription(String description) {
         this.description = description;
+        return this;
     }
-
-    public void setError(String error) {
+    
+    public String getError() {
+        return error;
+    }
+    
+    public ExceptionLogDO setError(String error) {
         this.error = error;
+        return this;
     }
-
-    public void setIp(String ip) {
+    
+    public String getIp() {
+        return ip;
+    }
+    
+    public ExceptionLogDO setIp(String ip) {
         this.ip = ip;
+        return this;
     }
-
-    public void setIpSource(String ipSource) {
+    
+    public String getIpSource() {
+        return ipSource;
+    }
+    
+    public ExceptionLogDO setIpSource(String ipSource) {
         this.ipSource = ipSource;
+        return this;
     }
-
-    public void setOs(String os) {
+    
+    public String getOs() {
+        return os;
+    }
+    
+    public ExceptionLogDO setOs(String os) {
         this.os = os;
+        return this;
     }
-
-    public void setBrowser(String browser) {
+    
+    public String getBrowser() {
+        return browser;
+    }
+    
+    public ExceptionLogDO setBrowser(String browser) {
         this.browser = browser;
+        return this;
     }
-
-    public void setCreateTime(Date createTime) {
+    
+    public Date getCreateTime() {
+        return createTime;
+    }
+    
+    public ExceptionLogDO setCreateTime(Date createTime) {
         this.createTime = createTime;
+        return this;
     }
-
-    public void setUserAgent(String userAgent) {
+    
+    public String getUserAgent() {
+        return userAgent;
+    }
+    
+    public ExceptionLogDO setUserAgent(String userAgent) {
         this.userAgent = userAgent;
+        return this;
     }
-
+    
     @Override
     public String toString() {
         return "ExceptionLogDO{" +

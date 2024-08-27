@@ -17,7 +17,8 @@ import java.util.Set;
  * @Date: 2020-12-02
  */
 public class AopUtils {
-    private static final Set<String> ignoreParams = new HashSet<String>() {
+    
+    private static final Set<String> ignoreParams = new HashSet<>() {
         {
             add("jwt");
         }
