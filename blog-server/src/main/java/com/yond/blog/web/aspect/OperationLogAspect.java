@@ -37,14 +37,13 @@ public class OperationLogAspect {
     @Pointcut("@annotation(operationLogger)")
     public void logPointcut(OperationLogger operationLogger) {
     }
-
+    
     @Around(value = "logPointcut(operationLogger)", argNames = "joinPoint,operationLogger")
     public Object logAround(ProceedingJoinPoint joinPoint, OperationLogger operationLogger) throws Throwable {
         long start = System.currentTimeMillis();
         Object result = joinPoint.proceed();
         int duration = (int) (System.currentTimeMillis() - start);
-
-        // Capture necessary data from the request before starting the new thread
+        
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String token = request.getHeader(JwtConstant.TOKEN_HEADER);
         String uri = request.getRequestURI();
@@ -53,15 +52,14 @@ public class OperationLogAspect {
         String userAgent = request.getHeader("User-Agent");
         String params = StringUtils.substring(AopUtils.getRequestParams(joinPoint), 0, 2000);
         String username = JwtUtil.validateJwt(token, JwtConstant.DEFAULT_SECRET).getSubject();
-
-        // Start a virtual thread with the captured data
+        
         Thread.startVirtualThread(() -> {
             handleLog(username, uri, method, ip, userAgent, duration, params, operationLogger);
         });
-
+        
         return result;
     }
-
+    
     private void handleLog(String username, String uri, String method, String ip, String userAgent, int duration, String params, OperationLogger operationLogger) {
         OperationLogDO log = OperationLogDO.custom()
                 .setUsername(username)
@@ -74,6 +72,6 @@ public class OperationLogAspect {
         log.setParam(params);
         operationLogService.saveOperationLog(log);
     }
-
-
+    
+    
 }

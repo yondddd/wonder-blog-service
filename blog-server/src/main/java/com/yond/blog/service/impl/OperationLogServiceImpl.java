@@ -7,7 +7,7 @@ import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.UserAgentUtils;
 import com.yond.blog.web.blog.view.dto.UserAgentDTO;
 import com.yond.common.exception.PersistenceException;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,27 +20,26 @@ import java.util.List;
  */
 @Service
 public class OperationLogServiceImpl implements OperationLogService {
-    @Autowired
-    OperationLogMapper operationLogMapper;
-    @Autowired
-    UserAgentUtils userAgentUtils;
-
+    
+    @Resource
+    private OperationLogMapper operationLogMapper;
+    
     @Override
     public List<OperationLogDO> getOperationLogListByDate(String startDate, String endDate) {
         return operationLogMapper.listByDate(startDate, endDate);
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveOperationLog(OperationLogDO log) {
         String ipSource = IpAddressUtils.getCityInfo(log.getIp());
-        UserAgentDTO userAgentDTO = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
+        UserAgentDTO userAgentDTO = UserAgentUtils.parseOsAndBrowser(log.getUserAgent());
         log.setIpSource(ipSource);
         log.setOs(userAgentDTO.getOs());
         log.setBrowser(userAgentDTO.getBrowser());
         operationLogMapper.insertSelective(log);
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteOperationLogById(Long id) {

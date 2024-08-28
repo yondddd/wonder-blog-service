@@ -1,14 +1,14 @@
 package com.yond.blog.service.impl;
 
-import com.yond.blog.service.VisitLogService;
-import com.yond.common.exception.PersistenceException;
 import com.yond.blog.entity.VisitLogDO;
 import com.yond.blog.mapper.VisitLogMapper;
-import com.yond.blog.web.blog.view.dto.UserAgentDTO;
-import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
+import com.yond.blog.service.VisitLogService;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.UserAgentUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.yond.blog.web.blog.view.dto.UserAgentDTO;
+import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
+import com.yond.common.exception.PersistenceException;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,26 +21,25 @@ import java.util.List;
  */
 @Service
 public class VisitLogServiceImpl implements VisitLogService {
-    @Autowired
-    VisitLogMapper visitLogMapper;
-    @Autowired
-    UserAgentUtils userAgentUtils;
-
+    
+    @Resource
+    private VisitLogMapper visitLogMapper;
+    
     @Override
     public List<VisitLogDO> getVisitLogListByUUIDAndDate(String uuid, String startDate, String endDate) {
         return visitLogMapper.getVisitLogListByUUIDAndDate(uuid, startDate, endDate);
     }
-
+    
     @Override
     public List<VisitLogUuidTime> getUUIDAndCreateTimeByYesterday() {
         return visitLogMapper.getUUIDAndCreateTimeByYesterday();
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveVisitLog(VisitLogDO log) {
         String ipSource = IpAddressUtils.getCityInfo(log.getIp());
-        UserAgentDTO userAgentDTO = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
+        UserAgentDTO userAgentDTO = UserAgentUtils.parseOsAndBrowser(log.getUserAgent());
         log.setIpSource(ipSource);
         log.setOs(userAgentDTO.getOs());
         log.setBrowser(userAgentDTO.getBrowser());
@@ -48,7 +47,7 @@ public class VisitLogServiceImpl implements VisitLogService {
             throw new PersistenceException("日志添加失败");
         }
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteVisitLogById(Long id) {
@@ -56,7 +55,7 @@ public class VisitLogServiceImpl implements VisitLogService {
             throw new PersistenceException("删除日志失败");
         }
     }
-
+    
     @Override
     public int countVisitLogByToday() {
         return visitLogMapper.countVisitLogByToday();

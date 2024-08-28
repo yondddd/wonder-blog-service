@@ -42,17 +42,16 @@ public class VisitLogAspect {
     @Pointcut("@annotation(visitLogger)")
     public void logPointcut(VisitLogger visitLogger) {
     }
-
-
+    
+    
     @Around(value = "logPointcut(visitLogger)", argNames = "joinPoint,visitLogger")
     public Object logAround(ProceedingJoinPoint joinPoint, VisitLogger visitLogger) throws Throwable {
         long start = System.currentTimeMillis();
         Object result = joinPoint.proceed();
         int duration = (int) (System.currentTimeMillis() - start);
-
+        
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-
-        // Capture necessary data from the request before starting the new thread
+        
         String uuid = checkIdentification(request);
         String uri = request.getRequestURI();
         String method = request.getMethod();
@@ -61,15 +60,14 @@ public class VisitLogAspect {
         String ip = IpAddressUtils.getIpAddress(request);
         String userAgent = request.getHeader("User-Agent");
         String params = StringUtils.substring(AopUtils.getRequestParams(joinPoint), 0, 2000);
-
-        // Start a virtual thread with the captured data
+        
         Thread.startVirtualThread(() -> {
             handleLog(uuid, uri, method, behavior, content, ip, userAgent, params, duration);
         });
-
+        
         return result;
     }
-
+    
     private void handleLog(String uuid, String uri, String method, String behavior, String content, String ip, String userAgent, String params, int duration) {
         VisitLogDO log = VisitLogDO.custom()
                 .setUuid(uuid)
@@ -83,8 +81,8 @@ public class VisitLogAspect {
         log.setParam(params);
         visitLogService.saveVisitLog(log);
     }
-
-
+    
+    
     private String checkIdentification(HttpServletRequest request) {
         String identification = request.getHeader("identification");
         if (identification == null) {
