@@ -14,14 +14,11 @@ import java.util.List;
 @Mapper
 @Repository
 public interface SiteSettingMapper {
-
+    
     List<SiteSettingDO> listAll();
-
-    int insert(SiteSettingDO siteSetting);
-
-    int update(SiteSettingDO siteSetting);
-
-    int deleteById(Integer id);
-
-
+    
+    int insertSelective(SiteSettingDO record);
+    
+    int updateSelective(SiteSettingDO record);
+    
 }

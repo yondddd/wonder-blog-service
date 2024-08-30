@@ -17,8 +17,13 @@ import com.yond.common.exception.PersistenceException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -30,15 +35,15 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SiteSettingServiceImpl implements SiteSettingService, InitializingBean {
-
+    
     private final SiteSettingMapper siteSettingMapper;
-
+    
     public SiteSettingServiceImpl(SiteSettingMapper siteSettingMapper) {
         this.siteSettingMapper = siteSettingMapper;
     }
-
+    
     private static final Pattern PATTERN = Pattern.compile("\"(.*?)\"");
-
+    
     @Override
     public void afterPropertiesSet() throws Exception {
         List<SiteSettingDO> list = this.listAll();
@@ -48,36 +53,8 @@ public class SiteSettingServiceImpl implements SiteSettingService, InitializingB
             }
         }
     }
-
-    @Override
-    public Map<String, List<SiteSettingDO>> getListForAdmin() {
-        List<SiteSettingDO> siteSettings = this.listAll();
-        List<SiteSettingDO> type1 = new ArrayList<>();
-        List<SiteSettingDO> type2 = new ArrayList<>();
-        List<SiteSettingDO> type3 = new ArrayList<>();
-        for (SiteSettingDO s : siteSettings) {
-            SiteSettingTypeEnum typeEnum = SiteSettingTypeEnum.getEnum(s.getType());
-            switch (typeEnum) {
-                case SiteSettingTypeEnum.BLOG_INFO:
-                    type1.add(s);
-                    break;
-                case SiteSettingTypeEnum.PERSON_INFO:
-                    type2.add(s);
-                    break;
-                case SiteSettingTypeEnum.BOTTOM_BADGE:
-                    type3.add(s);
-                    break;
-                default:
-                    break;
-            }
-        }
-        Map<String, List<SiteSettingDO>> map = new HashMap<>(8);
-        map.put("type1", type1);
-        map.put("type2", type2);
-        map.put("type3", type3);
-        return map;
-    }
-
+    
+    
     @Override
     public Map<String, Object> getSiteInfoForView() {
         List<SiteSettingDO> siteSettings = this.listAll();
@@ -153,8 +130,8 @@ public class SiteSettingServiceImpl implements SiteSettingService, InitializingB
         map.put("badges", badges);
         return map;
     }
-
-
+    
+    
     @Override
     public String getValue(String key) {
         SiteSettingDO exist = this.listAll()
@@ -166,7 +143,7 @@ public class SiteSettingServiceImpl implements SiteSettingService, InitializingB
         }
         return null;
     }
-
+    
     @Override
     public void updateValue(String key, String value) {
         SiteSettingDO exist = this.listAll()
@@ -179,33 +156,13 @@ public class SiteSettingServiceImpl implements SiteSettingService, InitializingB
         exist.setValue(value);
         this.updateOneSiteSetting(exist);
     }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void updateSiteSetting(List<LinkedHashMap> siteSettings, List<Integer> deleteIds) {
-        for (Integer id : deleteIds) {
-            //删除
-            deleteOneSiteSettingById(id);
-        }
-        for (LinkedHashMap s : siteSettings) {
-            SiteSettingDO siteSetting = JacksonUtils.convertValue(s, SiteSettingDO.class);
-            if (siteSetting.getId() != null) {
-                //修改
-                updateOneSiteSetting(siteSetting);
-            } else {
-                //添加
-                saveOneSiteSetting(siteSetting);
-            }
-        }
-        deleteSiteInfoRedisCache();
-    }
-
+    
     @Override
     public List<SiteSettingDO> listByType(SiteSettingTypeEnum typeEnum) {
         return this.listAll().stream()
                 .filter(x -> typeEnum.getVal().equals(x.getType())).collect(Collectors.toList());
     }
-
+    
     @Override
     public List<SiteSettingDO> listAll() {
         List<SiteSettingDO> siteSettings = SiteSettingCache.get();
@@ -215,33 +172,54 @@ public class SiteSettingServiceImpl implements SiteSettingService, InitializingB
         }
         return siteSettings;
     }
-
+    
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public synchronized void coverUpdate(List<SiteSettingDO> data) {
+        Map<String, SiteSettingDO> map = this.listAll().stream()
+                .collect(Collectors.toMap(SiteSettingDO::getNameEn, Function.identity(), (key1, key2) -> key1));
+        List<SiteSettingDO> insert = new ArrayList<>();
+        List<SiteSettingDO> update = new ArrayList<>();
+        for (SiteSettingDO datum : data) {
+            SiteSettingDO exist = map.get(datum.getNameEn());
+            if (datum.getId() == null) {
+                Assert.isNull(exist, datum.getNameEn() + " is exist");
+                insert.add(datum);
+            } else {
+                update.add(datum);
+            }
+        }
+        for (SiteSettingDO item : insert) {
+            this.saveOneSiteSetting(item);
+        }
+        for (SiteSettingDO item : update) {
+            SiteSettingDO toUpdate = new SiteSettingDO();
+            toUpdate.setId(item.getId());
+            toUpdate.setValue(item.getValue());
+            toUpdate.setNameZh(item.getNameZh());
+            this.updateOneSiteSetting(toUpdate);
+        }
+    }
+    
     private void saveOneSiteSetting(SiteSettingDO siteSetting) {
-        if (siteSettingMapper.insert(siteSetting) != 1) {
+        if (siteSettingMapper.insertSelective(siteSetting) != 1) {
             throw new PersistenceException("配置添加失败");
         }
         this.deleteSiteInfoRedisCache();
     }
-
+    
     private void updateOneSiteSetting(SiteSettingDO siteSetting) {
-        if (siteSettingMapper.update(siteSetting) != 1) {
+        if (siteSettingMapper.updateSelective(siteSetting) != 1) {
             throw new PersistenceException("配置修改失败");
         }
         this.deleteSiteInfoRedisCache();
     }
-
-    private void deleteOneSiteSettingById(Integer id) {
-        if (siteSettingMapper.deleteById(id) != 1) {
-            throw new PersistenceException("配置删除失败");
-        }
-        this.deleteSiteInfoRedisCache();
-    }
-
+    
     /**
      * 删除站点信息缓存
      */
     private void deleteSiteInfoRedisCache() {
         SiteSettingCache.del();
     }
-
+    
 }

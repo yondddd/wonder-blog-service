@@ -2,14 +2,17 @@ package com.yond.blog.web.blog.admin.controller;
 
 import com.yond.blog.entity.SiteSettingDO;
 import com.yond.blog.service.SiteSettingService;
+import com.yond.blog.web.blog.admin.convert.SiteSettingConverter;
+import com.yond.blog.web.blog.admin.vo.SiteSettingVO;
 import com.yond.common.annotation.OperationLogger;
-import com.yond.common.constant.SiteSettingConstant;
 import com.yond.common.resp.Response;
-import org.springframework.web.bind.annotation.*;
+import jakarta.annotation.Resource;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Description: 站点设置后台管理
@@ -17,50 +20,30 @@ import java.util.Map;
  * @Date: 2020-08-09
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/siteSetting")
 public class SiteSettingAdminController {
-
-    private final SiteSettingService siteSettingService;
-
-    public SiteSettingAdminController(SiteSettingService siteSettingService) {
-        this.siteSettingService = siteSettingService;
+    
+    @Resource
+    private SiteSettingService siteSettingService;
+    
+    @PostMapping("/listAll")
+    public Response<List<SiteSettingVO>> siteSettings() {
+        List<SiteSettingVO> data = siteSettingService.listAll().stream()
+                .map(SiteSettingConverter::do2vo).toList();
+        return Response.success(data);
     }
-
+    
     /**
-     * 获取所有站点配置信息
+     * 全量更新
      *
-     * @return
-     */
-    @GetMapping("/siteSettings")
-    public Response<Map<String, List<SiteSettingDO>>> siteSettings() {
-        Map<String, List<SiteSettingDO>> typeMap = siteSettingService.getListForAdmin();
-        return Response.success(typeMap);
-    }
-
-    /**
-     * 修改、删除(部分配置可为空，但不可删除)、添加(只能添加部分)站点配置
-     *
-     * @param map 包含所有站点信息更新后的数据 map => {settings=[更新后的所有配置List], deleteIds=[要删除的配置id List]}
-     * @return
+     * @param req id为空为新增，不为空则更新
      */
     @OperationLogger("更新站点配置信息")
-    @PostMapping("/siteSettings")
-    public Response<Boolean> updateAll(@RequestBody Map<String, Object> map) {
-        List<LinkedHashMap> siteSettings = (List<LinkedHashMap>) map.get("settings");
-        List<Integer> deleteIds = (List<Integer>) map.get("deleteIds");
-        siteSettingService.updateSiteSetting(siteSettings, deleteIds);
+    @PostMapping("/update")
+    public Response<Boolean> updateAll(@RequestBody List<SiteSettingVO> req) {
+        List<SiteSettingDO> list = req.stream().map(SiteSettingConverter::vo2do).toList();
+        siteSettingService.coverUpdate(list);
         return Response.success();
     }
-
-    /**
-     * 查询网页标题后缀
-     *
-     * @return
-     */
-    @GetMapping("/webTitleSuffix")
-    public Response<String> getWebTitleSuffix() {
-        String value = siteSettingService.getValue(SiteSettingConstant.WEB_TITLE_SUFFIX);
-        return Response.success(value);
-    }
-
+    
 }
