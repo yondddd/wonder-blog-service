@@ -6,10 +6,11 @@ import com.yond.blog.entity.BlogDO;
 import com.yond.blog.entity.CommentDO;
 import com.yond.blog.service.BlogService;
 import com.yond.blog.service.CommentService;
+import com.yond.blog.web.blog.admin.req.CommentPageReq;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.resp.Response;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,27 +21,18 @@ import java.util.List;
  * @Date: 2020-08-03
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/comment")
 public class CommentAdminController {
-    @Autowired
-    CommentService commentService;
-    @Autowired
-    BlogService blogService;
 
-    /**
-     * 按页面和博客id分页查询评论List
-     *
-     * @param page     要查询的页面(博客文章or关于我...)
-     * @param blogId   如果是博客文章页面 需要提供博客id
-     * @param pageNum  页码
-     * @param pageSize 每页个数
-     * @return
-     */
-    @GetMapping("/comments")
-    public Response<PageInfo<CommentDO>> comments(@RequestParam(defaultValue = "") Integer page,
-                                                  @RequestParam(defaultValue = "") Long blogId,
-                                                  @RequestParam(defaultValue = "1") Integer pageNum,
-                                                  @RequestParam(defaultValue = "10") Integer pageSize) {
+
+    @Resource
+    private CommentService commentService;
+    @Resource
+    private BlogService blogService;
+
+
+    @GetMapping("/page")
+    public Response<PageInfo<CommentDO>> page(@RequestBody CommentPageReq req) {
         String orderBy = "create_time desc";
         PageHelper.startPage(pageNum, pageSize, orderBy);
         List<CommentDO> comments = commentService.getListByPageAndParentCommentId(page, blogId, -1L);

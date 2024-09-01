@@ -1,5 +1,6 @@
 package com.yond.blog;
 
+import com.yond.blog.util.UserAgentUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -44,6 +45,7 @@ public class BlogApiApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BlogApiApplication.class, args);
+        Thread.startVirtualThread(UserAgentUtils::init);
     }
 
 }

@@ -1,10 +1,10 @@
 package com.yond.blog.web.aspect;
 
 import com.yond.blog.cache.remote.VisitCache;
-import com.yond.blog.entity.VisitLogDO;
-import com.yond.blog.entity.VisitorDO;
-import com.yond.blog.service.VisitLogService;
-import com.yond.blog.service.VisitorService;
+import com.yond.blog.entity.LogVisitDO;
+import com.yond.blog.entity.VisitUserDO;
+import com.yond.blog.service.LogVisitService;
+import com.yond.blog.service.VisitUserService;
 import com.yond.blog.util.AopUtils;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.common.annotation.VisitLogger;
@@ -31,27 +31,27 @@ import java.util.UUID;
 @Component
 @Aspect
 public class VisitLogAspect {
-    
+
     @Resource
-    private VisitLogService visitLogService;
+    private LogVisitService logVisitService;
     @Resource
-    private VisitorService visitorService;
+    private VisitUserService visitUserService;
     @Resource
     private VisitCache visitCache;
-    
+
     @Pointcut("@annotation(visitLogger)")
     public void logPointcut(VisitLogger visitLogger) {
     }
-    
-    
+
+
     @Around(value = "logPointcut(visitLogger)", argNames = "joinPoint,visitLogger")
     public Object logAround(ProceedingJoinPoint joinPoint, VisitLogger visitLogger) throws Throwable {
         long start = System.currentTimeMillis();
         Object result = joinPoint.proceed();
         int duration = (int) (System.currentTimeMillis() - start);
-        
+
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        
+
         String uuid = checkIdentification(request);
         String uri = request.getRequestURI();
         String method = request.getMethod();
@@ -60,16 +60,16 @@ public class VisitLogAspect {
         String ip = IpAddressUtils.getIpAddress(request);
         String userAgent = request.getHeader("User-Agent");
         String params = StringUtils.substring(AopUtils.getRequestParams(joinPoint), 0, 2000);
-        
+
         Thread.startVirtualThread(() -> {
             handleLog(uuid, uri, method, behavior, content, ip, userAgent, params, duration);
         });
-        
+
         return result;
     }
-    
+
     private void handleLog(String uuid, String uri, String method, String behavior, String content, String ip, String userAgent, String params, int duration) {
-        VisitLogDO log = VisitLogDO.custom()
+        LogVisitDO log = LogVisitDO.custom()
                 .setUuid(uuid)
                 .setUri(uri)
                 .setMethod(method)
@@ -79,10 +79,10 @@ public class VisitLogAspect {
                 .setTimes(duration)
                 .setUserAgent(userAgent);
         log.setParam(params);
-        visitLogService.saveVisitLog(log);
+        logVisitService.saveVisitLog(log);
     }
-    
-    
+
+
     private String checkIdentification(HttpServletRequest request) {
         String identification = request.getHeader("identification");
         if (identification == null) {
@@ -92,7 +92,7 @@ public class VisitLogAspect {
         if (redisExist) {
             return identification;
         }
-        boolean mysqlExist = visitorService.hasUUID(identification);
+        boolean mysqlExist = visitUserService.hasUUID(identification);
         if (mysqlExist) {
             visitCache.addIdentity(identification);
         } else {
@@ -100,7 +100,7 @@ public class VisitLogAspect {
         }
         return identification;
     }
-    
+
     private String saveUUID(HttpServletRequest request) {
         //获取响应对象
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
@@ -125,10 +125,10 @@ public class VisitLogAspect {
             //保存至Redis
             visitCache.addIdentity(uuid);
             //保存至数据库
-            VisitorDO visitor = new VisitorDO(uuid, ip, userAgent);
-            visitorService.saveVisitor(visitor);
+            VisitUserDO visitor = new VisitUserDO(uuid, ip, userAgent);
+            visitUserService.saveVisitor(visitor);
         }
         return uuid;
     }
-    
+
 }

@@ -1,13 +1,12 @@
 package com.yond.blog.service.impl;
 
-import com.yond.blog.cache.local.BlogCache;
 import com.yond.blog.cache.local.TagCache;
 import com.yond.blog.entity.TagDO;
 import com.yond.blog.mapper.TagMapper;
 import com.yond.blog.service.TagService;
-import com.yond.blog.web.blog.view.vo.TagBlogCount;
 import com.yond.common.exception.PersistenceException;
 import com.yond.common.utils.page.PageUtil;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,11 +23,8 @@ import java.util.Set;
 @Service
 public class TagServiceImpl implements TagService {
 
-    private final TagMapper tagMapper;
-
-    public TagServiceImpl(TagMapper tagMapper) {
-        this.tagMapper = tagMapper;
-    }
+    @Resource
+    private TagMapper tagMapper;
 
     @Override
     public List<TagDO> listAll() {
@@ -53,63 +49,46 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<TagDO> getTagListByBlogId(Long blogId) {
-        return tagMapper.getTagListByBlogId(blogId);
+    public TagDO getByName(String name) {
+        return this.listAll().stream()
+                .filter(x -> x.getName().equals(name)).findFirst().orElse(null);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveTag(TagDO tag) {
-        if (tagMapper.saveTag(tag) != 1) {
-            throw new PersistenceException("标签添加失败");
-        }
-        TagCache.del();
-    }
-
-    @Override
-    public TagDO getTagByName(String name) {
-        return tagMapper.getTagByName(name);
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void deleteTagById(Long id) {
-        if (tagMapper.deleteTagById(id) != 1) {
+    public void deleteById(Long id) {
+        if (tagMapper.deleteById(id) != 1) {
             throw new PersistenceException("标签删除失败");
         }
-        TagCache.del();
+        flushCache();
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void updateTag(TagDO tag) {
-        if (tagMapper.updateTag(tag) != 1) {
-            throw new PersistenceException("标签更新失败");
-        }
-        TagCache.del();
-        //修改了标签名或颜色，可能有首页文章关联了标签，也要更新首页缓存
-        BlogCache.delInfo();
-    }
 
-    @Override
-    public List<TagBlogCount> getTagBlogCount() {
-        return tagMapper.getTagBlogCount();
-    }
-    
     @Override
     public Long insertSelective(TagDO tag) {
         tagMapper.insertSelective(tag);
-        TagCache.del();
+        flushCache();
         return tag.getId();
     }
-    
+
     @Override
     public Long saveIfAbsent(TagDO tag) {
-        Assert.hasText(tag.getName(),"标签名字不应为空");
-        TagDO exist = this.getTagByName(tag.getName());
-        if (exist!=null){
+        Assert.hasText(tag.getName(), "标签名字不应为空");
+        TagDO exist = this.getByName(tag.getName());
+        if (exist != null) {
             return exist.getId();
         }
         return this.insertSelective(tag);
     }
+
+    @Override
+    public void updateSelective(TagDO tag) {
+        tagMapper.updateSelective(tag);
+        flushCache();
+    }
+
+    private void flushCache() {
+        TagCache.del();
+    }
+
 }

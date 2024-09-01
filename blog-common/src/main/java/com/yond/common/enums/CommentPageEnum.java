@@ -8,36 +8,36 @@ package com.yond.common.enums;
  */
 public enum CommentPageEnum {
 
-    UNKNOWN("UNKNOWN", "UNKNOWN"),
+    UNKNOWN(-1, "UNKNOWN", "UNKNOWN"),
 
-    BLOG("", ""),
+    BLOG(0, "", ""),
 
-    ABOUT("关于我", "/about"),
+    ABOUT(1, "关于我", "/about"),
 
-    FRIEND("友人帐", "/friends"),
+    FRIEND(2, "友人帐", "/friends"),
     ;
 
-    private String title;
-    private String path;
+    private final Integer id;
+    private final String title;
+    private final String path;
 
-    CommentPageEnum(String title, String path) {
+    CommentPageEnum(Integer id, String title, String path) {
+        this.id = id;
         this.title = title;
         this.path = path;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getPath() {
         return path;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
+
 }

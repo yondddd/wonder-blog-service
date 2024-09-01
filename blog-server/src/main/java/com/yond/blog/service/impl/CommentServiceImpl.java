@@ -1,10 +1,12 @@
 package com.yond.blog.service.impl;
 
-import com.yond.common.exception.PersistenceException;
 import com.yond.blog.entity.CommentDO;
 import com.yond.blog.mapper.CommentMapper;
-import com.yond.blog.web.blog.view.vo.PageComment;
 import com.yond.blog.service.CommentService;
+import com.yond.blog.web.blog.view.vo.PageComment;
+import com.yond.common.enums.CommentPageEnum;
+import com.yond.common.exception.PersistenceException;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,12 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
     @Autowired
     CommentMapper commentMapper;
+
+
+    @Override
+    public Pair<Integer, List<CommentDO>> pageBy(CommentPageEnum page, Long blogId, Integer pageNo, Integer pageSize) {
+        return null;
+    }
 
     @Override
     public List<CommentDO> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId) {
@@ -116,11 +124,6 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void deleteCommentsByBlogId(Long blogId) {
-        commentMapper.deleteCommentsByBlogId(blogId);
-    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override

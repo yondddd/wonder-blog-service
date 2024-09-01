@@ -18,4 +18,12 @@ public class TagConvert {
         return tagVO;
     }
 
+    public static TagDO vo2do(TagVO from) {
+        TagDO tagDO = new TagDO();
+        tagDO.setId(from.getId());
+        tagDO.setName(from.getName());
+        tagDO.setColor(from.getColor());
+        return tagDO;
+    }
+
 }

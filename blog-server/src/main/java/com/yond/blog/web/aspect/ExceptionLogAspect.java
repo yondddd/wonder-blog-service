@@ -1,7 +1,7 @@
 package com.yond.blog.web.aspect;
 
-import com.yond.blog.entity.ExceptionLogDO;
-import com.yond.blog.service.ExceptionLogService;
+import com.yond.blog.entity.LogExceptionDO;
+import com.yond.blog.service.LogExceptionService;
 import com.yond.blog.util.AopUtils;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.MyStringUtils;
@@ -30,19 +30,19 @@ import java.lang.reflect.Method;
 @Component
 @Aspect
 public class ExceptionLogAspect {
-    
+
     @Autowired
-    ExceptionLogService exceptionLogService;
-    
+    LogExceptionService logExceptionService;
+
     @Pointcut("execution(* com.yond.blog.web.blog.admin.controller..*.*(..)) || execution(* com.yond.blog.web.blog.view.controller..*.*(..))")
     public void logPointcut() {
     }
-    
-    
+
+
     @AfterThrowing(value = "logPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Exception e) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        
+
         String uri = request.getRequestURI();
         String method = request.getMethod();
         String ip = IpAddressUtils.getIpAddress(request);
@@ -50,14 +50,14 @@ public class ExceptionLogAspect {
         String params = StringUtils.substring(AopUtils.getRequestParams(joinPoint), 0, 2000);
         String description = getOperate(joinPoint);
         String error = MyStringUtils.getStackTrace(e);
-        
+
         Thread.startVirtualThread(() -> {
             handleLog(uri, method, ip, userAgent, description, error, params);
         });
     }
-    
+
     private void handleLog(String uri, String method, String ip, String userAgent, String description, String error, String params) {
-        ExceptionLogDO log = ExceptionLogDO.custom()
+        LogExceptionDO log = LogExceptionDO.custom()
                 .setUri(uri)
                 .setMethod(method)
                 .setIp(ip)
@@ -65,9 +65,9 @@ public class ExceptionLogAspect {
                 .setDescription(description)
                 .setError(error)
                 .setParam(params);
-        exceptionLogService.saveExceptionLog(log);
+        logExceptionService.saveExceptionLog(log);
     }
-    
+
     private String getOperate(JoinPoint joinPoint) {
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         OperationLogger operationLogger = method.getAnnotation(OperationLogger.class);
@@ -80,6 +80,6 @@ public class ExceptionLogAspect {
         }
         return "";
     }
-    
-    
+
+
 }

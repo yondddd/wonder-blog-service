@@ -2,10 +2,10 @@ package com.yond.blog.service.impl;
 
 import com.yond.blog.cache.local.FriendCache;
 import com.yond.blog.entity.FriendDO;
-import com.yond.blog.entity.SiteSettingDO;
+import com.yond.blog.entity.SiteConfigDO;
 import com.yond.blog.mapper.FriendMapper;
 import com.yond.blog.service.FriendService;
-import com.yond.blog.service.SiteSettingService;
+import com.yond.blog.service.SiteConfigService;
 import com.yond.blog.util.markdown.MarkdownUtils;
 import com.yond.blog.web.blog.view.vo.FriendInfo;
 import com.yond.common.constant.SiteSettingConstant;
@@ -26,11 +26,11 @@ import java.util.List;
 public class FriendServiceImpl implements FriendService {
 
     private final FriendMapper friendMapper;
-    private final SiteSettingService siteSettingService;
+    private final SiteConfigService siteConfigService;
 
-    public FriendServiceImpl(FriendMapper friendMapper, SiteSettingService siteSettingService) {
+    public FriendServiceImpl(FriendMapper friendMapper, SiteConfigService siteConfigService) {
         this.friendMapper = friendMapper;
-        this.siteSettingService = siteSettingService;
+        this.siteConfigService = siteConfigService;
     }
 
     @Override
@@ -93,10 +93,10 @@ public class FriendServiceImpl implements FriendService {
                 return friendInfo;
             }
         }
-        List<SiteSettingDO> siteSettings = siteSettingService.listAll()
+        List<SiteConfigDO> siteSettings = siteConfigService.listAll()
                 .stream().filter(x -> SiteSettingTypeEnum.FRIEND.getVal().equals(x.getType())).toList();
         FriendInfo friendInfo = new FriendInfo();
-        for (SiteSettingDO siteSetting : siteSettings) {
+        for (SiteConfigDO siteSetting : siteSettings) {
             if ("friendContent".equals(siteSetting.getNameEn())) {
                 if (md) {
                     friendInfo.setContent(MarkdownUtils.markdownToHtmlExtensions(siteSetting.getValue()));
@@ -116,14 +116,14 @@ public class FriendServiceImpl implements FriendService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateFriendInfoContent(String content) {
-        siteSettingService.updateValue(SiteSettingConstant.FRIEND_CONTENT, content);
+        siteConfigService.updateValue(SiteSettingConstant.FRIEND_CONTENT, content);
         deleteFriendInfoRedisCache();
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateFriendInfoCommentEnabled(Boolean commentEnabled) {
-        siteSettingService.updateValue(SiteSettingConstant.FRIEND_COMMENT_ENABLED, commentEnabled.toString());
+        siteConfigService.updateValue(SiteSettingConstant.FRIEND_COMMENT_ENABLED, commentEnabled.toString());
         deleteFriendInfoRedisCache();
     }
 

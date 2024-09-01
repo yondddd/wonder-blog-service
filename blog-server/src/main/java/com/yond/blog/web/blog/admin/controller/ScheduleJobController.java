@@ -2,8 +2,8 @@ package com.yond.blog.web.blog.admin.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yond.blog.entity.LogScheduleJobDO;
 import com.yond.blog.entity.ScheduleJobDO;
-import com.yond.blog.entity.ScheduleJobLogDO;
 import com.yond.blog.service.ScheduleJobService;
 import com.yond.blog.util.common.ValidatorUtils;
 import com.yond.common.annotation.OperationLogger;
@@ -130,7 +130,7 @@ public class ScheduleJobController {
         }
         String orderBy = "create_time desc";
         PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<ScheduleJobLogDO> pageInfo = new PageInfo<>(scheduleJobService.getJobLogListByDate(startDate, endDate));
+        PageInfo<LogScheduleJobDO> pageInfo = new PageInfo<>(scheduleJobService.getJobLogListByDate(startDate, endDate));
         return Response.ok("请求成功", pageInfo);
     }
 

@@ -17,4 +17,11 @@ public class CategoryConverter {
         return to;
     }
 
+    public static CategoryDO vo2do(CategoryVO from) {
+        CategoryDO categoryDO = new CategoryDO();
+        categoryDO.setId(from.getId());
+        categoryDO.setName(from.getName());
+        return categoryDO;
+    }
+
 }

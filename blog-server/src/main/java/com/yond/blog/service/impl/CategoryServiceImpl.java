@@ -65,14 +65,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Long save(CategoryDO category) {
+    public Long insertSelective(CategoryDO category) {
         categoryMapper.insertSelective(category);
         CategoryCache.del();
         return category.getId();
     }
 
     @Override
-    public void update(CategoryDO category) {
+    public void updateSelective(CategoryDO category) {
         if (categoryMapper.updateSelective(category) != 1) {
             throw new PersistenceException("分类更新失败");
         }
@@ -97,7 +97,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (exist != null) {
             return exist.getId();
         }
-        return this.save(CategoryDO.custom().setName(name));
+        return this.insertSelective(CategoryDO.custom().setName(name));
     }
     
 }

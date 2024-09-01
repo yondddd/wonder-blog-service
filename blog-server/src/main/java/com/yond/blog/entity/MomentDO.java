@@ -16,51 +16,70 @@ public class MomentDO implements Serializable {
 
     private Long id;
     private String content;//动态内容
-    private Date createTime;//创建时间
     private Integer likes;//点赞数量
     private Boolean published;//是否公开
+    private Integer status;
+    private Date createTime;//创建时间
+
+    public static MomentDO custom() {
+        return new MomentDO();
+    }
 
     public MomentDO() {
     }
 
     public Long getId() {
-        return this.id;
+        return id;
+    }
+
+    public MomentDO setId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public String getContent() {
-        return this.content;
+        return content;
     }
 
-    public Date getCreateTime() {
-        return this.createTime;
+    public MomentDO setContent(String content) {
+        this.content = content;
+        return this;
     }
 
     public Integer getLikes() {
-        return this.likes;
+        return likes;
+    }
+
+    public MomentDO setLikes(Integer likes) {
+        this.likes = likes;
+        return this;
     }
 
     public Boolean getPublished() {
-        return this.published;
+        return published;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public void setLikes(Integer likes) {
-        this.likes = likes;
-    }
-
-    public void setPublished(Boolean published) {
+    public MomentDO setPublished(Boolean published) {
         this.published = published;
+        return this;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public MomentDO setStatus(Integer status) {
+        this.status = status;
+        return this;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public MomentDO setCreateTime(Date createTime) {
+        this.createTime = createTime;
+        return this;
     }
 
     @Override
@@ -68,9 +87,10 @@ public class MomentDO implements Serializable {
         return "MomentDO{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
-                ", createTime=" + createTime +
                 ", likes=" + likes +
                 ", published=" + published +
+                ", status=" + status +
+                ", createTime=" + createTime +
                 '}';
     }
 }

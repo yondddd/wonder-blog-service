@@ -1,13 +1,13 @@
 package com.yond.blog.service.impl;
 
 import com.yond.blog.entity.CategoryDO;
-import com.yond.blog.entity.CityVisitorDO;
 import com.yond.blog.entity.TagDO;
+import com.yond.blog.entity.VisitCityDO;
 import com.yond.blog.entity.VisitRecordDO;
 import com.yond.blog.service.*;
 import com.yond.blog.web.blog.view.vo.CategoryBlogCount;
 import com.yond.blog.web.blog.view.vo.TagBlogCount;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,26 +23,28 @@ import java.util.Map;
 @Service
 public class DashboardServiceImpl implements DashboardService {
 
-    @Autowired
-    BlogService blogService;
-    @Autowired
-    CommentService commentService;
-    @Autowired
-    CategoryService categoryService;
-    @Autowired
-    TagService tagService;
-    @Autowired
-    VisitLogService visitLogService;
-    @Autowired
-    VisitRecordService visitRecordService;
-    @Autowired
-    CityVisitorService cityVisitorService;
+    @Resource
+    private BlogService blogService;
+    @Resource
+    private BlogTagService blogTagService;
+    @Resource
+    private CommentService commentService;
+    @Resource
+    private CategoryService categoryService;
+    @Resource
+    private TagService tagService;
+    @Resource
+    private LogVisitService logVisitService;
+    @Resource
+    private VisitRecordService visitRecordService;
+    @Resource
+    private VisitCityService visitCityService;
     //查询最近30天的记录
     private static final int visitRecordLimitNum = 30;
 
     @Override
     public int countVisitLogByToday() {
-        return visitLogService.countVisitLogByToday();
+        return logVisitService.countVisitLogByToday();
     }
 
     @Override
@@ -103,7 +105,7 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public Map<String, List> getTagBlogCountMap() {
         //查询标签id对应的博客数量
-        List<TagBlogCount> tagBlogCountList = tagService.getTagBlogCount();
+        List<TagBlogCount> tagBlogCountList = blogTagService.getTagBlogCount();
         //查询所有标签的id和名称
         List<TagDO> tagList = tagService.listAll();
         //所有标签名称的List
@@ -165,8 +167,8 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public List<CityVisitorDO> getCityVisitorList() {
-        return cityVisitorService.listAll();
+    public List<VisitCityDO> getCityVisitorList() {
+        return visitCityService.listAll();
     }
 
 }

@@ -1,15 +1,18 @@
 package com.yond.blog.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.yond.common.exception.NotFoundException;
-import com.yond.common.exception.PersistenceException;
+import com.yond.blog.cache.local.MomentCache;
 import com.yond.blog.entity.MomentDO;
 import com.yond.blog.mapper.MomentMapper;
 import com.yond.blog.service.MomentService;
 import com.yond.blog.util.markdown.MarkdownUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.yond.common.enums.EnableStatusEnum;
+import com.yond.common.exception.PersistenceException;
+import com.yond.common.utils.page.PageUtil;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -20,80 +23,71 @@ import java.util.List;
  */
 @Service
 public class MomentServiceImpl implements MomentService {
-    @Autowired
-    MomentMapper momentMapper;
-    //每页显示5条动态
-    private static final int pageSize = 5;
-    //动态列表排序方式
-    private static final String orderBy = "create_time desc";
-    //私密动态提示
+
+    @Resource
+    private MomentMapper momentMapper;
+
     private static final String PRIVATE_MOMENT_CONTENT = "<p>此条为私密动态，仅发布者可见！</p>";
 
     @Override
-    public List<MomentDO> getMomentList() {
-        return momentMapper.getMomentList();
+    public List<MomentDO> listEnable() {
+        List<MomentDO> cache = MomentCache.get();
+        if (cache != null) {
+            return cache;
+        }
+        cache = momentMapper.listByStatus(EnableStatusEnum.ENABLE.getVal());
+        MomentCache.set(cache);
+        return cache;
     }
 
     @Override
-    public List<MomentDO> getMomentVOList(Integer pageNum, boolean adminIdentity) {
-        PageHelper.startPage(pageNum, pageSize, orderBy);
-        List<MomentDO> moments = momentMapper.getMomentList();
-        for (MomentDO moment : moments) {
-            if (adminIdentity || moment.getPublished()) {
+    public Pair<Integer, List<MomentDO>> page(boolean admin, boolean frontView, Integer pageNo, Integer pageSize) {
+        List<MomentDO> all = this.listEnable();
+        List<MomentDO> page = PageUtil.pageList(all, pageNo, pageSize);
+        for (MomentDO moment : page) {
+            if (!frontView) {
+                continue;
+            }
+            if (admin || moment.getPublished()) {
                 moment.setContent(MarkdownUtils.markdownToHtmlExtensions(moment.getContent()));
             } else {
                 moment.setContent(PRIVATE_MOMENT_CONTENT);
             }
         }
-        return moments;
+        return Pair.of(all.size(), page);
+    }
+
+    @Override
+    public MomentDO getById(Long id) {
+        MomentDO exist = this.listEnable().stream()
+                .filter(x -> id.equals(x.getId())).findFirst().orElse(null);
+        Assert.notNull(exist, "动态不存在:" + id);
+        return exist;
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void addLikeByMomentId(Long momentId) {
-        if (momentMapper.addLikeByMomentId(momentId) != 1) {
+    public void incrLikeById(Long momentId) {
+        if (momentMapper.incrLikeById(momentId) != 1) {
             throw new PersistenceException("操作失败");
         }
+        MomentCache.del();
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateMomentPublishedById(Long momentId, Boolean published) {
-        if (momentMapper.updateMomentPublishedById(momentId, published) != 1) {
-            throw new PersistenceException("操作失败");
-        }
-    }
-
-    @Override
-    public MomentDO getMomentById(Long id) {
-        MomentDO moment = momentMapper.getMomentById(id);
-        if (moment == null) {
-            throw new NotFoundException("动态不存在");
-        }
-        return moment;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void deleteMomentById(Long id) {
-        if (momentMapper.deleteMomentById(id) != 1) {
-            throw new PersistenceException("删除失败");
-        }
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void saveMoment(MomentDO moment) {
-        if (momentMapper.saveMoment(moment) != 1) {
+    public void insertSelective(MomentDO moment) {
+        if (momentMapper.insertSelective(moment) != 1) {
             throw new PersistenceException("动态添加失败");
         }
+        MomentCache.del();
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateMoment(MomentDO moment) {
-        if (momentMapper.updateMoment(moment) != 1) {
-            throw new PersistenceException("动态修改失败");
-        }
+    public void updateSelective(MomentDO moment) {
+        momentMapper.updateSelective(moment);
+        MomentCache.del();
     }
+
 }

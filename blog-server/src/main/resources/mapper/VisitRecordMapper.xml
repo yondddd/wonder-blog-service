@@ -16,14 +16,15 @@
     <!--按天数查询访问记录-->
     <select id="listByLimit" resultMap="visitRecord">
         select <include refid="Base_Column_List"/>
-        from visit_record
+        from visit_day
         order by id desc
         limit #{limit}
     </select>
 
     <!--添加访问记录-->
     <insert id="insert" parameterType="com.yond.blog.entity.VisitRecordDO" useGeneratedKeys="true" keyProperty="id">
-        insert into visit_record (pv, uv, date) values (#{pv}, #{uv}, #{date})
+        insert into visit_day (pv, uv, date)
+        values (#{pv}, #{uv}, #{date})
     </insert>
 
 </mapper>

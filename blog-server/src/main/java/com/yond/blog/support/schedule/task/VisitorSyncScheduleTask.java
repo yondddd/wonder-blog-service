@@ -1,12 +1,12 @@
 package com.yond.blog.support.schedule.task;
 
 import com.yond.blog.cache.remote.VisitCache;
-import com.yond.blog.entity.CityVisitorDO;
+import com.yond.blog.entity.VisitCityDO;
 import com.yond.blog.entity.VisitRecordDO;
-import com.yond.blog.service.CityVisitorService;
-import com.yond.blog.service.VisitLogService;
+import com.yond.blog.service.VisitCityService;
+import com.yond.blog.service.LogVisitService;
 import com.yond.blog.service.VisitRecordService;
-import com.yond.blog.service.VisitorService;
+import com.yond.blog.service.VisitUserService;
 import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +27,13 @@ import java.util.Map;
 public class VisitorSyncScheduleTask {
 
     @Autowired
-    VisitLogService visitLogService;
+    LogVisitService logVisitService;
     @Autowired
-    VisitorService visitorService;
+    VisitUserService visitUserService;
     @Autowired
     VisitRecordService visitRecordService;
     @Autowired
-    CityVisitorService cityVisitorService;
+    VisitCityService visitCityService;
     @Autowired
     VisitCache visitCache;
 
@@ -52,7 +52,7 @@ public class VisitorSyncScheduleTask {
         //获取昨天的所有访问日志
         //为避免缓存击穿导致第二天的数据统计不准确，以数据库访问日志为准，而不从Redis中获取这个Set
         //比如在这个定时任务执行期间，产生大量访客的请求，而这些访客的uuid都在任务执行结束后被清空了，没有被第二天的定时任务记录到
-        List<VisitLogUuidTime> yesterdayLogList = visitLogService.getUUIDAndCreateTimeByYesterday();
+        List<VisitLogUuidTime> yesterdayLogList = logVisitService.getUUIDAndCreateTimeByYesterday();
         //按每日UV 700的标准初始化map
         //TODO 这里可以做个优化，根据近期每日UV数量做对应初始容量适配，避免访问量很大的站点执行此任务时调用过多的resize
         Map<String, Integer> PVMap = new HashMap<>(1024);
@@ -74,10 +74,10 @@ public class VisitorSyncScheduleTask {
         //更新昨天所有访客的PV和最后访问时间到数据库
         PVMap.forEach((uuid, views) -> {
             VisitLogUuidTime uuidPVTimeDTO = new VisitLogUuidTime(uuid, lastTimeMap.get(uuid), views);
-            visitorService.updatePVAndLastTimeByUUID(uuidPVTimeDTO);
+            visitUserService.updatePVAndLastTimeByUUID(uuidPVTimeDTO);
         });
         //查询昨天新增访客的ip来源
-        List<String> ipSource = visitorService.getNewVisitorIpSourceByYesterday();
+        List<String> ipSource = visitUserService.getNewVisitorIpSourceByYesterday();
         //按每日新增UV 300的标准初始化map
         Map<String, Integer> cityVisitorMap = new HashMap<>(512);
         ipSource.forEach(i -> {
@@ -90,6 +90,6 @@ public class VisitorSyncScheduleTask {
             }
         });
         //更新城市新增访客UV数
-        cityVisitorMap.forEach((k, v) -> cityVisitorService.save(new CityVisitorDO(k, v)));
+        cityVisitorMap.forEach((k, v) -> visitCityService.save(new VisitCityDO(k, v)));
     }
 }

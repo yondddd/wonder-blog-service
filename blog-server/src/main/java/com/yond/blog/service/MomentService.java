@@ -1,23 +1,22 @@
 package com.yond.blog.service;
 
 import com.yond.blog.entity.MomentDO;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
 public interface MomentService {
-	List<MomentDO> getMomentList();
 
-	List<MomentDO> getMomentVOList(Integer pageNum, boolean adminIdentity);
+	List<MomentDO> listEnable();
 
-	void addLikeByMomentId(Long momentId);
+	Pair<Integer, List<MomentDO>> page(boolean admin, boolean frontView, Integer pageNo, Integer pageSize);
 
-	void updateMomentPublishedById(Long momentId, Boolean published);
+	MomentDO getById(Long id);
 
-	MomentDO getMomentById(Long id);
+	void incrLikeById(Long id);
 
-	void deleteMomentById(Long id);
+	void insertSelective(MomentDO moment);
 
-	void saveMoment(MomentDO moment);
+	void updateSelective(MomentDO moment);
 
-	void updateMoment(MomentDO moment);
 }

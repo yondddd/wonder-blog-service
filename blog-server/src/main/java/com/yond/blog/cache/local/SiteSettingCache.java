@@ -1,7 +1,7 @@
 package com.yond.blog.cache.local;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import com.yond.blog.entity.SiteSettingDO;
+import com.yond.blog.entity.SiteConfigDO;
 
 import java.util.List;
 
@@ -14,13 +14,13 @@ public class SiteSettingCache {
 
     private final static String KEY = "allSiteSetting";
 
-    private final static Cache<String, List<SiteSettingDO>> cache = LocalCache.buildCache(1);
+    private final static Cache<String, List<SiteConfigDO>> cache = LocalCache.buildCache(1);
 
-    public static List<SiteSettingDO> get() {
+    public static List<SiteConfigDO> get() {
         return cache.getIfPresent(KEY);
     }
 
-    public static void set(List<SiteSettingDO> data) {
+    public static void set(List<SiteConfigDO> data) {
         cache.put(KEY, data);
     }
 

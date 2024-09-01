@@ -1,7 +1,7 @@
 package com.yond.blog.web.blog.admin.controller;
 
 import com.yond.blog.cache.remote.VisitCache;
-import com.yond.blog.entity.CityVisitorDO;
+import com.yond.blog.entity.VisitCityDO;
 import com.yond.blog.service.DashboardService;
 import com.yond.common.resp.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class DashboardAdminController {
         Map<String, List> categoryBlogCountMap = dashboardService.getCategoryBlogCountMap();
         Map<String, List> tagBlogCountMap = dashboardService.getTagBlogCountMap();
         Map<String, List> visitRecordMap = dashboardService.getVisitRecordMap();
-        List<CityVisitorDO> cityVisitorList = dashboardService.getCityVisitorList();
+        List<VisitCityDO> cityVisitorList = dashboardService.getCityVisitorList();
 
         Map<String, Object> map = new HashMap<>(16);
         map.put("pv", todayPV);

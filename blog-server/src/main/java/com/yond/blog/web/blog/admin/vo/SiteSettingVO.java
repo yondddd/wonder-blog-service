@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 /**
  * @Description:
- * @Author: WangJieLong
+ * @Author: yond
  * @Date: 2024-08-30
  */
 public class SiteSettingVO implements Serializable {

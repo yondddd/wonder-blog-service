@@ -2,8 +2,8 @@ package com.yond.blog.web.blog.admin.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.yond.blog.entity.VisitorDO;
-import com.yond.blog.service.VisitorService;
+import com.yond.blog.entity.VisitUserDO;
+import com.yond.blog.service.VisitUserService;
 import com.yond.common.resp.Response;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin")
 public class VisitorAdminController {
 
-    private final VisitorService visitorService;
+    private final VisitUserService visitUserService;
 
-    public VisitorAdminController(VisitorService visitorService) {
-        this.visitorService = visitorService;
+    public VisitorAdminController(VisitUserService visitUserService) {
+        this.visitUserService = visitUserService;
     }
 
     /**
@@ -42,7 +42,7 @@ public class VisitorAdminController {
         }
         String orderBy = "create_time desc";
         PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<VisitorDO> pageInfo = new PageInfo<>(visitorService.listByDate(startDate, endDate));
+        PageInfo<VisitUserDO> pageInfo = new PageInfo<>(visitUserService.listByDate(startDate, endDate));
         return Response.ok("请求成功", pageInfo);
     }
 
@@ -56,7 +56,7 @@ public class VisitorAdminController {
      */
     @DeleteMapping("/visitor")
     public Response delete(@RequestParam Long id, @RequestParam String uuid) {
-        visitorService.deleteVisitor(id, uuid);
+        visitUserService.deleteVisitor(id, uuid);
         return Response.ok("删除成功");
     }
 }

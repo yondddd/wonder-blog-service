@@ -23,8 +23,8 @@ public class UserAgentUtils {
         String browser = agent.getValue(UserAgent.AGENT_NAME_VERSION);
         return new UserAgentDTO(os, browser);
     }
-    
-    private static synchronized void init() {
+
+    public static synchronized void init() {
         if (userAgentAnalyzer != null) {
             return;
         }

@@ -16,27 +16,25 @@ import java.util.List;
 @Repository
 public interface CommentMapper {
 
-	List<CommentDO> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
+    List<CommentDO> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
 
-	List<CommentDO> getListByParentCommentId(Long parentCommentId);
+    List<CommentDO> getListByParentCommentId(Long parentCommentId);
 
-	List<PageComment> getPageCommentListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
+    List<PageComment> getPageCommentListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
 
-	CommentDO getCommentById(Long id);
+    CommentDO getCommentById(Long id);
 
-	int updateCommentPublishedById(Long commentId, Boolean published);
+    int updateCommentPublishedById(Long commentId, Boolean published);
 
-	int updateCommentNoticeById(Long commentId, Boolean notice);
+    int updateCommentNoticeById(Long commentId, Boolean notice);
 
-	int deleteCommentById(Long commentId);
+    int deleteCommentById(Long commentId);
 
-	int deleteCommentsByBlogId(Long blogId);
+    int updateComment(CommentDO comment);
 
-	int updateComment(CommentDO comment);
+    int countByPageAndIsPublished(Integer page, Long blogId, Boolean isPublished);
 
-	int countByPageAndIsPublished(Integer page, Long blogId, Boolean isPublished);
+    int countComment();
 
-	int countComment();
-
-	int saveComment(com.yond.blog.web.blog.view.dto.Comment comment);
+    int saveComment(com.yond.blog.web.blog.view.dto.Comment comment);
 }

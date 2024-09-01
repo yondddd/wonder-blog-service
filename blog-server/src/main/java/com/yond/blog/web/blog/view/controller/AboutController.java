@@ -1,7 +1,7 @@
 package com.yond.blog.web.blog.view.controller;
 
-import com.yond.blog.entity.SiteSettingDO;
-import com.yond.blog.service.SiteSettingService;
+import com.yond.blog.entity.SiteConfigDO;
+import com.yond.blog.service.SiteConfigService;
 import com.yond.blog.util.markdown.MarkdownUtils;
 import com.yond.common.annotation.VisitLogger;
 import com.yond.common.constant.AboutConstant;
@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 @RestController
 public class AboutController {
 
-    private final SiteSettingService siteSettingService;
+    private final SiteConfigService siteConfigService;
 
-    public AboutController(SiteSettingService siteSettingService) {
-        this.siteSettingService = siteSettingService;
+    public AboutController(SiteConfigService siteConfigService) {
+        this.siteConfigService = siteConfigService;
     }
 
     /**
@@ -37,8 +37,8 @@ public class AboutController {
     @GetMapping("/view/about")
     public Response<Map<String, String>> about() {
 
-        Map<String, String> map = siteSettingService.listByType(SiteSettingTypeEnum.ABOUT)
-                .stream().collect(Collectors.toMap(SiteSettingDO::getNameEn, SiteSettingDO::getValue));
+        Map<String, String> map = siteConfigService.listByType(SiteSettingTypeEnum.ABOUT)
+                .stream().collect(Collectors.toMap(SiteConfigDO::getNameEn, SiteConfigDO::getValue));
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (AboutConstant.CONTENT_KEY.equals(entry.getKey())) {
                 entry.setValue(MarkdownUtils.markdownToHtmlExtensions(entry.getValue()));

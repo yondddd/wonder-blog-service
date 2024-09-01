@@ -6,7 +6,7 @@ import com.yond.blog.entity.CommentDO;
 import com.yond.blog.entity.UserDO;
 import com.yond.blog.service.BlogService;
 import com.yond.blog.service.FriendService;
-import com.yond.blog.service.SiteSettingService;
+import com.yond.blog.service.SiteConfigService;
 import com.yond.blog.service.UserService;
 import com.yond.blog.util.HashUtils;
 import com.yond.blog.util.IpAddressUtils;
@@ -53,7 +53,7 @@ public class CommentUtils {
     @Autowired
     private QQAvatarCache qqAvatarCache;
     @Resource
-    private SiteSettingService siteSettingService;
+    private SiteConfigService siteConfigService;
 
     private static BlogService blogService;
 
@@ -196,7 +196,7 @@ public class CommentUtils {
                 break;
             case PageConstant.ABOUT:
                 //关于我页面
-                String value = siteSettingService.getValue(SiteSettingConstant.COMMENT_ENABLED);
+                String value = siteConfigService.getValue(SiteSettingConstant.COMMENT_ENABLED);
                 if (!BooleanUtils.toBoolean(value)) {
                     //页面评论已关闭
                     return CommentOpenStateEnum.CLOSE;

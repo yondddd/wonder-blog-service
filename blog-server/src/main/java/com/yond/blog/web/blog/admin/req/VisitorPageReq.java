@@ -3,7 +3,6 @@ package com.yond.blog.web.blog.admin.req;
 import com.yond.common.req.PageReq;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +10,7 @@ import java.util.Date;
  * @date 7/13/2024
  * @description
  */
-public class VisitorPageReq extends PageReq implements Serializable {
+public class VisitorPageReq extends PageReq  {
 
     @Serial
     private static final long serialVersionUID = -1965632279964606709L;

@@ -1,5 +1,6 @@
 package com.yond.common.req;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -9,6 +10,7 @@ import java.io.Serializable;
  */
 public class PageReq implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 2760764853696416726L;
 
     private Integer pageNo;

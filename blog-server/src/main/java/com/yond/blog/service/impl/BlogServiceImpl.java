@@ -168,7 +168,7 @@ public class BlogServiceImpl implements BlogService {
             blogInfo.setDescription(MarkdownUtils.markdownToHtmlExtensions(blogDO.getDescription()));
         }
         blogInfo.setCategory(categoryService.getById(blogDO.getCategoryId().longValue()));
-        blogInfo.setTags(tagService.getTagListByBlogId(blogDO.getId()));
+        blogInfo.setTags(blogTagService.listTagsByBlogId(blogDO.getId()));
         return blogInfo;
     }
 
@@ -230,7 +230,7 @@ public class BlogServiceImpl implements BlogService {
                 blogInfo.setPrivacy(false);
                 blogInfo.setDescription(MarkdownUtils.markdownToHtmlExtensions(blogInfo.getDescription()));
             }
-            blogInfo.setTags(tagService.getTagListByBlogId(blogInfo.getId()));
+            blogInfo.setTags(blogTagService.listTagsByBlogId(blogInfo.getId()));
         }
         return blogInfos;
     }
@@ -354,12 +354,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public int countBlogByCategoryId(Long categoryId) {
-        return blogMapper.countBlogByCategoryId(categoryId);
-    }
-
-    @Override
-    public int countBlogByTagId(Long tagId) {
+    public int countByTagId(Long tagId) {
         return blogMapper.countBlogByTagId(tagId);
     }
 

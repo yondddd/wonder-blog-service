@@ -1,8 +1,9 @@
 package com.yond.blog.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 import com.yond.blog.entity.MomentDO;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -14,17 +15,13 @@ import java.util.List;
 @Mapper
 @Repository
 public interface MomentMapper {
-	List<MomentDO> getMomentList();
 
-	int addLikeByMomentId(Long momentId);
+    List<MomentDO> listByStatus(@Param("status") Integer status);
 
-	int updateMomentPublishedById(Long momentId, Boolean published);
+    int incrLikeById(Long momentId);
 
-	MomentDO getMomentById(Long id);
+    int insertSelective(MomentDO moment);
 
-	int deleteMomentById(Long id);
+    int updateSelective(MomentDO moment);
 
-	int saveMoment(MomentDO moment);
-
-	int updateMoment(MomentDO moment);
 }

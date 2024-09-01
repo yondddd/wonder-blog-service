@@ -1,15 +1,25 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.MomentDO;
 import com.yond.blog.service.MomentService;
+import com.yond.blog.web.blog.admin.convert.MomentConverter;
+import com.yond.blog.web.blog.admin.req.MomentDelReq;
+import com.yond.blog.web.blog.admin.req.MomentDetailReq;
+import com.yond.blog.web.blog.admin.req.MomentPageReq;
+import com.yond.blog.web.blog.admin.req.MomentPublishedReq;
+import com.yond.blog.web.blog.admin.vo.MomentVO;
 import com.yond.common.annotation.OperationLogger;
+import com.yond.common.enums.EnableStatusEnum;
+import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * @Description: 博客动态后台管理
@@ -17,94 +27,57 @@ import java.util.Date;
  * @Date: 2020-08-24
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/moment")
 public class MomentAdminController {
-    @Autowired
-    MomentService momentService;
 
-    /**
-     * 分页查询动态列表
-     *
-     * @param pageNum  页码
-     * @param pageSize 每页条数
-     * @return
-     */
-    @GetMapping("/moments")
-    public Response moments(@RequestParam(defaultValue = "1") Integer pageNum,
-                            @RequestParam(defaultValue = "10") Integer pageSize) {
-        String orderBy = "create_time desc";
-        PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<MomentDO> pageInfo = new PageInfo<>(momentService.getMomentList());
-        return Response.ok("请求成功", pageInfo);
+    @Resource
+    private MomentService momentService;
+
+    @PostMapping("/page")
+    public PageResponse<List<MomentVO>> moments(@RequestBody MomentPageReq req) {
+        Pair<Integer, List<MomentDO>> pair = momentService.page(true, false, req.getPageNo(), req.getPageSize());
+        List<MomentVO> data = pair.getRight().stream().map(MomentConverter::do2vo).toList();
+        return PageResponse.<List<MomentVO>>custom().setSuccess().setData(data).setTotal(pair.getLeft());
     }
 
-    /**
-     * 更新动态公开状态
-     *
-     * @param id        动态id
-     * @param published 是否公开
-     * @return
-     */
+    @PostMapping("/detail")
+    public Response<MomentVO> moment(@RequestBody MomentDetailReq req) {
+        MomentDO moment = momentService.getById(req.getId());
+        return Response.success(MomentConverter.do2vo(moment));
+    }
+
     @OperationLogger("更新动态公开状态")
-    @PutMapping("/moment/published")
-    public Response updatePublished(@RequestParam Long id, @RequestParam Boolean published) {
-        momentService.updateMomentPublishedById(id, published);
-        return Response.ok("操作成功");
+    @PostMapping("/published")
+    public Response<Boolean> updatePublished(@RequestBody MomentPublishedReq req) {
+        MomentDO update = MomentDO.custom()
+                .setId(req.getId())
+                .setPublished(req.getPublished());
+        momentService.updateSelective(update);
+        return Response.success();
     }
 
-    /**
-     * 根据id查询动态
-     *
-     * @param id 动态id
-     * @return
-     */
-    @GetMapping("/moment")
-    public Response moment(@RequestParam Long id) {
-        return Response.ok("获取成功", momentService.getMomentById(id));
-    }
-
-    /**
-     * 删除动态
-     *
-     * @param id 动态id
-     * @return
-     */
     @OperationLogger("删除动态")
-    @DeleteMapping("/moment")
-    public Response deleteMoment(@RequestParam Long id) {
-        momentService.deleteMomentById(id);
-        return Response.ok("删除成功");
+    @PostMapping("/del")
+    public Response<Boolean> deleteMoment(@RequestBody MomentDelReq req) {
+        MomentDO update = MomentDO.custom()
+                .setId(req.getId())
+                .setStatus(EnableStatusEnum.DELETE.getVal());
+        momentService.updateSelective(update);
+        return Response.success();
     }
 
-    /**
-     * 发布动态
-     *
-     * @param moment 动态实体
-     * @return
-     */
-    @OperationLogger("发布动态")
-    @PostMapping("/moment")
-    public Response saveMoment(@RequestBody MomentDO moment) {
-        if (moment.getCreateTime() == null) {
-            moment.setCreateTime(new Date());
-        }
-        momentService.saveMoment(moment);
-        return Response.ok("添加成功");
+    @OperationLogger("新增动态")
+    @PostMapping("/save")
+    public Response<Boolean> saveMoment(@RequestBody MomentVO moment) {
+        momentService.insertSelective(MomentConverter.vo2do(moment));
+        return Response.success();
     }
 
-    /**
-     * 更新动态
-     *
-     * @param moment 动态实体
-     * @return
-     */
     @OperationLogger("更新动态")
-    @PutMapping("/moment")
-    public Response updateMoment(@RequestBody MomentDO moment) {
-        if (moment.getCreateTime() == null) {
-            moment.setCreateTime(new Date());
-        }
-        momentService.updateMoment(moment);
-        return Response.ok("修改成功");
+    @PostMapping("/update")
+    public Response<Boolean> updateMoment(@RequestBody MomentVO moment) {
+        momentService.updateSelective(MomentConverter.vo2do(moment));
+        return Response.success();
     }
+
 }

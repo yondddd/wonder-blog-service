@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yond.blog.mapper.LogExceptionMapper">
+
+    <resultMap id="log" type="com.yond.blog.entity.LogExceptionDO">
+        <id property="id" column="id"/>
+        <result property="uri" column="uri"/>
+        <result property="method" column="method"/>
+        <result property="param" column="param"/>
+        <result property="description" column="description"/>
+        <result property="error" column="error"/>
+        <result property="ip" column="ip"/>
+        <result property="ipSource" column="ip_source"/>
+        <result property="os" column="os"/>
+        <result property="browser" column="browser"/>
+        <result property="createTime" column="create_time"/>
+        <result property="userAgent" column="user_agent"/>
+    </resultMap>
+
+    <!--查询日志-->
+    <select id="getExceptionLogListByDate" resultMap="log">
+        select id, uri, method, param, description, error, ip, ip_source, os, browser, create_time
+        from log_exception
+        <where>
+            <if test="startDate!=null and startDate!='' and endDate!=null and endDate!=''">
+                create_time between #{startDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+
+    <!--删除日志-->
+    <delete id="deleteExceptionLogById">
+        delete
+        from log_exception
+        where id = #{id}
+    </delete>
+
+    <insert id="insertSelective">
+        insert into log_exception
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="uri != null">uri,</if>
+            <if test="method != null">method,</if>
+            <if test="param != null">param,</if>
+            <if test="description != null">description,</if>
+            <if test="error != null">error,</if>
+            <if test="ip != null">ip,</if>
+            <if test="ipSource != null">ip_source,</if>
+            <if test="os != null">os,</if>
+            <if test="browser != null">browser,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="userAgent != null">user_agent,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=NUMERIC},</if>
+            <if test="uri != null">#{uri,jdbcType=VARCHAR},</if>
+            <if test="method != null">#{method,jdbcType=VARCHAR},</if>
+            <if test="param != null">#{param,jdbcType=VARCHAR},</if>
+            <if test="description != null">#{description,jdbcType=VARCHAR},</if>
+            <if test="error != null">#{error,jdbcType=VARCHAR},</if>
+            <if test="ip != null">#{ip,jdbcType=VARCHAR},</if>
+            <if test="ipSource != null">#{ipSource,jdbcType=VARCHAR},</if>
+            <if test="os != null">#{os,jdbcType=VARCHAR},</if>
+            <if test="browser != null">#{browser,jdbcType=VARCHAR},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="userAgent != null">#{userAgent,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+</mapper>

@@ -1,8 +1,8 @@
 package com.yond.blog.service.impl;
 
+import com.yond.blog.entity.LogScheduleJobDO;
 import com.yond.blog.entity.ScheduleJobDO;
-import com.yond.blog.entity.ScheduleJobLogDO;
-import com.yond.blog.mapper.ScheduleJobLogMapper;
+import com.yond.blog.mapper.LogScheduleJobMapper;
 import com.yond.blog.mapper.ScheduleJobMapper;
 import com.yond.blog.service.ScheduleJobService;
 import com.yond.blog.support.schedule.BlogSchedulingConfigurer;
@@ -21,12 +21,12 @@ import java.util.List;
 public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     private final ScheduleJobMapper schedulerJobMapper;
-    private final ScheduleJobLogMapper scheduleJobLogMapper;
+    private final LogScheduleJobMapper logScheduleJobMapper;
     private final BlogSchedulingConfigurer blogSchedulingConfigurer;
 
-    public ScheduleJobServiceImpl(ScheduleJobMapper schedulerJobMapper, ScheduleJobLogMapper scheduleJobLogMapper, BlogSchedulingConfigurer blogSchedulingConfigurer) {
+    public ScheduleJobServiceImpl(ScheduleJobMapper schedulerJobMapper, LogScheduleJobMapper logScheduleJobMapper, BlogSchedulingConfigurer blogSchedulingConfigurer) {
         this.schedulerJobMapper = schedulerJobMapper;
-        this.scheduleJobLogMapper = scheduleJobLogMapper;
+        this.logScheduleJobMapper = logScheduleJobMapper;
         this.blogSchedulingConfigurer = blogSchedulingConfigurer;
     }
 
@@ -83,14 +83,14 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     }
 
     @Override
-    public List<ScheduleJobLogDO> getJobLogListByDate(String startDate, String endDate) {
-        return scheduleJobLogMapper.getJobLogListByDate(startDate, endDate);
+    public List<LogScheduleJobDO> getJobLogListByDate(String startDate, String endDate) {
+        return logScheduleJobMapper.getJobLogListByDate(startDate, endDate);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveJobLog(ScheduleJobLogDO jobLog) {
-        if (scheduleJobLogMapper.saveJobLog(jobLog) != 1) {
+    public void saveJobLog(LogScheduleJobDO jobLog) {
+        if (logScheduleJobMapper.saveJobLog(jobLog) != 1) {
             throw new PersistenceException("日志添加失败");
         }
     }
@@ -98,7 +98,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteJobLogByLogId(Long logId) {
-        if (scheduleJobLogMapper.deleteJobLogByLogId(logId) != 1) {
+        if (logScheduleJobMapper.deleteJobLogByLogId(logId) != 1) {
             throw new PersistenceException("日志删除失败");
         }
     }

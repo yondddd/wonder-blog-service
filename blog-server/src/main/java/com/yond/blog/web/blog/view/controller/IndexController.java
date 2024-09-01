@@ -4,7 +4,7 @@ import com.yond.blog.entity.CategoryDO;
 import com.yond.blog.entity.TagDO;
 import com.yond.blog.service.BlogService;
 import com.yond.blog.service.CategoryService;
-import com.yond.blog.service.SiteSettingService;
+import com.yond.blog.service.SiteConfigService;
 import com.yond.blog.service.TagService;
 import com.yond.blog.web.blog.view.vo.NewBlog;
 import com.yond.blog.web.blog.view.vo.RandomBlog;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class IndexController {
 
     @Autowired
-    SiteSettingService siteSettingService;
+    SiteConfigService siteConfigService;
     @Autowired
     BlogService blogService;
     @Autowired
@@ -41,7 +41,7 @@ public class IndexController {
      */
     @GetMapping("/view/site")
     public Response site() {
-        Map<String, Object> map = siteSettingService.getSiteInfoForView();
+        Map<String, Object> map = siteConfigService.getSiteInfoForView();
         List<NewBlog> newBlogList = blogService.getNewBlogListByIsPublished();
         List<CategoryDO> categoryList = categoryService.listAll();
         List<TagDO> tagList = tagService.listAll();

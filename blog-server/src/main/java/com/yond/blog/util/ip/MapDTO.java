@@ -2,7 +2,7 @@ package com.yond.blog.util.ip;
 
 /**
  * @Description: 地图
- * @Author: WangJieLong
+ * @Author: yond
  * @Date: 2023-05-29
  */
 public class MapDTO {

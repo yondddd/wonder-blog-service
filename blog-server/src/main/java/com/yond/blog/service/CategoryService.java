@@ -17,9 +17,9 @@ public interface CategoryService {
 
     CategoryDO getByName(String name);
 
-    Long save(CategoryDO category);
+    Long insertSelective(CategoryDO category);
 
-    void update(CategoryDO category);
+    void updateSelective(CategoryDO category);
 
     void deleteById(Long id);
 

@@ -1,7 +1,7 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.yond.blog.entity.SiteSettingDO;
-import com.yond.blog.service.SiteSettingService;
+import com.yond.blog.entity.SiteConfigDO;
+import com.yond.blog.service.SiteConfigService;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.enums.SiteSettingTypeEnum;
 import com.yond.common.resp.Response;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class AboutAdminController {
 
     @Resource
-    private SiteSettingService siteSettingService;
+    private SiteConfigService siteConfigService;
 
     /**
      * 获取关于我页面配置
@@ -30,8 +30,8 @@ public class AboutAdminController {
      */
     @GetMapping("/about")
     public Response<Map<String, String>> about() {
-        Map<String, String> map = siteSettingService.listByType(SiteSettingTypeEnum.ABOUT)
-                .stream().collect(Collectors.toMap(SiteSettingDO::getNameEn, SiteSettingDO::getValue));
+        Map<String, String> map = siteConfigService.listByType(SiteSettingTypeEnum.ABOUT)
+                .stream().collect(Collectors.toMap(SiteConfigDO::getNameEn, SiteConfigDO::getValue));
         return Response.success(map);
     }
 
@@ -45,7 +45,7 @@ public class AboutAdminController {
     @PutMapping("/about")
     public Response<Boolean> updateAbout(@RequestBody Map<String, String> map) {
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            siteSettingService.updateValue(entry.getKey(), entry.getValue());
+            siteConfigService.updateValue(entry.getKey(), entry.getValue());
         }
         return Response.success();
     }

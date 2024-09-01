@@ -4,13 +4,19 @@ import com.yond.blog.entity.TagDO;
 import com.yond.blog.service.BlogService;
 import com.yond.blog.service.TagService;
 import com.yond.blog.web.blog.admin.convert.TagConvert;
+import com.yond.blog.web.blog.admin.req.TagDelReq;
+import com.yond.blog.web.blog.admin.req.TagPageReq;
 import com.yond.blog.web.blog.admin.vo.TagVO;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
-import org.apache.commons.lang3.StringUtils;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -23,13 +29,10 @@ import java.util.List;
 @RequestMapping("/admin/tag")
 public class TagAdminController {
 
-    private final BlogService blogService;
-    private final TagService tagService;
-
-    public TagAdminController(BlogService blogService, TagService tagService) {
-        this.blogService = blogService;
-        this.tagService = tagService;
-    }
+    @Resource
+    private BlogService blogService;
+    @Resource
+    private TagService tagService;
 
     @PostMapping("listAll")
     public Response<List<TagVO>> listAll() {
@@ -38,85 +41,43 @@ public class TagAdminController {
         return Response.success(data);
     }
 
-    /**
-     * 获取博客标签列表
-     *
-     * @param pageNum  页码
-     * @param pageSize 每页个数
-     * @return
-     */
-    @GetMapping("/tags")
-    public PageResponse<List<TagVO>> tags(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
-        Pair<Integer, List<TagDO>> pair = tagService.page(pageNum, pageSize);
+    @PostMapping("/page")
+    public PageResponse<List<TagVO>> page(@RequestBody TagPageReq req) {
+        Pair<Integer, List<TagDO>> pair = tagService.page(req.getPageNo(), req.getPageSize());
         List<TagVO> data = pair.getRight().stream().map(TagConvert::do2vo).toList();
         return PageResponse.<List<TagVO>>custom().setData(data).setTotal(pair.getLeft()).setSuccess();
     }
 
-    /**
-     * 添加新标签
-     *
-     * @param tag 标签实体
-     * @return
-     */
     @OperationLogger("添加标签")
-    @PostMapping("/tag")
-    public Response saveTag(@RequestBody TagDO tag) {
-        return getResult(tag, "save");
+    @PostMapping("/save")
+    public Response<Boolean> save(@RequestBody TagVO tag) {
+        TagDO exist = tagService.getByName(tag.getName());
+        Assert.isNull(exist, "标签名称已存在");
+        TagDO insert = TagConvert.vo2do(tag);
+        tagService.insertSelective(insert);
+        return Response.success();
     }
 
-    /**
-     * 修改标签
-     *
-     * @param tag 标签实体
-     * @return
-     */
     @OperationLogger("修改标签")
-    @PutMapping("/tag")
-    public Response updateTag(@RequestBody TagDO tag) {
-        return getResult(tag, "update");
+    @PostMapping("/update")
+    public Response<Boolean> update(@RequestBody TagVO tag) {
+        TagDO exist = tagService.getByName(tag.getName());
+        if (exist != null) {
+            Assert.isTrue(exist.getId().equals(tag.getId()), "标签名称已存在");
+        }
+        TagDO update = TagConvert.vo2do(tag);
+        tagService.updateSelective(update);
+        return Response.success();
     }
 
-    /**
-     * 执行标签添加或更新操作：校验参数是否合法，标签是否已存在
-     *
-     * @param tag  标签实体
-     * @param type 添加或更新
-     * @return
-     */
-    private Response getResult(TagDO tag, String type) {
-        if (StringUtils.isBlank(tag.getName())) {
-            return Response.failure("参数不能为空");
-        }
-        //查询标签是否已存在
-        TagDO tag1 = tagService.getTagByName(tag.getName());
-        //如果 tag1.getId().equals(tag.getId()) == true 就是更新标签
-        if (tag1 != null && !tag1.getId().equals(tag.getId())) {
-            return Response.failure("该标签已存在");
-        }
-        if ("save".equals(type)) {
-            tagService.saveTag(tag);
-            return Response.ok("添加成功");
-        } else {
-            tagService.updateTag(tag);
-            return Response.ok("更新成功");
-        }
-    }
-
-    /**
-     * 按id删除标签
-     *
-     * @param id 标签id
-     * @return
-     */
     @OperationLogger("删除标签")
-    @DeleteMapping("/tag")
-    public Response delete(@RequestParam Long id) {
-        //删除存在博客关联的标签后，该博客的查询会出异常
-        int num = blogService.countBlogByTagId(id);
+    @PostMapping("/del")
+    public Response<Boolean> delete(@RequestBody TagDelReq req) {
+        int num = blogService.countByTagId(req.getId());
         if (num != 0) {
-            return Response.failure("已有博客与此标签关联，不可删除");
+            return Response.<Boolean>custom().setFailure("已有博客与此标签关联，不可删除");
         }
-        tagService.deleteTagById(id);
-        return Response.ok("删除成功");
+        tagService.deleteById(req.getId());
+        return Response.success();
     }
 }

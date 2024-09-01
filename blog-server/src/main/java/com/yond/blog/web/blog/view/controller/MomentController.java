@@ -1,6 +1,5 @@
 package com.yond.blog.web.blog.view.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.MomentDO;
 import com.yond.blog.service.MomentService;
 import com.yond.blog.service.impl.UserServiceImpl;
@@ -12,10 +11,12 @@ import com.yond.common.constant.JwtConstant;
 import com.yond.common.enums.VisitBehavior;
 import com.yond.common.resp.Response;
 import io.jsonwebtoken.Claims;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Description: 动态
@@ -29,6 +30,7 @@ public class MomentController {
     @Autowired
     UserServiceImpl userService;
 
+    private static final int pageSize = 5;
     /**
      * 分页查询动态List
      *
@@ -55,8 +57,8 @@ public class MomentController {
                 return Response.custom(403, "博主身份Token已失效，请重新登录！");
             }
         }
-        PageInfo<MomentDO> pageInfo = new PageInfo<>(momentService.getMomentVOList(pageNum, adminIdentity));
-        PageResult<MomentDO> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
+        Pair<Integer, List<MomentDO>> pair = momentService.page(adminIdentity, true, pageNum, pageSize);
+        PageResult<MomentDO> pageResult = new PageResult<>(pair.getLeft(), pair.getRight());
         return Response.success(pageResult);
     }
 
@@ -71,7 +73,7 @@ public class MomentController {
     @VisitLogger(VisitBehavior.LIKE_MOMENT)
     @PostMapping("/view/moment/like/{id}")
     public Response like(@PathVariable Long id) {
-        momentService.addLikeByMomentId(id);
+        momentService.incrLikeById(id);
         return Response.ok("点赞成功");
     }
 }

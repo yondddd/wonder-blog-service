@@ -1,8 +1,8 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.yond.blog.entity.LoginLogDO;
+import com.yond.blog.entity.LogLoginDO;
 import com.yond.blog.entity.UserDO;
-import com.yond.blog.service.LoginLogService;
+import com.yond.blog.service.LogLoginService;
 import com.yond.blog.service.UserService;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.jwt.JwtUtil;
@@ -35,7 +35,7 @@ public class AdminLoginController {
     @Resource
     private UserService userService;
     @Resource
-    private LoginLogService loginLogService;
+    private LogLoginService logLoginService;
 
     /**
      * 登录成功后，签发博主身份Token
@@ -44,7 +44,7 @@ public class AdminLoginController {
     public Response<TokenVO> login(@RequestBody LoginInfo loginInfo) {
         UserDO user = userService.getByNameAndPassword(loginInfo.getUsername(), loginInfo.getPassword());
         if (user == null) {
-            loginLogService.saveLoginLog(handleLog(loginInfo.getUsername(), false, "用户名或密码错误"));
+            logLoginService.saveLoginLog(handleLog(loginInfo.getUsername(), false, "用户名或密码错误"));
             return Response.fail("用户名或密码错误");
         }
         if (!RoleEnum.ADMIN.getVal().equals(user.getRole())) {
@@ -63,18 +63,18 @@ public class AdminLoginController {
         result.setToken(token);
         result.setUser(user);
 
-        LoginLogDO log = handleLog(user.getUsername(), true, "登录成功");
-        loginLogService.saveLoginLog(log);
+        LogLoginDO log = handleLog(user.getUsername(), true, "登录成功");
+        logLoginService.saveLoginLog(log);
 
         return Response.success(result);
     }
 
 
-    private LoginLogDO handleLog(String userName, boolean loginSuccess, String description) {
+    private LogLoginDO handleLog(String userName, boolean loginSuccess, String description) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String ip = IpAddressUtils.getIpAddress(request);
         String userAgent = request.getHeader("User-Agent");
-        return new LoginLogDO(userName, ip, loginSuccess, description, userAgent);
+        return new LogLoginDO(userName, ip, loginSuccess, description, userAgent);
     }
 
 }

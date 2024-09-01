@@ -1,6 +1,6 @@
 package com.yond.blog.service;
 
-import com.yond.blog.entity.CityVisitorDO;
+import com.yond.blog.entity.VisitCityDO;
 
 import java.util.List;
 import java.util.Map;
@@ -18,5 +18,5 @@ public interface DashboardService {
 
     Map<String, List> getVisitRecordMap();
 
-    List<CityVisitorDO> getCityVisitorList();
+    List<VisitCityDO> getCityVisitorList();
 }

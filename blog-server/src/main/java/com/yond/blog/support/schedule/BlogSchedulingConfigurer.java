@@ -1,7 +1,7 @@
 package com.yond.blog.support.schedule;
 
+import com.yond.blog.entity.LogScheduleJobDO;
 import com.yond.blog.entity.ScheduleJobDO;
-import com.yond.blog.entity.ScheduleJobLogDO;
 import com.yond.blog.service.ScheduleJobService;
 import com.yond.common.utils.json.util.JsonUtils;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +25,7 @@ import java.util.Map;
 
 /**
  * @Description: 单位同步配置定时任务
- * @Author: WangJieLong
+ * @Author: yond
  * @Date: 2023-10-30
  */
 @Configuration
@@ -107,7 +107,7 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
         public void run() {
             ScheduleJobDO job = scheduleJobService.getJobById(task.getJobId());
             long start = System.currentTimeMillis();
-            ScheduleJobLogDO jobLog = new ScheduleJobLogDO();
+            LogScheduleJobDO jobLog = new LogScheduleJobDO();
             jobLog.setJobId(job.getId());
             jobLog.setBeanName(job.getBeanName());
             jobLog.setMethodName(job.getMethodName());

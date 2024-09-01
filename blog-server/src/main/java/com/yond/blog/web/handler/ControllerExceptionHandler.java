@@ -57,6 +57,6 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Response exceptionHandler(HttpServletRequest request, Exception e) {
         logger.error("Request URL : {}, Exception :", request.getRequestURL(), e);
-        return Response.create(HttpStatus.INTERNAL_SERVER_ERROR.value(), "异常错误:" + e.getMessage());
+        return Response.create(HttpStatus.INTERNAL_SERVER_ERROR.value(), "异常错误: " + e.getMessage());
     }
 }

@@ -249,7 +249,7 @@ public class TelegramBotMsgHandler {
         moment.setContent(content);
         moment.setLikes(0);
         moment.setPublished(true);
-        momentService.saveMoment(moment);
+        momentService.insertSelective(moment);
 
         return String.format(
                 "<b>动态发布成功！\n</b>" +

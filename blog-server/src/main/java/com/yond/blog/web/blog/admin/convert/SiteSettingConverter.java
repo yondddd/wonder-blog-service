@@ -1,16 +1,16 @@
 package com.yond.blog.web.blog.admin.convert;
 
-import com.yond.blog.entity.SiteSettingDO;
+import com.yond.blog.entity.SiteConfigDO;
 import com.yond.blog.web.blog.admin.vo.SiteSettingVO;
 
 /**
  * @Description:
- * @Author: WangJieLong
+ * @Author: yond
  * @Date: 2024-08-30
  */
 public class SiteSettingConverter {
-    
-    public static SiteSettingVO do2vo(SiteSettingDO from) {
+
+    public static SiteSettingVO do2vo(SiteConfigDO from) {
         SiteSettingVO to = new SiteSettingVO();
         to.setId(from.getId());
         to.setNameEn(from.getNameEn());
@@ -19,9 +19,9 @@ public class SiteSettingConverter {
         to.setType(from.getType());
         return to;
     }
-    
-    public static SiteSettingDO vo2do(SiteSettingVO from) {
-        SiteSettingDO to = new SiteSettingDO();
+
+    public static SiteConfigDO vo2do(SiteSettingVO from) {
+        SiteConfigDO to = new SiteConfigDO();
         to.setId(from.getId());
         to.setNameEn(from.getNameEn());
         to.setNameZh(from.getNameZh());
@@ -29,6 +29,6 @@ public class SiteSettingConverter {
         to.setType(from.getType());
         return to;
     }
-    
-    
+
+
 }
