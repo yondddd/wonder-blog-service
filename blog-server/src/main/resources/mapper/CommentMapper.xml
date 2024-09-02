@@ -23,6 +23,14 @@
         </association>
     </resultMap>
 
+    <resultMap id="BaseResultMap" type="com.yond.blog.entity.CommentDO">
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+
+    </sql>
+
     <!--按页面和父评论id查询评论List-->
     <select id="getListByPageAndParentCommentId" resultMap="comment">
         select c.id, c.nickname, c.email, c.content, c.avatar, c.create_time, c.ip, c.is_published, c.is_admin_comment,
@@ -171,4 +179,10 @@
                 #{adminComment},
                 #{page}, #{notice}, #{parentCommentId}, #{blogId}, #{qq})
     </insert>
+
+    <select id="listAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from comment_dO
+    </select>
 </mapper>

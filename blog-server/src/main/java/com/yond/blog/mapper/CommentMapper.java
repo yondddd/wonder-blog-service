@@ -37,4 +37,6 @@ public interface CommentMapper {
     int countComment();
 
     int saveComment(com.yond.blog.web.blog.view.dto.Comment comment);
+    
+    List<CommentDO> listAll();
 }

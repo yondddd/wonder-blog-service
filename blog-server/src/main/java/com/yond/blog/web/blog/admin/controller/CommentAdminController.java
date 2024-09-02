@@ -7,7 +7,9 @@ import com.yond.blog.entity.CommentDO;
 import com.yond.blog.service.BlogService;
 import com.yond.blog.service.CommentService;
 import com.yond.blog.web.blog.admin.req.CommentPageReq;
+import com.yond.blog.web.blog.admin.vo.CommentVO;
 import com.yond.common.annotation.OperationLogger;
+import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
@@ -23,23 +25,22 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/comment")
 public class CommentAdminController {
-
-
+    
     @Resource
     private CommentService commentService;
     @Resource
     private BlogService blogService;
-
-
+    
     @GetMapping("/page")
-    public Response<PageInfo<CommentDO>> page(@RequestBody CommentPageReq req) {
+    public PageResponse<List<CommentVO>> page(@RequestBody CommentPageReq req) {
+        // order by id
         String orderBy = "create_time desc";
         PageHelper.startPage(pageNum, pageSize, orderBy);
         List<CommentDO> comments = commentService.getListByPageAndParentCommentId(page, blogId, -1L);
         PageInfo<CommentDO> pageInfo = new PageInfo<>(comments);
         return Response.success(pageInfo);
     }
-
+    
     /**
      * 获取所有博客id和title 供评论分类的选择
      *
@@ -50,7 +51,7 @@ public class CommentAdminController {
         List<BlogDO> blogs = blogService.getIdAndTitleList();
         return Response.success(blogs);
     }
-
+    
     /**
      * 更新评论公开状态
      *
@@ -64,7 +65,7 @@ public class CommentAdminController {
         commentService.updateCommentPublishedById(id, published);
         return Response.success();
     }
-
+    
     /**
      * 更新评论接收邮件提醒状态
      *
@@ -78,7 +79,7 @@ public class CommentAdminController {
         commentService.updateCommentNoticeById(id, notice);
         return Response.success();
     }
-
+    
     /**
      * 按id删除该评论及其所有子评论
      *
@@ -91,7 +92,7 @@ public class CommentAdminController {
         commentService.deleteCommentById(id);
         return Response.success();
     }
-
+    
     /**
      * 修改评论
      *

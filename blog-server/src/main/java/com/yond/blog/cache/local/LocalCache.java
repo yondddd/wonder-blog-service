@@ -2,6 +2,7 @@ package com.yond.blog.cache.local;
 
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Scheduler;
 
@@ -50,6 +51,15 @@ public class LocalCache {
                 .scheduler(SCHEDULER)
                 .executor(EXECUTOR)
                 .build();
+    }
+    
+    public static <K, V> Cache<K, V> buildCache(int maxSize, CacheLoader<K, V> loader) {
+        return Caffeine.newBuilder()
+                .expireAfterWrite(getExpireSecond(), TimeUnit.SECONDS)
+                .maximumSize(maxSize)
+                .scheduler(SCHEDULER)
+                .executor(EXECUTOR)
+                .build(loader);
     }
     
 }

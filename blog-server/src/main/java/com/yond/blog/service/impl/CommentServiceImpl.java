@@ -1,13 +1,17 @@
 package com.yond.blog.service.impl;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.CacheLoader;
+import com.yond.blog.cache.local.LocalCache;
 import com.yond.blog.entity.CommentDO;
 import com.yond.blog.mapper.CommentMapper;
 import com.yond.blog.service.CommentService;
 import com.yond.blog.web.blog.view.vo.PageComment;
 import com.yond.common.enums.CommentPageEnum;
 import com.yond.common.exception.PersistenceException;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,15 +26,24 @@ import java.util.List;
  */
 @Service
 public class CommentServiceImpl implements CommentService {
-    @Autowired
-    CommentMapper commentMapper;
-
-
+    
+    @Resource
+    private CommentMapper commentMapper;
+    
+    // 先缓存全部数据
+    private final Cache<String, List<CommentDO>> cache = LocalCache.buildCache(1, new CacheLoader<>() {
+        @Override
+        public @Nullable List<CommentDO> load(String s) throws Exception {
+            return commentMapper.listAll();
+        }
+    });
+    
+    
     @Override
     public Pair<Integer, List<CommentDO>> pageBy(CommentPageEnum page, Long blogId, Integer pageNo, Integer pageSize) {
         return null;
     }
-
+    
     @Override
     public List<CommentDO> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId) {
         List<CommentDO> comments = commentMapper.getListByPageAndParentCommentId(page, blogId, parentCommentId);
@@ -41,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
         }
         return comments;
     }
-
+    
     @Override
     public List<PageComment> getPageCommentList(Integer page, Long blogId, Long parentCommentId) {
         List<PageComment> comments = getPageCommentListByPageAndParentCommentId(page, blogId, parentCommentId);
@@ -52,12 +65,12 @@ public class CommentServiceImpl implements CommentService {
             //排序一下
             Comparator<PageComment> comparator = Comparator.comparing(PageComment::getCreateTime);
             tmpComments.sort(comparator);
-
+            
             c.setReplyComments(tmpComments);
         }
         return comments;
     }
-
+    
     @Override
     public CommentDO getCommentById(Long id) {
         CommentDO comment = commentMapper.getCommentById(id);
@@ -66,7 +79,7 @@ public class CommentServiceImpl implements CommentService {
         }
         return comment;
     }
-
+    
     /**
      * 将所有子评论递归取出到一个List中
      *
@@ -78,7 +91,7 @@ public class CommentServiceImpl implements CommentService {
             getReplyComments(tmpComments, c.getReplyComments());
         }
     }
-
+    
     private List<PageComment> getPageCommentListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId) {
         List<PageComment> comments = commentMapper.getPageCommentListByPageAndParentCommentId(page, blogId, parentCommentId);
         for (PageComment c : comments) {
@@ -87,7 +100,7 @@ public class CommentServiceImpl implements CommentService {
         }
         return comments;
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateCommentPublishedById(Long commentId, Boolean published) {
@@ -98,12 +111,12 @@ public class CommentServiceImpl implements CommentService {
                 hideComment(c);
             }
         }
-
+        
         if (commentMapper.updateCommentPublishedById(commentId, published) != 1) {
             throw new PersistenceException("操作失败");
         }
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateCommentNoticeById(Long commentId, Boolean notice) {
@@ -111,7 +124,7 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("操作失败");
         }
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteCommentById(Long commentId) {
@@ -123,8 +136,8 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论删除失败");
         }
     }
-
-
+    
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateComment(CommentDO comment) {
@@ -132,12 +145,12 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论修改失败");
         }
     }
-
+    
     @Override
     public int countByPageAndIsPublished(Integer page, Long blogId, Boolean isPublished) {
         return commentMapper.countByPageAndIsPublished(page, blogId, isPublished);
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveComment(com.yond.blog.web.blog.view.dto.Comment comment) {
@@ -145,12 +158,12 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论失败");
         }
     }
-
+    
     @Override
     public int countComment() {
         return commentMapper.countComment();
     }
-
+    
     /**
      * 递归删除子评论
      *
@@ -164,7 +177,7 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论删除失败");
         }
     }
-
+    
     /**
      * 递归隐藏子评论
      *
@@ -178,7 +191,7 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("操作失败");
         }
     }
-
+    
     /**
      * 按id递归查询子评论
      *
