@@ -183,6 +183,8 @@
     <select id="listAll" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from comment_dO
+        from comment
+        order by id desc
     </select>
+
 </mapper>

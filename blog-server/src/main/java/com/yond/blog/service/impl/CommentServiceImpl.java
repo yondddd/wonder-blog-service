@@ -30,7 +30,6 @@ public class CommentServiceImpl implements CommentService {
     @Resource
     private CommentMapper commentMapper;
     
-    // 先缓存全部数据
     private final Cache<String, List<CommentDO>> cache = LocalCache.buildCache(1, new CacheLoader<>() {
         @Override
         public @Nullable List<CommentDO> load(String s) throws Exception {
@@ -38,6 +37,9 @@ public class CommentServiceImpl implements CommentService {
         }
     });
     
+    private List<CommentDO> listAll() {
+        return cache.getIfPresent("listAll");
+    }
     
     @Override
     public Pair<Integer, List<CommentDO>> pageBy(CommentPageEnum page, Long blogId, Integer pageNo, Integer pageSize) {

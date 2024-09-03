@@ -1,6 +1,5 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.BlogDO;
 import com.yond.blog.entity.CommentDO;
@@ -9,10 +8,12 @@ import com.yond.blog.service.CommentService;
 import com.yond.blog.web.blog.admin.req.CommentPageReq;
 import com.yond.blog.web.blog.admin.vo.CommentVO;
 import com.yond.common.annotation.OperationLogger;
+import com.yond.common.enums.CommentPageEnum;
 import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,10 +34,7 @@ public class CommentAdminController {
     
     @GetMapping("/page")
     public PageResponse<List<CommentVO>> page(@RequestBody CommentPageReq req) {
-        // order by id
-        String orderBy = "create_time desc";
-        PageHelper.startPage(pageNum, pageSize, orderBy);
-        List<CommentDO> comments = commentService.getListByPageAndParentCommentId(page, blogId, -1L);
+        Pair<Integer, List<CommentDO>> pair = commentService.pageBy(CommentPageEnum.getByValue(req.getPage()), req.getBlogId(), req.getPageNo(), req.getPageSize());
         PageInfo<CommentDO> pageInfo = new PageInfo<>(comments);
         return Response.success(pageInfo);
     }
