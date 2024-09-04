@@ -4,6 +4,8 @@
 
     <resultMap id="comment" type="com.yond.blog.entity.CommentDO">
         <id property="id" column="id"/>
+        <result property="page" column="page"/>
+        <result property="businessKey" column="business_key"/>
         <result property="nickname" column="nickname"/>
         <result property="email" column="email"/>
         <result property="content" column="content"/>
@@ -12,15 +14,11 @@
         <result property="ip" column="ip"/>
         <result property="published" column="is_published"/>
         <result property="adminComment" column="is_admin_comment"/>
-        <result property="page" column="page"/>
         <result property="notice" column="is_notice"/>
-        <result property="parentCommentId" column="parent_comment_id"/>
+        <result property="parentId" column="parent_id"/>
         <result property="website" column="website"/>
         <result property="qq" column="qq"/>
-        <association property="blog" javaType="com.yond.blog.web.blog.view.vo.BlogIdAndTitle">
-            <id property="id" column="blog_id"/>
-            <result property="title" column="title"/>
-        </association>
+
     </resultMap>
 
     <resultMap id="BaseResultMap" type="com.yond.blog.entity.CommentDO">
