@@ -6,9 +6,11 @@ import com.yond.blog.cache.local.LocalCache;
 import com.yond.blog.entity.CommentDO;
 import com.yond.blog.mapper.CommentMapper;
 import com.yond.blog.service.CommentService;
+import com.yond.blog.web.blog.admin.dto.CommentDTO;
 import com.yond.blog.web.blog.view.vo.PageComment;
 import com.yond.common.enums.CommentPageEnum;
 import com.yond.common.exception.PersistenceException;
+import com.yond.common.utils.page.PageUtil;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.tuple.Pair;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -18,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @Description: 博客评论业务层实现
@@ -41,9 +46,19 @@ public class CommentServiceImpl implements CommentService {
         return cache.getIfPresent("listAll");
     }
     
+    private Map<Long, CommentDO> allToMap(List<CommentDO> list) {
+        return list.stream().collect(Collectors.toMap(CommentDO::getId, Function.identity()));
+    }
+    
+    
     @Override
-    public Pair<Integer, List<CommentDO>> pageBy(CommentPageEnum page, Long blogId, Integer pageNo, Integer pageSize) {
-        return null;
+    public Pair<Integer, List<CommentDTO>> pageBy(CommentPageEnum page, Long blogId, Integer pageNo, Integer pageSize) {
+        List<CommentDO> allData = this.listAll();
+        Map<Long, CommentDO> allMap = this.allToMap(allData);
+        List<CommentDO> filter = allData.stream().filter(x -> (page == null || page.getId().equals(x.getPage()))
+                && (blogId == null || blogId.toString().equals(x.getBusinessKey()))).toList();
+        List<CommentDO> page = PageUtil.pageList(filter, pageNo, pageSize);
+        return Pair.of(allData.size(), );
     }
     
     @Override
@@ -208,4 +223,11 @@ public class CommentServiceImpl implements CommentService {
         }
         return comments;
     }
+    
+    private List<CommentDTO> do2dto(List<CommentDO> from,Map<Long, CommentDO> map){
+        for (CommentDO c : from) {
+        
+        }
+    }
+    
 }

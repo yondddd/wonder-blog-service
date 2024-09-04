@@ -1,44 +1,39 @@
-package com.yond.blog.entity;
+package com.yond.blog.web.blog.admin.dto;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
- * @Description: 博客评论
- * @Author: Naccl
- * @Date: 2020-07-27
+ * @Description:
+ * @Author: WangJieLong
+ * @Date: 2024-09-04
  */
-public class CommentDO implements Serializable {
-    
-    @Serial
-    private static final long serialVersionUID = 4679382704395889186L;
+@Model("")
+public class CommentDTO {
     
     private Long id;
-    private Integer page;//0普通文章，1关于我页面
-    private String businessKey; // 业务key比如blogId
-    private Long parentId;//父评论id
-    private String nickname;//昵称
-    private String email;//邮箱
-    private String content;//评论内容
-    private String avatar;//头像(图片路径)
-    private String website;//个人网站
-    private String ip;//评论者ip地址
-    private Boolean published;//公开或回收站
-    private Boolean adminComment;//博主回复
-    private Boolean notice;//接收邮件提醒
-    private String qq;//如果评论昵称为QQ号，则将昵称和头像置为QQ昵称和QQ头像，并将此字段置为QQ号备份
+    private Integer page;
+    private String businessKey;
+    private Long parentId;
+    private String nickname;
+    private String email;
+    private String content;
+    private String avatar;
+    private String website;
+    private String ip;
+    private Boolean published;
+    private Boolean adminComment;
+    private Boolean notice;
+    private String qq;
     private Integer status;
-    private Date createTime;//评论时间
-    
-    public CommentDO() {
-    }
+    private Date createTime;
+    private List<CommentDTO> reply;
     
     public Long getId() {
         return id;
     }
     
-    public CommentDO setId(Long id) {
+    public CommentDTO setId(Long id) {
         this.id = id;
         return this;
     }
@@ -47,7 +42,7 @@ public class CommentDO implements Serializable {
         return page;
     }
     
-    public CommentDO setPage(Integer page) {
+    public CommentDTO setPage(Integer page) {
         this.page = page;
         return this;
     }
@@ -56,7 +51,7 @@ public class CommentDO implements Serializable {
         return businessKey;
     }
     
-    public CommentDO setBusinessKey(String businessKey) {
+    public CommentDTO setBusinessKey(String businessKey) {
         this.businessKey = businessKey;
         return this;
     }
@@ -65,7 +60,7 @@ public class CommentDO implements Serializable {
         return parentId;
     }
     
-    public CommentDO setParentId(Long parentId) {
+    public CommentDTO setParentId(Long parentId) {
         this.parentId = parentId;
         return this;
     }
@@ -74,7 +69,7 @@ public class CommentDO implements Serializable {
         return nickname;
     }
     
-    public CommentDO setNickname(String nickname) {
+    public CommentDTO setNickname(String nickname) {
         this.nickname = nickname;
         return this;
     }
@@ -83,7 +78,7 @@ public class CommentDO implements Serializable {
         return email;
     }
     
-    public CommentDO setEmail(String email) {
+    public CommentDTO setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -92,7 +87,7 @@ public class CommentDO implements Serializable {
         return content;
     }
     
-    public CommentDO setContent(String content) {
+    public CommentDTO setContent(String content) {
         this.content = content;
         return this;
     }
@@ -101,7 +96,7 @@ public class CommentDO implements Serializable {
         return avatar;
     }
     
-    public CommentDO setAvatar(String avatar) {
+    public CommentDTO setAvatar(String avatar) {
         this.avatar = avatar;
         return this;
     }
@@ -110,7 +105,7 @@ public class CommentDO implements Serializable {
         return website;
     }
     
-    public CommentDO setWebsite(String website) {
+    public CommentDTO setWebsite(String website) {
         this.website = website;
         return this;
     }
@@ -119,7 +114,7 @@ public class CommentDO implements Serializable {
         return ip;
     }
     
-    public CommentDO setIp(String ip) {
+    public CommentDTO setIp(String ip) {
         this.ip = ip;
         return this;
     }
@@ -128,7 +123,7 @@ public class CommentDO implements Serializable {
         return published;
     }
     
-    public CommentDO setPublished(Boolean published) {
+    public CommentDTO setPublished(Boolean published) {
         this.published = published;
         return this;
     }
@@ -137,7 +132,7 @@ public class CommentDO implements Serializable {
         return adminComment;
     }
     
-    public CommentDO setAdminComment(Boolean adminComment) {
+    public CommentDTO setAdminComment(Boolean adminComment) {
         this.adminComment = adminComment;
         return this;
     }
@@ -146,7 +141,7 @@ public class CommentDO implements Serializable {
         return notice;
     }
     
-    public CommentDO setNotice(Boolean notice) {
+    public CommentDTO setNotice(Boolean notice) {
         this.notice = notice;
         return this;
     }
@@ -155,7 +150,7 @@ public class CommentDO implements Serializable {
         return qq;
     }
     
-    public CommentDO setQq(String qq) {
+    public CommentDTO setQq(String qq) {
         this.qq = qq;
         return this;
     }
@@ -164,7 +159,7 @@ public class CommentDO implements Serializable {
         return status;
     }
     
-    public CommentDO setStatus(Integer status) {
+    public CommentDTO setStatus(Integer status) {
         this.status = status;
         return this;
     }
@@ -173,14 +168,23 @@ public class CommentDO implements Serializable {
         return createTime;
     }
     
-    public CommentDO setCreateTime(Date createTime) {
+    public CommentDTO setCreateTime(Date createTime) {
         this.createTime = createTime;
+        return this;
+    }
+    
+    public List<CommentDTO> getReply() {
+        return reply;
+    }
+    
+    public CommentDTO setReply(List<CommentDTO> reply) {
+        this.reply = reply;
         return this;
     }
     
     @Override
     public String toString() {
-        return "CommentDO{" +
+        return "CommentDTO{" +
                 "id=" + id +
                 ", page=" + page +
                 ", businessKey='" + businessKey + '\'' +
@@ -197,6 +201,7 @@ public class CommentDO implements Serializable {
                 ", qq='" + qq + '\'' +
                 ", status=" + status +
                 ", createTime=" + createTime +
+                ", reply=" + reply +
                 '}';
     }
 }

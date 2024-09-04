@@ -1,7 +1,7 @@
 package com.yond.blog.mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.yond.blog.entity.CommentDO;
-import com.yond.blog.web.blog.view.vo.PageComment;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -15,28 +15,10 @@ import java.util.List;
 @Mapper
 @Repository
 public interface CommentMapper {
-
-    List<CommentDO> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
-
-    List<CommentDO> getListByParentCommentId(Long parentCommentId);
-
-    List<PageComment> getPageCommentListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
-
-    CommentDO getCommentById(Long id);
-
-    int updateCommentPublishedById(Long commentId, Boolean published);
-
-    int updateCommentNoticeById(Long commentId, Boolean notice);
-
-    int deleteCommentById(Long commentId);
-
-    int updateComment(CommentDO comment);
-
-    int countByPageAndIsPublished(Integer page, Long blogId, Boolean isPublished);
-
-    int countComment();
-
-    int saveComment(com.yond.blog.web.blog.view.dto.Comment comment);
     
     List<CommentDO> listAll();
+    
+    int insertSelective(CommentDO commentDO);
+    
+    int updateSelective(CommentDO commentDO);
 }

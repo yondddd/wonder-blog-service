@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yond.blog.mapper.CommentMapper">
 
-    <resultMap id="comment" type="com.yond.blog.entity.CommentDO">
+    <resultMap id="BaseResultMap" type="com.yond.blog.entity.CommentDO">
         <id property="id" column="id"/>
         <result property="page" column="page"/>
         <result property="businessKey" column="business_key"/>
@@ -21,162 +21,10 @@
 
     </resultMap>
 
-    <resultMap id="BaseResultMap" type="com.yond.blog.entity.CommentDO">
-
-    </resultMap>
-
     <sql id="Base_Column_List">
 
     </sql>
 
-    <!--按页面和父评论id查询评论List-->
-    <select id="getListByPageAndParentCommentId" resultMap="comment">
-        select c.id, c.nickname, c.email, c.content, c.avatar, c.create_time, c.ip, c.is_published, c.is_admin_comment,
-        c.page,
-        c.is_notice, c.parent_comment_id, c.website, c.blog_id, c.qq, b.title
-        from comment as c left join blog as b on c.blog_id=b.id
-        <where>
-            <if test="page!=null">
-                c.page=#{page}
-            </if>
-            <if test="page==0 and blogId!=null">
-                and c.blog_id=#{blogId}
-            </if>
-            and c.parent_comment_id=#{parentCommentId}
-        </where>
-    </select>
-
-    <!--按父评论id查询评论List-->
-    <select id="getListByParentCommentId" resultMap="comment">
-        select c.id,
-               c.nickname,
-               c.email,
-               c.content,
-               c.avatar,
-               c.create_time,
-               c.ip,
-               c.is_published,
-               c.is_admin_comment,
-               c.page,
-               c.is_notice,
-               c.parent_comment_id,
-               c.website,
-               c.qq,
-               c.blog_id,
-               b.title
-        from comment as c
-                 left join blog as b on c.blog_id = b.id
-        where c.parent_comment_id = #{parentCommentId}
-    </select>
-
-    <resultMap id="pageComment" type="com.yond.blog.web.blog.view.vo.PageComment">
-        <id property="id" column="id"/>
-        <result property="nickname" column="nickname"/>
-        <result property="content" column="content"/>
-        <result property="avatar" column="avatar"/>
-        <result property="createTime" column="create_time"/>
-        <result property="website" column="website"/>
-        <result property="adminComment" column="is_admin_comment"/>
-        <result property="parentCommentId" column="parent_comment_id"/>
-        <result property="parentCommentNickname" column="parent_comment_nickname"/>
-    </resultMap>
-
-    <!--查询页面展示的评论List-->
-    <select id="getPageCommentListByPageAndParentCommentId" resultMap="pageComment">
-        select c1.id, c1.nickname, c1.content, c1.avatar, c1.create_time, c1.is_admin_comment, c1.website,
-        c1.parent_comment_id as parent_comment_id, c2.nickname as parent_comment_nickname
-        from comment as c1 left join comment as c2 on c1.parent_comment_id=c2.id
-        where c1.page=#{page}
-        <if test="page==0 and blogId!=null">
-            and c1.blog_id=#{blogId}
-        </if>
-        and c1.parent_comment_id=#{parentCommentId}
-        and c1.is_published=true
-        order by c1.create_time desc
-    </select>
-
-    <!--按id查询评论-->
-    <select id="getCommentById" resultMap="comment">
-        select c.id,
-               c.nickname,
-               c.email,
-               c.content,
-               c.avatar,
-               c.create_time,
-               c.ip,
-               c.is_published,
-               c.is_admin_comment,
-               c.page,
-               c.is_notice,
-               c.parent_comment_id,
-               c.website,
-               c.qq,
-               c.blog_id,
-               b.title
-        from comment as c
-                 left join blog as b on c.blog_id = b.id
-        where c.id = #{id}
-    </select>
-
-    <!--更新评论公开状态-->
-    <update id="updateCommentPublishedById">
-        update comment
-        set is_published=#{published}
-        where id = #{commentId}
-    </update>
-
-    <!--更新评论接收邮件提醒状态-->
-    <update id="updateCommentNoticeById">
-        update comment
-        set is_notice=#{notice}
-        where id = #{commentId}
-    </update>
-
-    <!--按id删除评论-->
-    <delete id="deleteCommentById">
-        delete
-        from comment
-        where id = #{commentId}
-    </delete>
-
-    <!--更新评论-->
-    <update id="updateComment">
-        update comment
-        set nickname=#{nickname},
-            avatar=#{avatar},
-            email=#{email},
-            ip=#{ip},
-            content=#{content},
-            website=#{website}
-        where id = #{id}
-    </update>
-
-    <!--按页面查询评论数量-->
-    <select id="countByPageAndIsPublished" resultType="java.lang.Integer">
-        select count(*) from comment
-        where page=#{page}
-        <if test="isPublished!=null">
-            and is_published=#{isPublished}
-        </if>
-        <if test="page==0 and blogId!=0">
-            and blog_id=#{blogId}
-        </if>
-    </select>
-
-    <!--查询所有评论数量-->
-    <select id="countComment" resultType="java.lang.Integer">
-        select count(*)
-        from comment
-    </select>
-
-    <!--保存评论-->
-    <insert id="saveComment" useGeneratedKeys="true" keyProperty="id">
-        insert into comment (nickname, email, content, avatar, create_time, website, ip, is_published, is_admin_comment,
-                             page, is_notice, parent_comment_id, blog_id, qq)
-        values (#{nickname}, #{email}, #{content}, #{avatar}, #{createTime}, #{website}, #{ip}, #{published},
-                #{adminComment},
-                #{page}, #{notice}, #{parentCommentId}, #{blogId}, #{qq})
-    </insert>
 
     <select id="listAll" resultMap="BaseResultMap">
         select
@@ -184,5 +32,69 @@
         from comment
         order by id desc
     </select>
+
+    <insert id="insertSelective">
+        insert into comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="page != null">page,</if>
+            <if test="businessKey != null">business_key,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="nickname != null">nickname,</if>
+            <if test="email != null">email,</if>
+            <if test="content != null">content,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="website != null">website,</if>
+            <if test="ip != null">ip,</if>
+            <if test="published != null">is_published,</if>
+            <if test="adminComment != null">is_admin_comment,</if>
+            <if test="notice != null">is_notice,</if>
+            <if test="qq != null">qq,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=NUMERIC},</if>
+            <if test="page != null">#{page,jdbcType=NUMERIC},</if>
+            <if test="businessKey != null">#{businessKey,jdbcType=VARCHAR},</if>
+            <if test="parentId != null">#{parentId,jdbcType=NUMERIC},</if>
+            <if test="nickname != null">#{nickname,jdbcType=VARCHAR},</if>
+            <if test="email != null">#{email,jdbcType=VARCHAR},</if>
+            <if test="content != null">#{content,jdbcType=VARCHAR},</if>
+            <if test="avatar != null">#{avatar,jdbcType=VARCHAR},</if>
+            <if test="website != null">#{website,jdbcType=VARCHAR},</if>
+            <if test="ip != null">#{ip,jdbcType=VARCHAR},</if>
+            <if test="published != null">#{published,jdbcType=BOOLEAN},</if>
+            <if test="adminComment != null">#{adminComment,jdbcType=BOOLEAN},</if>
+            <if test="notice != null">#{notice,jdbcType=BOOLEAN},</if>
+            <if test="qq != null">#{qq,jdbcType=VARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=NUMERIC},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+
+
+    <update id="updateSelective">
+        update comment
+        <set>
+            <if test="page != null">page=#{page,jdbcType=NUMERIC},</if>
+            <if test="businessKey != null">business_key=#{businessKey,jdbcType=VARCHAR},</if>
+            <if test="parentId != null">parent_id=#{parentId,jdbcType=NUMERIC},</if>
+            <if test="nickname != null">nickname=#{nickname,jdbcType=VARCHAR},</if>
+            <if test="email != null">email=#{email,jdbcType=VARCHAR},</if>
+            <if test="content != null">content=#{content,jdbcType=VARCHAR},</if>
+            <if test="avatar != null">avatar=#{avatar,jdbcType=VARCHAR},</if>
+            <if test="website != null">website=#{website,jdbcType=VARCHAR},</if>
+            <if test="ip != null">ip=#{ip,jdbcType=VARCHAR},</if>
+            <if test="published != null">is_published=#{published,jdbcType=BOOLEAN},</if>
+            <if test="adminComment != null">is_admin_comment=#{adminComment,jdbcType=BOOLEAN},</if>
+            <if test="notice != null">is_notice=#{notice,jdbcType=BOOLEAN},</if>
+            <if test="qq != null">qq=#{qq,jdbcType=VARCHAR},</if>
+            <if test="status != null">status=#{status,jdbcType=NUMERIC},</if>
+            <if test="createTime != null">create_time=#{createTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        where id = #{id,jdbcType=NUMERIC}
+    </update>
 
 </mapper>
