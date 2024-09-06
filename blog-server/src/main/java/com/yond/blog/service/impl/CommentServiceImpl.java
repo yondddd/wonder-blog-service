@@ -12,6 +12,7 @@ import com.yond.common.enums.CommentPageEnum;
 import com.yond.common.exception.PersistenceException;
 import com.yond.common.utils.page.PageUtil;
 import jakarta.annotation.Resource;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -31,36 +31,38 @@ import java.util.stream.Collectors;
  */
 @Service
 public class CommentServiceImpl implements CommentService {
-    
+
     @Resource
     private CommentMapper commentMapper;
-    
+
+    private static final Long ROOT_ID = 0L;
+
     private final Cache<String, List<CommentDO>> cache = LocalCache.buildCache(1, new CacheLoader<>() {
         @Override
         public @Nullable List<CommentDO> load(String s) throws Exception {
             return commentMapper.listAll();
         }
     });
-    
+
     private List<CommentDO> listAll() {
         return cache.getIfPresent("listAll");
     }
-    
-    private Map<Long, CommentDO> allToMap(List<CommentDO> list) {
-        return list.stream().collect(Collectors.toMap(CommentDO::getId, Function.identity()));
+
+    private Map<Long, List<CommentDO>> allToMap(List<CommentDO> list) {
+        return list.stream().collect(Collectors.groupingBy(CommentDO::getParentId));
     }
-    
-    
+
     @Override
     public Pair<Integer, List<CommentDTO>> pageBy(CommentPageEnum page, Long blogId, Integer pageNo, Integer pageSize) {
         List<CommentDO> allData = this.listAll();
-        Map<Long, CommentDO> allMap = this.allToMap(allData);
-        List<CommentDO> filter = allData.stream().filter(x -> (page == null || page.getId().equals(x.getPage()))
+        Map<Long, List<CommentDO>> map = this.allToMap(allData);
+        List<CommentDO> root = map.get(0L);
+        root = root.stream().filter(x -> (page == null || page.getId().equals(x.getPage()))
                 && (blogId == null || blogId.toString().equals(x.getBusinessKey()))).toList();
-        List<CommentDO> page = PageUtil.pageList(filter, pageNo, pageSize);
-        return Pair.of(allData.size(), );
+        List<CommentDO> pageList = PageUtil.pageList(root, pageNo, pageSize);
+        return Pair.of(root.size(), buildTree(pageList, map));
     }
-    
+
     @Override
     public List<CommentDO> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId) {
         List<CommentDO> comments = commentMapper.getListByPageAndParentCommentId(page, blogId, parentCommentId);
@@ -71,7 +73,7 @@ public class CommentServiceImpl implements CommentService {
         }
         return comments;
     }
-    
+
     @Override
     public List<PageComment> getPageCommentList(Integer page, Long blogId, Long parentCommentId) {
         List<PageComment> comments = getPageCommentListByPageAndParentCommentId(page, blogId, parentCommentId);
@@ -82,12 +84,12 @@ public class CommentServiceImpl implements CommentService {
             //排序一下
             Comparator<PageComment> comparator = Comparator.comparing(PageComment::getCreateTime);
             tmpComments.sort(comparator);
-            
+
             c.setReplyComments(tmpComments);
         }
         return comments;
     }
-    
+
     @Override
     public CommentDO getCommentById(Long id) {
         CommentDO comment = commentMapper.getCommentById(id);
@@ -96,7 +98,7 @@ public class CommentServiceImpl implements CommentService {
         }
         return comment;
     }
-    
+
     /**
      * 将所有子评论递归取出到一个List中
      *
@@ -108,7 +110,7 @@ public class CommentServiceImpl implements CommentService {
             getReplyComments(tmpComments, c.getReplyComments());
         }
     }
-    
+
     private List<PageComment> getPageCommentListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId) {
         List<PageComment> comments = commentMapper.getPageCommentListByPageAndParentCommentId(page, blogId, parentCommentId);
         for (PageComment c : comments) {
@@ -117,7 +119,7 @@ public class CommentServiceImpl implements CommentService {
         }
         return comments;
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateCommentPublishedById(Long commentId, Boolean published) {
@@ -128,12 +130,12 @@ public class CommentServiceImpl implements CommentService {
                 hideComment(c);
             }
         }
-        
+
         if (commentMapper.updateCommentPublishedById(commentId, published) != 1) {
             throw new PersistenceException("操作失败");
         }
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateCommentNoticeById(Long commentId, Boolean notice) {
@@ -141,7 +143,7 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("操作失败");
         }
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteCommentById(Long commentId) {
@@ -153,8 +155,8 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论删除失败");
         }
     }
-    
-    
+
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateComment(CommentDO comment) {
@@ -162,12 +164,12 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论修改失败");
         }
     }
-    
+
     @Override
     public int countByPageAndIsPublished(Integer page, Long blogId, Boolean isPublished) {
         return commentMapper.countByPageAndIsPublished(page, blogId, isPublished);
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveComment(com.yond.blog.web.blog.view.dto.Comment comment) {
@@ -175,12 +177,12 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论失败");
         }
     }
-    
+
     @Override
     public int countComment() {
         return commentMapper.countComment();
     }
-    
+
     /**
      * 递归删除子评论
      *
@@ -194,7 +196,7 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论删除失败");
         }
     }
-    
+
     /**
      * 递归隐藏子评论
      *
@@ -208,7 +210,7 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("操作失败");
         }
     }
-    
+
     /**
      * 按id递归查询子评论
      *
@@ -223,11 +225,39 @@ public class CommentServiceImpl implements CommentService {
         }
         return comments;
     }
-    
-    private List<CommentDTO> do2dto(List<CommentDO> from,Map<Long, CommentDO> map){
-        for (CommentDO c : from) {
-        
+
+    public List<CommentDTO> buildTree(List<CommentDO> root, Map<Long, List<CommentDO>> map) {
+        List<CommentDTO> result = new ArrayList<>();
+        for (CommentDO commentDO : root) {
+            CommentDTO commentDTO = convertToDTO(commentDO);
+            List<CommentDO> children = map.get(commentDO.getId());
+            if (CollectionUtils.isNotEmpty(children)) {
+                commentDTO.setReply(buildTree(children, map));
+            }
+            result.add(commentDTO);
         }
+        return result;
     }
-    
+
+    private CommentDTO convertToDTO(CommentDO commentDO) {
+        CommentDTO dto = new CommentDTO();
+        dto.setId(commentDO.getId());
+        dto.setPage(commentDO.getPage());
+        dto.setBusinessKey(commentDO.getBusinessKey());
+        dto.setParentId(commentDO.getParentId());
+        dto.setNickname(commentDO.getNickname());
+        dto.setEmail(commentDO.getEmail());
+        dto.setContent(commentDO.getContent());
+        dto.setAvatar(commentDO.getAvatar());
+        dto.setWebsite(commentDO.getWebsite());
+        dto.setIp(commentDO.getIp());
+        dto.setPublished(commentDO.getPublished());
+        dto.setAdminComment(commentDO.getAdminComment());
+        dto.setNotice(commentDO.getNotice());
+        dto.setQq(commentDO.getQq());
+        dto.setStatus(commentDO.getStatus());
+        dto.setCreateTime(commentDO.getCreateTime());
+        return dto;
+    }
+
 }

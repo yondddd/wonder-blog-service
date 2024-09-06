@@ -1,10 +1,10 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.BlogDO;
 import com.yond.blog.entity.CommentDO;
 import com.yond.blog.service.BlogService;
 import com.yond.blog.service.CommentService;
+import com.yond.blog.web.blog.admin.dto.CommentDTO;
 import com.yond.blog.web.blog.admin.req.CommentPageReq;
 import com.yond.blog.web.blog.admin.vo.CommentVO;
 import com.yond.common.annotation.OperationLogger;
@@ -26,19 +26,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/comment")
 public class CommentAdminController {
-    
+
     @Resource
     private CommentService commentService;
     @Resource
     private BlogService blogService;
-    
+
     @GetMapping("/page")
     public PageResponse<List<CommentVO>> page(@RequestBody CommentPageReq req) {
-        Pair<Integer, List<CommentDO>> pair = commentService.pageBy(CommentPageEnum.getByValue(req.getPage()), req.getBlogId(), req.getPageNo(), req.getPageSize());
-        PageInfo<CommentDO> pageInfo = new PageInfo<>(comments);
-        return Response.success(pageInfo);
+        Pair<Integer, List<CommentDTO>> pair = commentService.pageBy(CommentPageEnum.getByValue(req.getPage()), req.getBlogId(), req.getPageNo(), req.getPageSize());
+        return PageResponse.custom().setTotal(pair.getLeft()).setData(pair.getRight()).setSuccess();
     }
-    
+
     /**
      * 获取所有博客id和title 供评论分类的选择
      *
@@ -49,7 +48,7 @@ public class CommentAdminController {
         List<BlogDO> blogs = blogService.getIdAndTitleList();
         return Response.success(blogs);
     }
-    
+
     /**
      * 更新评论公开状态
      *
@@ -63,7 +62,7 @@ public class CommentAdminController {
         commentService.updateCommentPublishedById(id, published);
         return Response.success();
     }
-    
+
     /**
      * 更新评论接收邮件提醒状态
      *
@@ -77,7 +76,7 @@ public class CommentAdminController {
         commentService.updateCommentNoticeById(id, notice);
         return Response.success();
     }
-    
+
     /**
      * 按id删除该评论及其所有子评论
      *
@@ -90,7 +89,7 @@ public class CommentAdminController {
         commentService.deleteCommentById(id);
         return Response.success();
     }
-    
+
     /**
      * 修改评论
      *
