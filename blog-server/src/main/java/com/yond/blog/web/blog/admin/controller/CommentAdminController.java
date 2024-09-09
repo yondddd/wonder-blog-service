@@ -4,6 +4,7 @@ import com.yond.blog.entity.BlogDO;
 import com.yond.blog.entity.CommentDO;
 import com.yond.blog.service.BlogService;
 import com.yond.blog.service.CommentService;
+import com.yond.blog.web.blog.admin.convert.CommentConverter;
 import com.yond.blog.web.blog.admin.dto.CommentDTO;
 import com.yond.blog.web.blog.admin.req.CommentPageReq;
 import com.yond.blog.web.blog.admin.vo.CommentVO;
@@ -17,6 +18,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @Description: 博客评论后台管理
@@ -35,7 +39,9 @@ public class CommentAdminController {
     @GetMapping("/page")
     public PageResponse<List<CommentVO>> page(@RequestBody CommentPageReq req) {
         Pair<Integer, List<CommentDTO>> pair = commentService.pageBy(CommentPageEnum.getByValue(req.getPage()), req.getBlogId(), req.getPageNo(), req.getPageSize());
-        return PageResponse.custom().setTotal(pair.getLeft()).setData(pair.getRight()).setSuccess();
+        List<Long> blogIds = pair.getRight().stream().map(CommentDTO::getBlogId).toList();
+        Map<Long, BlogDO> blogMap = blogService.listByIds(blogIds).stream().collect(Collectors.toMap(BlogDO::getId, Function.identity()));
+        return PageResponse.<List<CommentVO>>custom().setTotal(pair.getLeft()).setData(CommentConverter.dto2vo(pair.getRight(), blogMap)).setSuccess();
     }
 
     /**

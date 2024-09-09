@@ -11,6 +11,8 @@ public interface BlogService {
 
     Pair<Integer, List<BlogDO>> pageByTitleLikeAndCategoryId(String title, Integer categoryId, Integer pageNo, Integer pageSize);
 
+    List<BlogDO> listByIds(List<Long> ids);
+
     List<SearchBlog> searchPublic(String query);
 
     List<BlogDO> getIdAndTitleList();

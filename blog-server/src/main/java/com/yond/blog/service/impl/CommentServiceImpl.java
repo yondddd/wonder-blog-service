@@ -58,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
         Map<Long, List<CommentDO>> map = this.allToMap(allData);
         List<CommentDO> root = map.get(0L);
         root = root.stream().filter(x -> (page == null || page.getId().equals(x.getPage()))
-                && (blogId == null || blogId.toString().equals(x.getBusinessKey()))).toList();
+                && (blogId == null || blogId.equals(x.getBlogId()))).toList();
         List<CommentDO> pageList = PageUtil.pageList(root, pageNo, pageSize);
         return Pair.of(root.size(), buildTree(pageList, map));
     }
@@ -243,7 +243,7 @@ public class CommentServiceImpl implements CommentService {
         CommentDTO dto = new CommentDTO();
         dto.setId(commentDO.getId());
         dto.setPage(commentDO.getPage());
-        dto.setBusinessKey(commentDO.getBusinessKey());
+        dto.setBlogId(commentDO.getBlogId());
         dto.setParentId(commentDO.getParentId());
         dto.setNickname(commentDO.getNickname());
         dto.setEmail(commentDO.getEmail());

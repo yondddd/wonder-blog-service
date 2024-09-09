@@ -71,6 +71,12 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    public List<BlogDO> listByIds(List<Long> ids) {
+        Set<Long> set = Set.copyOf(ids);
+        return this.listEnable().stream().filter(x -> set.contains(x.getId())).collect(Collectors.toList());
+    }
+
+    @Override
     public List<SearchBlog> searchPublic(String query) {
         String lowerCase = query.toLowerCase();
         List<BlogDO> searchBlogs = this.listEnable().stream()
