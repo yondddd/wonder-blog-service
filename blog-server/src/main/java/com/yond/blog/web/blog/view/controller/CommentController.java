@@ -1,29 +1,32 @@
 package com.yond.blog.web.blog.view.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.CommentDO;
 import com.yond.blog.entity.UserDO;
 import com.yond.blog.service.CommentService;
 import com.yond.blog.service.impl.UserServiceImpl;
 import com.yond.blog.util.comment.CommentUtils;
 import com.yond.blog.util.jwt.JwtUtil;
-import com.yond.blog.web.blog.view.dto.Comment;
-import com.yond.blog.web.blog.view.vo.PageComment;
-import com.yond.blog.web.blog.view.vo.PageResult;
+import com.yond.blog.web.blog.view.req.CommentLeaveReq;
+import com.yond.blog.web.blog.view.req.CommentPageViewReq;
+import com.yond.blog.web.blog.view.vo.CommentViewVO;
 import com.yond.common.annotation.AccessLimit;
+import com.yond.common.constant.CommonConstant;
 import com.yond.common.constant.JwtConstant;
 import com.yond.common.enums.CommentOpenStateEnum;
+import com.yond.common.enums.CommentPageEnum;
+import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import io.jsonwebtoken.Claims;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @Description: 评论
@@ -31,123 +34,79 @@ import java.util.Map;
  * @Date: 2020-08-15
  */
 @RestController
+@RequestMapping("/view/comment")
 public class CommentController {
-    @Autowired
-    CommentService commentService;
-    @Autowired
-    UserServiceImpl userService;
-    @Autowired
-    CommentUtils commentUtils;
-
-    /**
-     * 根据页面分页查询评论列表
-     *
-     * @param page     页面分类（0普通文章，1关于我...）
-     * @param blogId   如果page==0，需要博客id参数
-     * @param pageNum  页码
-     * @param pageSize 每页个数
-     * @param jwt      若文章受密码保护，需要获取访问Token
-     * @return
-     */
-    @GetMapping("/view/comments")
-    public Response comments(@RequestParam Integer page,
-                             @RequestParam(defaultValue = "") Long blogId,
-                             @RequestParam(defaultValue = "1") Integer pageNum,
-                             @RequestParam(defaultValue = "10") Integer pageSize,
-                             @RequestHeader(value = JwtConstant.TOKEN_HEADER, defaultValue = "") String jwt) {
-        CommentOpenStateEnum openState = commentUtils.judgeCommentState(page, blogId);
-        switch (openState) {
-            case NOT_FOUND:
-                return Response.custom(404, "该博客不存在");
-            case CLOSE:
-                return Response.custom(403, "评论已关闭");
-            case PASSWORD:
-                //文章受密码保护，需要验证Token
-                if (JwtUtil.judgeTokenIsExist(jwt)) {
-                    try {
-                        Claims claims = JwtUtil.validateJwt(jwt, JwtConstant.DEFAULT_SECRET);
-                        String subject = claims.getSubject();
-                        if (subject.startsWith(JwtConstant.ADMIN_PREFIX)) {
-                            //博主身份Token
-                            if (claims.getExpiration().before(new Date())) {
-                                return Response.custom(403, "博主身份Token已失效，请重新登录！");
-                            }
-                        } else {
-                            //经密码验证后的Token
-                            Long tokenBlogId = Long.parseLong(subject);
-                            //博客id不匹配，验证不通过，可能博客id改变或客户端传递了其它密码保护文章的Token
-                            if (!tokenBlogId.equals(blogId)) {
-                                return Response.custom(403, "Token不匹配，请重新验证密码！");
-                            }
-                        }
-                    } catch (Exception e) {
-                        return Response.custom(403, "Token已失效，请重新验证密码！");
-                    }
-                } else {
-                    return Response.custom(403, "此文章受密码保护，请验证密码！");
-                }
-                break;
-            default:
-                break;
+    
+    @Resource
+    private CommentService commentService;
+    @Resource
+    private UserServiceImpl userService;
+    @Resource
+    private CommentUtils commentUtils;
+    
+    @GetMapping("/page")
+    public PageResponse<List<CommentViewVO>> comments(@RequestBody CommentPageViewReq req,
+                                                      @RequestHeader(value = JwtConstant.TOKEN_HEADER, defaultValue = "") String jwt) {
+        CommentOpenStateEnum openState = commentService.getPageCommentStatus(req.getPage(), req.getBlogId());
+        if (CommentOpenStateEnum.NOT_FOUND.equals(openState)) {
+            return PageResponse.<List<CommentViewVO>>custom().setCode(404).setFailure("该博客不存在");
         }
-        //查询该页面所有评论的数量
-        Integer allComment = commentService.countByPageAndIsPublished(page, blogId, null);
-        //查询该页面公开评论的数量
-        Integer openComment = commentService.countByPageAndIsPublished(page, blogId, true);
-        PageHelper.startPage(pageNum, pageSize);
-        PageInfo<PageComment> pageInfo = new PageInfo<>(commentService.getPageCommentList(page, blogId, -1L));
-        PageResult<PageComment> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
-        Map<String, Object> map = new HashMap<>(8);
-        map.put("allComment", allComment);
-        map.put("closeComment", allComment - openComment);
-        map.put("comments", pageResult);
-        return Response.ok("获取成功", map);
-    }
-
-    /**
-     * 提交评论 又长又臭 能用就不改了:)
-     * 单个ip，30秒内允许提交1次评论
-     *
-     * @param comment 评论DTO
-     * @param request 获取ip
-     * @param jwt     博主身份Token
-     * @return
-     */
-    @AccessLimit(seconds = 30, maxCount = 1, msg = "30秒内只能提交一次评论")
-    @PostMapping("/view/comment")
-    public Response postComment(@RequestBody Comment comment,
-                                HttpServletRequest request,
-                                @RequestHeader(value = JwtConstant.TOKEN_HEADER, defaultValue = "") String jwt) {
-        //评论内容合法性校验
-        if (StringUtils.isBlank(comment.getContent()) || comment.getContent().length() > 250 ||
-                comment.getPage() == null || comment.getParentCommentId() == null) {
-            return Response.failure("参数有误");
+        if (CommentOpenStateEnum.CLOSE.equals(openState)) {
+            return PageResponse.<List<CommentViewVO>>custom().setCode(403).setFailure("评论已关闭");
         }
-        //是否访客的评论
-        boolean isVisitorComment = false;
-        //父评论
-        CommentDO parentComment = null;
-        //对于有指定父评论的评论，应该以父评论为准，只判断页面可能会被绕过“评论开启状态检测”
-        if (comment.getParentCommentId() != -1) {
-            //当前评论为子评论
-            parentComment = commentService.getCommentById(comment.getParentCommentId());
-            Integer page = parentComment.getPage();
-            Long blogId = page == 0 ? parentComment.getBlog().getId() : null;
-            comment.setPage(page);
-            comment.setBlogId(blogId);
-        } else {
-            //当前评论为顶级评论
-            if (comment.getPage() != 0) {
-                comment.setBlogId(null);
+        if (CommentOpenStateEnum.PASSWORD.equals(openState)) {
+            String err = this.verifyToken(jwt, req.getBlogId());
+            if (StringUtils.isNotBlank(err)) {
+                return PageResponse.<List<CommentViewVO>>custom().setCode(403).setFailure(err);
             }
         }
-        //判断是否可评论
-        CommentOpenStateEnum openState = commentUtils.judgeCommentState(comment.getPage(), comment.getBlogId());
+        Pair<Integer, List<CommentViewVO>> pair = commentService.viewPageBy(req.getPage(), req.getBlogId(), req.getPage(), req.getPageSize());
+        return PageResponse.<List<CommentViewVO>>custom().setData(pair.getRight()).setTotal(pair.getLeft()).setSuccess();
+    }
+    
+    
+    @AccessLimit(seconds = 30, maxCount = 1, msg = "30秒内只能提交一次评论")
+    @PostMapping("/leave")
+    public Response<Boolean> postComment(@RequestBody CommentLeaveReq req,
+                                         @RequestHeader(value = JwtConstant.TOKEN_HEADER, defaultValue = "") String jwt,
+                                         HttpServletRequest request) {
+        
+        Assert.hasText(req.getContent(), "评论为空");
+        Assert.isTrue(req.getContent().length() <= 250, "评论过长");
+        Assert.notNull(req.getPage(), "页面为空");
+        Integer page = req.getPage();
+        Long blogId = req.getBlogId();
+        Long parentId = req.getParentId() == null ? CommonConstant.ROOT_ID : req.getParentId();
+        boolean isBlogComment = CommentPageEnum.BLOG.getId().equals(page);
+        boolean isVisitor = false;
+        if (!isBlogComment) {
+            blogId = null;
+        }
+        CommentDO parentComment = null;
+        //对于有指定父评论的评论，应该以父评论为准，只判断页面可能会被绕过“评论开启状态检测”
+        if (!Objects.equals(parentId, CommonConstant.ROOT_ID)) {
+            //当前评论为子评论
+            parentComment = commentService.getById(parentId);
+            Assert.notNull(parentComment, "父评论为空：" + parentId);
+            page = parentComment.getPage();
+            if (isBlogComment) {
+                blogId = parentComment.getBlogId();
+            }
+        }
+        CommentOpenStateEnum openState = commentService.getPageCommentStatus(page, blogId);
+        if (CommentOpenStateEnum.NOT_FOUND.equals(openState)) {
+            return Response.custom(404, "该博客不存在");
+        }
+        if (CommentOpenStateEnum.CLOSE.equals(openState)) {
+            return Response.custom(403, "评论已关闭");
+        }
+        if (CommentOpenStateEnum.PASSWORD.equals(openState)) {
+        
+        }
+        if (CommentOpenStateEnum.OPEN.equals(openState)) {
+        
+        }
         switch (openState) {
-            case NOT_FOUND:
-                return Response.create(404, "该博客不存在");
-            case CLOSE:
-                return Response.create(403, "评论已关闭");
             case PASSWORD:
                 //文章受密码保护
                 //验证Token合法性
@@ -180,7 +139,7 @@ public class CommentController {
                             return Response.create(403, "Token不匹配，请重新验证密码！");
                         }
                         commentUtils.setVisitorComment(comment, request);
-                        isVisitorComment = true;
+                        isVisitor = true;
                     }
                 } else {//不存在Token则无评论权限
                     return Response.create(403, "此文章受密码保护，请验证密码！");
@@ -213,7 +172,7 @@ public class CommentController {
                             return Response.failure("参数有误");
                         }
                         commentUtils.setVisitorComment(comment, request);
-                        isVisitorComment = true;
+                        isVisitor = true;
                     }
                 } else {
                     //访客评论
@@ -222,14 +181,42 @@ public class CommentController {
                         return Response.failure("参数有误");
                     }
                     commentUtils.setVisitorComment(comment, request);
-                    isVisitorComment = true;
+                    isVisitor = true;
                 }
                 break;
             default:
                 break;
         }
         commentService.saveComment(comment);
-        commentUtils.judgeSendNotify(comment, isVisitorComment, parentComment);
+        commentUtils.judgeSendNotify(comment, isVisitor, parentComment);
         return Response.ok("评论成功");
     }
+    
+    
+    private String verifyToken(String jwt, Long blogId) {
+        boolean tokenIsExist = JwtUtil.judgeTokenIsExist(jwt);
+        if (!tokenIsExist) {
+            return "此文章受密码保护，请验证密码！";
+        }
+        try {
+            Claims claims = JwtUtil.validateJwt(jwt, JwtConstant.DEFAULT_SECRET);
+            String subject = claims.getSubject();
+            if (subject.startsWith(JwtConstant.ADMIN_PREFIX)) {
+                if (claims.getExpiration().before(new Date())) {
+                    return "博主身份Token已失效，请重新登录！";
+                }
+            } else {
+                // 游客验证
+                Long tokenBlogId = Long.parseLong(subject);
+                //博客id不匹配，验证不通过，可能博客id改变或客户端传递了其它密码保护文章的Token
+                if (!tokenBlogId.equals(blogId)) {
+                    return "Token不匹配，请重新验证密码！";
+                }
+            }
+        } catch (Exception e) {
+            return "Token已失效，请重新验证密码！";
+        }
+        return null;
+    }
+    
 }

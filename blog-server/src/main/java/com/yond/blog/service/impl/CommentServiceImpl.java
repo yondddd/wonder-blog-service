@@ -3,16 +3,26 @@ package com.yond.blog.service.impl;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.yond.blog.cache.local.LocalCache;
+import com.yond.blog.entity.BlogDO;
 import com.yond.blog.entity.CommentDO;
 import com.yond.blog.mapper.CommentMapper;
+import com.yond.blog.service.BlogService;
 import com.yond.blog.service.CommentService;
+import com.yond.blog.service.FriendService;
+import com.yond.blog.service.SiteConfigService;
 import com.yond.blog.web.blog.admin.dto.CommentDTO;
-import com.yond.blog.web.blog.view.vo.PageComment;
+import com.yond.blog.web.blog.view.vo.CommentViewVO;
+import com.yond.blog.web.blog.view.vo.FriendInfo;
+import com.yond.common.constant.CommonConstant;
+import com.yond.common.constant.SiteSettingConstant;
+import com.yond.common.enums.CommentOpenStateEnum;
 import com.yond.common.enums.CommentPageEnum;
 import com.yond.common.exception.PersistenceException;
 import com.yond.common.utils.page.PageUtil;
 import jakarta.annotation.Resource;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.stereotype.Service;
@@ -31,65 +41,60 @@ import java.util.stream.Collectors;
  */
 @Service
 public class CommentServiceImpl implements CommentService {
-
+    
     @Resource
     private CommentMapper commentMapper;
-
-    private static final Long ROOT_ID = 0L;
-
+    @Resource
+    private SiteConfigService siteConfigService;
+    @Resource
+    private FriendService friendService;
+    @Resource
+    private BlogService blogService;
+    
+    
     private final Cache<String, List<CommentDO>> cache = LocalCache.buildCache(1, new CacheLoader<>() {
         @Override
         public @Nullable List<CommentDO> load(String s) throws Exception {
             return commentMapper.listAll();
         }
     });
-
+    
     private List<CommentDO> listAll() {
         return cache.getIfPresent("listAll");
     }
-
+    
     private Map<Long, List<CommentDO>> allToMap(List<CommentDO> list) {
         return list.stream().collect(Collectors.groupingBy(CommentDO::getParentId));
     }
-
+    
     @Override
     public Pair<Integer, List<CommentDTO>> pageBy(CommentPageEnum page, Long blogId, Integer pageNo, Integer pageSize) {
         List<CommentDO> allData = this.listAll();
         Map<Long, List<CommentDO>> map = this.allToMap(allData);
-        List<CommentDO> root = map.get(0L);
+        List<CommentDO> root = map.get(CommonConstant.ROOT_ID);
         root = root.stream().filter(x -> (page == null || page.getId().equals(x.getPage()))
                 && (blogId == null || blogId.equals(x.getBlogId()))).toList();
         List<CommentDO> pageList = PageUtil.pageList(root, pageNo, pageSize);
         return Pair.of(root.size(), buildTree(pageList, map));
     }
-
+    
+    
     @Override
-    public List<CommentDO> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId) {
-        List<CommentDO> comments = commentMapper.getListByPageAndParentCommentId(page, blogId, parentCommentId);
-        for (CommentDO c : comments) {
-            //递归查询子评论及其子评论
-            List<CommentDO> replyComments = getListByPageAndParentCommentId(page, blogId, c.getId());
-            c.setReplyComments(replyComments);
-        }
-        return comments;
-    }
-
-    @Override
-    public List<PageComment> getPageCommentList(Integer page, Long blogId, Long parentCommentId) {
-        List<PageComment> comments = getPageCommentListByPageAndParentCommentId(page, blogId, parentCommentId);
-        for (PageComment c : comments) {
-            List<PageComment> tmpComments = new ArrayList<>();
+    public List<CommentViewVO> getPageCommentList(Integer page, Long blogId, Long parentCommentId) {
+        List<CommentViewVO> comments = getPageCommentListByPageAndParentCommentId(page, blogId, parentCommentId);
+        for (CommentViewVO c : comments) {
+            List<CommentViewVO> tmpComments = new ArrayList<>();
             getReplyComments(tmpComments, c.getReplyComments());
             //对于两列评论来说，按时间顺序排列应该比树形更合理些
             //排序一下
-            Comparator<PageComment> comparator = Comparator.comparing(PageComment::getCreateTime);
+            Comparator<CommentViewVO> comparator = Comparator.comparing(CommentViewVO::getCreateTime);
             tmpComments.sort(comparator);
-
+            
             c.setReplyComments(tmpComments);
         }
         return comments;
     }
-
+    
     @Override
     public CommentDO getCommentById(Long id) {
         CommentDO comment = commentMapper.getCommentById(id);
@@ -98,28 +103,28 @@ public class CommentServiceImpl implements CommentService {
         }
         return comment;
     }
-
+    
     /**
      * 将所有子评论递归取出到一个List中
      *
      * @param comments
      */
-    private void getReplyComments(List<PageComment> tmpComments, List<PageComment> comments) {
-        for (PageComment c : comments) {
+    private void getReplyComments(List<CommentViewVO> tmpComments, List<CommentViewVO> comments) {
+        for (CommentViewVO c : comments) {
             tmpComments.add(c);
             getReplyComments(tmpComments, c.getReplyComments());
         }
     }
-
-    private List<PageComment> getPageCommentListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId) {
-        List<PageComment> comments = commentMapper.getPageCommentListByPageAndParentCommentId(page, blogId, parentCommentId);
-        for (PageComment c : comments) {
-            List<PageComment> replyComments = getPageCommentListByPageAndParentCommentId(page, blogId, c.getId());
+    
+    private List<CommentViewVO> getPageCommentListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId) {
+        List<CommentViewVO> comments = commentMapper.getPageCommentListByPageAndParentCommentId(page, blogId, parentCommentId);
+        for (CommentViewVO c : comments) {
+            List<CommentViewVO> replyComments = getPageCommentListByPageAndParentCommentId(page, blogId, c.getId());
             c.setReplyComments(replyComments);
         }
         return comments;
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateCommentPublishedById(Long commentId, Boolean published) {
@@ -130,20 +135,12 @@ public class CommentServiceImpl implements CommentService {
                 hideComment(c);
             }
         }
-
+        
         if (commentMapper.updateCommentPublishedById(commentId, published) != 1) {
             throw new PersistenceException("操作失败");
         }
     }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void updateCommentNoticeById(Long commentId, Boolean notice) {
-        if (commentMapper.updateCommentNoticeById(commentId, notice) != 1) {
-            throw new PersistenceException("操作失败");
-        }
-    }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteCommentById(Long commentId) {
@@ -155,21 +152,17 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论删除失败");
         }
     }
-
-
+    
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateComment(CommentDO comment) {
-        if (commentMapper.updateComment(comment) != 1) {
+    public void updateSelective(CommentDO comment) {
+        if (commentMapper.updateSelective(comment) != 1) {
             throw new PersistenceException("评论修改失败");
         }
     }
-
-    @Override
-    public int countByPageAndIsPublished(Integer page, Long blogId, Boolean isPublished) {
-        return commentMapper.countByPageAndIsPublished(page, blogId, isPublished);
-    }
-
+    
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveComment(com.yond.blog.web.blog.view.dto.Comment comment) {
@@ -177,12 +170,58 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论失败");
         }
     }
-
+    
     @Override
     public int countComment() {
         return commentMapper.countComment();
     }
-
+    
+    @Override
+    public CommentOpenStateEnum getPageCommentStatus(Integer page, Long blogId) {
+        CommentPageEnum pageEnum = CommentPageEnum.getByValue(page);
+        if (pageEnum == null) {
+            return CommentOpenStateEnum.NOT_FOUND;
+        }
+        // 博客页面
+        if (CommentPageEnum.BLOG.equals(pageEnum)) {
+            BlogDO blog = blogService.getBlogById(blogId);
+            if (blog == null) {
+                return CommentOpenStateEnum.NOT_FOUND;
+            }
+            if (!blog.getPublished()) {
+                return CommentOpenStateEnum.NOT_FOUND;
+            }
+            if (!blog.getCommentEnabled()) {
+                return CommentOpenStateEnum.CLOSE;
+            }
+            if (StringUtils.isNotBlank(blog.getPassword())) {
+                return CommentOpenStateEnum.PASSWORD;
+            }
+            return CommentOpenStateEnum.OPEN;
+        }
+        //友链页面
+        if (CommentPageEnum.FRIEND.equals(pageEnum)) {
+            FriendInfo friendInfo = friendService.getFriendInfo(true, false);
+            if (friendInfo.getCommentEnabled()) {
+                return CommentOpenStateEnum.OPEN;
+            }
+        }
+        //关于我页面
+        if (CommentPageEnum.ABOUT.equals(pageEnum)) {
+            String value = siteConfigService.getValue(SiteSettingConstant.COMMENT_ENABLED);
+            if (BooleanUtils.toBoolean(value)) {
+                return CommentOpenStateEnum.OPEN;
+            }
+        }
+        return CommentOpenStateEnum.CLOSE;
+    }
+    
+    @Override
+    public CommentDO getById(Long id) {
+        return this.listAll().stream()
+                .filter(x -> x.getId().equals(id)).findFirst().orElse(null);
+    }
+    
     /**
      * 递归删除子评论
      *
@@ -196,7 +235,7 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论删除失败");
         }
     }
-
+    
     /**
      * 递归隐藏子评论
      *
@@ -210,7 +249,7 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("操作失败");
         }
     }
-
+    
     /**
      * 按id递归查询子评论
      *
@@ -225,7 +264,7 @@ public class CommentServiceImpl implements CommentService {
         }
         return comments;
     }
-
+    
     public List<CommentDTO> buildTree(List<CommentDO> root, Map<Long, List<CommentDO>> map) {
         List<CommentDTO> result = new ArrayList<>();
         for (CommentDO commentDO : root) {
@@ -238,7 +277,7 @@ public class CommentServiceImpl implements CommentService {
         }
         return result;
     }
-
+    
     private CommentDTO convertToDTO(CommentDO commentDO) {
         CommentDTO dto = new CommentDTO();
         dto.setId(commentDO.getId());
@@ -259,5 +298,5 @@ public class CommentServiceImpl implements CommentService {
         dto.setCreateTime(commentDO.getCreateTime());
         return dto;
     }
-
+    
 }

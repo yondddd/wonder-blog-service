@@ -1,4 +1,4 @@
-package com.yond.blog.web.blog.admin.req;
+package com.yond.blog.web.blog.view.req;
 
 import com.yond.common.enums.CommentPageEnum;
 import com.yond.common.req.PageReq;
@@ -6,13 +6,14 @@ import com.yond.common.req.PageReq;
 import java.io.Serial;
 
 /**
- * @author yond
- * @date 9/1/2024
- * @description
+ * @Description:
+ * @Author: WangJieLong
+ * @Date: 2024-09-13
  */
-public class CommentPageReq extends PageReq {
+public class CommentPageViewReq extends PageReq {
+    
     @Serial
-    private static final long serialVersionUID = -2588463862115421435L;
+    private static final long serialVersionUID = 557219188118481112L;
     
     /**
      * {@link CommentPageEnum}
@@ -24,7 +25,7 @@ public class CommentPageReq extends PageReq {
         return page;
     }
     
-    public CommentPageReq setPage(Integer page) {
+    public CommentPageViewReq setPage(Integer page) {
         this.page = page;
         return this;
     }
@@ -33,16 +34,17 @@ public class CommentPageReq extends PageReq {
         return blogId;
     }
     
-    public CommentPageReq setBlogId(Long blogId) {
+    public CommentPageViewReq setBlogId(Long blogId) {
         this.blogId = blogId;
         return this;
     }
     
     @Override
     public String toString() {
-        return "CommentPageReq{" +
+        return "CommentPageViewReq{" +
                 "page=" + page +
                 ", blogId=" + blogId +
                 '}';
     }
+    
 }

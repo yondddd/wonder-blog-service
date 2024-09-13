@@ -40,18 +40,18 @@ public class TelegramBotMsgHandler {
     private BlogProperties blogProperties;
     @Autowired
     private TelegramProperties telegramProperties;
-
+    
     private final SimpleDateFormat simpleDateFormat;
-
+    
     private static final String CONTENT_UNKNOWN = "";
-
+    
     private static final String CMD_HELP = "/help";
     private static final String CMD_HIDE = "/hide";
     private static final String CMD_SHOW = "/show";
     private static final String CMD_DEL = "/del";
     private static final String CMD_REPLY = "/reply";
     private static final String CMD_MOMENT = "/moment";
-
+    
     private static final String HELP_MESSAGE = "<b>可用命令如下：</b>\n" +
             "\n" +
             "/help - 显示此帮助信息\n" +
@@ -62,12 +62,12 @@ public class TelegramBotMsgHandler {
             "/moment [内容] - 发布动态\n" +
             "\n" +
             "例如：/reply 123 好！";
-
+    
     public TelegramBotMsgHandler() {
         this.simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         this.simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
     }
-
+    
     /**
      * 处理指令
      *
@@ -75,7 +75,7 @@ public class TelegramBotMsgHandler {
      */
     public void processCommand(String message) {
         log.debug("message content: {}", message);
-
+        
         String cmd = message;
         String content = CONTENT_UNKNOWN;
         int splitIndex = message.indexOf(" ");
@@ -86,7 +86,7 @@ public class TelegramBotMsgHandler {
             }
         }
         log.debug("cmd: {}, content: {}", cmd, content);
-
+        
         String result = "";
         try {
             switch (cmd) {
@@ -132,7 +132,7 @@ public class TelegramBotMsgHandler {
         }
         sendResult(result);
     }
-
+    
     /**
      * 修改评论公开状态
      *
@@ -155,7 +155,7 @@ public class TelegramBotMsgHandler {
                 status ? "公开" : "隐藏"
         );
     }
-
+    
     /**
      * 删除评论及其子评论
      *
@@ -176,7 +176,7 @@ public class TelegramBotMsgHandler {
                 commentId
         );
     }
-
+    
     /**
      * 快捷回复评论
      *
@@ -189,26 +189,26 @@ public class TelegramBotMsgHandler {
         if (splitIndex2 != -1 && msgContent.length() > splitIndex2 + 1) {
             String commentIdString = msgContent.substring(0, splitIndex2);
             String commentContent = msgContent.substring(splitIndex2 + 1);
-
+            
             long commentId = Long.parseLong(commentIdString);
             //先找到要回复的评论
             CommentDO parentComment = commentService.getCommentById(commentId);
-
+            
             com.yond.blog.web.blog.view.dto.Comment comment = new com.yond.blog.web.blog.view.dto.Comment();
             comment.setContent(commentContent);
-            comment.setParentCommentId(parentComment.getId());
+            comment.setParentId(parentComment.getId());
             //父评论所在页面
             Integer page = parentComment.getPage();
             Long blogId = page == 0 ? parentComment.getBlog().getId() : null;
             comment.setPage(page);
             comment.setBlogId(blogId);
             commentUtils.setAdminCommentByTelegramAction(comment);
-
+            
             //保存评论
             commentService.saveComment(comment);
             //提醒回复对象
             commentUtils.judgeSendNotify(comment, false, parentComment);
-
+            
             CommentPageEnum commentPageEnum = CommentUtils.getCommentPageEnum(comment);
             return String.format(
                     "<b>回复成功！</b>\n" +
@@ -237,7 +237,7 @@ public class TelegramBotMsgHandler {
         }
         return "<b>命令格式有误！</b>\n\n" + HELP_MESSAGE;
     }
-
+    
     /**
      * 发布新动态
      *
@@ -250,7 +250,7 @@ public class TelegramBotMsgHandler {
         moment.setLikes(0);
         moment.setPublished(true);
         momentService.insertSelective(moment);
-
+        
         return String.format(
                 "<b>动态发布成功！\n</b>" +
                         "\n" +
@@ -265,7 +265,7 @@ public class TelegramBotMsgHandler {
                 blogProperties.getCms() + "/blog/moment/list"
         );
     }
-
+    
     /**
      * 捕获命令处理过程中的全部异常信息并提示
      *
@@ -281,7 +281,7 @@ public class TelegramBotMsgHandler {
         );
         sendResult(result);
     }
-
+    
     /**
      * 发送命令处理结果
      *
