@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @DependsOn("springContextUtils")
 public class UploadUtils {
+
     private static RestTemplate restTemplate;
 
     private static FileUploadChannel uploadChannel;

@@ -3,13 +3,6 @@ package com.yond.common.utils.date;
 import com.yond.common.utils.api.Factory;
 import org.apache.commons.pool2.ObjectPool;
 
-/**
- * 简单对象池（实现了common-pool中的ObjectPool接口
- *
- 
- * @version 1.0
- * @created 2018/1/7 00:31
- **/
 public class SimplePool<T> implements ObjectPool<T> {
 
     private final int initialPoolSize;

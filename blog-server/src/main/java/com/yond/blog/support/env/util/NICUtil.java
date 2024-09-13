@@ -8,12 +8,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-/**
- * NICUtil
- *
- * @version 1.0
- * @created 2023/09/26 20:16
- **/
 public class NICUtil {
 
     private final static String LOCALHOST = "localhost";

@@ -7,21 +7,10 @@ import org.slf4j.Logger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-/**
- * @Description: ip记录
- * @Author: Naccl
- * @Date: 2020-08-18
- */
 public class IpAddressUtils {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(IpAddressUtils.class);
 
-    /**
-     * 在Nginx等代理之后获取用户真实IP地址
-     *
-     * @param request
-     * @return
-     */
     public static String getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("X-Real-IP");
         if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
@@ -56,12 +45,6 @@ public class IpAddressUtils {
     }
 
 
-    /**
-     * 根据ip从 ip2region.db 中获取地理位置
-     *
-     * @param ip
-     * @return
-     */
     public static String getCityInfo(String ip) {
         try {
             return IpGeographicUtil.getAddressByIp(ip);
@@ -75,5 +58,5 @@ public class IpAddressUtils {
         String cityInfo = IpAddressUtils.getCityInfo("14.215.177.39");
         System.out.println(cityInfo);
     }
-    
+
 }

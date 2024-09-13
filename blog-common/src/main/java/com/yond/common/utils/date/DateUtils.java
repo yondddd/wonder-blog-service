@@ -1,21 +1,11 @@
 package com.yond.common.utils.date;
 
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * 日期处理工具类
- * 注：由于 SimpleDateFormat是线程不安全，所以将其设计成线程安全
- *
- * @version 1.0
- * @created 2017/3/31 16:15
- * @see SimpleDateFormat#format(Date)
- * @see Date#parse(String)
- **/
 public final class DateUtils {
 
     public static final String SIMPLE_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";

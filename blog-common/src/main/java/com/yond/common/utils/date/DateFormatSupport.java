@@ -11,13 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * DateFormatSupport
- * <p>
- *
- * @version 1.0
- * @created 2021/01/28 17:03
- **/
 class DateFormatSupport implements DateAdapter {
 
     private final List<DateFormat> dateFormats = new ArrayList<DateFormat>();

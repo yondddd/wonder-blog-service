@@ -55,8 +55,9 @@ public class VisitorAdminController {
      * @return
      */
     @DeleteMapping("/visitor")
-    public Response delete(@RequestParam Long id, @RequestParam String uuid) {
+    public Response<Boolean> delete(@RequestParam Long id, @RequestParam String uuid) {
         visitUserService.deleteVisitor(id, uuid);
-        return Response.ok("删除成功");
+        return Response.success();
     }
+    
 }

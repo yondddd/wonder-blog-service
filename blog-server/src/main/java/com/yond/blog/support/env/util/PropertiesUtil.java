@@ -1,20 +1,12 @@
 package com.yond.blog.support.env.util;
 
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.Properties;
 
-/**
- * 环境配制属性工具类
- *
- * @version 1.0
- * @created 2018/08/23 13:53
- **/
+
 public class PropertiesUtil {
 
     private static final String SCHEMA_CLASSPATH = "classpath:";
@@ -72,97 +64,4 @@ public class PropertiesUtil {
         }
     }
 
-//    public static Map<String, String> loadYamlFromClassPath(String file) throws IOException {
-//        URL url = Thread.currentThread().getContextClassLoader().getResource(file);
-//        if (url == null) {
-//            return null;
-//        }
-//        return loadYaml(url);
-//    }
-//
-//    public static Map<String, String> loadYaml(URL url) throws IOException {
-//        InputStream in = null;
-//        final Map<String, String> result = new HashMap<>();
-//        try {
-//            in = url.openStream();
-//            final Map<String, Object> map = Yaml.loadType(in, HashMap.class);
-//            toMap(map, result, new StringBuilder());
-//        } finally {
-//            if (in != null) {
-//                try {
-//                    in.close();
-//                } catch (IOException e) {
-//                    //quite
-//                }
-//            }
-//        }
-//        return result;
-//    }
-
-    private static void toMap(final Map<String, Object> map, final Map<String, String> result, final StringBuilder builder) {
-        if (MapUtils.isEmpty(map)) {
-            return;
-        }
-        final String parentKey = builder.toString();
-        for (final Map.Entry<String, Object> entry : map.entrySet()) {
-            final String key = entry.getKey();
-            final Object value = entry.getValue();
-            if (value instanceof Map) {
-                if (StringUtils.isBlank(parentKey)) {
-                    toMap((Map) value, result, new StringBuilder(key));
-                } else {
-                    toMap((Map) value, result, new StringBuilder(builder).append(".").append(key));
-                }
-            } else {
-                if (StringUtils.isBlank(parentKey)) {
-                    result.put(key, String.valueOf(value));
-                } else {
-                    result.put(parentKey + "." + key, String.valueOf(value));
-                }
-            }
-        }
-    }
-
-    public static void save(Map<String, String> properties, String fileName) throws IOException {
-        if (properties == null) {
-            throw new NullPointerException("properties is null");
-        }
-        if (fileName == null) {
-            throw new NullPointerException("file is null");
-        }
-        File file = new File(fileName);
-        if (!file.exists()) {
-            File dir = file.getParentFile();
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-        }
-        Writer writer = null;
-        try {
-            writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-            Properties props = new Properties();
-            props.putAll(properties);
-            props.store(writer, null);
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
-        }
-    }
-
-    public static String get(Map<String, String> properties, String key, String defaultValue) {
-        if (properties == null) {
-            return null;
-        }
-        String value = properties.get(key);
-        return value == null ? defaultValue : value;
-    }
-
-    public static Boolean getBoolean(Map<String, String> properties, String key, Boolean defaultValue) {
-        if (properties == null) {
-            return null;
-        }
-        String value = properties.get(key);
-        return value == null ? defaultValue : Boolean.valueOf(value);
-    }
 }

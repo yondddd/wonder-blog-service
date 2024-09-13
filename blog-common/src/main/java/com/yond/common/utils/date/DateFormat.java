@@ -10,13 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * DateFormat
- * <p>
- *
- * @version 1.0
- * @created 2021/12/08 00:29
- **/
 public class DateFormat {
 
     private final List<SimpleDateFormat> dateFormats = new ArrayList<>();

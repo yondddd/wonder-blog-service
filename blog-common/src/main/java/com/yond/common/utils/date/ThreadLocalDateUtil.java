@@ -4,13 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * ThreadLocal DateUtil
- * <p>
- *
- * @version 1.0
- * @created 2020/10/23 17:03
- **/
 public class ThreadLocalDateUtil {
 
     public static final String SIMPLE_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";

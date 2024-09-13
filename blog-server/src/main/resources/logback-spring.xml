@@ -9,9 +9,6 @@
     <property name="DEFAULT_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] [%logger{40}] %msg%n{}"/>
     <property name="OPERATION_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] %msg%n{}"/>
 
-    <contextListener class="com.yond.blog.support.log.logback.LogbackContextListener"/>
-
-
     <!-- To enable JMX Management -->
     <jmxConfigurator/>
 

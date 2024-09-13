@@ -1,8 +1,5 @@
 package com.yond.blog.support.env.enums;
 
-/**
- * 服务运行时的环境变量
- */
 public enum EnvEnum {
 
     DEV(10, "dev"),
@@ -46,14 +43,5 @@ public enum EnvEnum {
 
     public boolean isProdEnv() {
         return code == PROD.code;
-    }
-
-
-    @Override
-    public String toString() {
-        String sb = "EnvEnum{" + "code=" + code +
-                ", name='" + name + '\'' +
-                '}';
-        return sb;
     }
 }

@@ -5,11 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.gson.JsonSyntaxException;
-import com.yond.common.resp.PageResponse;
-import com.yond.common.resp.Response;
 import com.yond.common.utils.json.adapter.DateInitManager;
 import com.yond.common.utils.json.adapter.jackson.DateDeserializer;
 import com.yond.common.utils.json.adapter.jackson.LocalDateTimeDeserializer;
@@ -25,9 +22,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 简单封装Jackson
- **/
 public class JsonUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JsonMapper.class);
@@ -63,36 +57,6 @@ public class JsonUtils {
         return DEFAULT_MAPPER.fromJson(json, clazz);
     }
 
-    public static <T> Response<T> toResponse(String json, Class<T> clazz) {
-        JavaType javaType = getDefaultMapper().constructParametricType(Response.class, clazz);
-        return DEFAULT_MAPPER.fromJson(json, javaType);
-    }
-
-    public static <T> Response<T> toResponse(String json, JavaType javaType) {
-        return DEFAULT_MAPPER.fromJson(json, javaType);
-    }
-
-    public static <T> PageResponse<T> toPageableResponse(String json, Class<T> clazz) {
-        JavaType javaType = getDefaultMapper().constructParametricType(PageResponse.class, clazz);
-        return DEFAULT_MAPPER.fromJson(json, javaType);
-    }
-
-    public static <T> PageResponse<T> toPageableResponse(String json, JavaType javaType) {
-        return DEFAULT_MAPPER.fromJson(json, javaType);
-    }
-
-    public static JavaType toJavaType(Class<?> parametrized, Class<?>... parameterClasses) {
-        return getDefaultMapper().constructParametricType(parametrized, parameterClasses);
-    }
-
-    public static JavaType toJavaType(Class<?> parametrized, JavaType... parameterClasses) {
-        return getDefaultMapper().constructParametricType(parametrized, parameterClasses);
-    }
-
-    public static String toJsonP(String func, Object obj) {
-        return DEFAULT_MAPPER.toJsonP(func, obj);
-    }
-
     public static String toJsonIgnoreNull(Object object) {
         return NON_NULL_MAPPER.toJson(object);
     }
@@ -108,10 +72,6 @@ public class JsonUtils {
         } catch (JsonSyntaxException e) {
             return false;
         }
-    }
-
-    public static String toJsonpIgnoreNull(String func, Object object) {
-        return NON_DEFAULT_MAPPER.toJsonP(func, object);
     }
 
     public static <T> List<T> parseList(String json, Class<T> clazz) {
@@ -252,20 +212,6 @@ public class JsonUtils {
             return mapper.getTypeFactory().constructMapType(mapClass, keyClass, valueClass);
         }
 
-        /**
-         * 构造类型.
-         */
-        public JavaType constructParametricType(Class<?> rawType, Class... parameterTypes) {
-            return mapper.getTypeFactory().constructParametricType(rawType, parameterTypes);
-        }
-
-        /**
-         * 构造类型.
-         */
-        public JavaType constructParametricType(Class<?> rawType, JavaType... parameterTypes) {
-            return mapper.getTypeFactory().constructParametricType(rawType, parameterTypes);
-        }
-
         public ObjectMapper getMapper() {
             return mapper;
         }
@@ -282,11 +228,5 @@ public class JsonUtils {
             }
         }
 
-        /**
-         * 輸出JSONP格式數據.
-         */
-        public String toJsonP(String functionName, Object object) {
-            return toJson(new JSONPObject(functionName, object));
-        }
     }
 }

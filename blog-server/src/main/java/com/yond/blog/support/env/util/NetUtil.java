@@ -2,12 +2,6 @@ package com.yond.blog.support.env.util;
 
 import org.apache.commons.lang3.StringUtils;
 
-/**
- * net 相关工具类
- *
- * @version 1.0
- * @created 2022/08/23 20:16
- **/
 public class NetUtil {
 
     private final static String LOCALHOST = "localhost";
@@ -33,4 +27,5 @@ public class NetUtil {
 
         return ip.equalsIgnoreCase(NICUtil.getLocalIpV4(null));
     }
+    
 }

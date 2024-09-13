@@ -8,11 +8,6 @@ import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-/**
- * SimpleDateFormat对象池
- * <p>
- * 解决SimpleDateFormat线程不安全问题
- **/
 public class ThreadSafeDateFormat {
 
     private final String format;
