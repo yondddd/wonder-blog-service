@@ -312,11 +312,6 @@ public class BlogServiceImpl implements BlogService {
     }
     
     @Override
-    public String getTitleByBlogId(Long id) {
-        return blogMapper.getTitleByBlogId(id);
-    }
-    
-    @Override
     public BlogDetail getBlogByIdAndIsPublished(Long id) {
         BlogDetail blog = blogMapper.getBlogByIdAndIsPublished(id);
         if (blog == null) {
@@ -348,26 +343,6 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public int countByTagId(Long tagId) {
         return blogMapper.countBlogByTagId(tagId);
-    }
-    
-    @Override
-    public Boolean getCommentEnabledByBlogId(Long blogId) {
-        return blogMapper.getCommentEnabledByBlogId(blogId);
-    }
-    
-    @Override
-    public Boolean getPublishedByBlogId(Long blogId) {
-        return blogMapper.getPublishedByBlogId(blogId);
-    }
-    
-    @Override
-    public int countBlog() {
-        return blogMapper.countBlog();
-    }
-    
-    @Override
-    public List<CategoryBlogCount> getCategoryBlogCountList() {
-        return blogMapper.getCategoryBlogCountList();
     }
     
     @Override

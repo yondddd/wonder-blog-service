@@ -153,11 +153,6 @@
         update blog set views=#{views} where id=#{blogId}
     </update>
 
-    <!--按id查询博客标题-->
-    <select id="getTitleByBlogId" resultType="java.lang.String">
-        select title from blog where id=#{id}
-    </select>
-
     <resultMap id="blogDetail" type="com.yond.blog.web.blog.view.vo.BlogDetail">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
@@ -195,12 +190,6 @@
         select password from blog where id=#{blogId}
     </select>
 
-
-    <!--查询博客总数-->
-    <select id="countBlog" resultType="java.lang.Integer">
-        select count(*) from blog
-    </select>
-
     <!--查询公开博客总数-->
     <select id="countBlogByIsPublished" resultType="java.lang.Integer">
         select count(*) from blog where is_published=true
@@ -211,25 +200,10 @@
         select count(*) from blog_tag where tag_id=#{tagId}
     </select>
 
-    <!--查询博客是否启用评论-->
-    <select id="getCommentEnabledByBlogId" resultType="java.lang.Boolean">
-        select is_comment_enabled from blog where id=#{blogId}
-    </select>
-
-    <!--查询博客是否公开-->
-    <select id="getPublishedByBlogId" resultType="java.lang.Boolean">
-        select is_published from blog where id=#{blogId}
-    </select>
-
     <resultMap id="categoryBlogCount" type="com.yond.blog.web.blog.view.vo.CategoryBlogCount">
         <id property="id" column="category_id"/>
         <result property="value" column="blog_count"/>
     </resultMap>
-
-    <!--查询每个分类的博客数量-->
-    <select id="getCategoryBlogCountList" resultMap="categoryBlogCount">
-        select category_id, count(category_id) as blog_count from blog group by category_id
-    </select>
 
     <select id="listAll" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>

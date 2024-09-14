@@ -30,8 +30,7 @@ import java.util.stream.Collectors;
 
 /**
  * @Description: 博客文章后台管理
- * @Author: yond
- * @Date: 2020-07-29
+ * @Author: Yond
  */
 @RestController
 @RequestMapping("/admin/blog")
@@ -52,18 +51,18 @@ public class BlogAdminController {
         
         Pair<Integer, List<BlogDO>> pair = blogService.pageByTitleLikeAndCategoryId(req.getTitle(), req.getCategoryId(),
                 req.getPageNo(), req.getPageSize());
-        List<Long> categoryIds = pair.getRight().stream().map(BlogDO::getCategoryId).map(Integer::longValue).toList();
+        List<Long> categoryIds = pair.getRight().stream().map(BlogDO::getCategoryId).toList();
         Map<Long, String> map = categoryService.listByIds(categoryIds).stream()
                 .collect(Collectors.toMap(CategoryDO::getId, CategoryDO::getName, (key1, key2) -> key1));
         List<BlogVO> data = pair.getRight().stream()
-                .map(x -> BlogConverter.do2vo(x, map.get(x.getCategoryId().longValue()), null)).toList();
+                .map(x -> BlogConverter.do2vo(x, map.get(x.getCategoryId()), null)).toList();
         return PageResponse.<List<BlogVO>>custom().setData(data).setTotal(pair.getLeft()).setSuccess();
     }
     
     @PostMapping("/detail")
     public Response<BlogVO> getBlog(@RequestBody BlogDetailReq req) {
         BlogDO blog = blogService.getBlogById(req.getId());
-        CategoryDO category = categoryService.getById(blog.getCategoryId().longValue());
+        CategoryDO category = categoryService.getById(blog.getCategoryId());
         List<TagDO> blogTags = blogTagService.listTagsByBlogId(blog.getId());
         BlogVO data = BlogConverter.do2vo(blog, category.getName(), blogTags);
         return Response.success(data);
@@ -133,7 +132,7 @@ public class BlogAdminController {
         this.checkBlogSaveParam(req);
         List<Long> tagIds = this.getTagIds(req.getTags());
         BlogDO insert = BlogConverter.save2do(req);
-        insert.setCategoryId(this.geCategoryId(req.getCategory()).intValue());
+        insert.setCategoryId(this.geCategoryId(req.getCategory()));
         insert.setUserId(userSession.getUserId().intValue());
         Long blogId = blogService.insertSelective(insert);
         blogTagService.saveBlogTag(blogId, tagIds);
@@ -148,7 +147,7 @@ public class BlogAdminController {
         this.checkBlogSaveParam(req);
         List<Long> tagIds = this.getTagIds(req.getTags());
         BlogDO update = BlogConverter.save2do(req);
-        update.setCategoryId(this.geCategoryId(req.getCategory()).intValue());
+        update.setCategoryId(this.geCategoryId(req.getCategory()));
         update.setUserId(userSession.getUserId().intValue());
         blogService.updateSelective(update);
         blogTagService.saveBlogTag(update.getId(), tagIds);

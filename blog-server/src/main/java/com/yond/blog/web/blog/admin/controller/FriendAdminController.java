@@ -6,29 +6,22 @@ import com.yond.blog.entity.FriendDO;
 import com.yond.blog.service.FriendService;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.resp.Response;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 /**
  * @Description: 友链页面后台管理
- * @Author: Naccl
- * @Date: 2020-09-08
+ * @Author: Yond
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/friend")
 public class FriendAdminController {
-    @Autowired
-    FriendService friendService;
-
-    /**
-     * 分页获取友链列表
-     *
-     * @param pageNum  页码
-     * @param pageSize 每页条数
-     * @return
-     */
+    
+    @Resource
+    private FriendService friendService;
+    
     @GetMapping("/friends")
     public Response friends(@RequestParam(defaultValue = "1") Integer pageNum,
                             @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -37,7 +30,7 @@ public class FriendAdminController {
         PageInfo<FriendDO> pageInfo = new PageInfo<>(friendService.getFriendList());
         return Response.success(pageInfo);
     }
-
+    
     /**
      * 更新友链公开状态
      *
@@ -51,7 +44,7 @@ public class FriendAdminController {
         friendService.updateFriendPublishedById(id, published);
         return Response.ok("操作成功");
     }
-
+    
     /**
      * 添加友链
      *
@@ -64,7 +57,7 @@ public class FriendAdminController {
         friendService.saveFriend(friend);
         return Response.ok("添加成功");
     }
-
+    
     /**
      * 更新友链
      *
@@ -77,7 +70,7 @@ public class FriendAdminController {
         friendService.updateFriend(friend);
         return Response.ok("修改成功");
     }
-
+    
     /**
      * 按id删除友链
      *
@@ -90,7 +83,7 @@ public class FriendAdminController {
         friendService.deleteFriend(id);
         return Response.ok("删除成功");
     }
-
+    
     /**
      * 获取友链页面信息
      *
@@ -100,7 +93,7 @@ public class FriendAdminController {
     public Response friendInfo() {
         return Response.ok("请求成功", friendService.getFriendInfo(false, false));
     }
-
+    
     /**
      * 修改友链页面评论开放状态
      *
@@ -113,7 +106,7 @@ public class FriendAdminController {
         friendService.updateFriendInfoCommentEnabled(commentEnabled);
         return Response.ok("修改成功");
     }
-
+    
     /**
      * 修改友链页面content
      *

@@ -9,16 +9,17 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.List;
 
 public interface CommentService {
-
+    
+    List<CommentDO> listAll();
+    
     Pair<Integer, List<CommentDTO>> pageBy(CommentPageEnum page, Long blogId, Integer pageNo, Integer pageSize);
-
-    void updateSelective(CommentDO comment);
-
-    void insertSelective(CommentDO comment);
-
-    int countComment();
-
-    CommentOpenStateEnum getPageCommentStatus(Integer page, Long blogId);
-
+    
     CommentDO getById(Long id);
+    
+    void updateSelective(CommentDO comment);
+    
+    void insertSelective(CommentDO comment);
+    
+    CommentOpenStateEnum getPageCommentStatus(Integer page, Long blogId);
+    
 }

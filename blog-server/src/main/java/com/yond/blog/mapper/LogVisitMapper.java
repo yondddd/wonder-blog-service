@@ -15,13 +15,14 @@ import java.util.List;
 @Mapper
 @Repository
 public interface LogVisitMapper {
+    
     List<LogVisitDO> getVisitLogListByUUIDAndDate(String uuid, String startDate, String endDate);
-
+    
     List<VisitLogUuidTime> getUUIDAndCreateTimeByYesterday();
-
+    
     int saveVisitLog(LogVisitDO log);
-
+    
     int deleteVisitLogById(Long id);
-
+    
     int countVisitLogByToday();
 }

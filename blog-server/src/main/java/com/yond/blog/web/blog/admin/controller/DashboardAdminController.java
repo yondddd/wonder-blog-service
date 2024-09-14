@@ -1,51 +1,47 @@
 package com.yond.blog.web.blog.admin.controller;
 
 import com.yond.blog.cache.remote.VisitCache;
-import com.yond.blog.entity.VisitCityDO;
 import com.yond.blog.service.DashboardService;
+import com.yond.blog.web.blog.admin.vo.StatisticDashboardVO;
 import com.yond.common.resp.Response;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * @Description: 后台管理仪表盘
- * @Author: Naccl
- * @Date: 2020-10-08
+ * @Author: Yond
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/statistic")
 public class DashboardAdminController {
-    @Autowired
-    DashboardService dashboardService;
-    @Autowired
-    VisitCache visitCache;
-
+    
+    @Resource
+    private DashboardService dashboardService;
+    @Resource
+    private VisitCache visitCache;
+    
+    private static final Executor executor = Executors.newVirtualThreadPerTaskExecutor();
+    
     @GetMapping("/dashboard")
-    public Response dashboard() {
-        int todayPV = dashboardService.countVisitLogByToday();
-        int todayUV = visitCache.identitySize();
-        int blogCount = dashboardService.getBlogCount();
-        int commentCount = dashboardService.getCommentCount();
-        Map<String, List> categoryBlogCountMap = dashboardService.getCategoryBlogCountMap();
-        Map<String, List> tagBlogCountMap = dashboardService.getTagBlogCountMap();
-        Map<String, List> visitRecordMap = dashboardService.getVisitRecordMap();
-        List<VisitCityDO> cityVisitorList = dashboardService.getCityVisitorList();
-
-        Map<String, Object> map = new HashMap<>(16);
-        map.put("pv", todayPV);
-        map.put("uv", todayUV);
-        map.put("blogCount", blogCount);
-        map.put("commentCount", commentCount);
-        map.put("category", categoryBlogCountMap);
-        map.put("tag", tagBlogCountMap);
-        map.put("visitRecord", visitRecordMap);
-        map.put("cityVisitor", cityVisitorList);
-        return Response.ok("获取成功", map);
+    public Response<StatisticDashboardVO> dashboard() {
+        StatisticDashboardVO data = new StatisticDashboardVO();
+        CompletableFuture.allOf(
+                CompletableFuture.runAsync(() -> data.setPv(dashboardService.countVisitLogByToday()), executor),
+                CompletableFuture.runAsync(() -> data.setUv(visitCache.identitySize()), executor),
+                CompletableFuture.runAsync(() -> data.setBlogCount(dashboardService.getBlogCount()), executor),
+                CompletableFuture.runAsync(() -> data.setCommentCount(dashboardService.getCommentCount()), executor),
+                CompletableFuture.runAsync(() -> data.setCategory(dashboardService.getCategoryBlogCount()), executor),
+                CompletableFuture.runAsync(() -> data.setTag(dashboardService.getTagBlogCount()), executor),
+                CompletableFuture.runAsync(() -> data.setVisitRecord(dashboardService.getVisitRecord()), executor),
+                CompletableFuture.runAsync(() -> data.setCityVisitor(dashboardService.getCityVisitorList()), executor)
+        ).join();
+        return Response.success(data);
     }
+    
 }

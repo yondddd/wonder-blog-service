@@ -33,8 +33,6 @@ public interface BlogService {
     
     BlogDO getBlogById(Long id);
     
-    String getTitleByBlogId(Long id);
-    
     BlogDetail getBlogByIdAndIsPublished(Long id);
     
     String getBlogPassword(Long blogId);
@@ -42,14 +40,6 @@ public interface BlogService {
     int countBlogByIsPublished();
     
     int countByTagId(Long tagId);
-    
-    Boolean getCommentEnabledByBlogId(Long blogId);
-    
-    Boolean getPublishedByBlogId(Long blogId);
-    
-    int countBlog();
-    
-    List<CategoryBlogCount> getCategoryBlogCountList();
     
     List<BlogDO> listEnable();
     

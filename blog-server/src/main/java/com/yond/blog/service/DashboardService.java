@@ -1,22 +1,26 @@
 package com.yond.blog.service;
 
-import com.yond.blog.entity.VisitCityDO;
+import com.yond.blog.web.blog.admin.vo.StatisticCategoryVO;
+import com.yond.blog.web.blog.admin.vo.StatisticCityVO;
+import com.yond.blog.web.blog.admin.vo.StatisticTagVO;
+import com.yond.blog.web.blog.admin.vo.StatisticVisitRecordVO;
 
 import java.util.List;
-import java.util.Map;
 
 public interface DashboardService {
-    int countVisitLogByToday();
-
-    int getBlogCount();
-
-    int getCommentCount();
-
-    Map<String, List> getCategoryBlogCountMap();
-
-    Map<String, List> getTagBlogCountMap();
-
-    Map<String, List> getVisitRecordMap();
-
-    List<VisitCityDO> getCityVisitorList();
+    
+    Integer countVisitLogByToday();
+    
+    Integer getBlogCount();
+    
+    Integer getCommentCount();
+    
+    StatisticCategoryVO getCategoryBlogCount();
+    
+    StatisticTagVO getTagBlogCount();
+    
+    StatisticVisitRecordVO getVisitRecord();
+    
+    List<StatisticCityVO> getCityVisitorList();
+    
 }

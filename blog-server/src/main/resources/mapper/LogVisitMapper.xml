@@ -75,4 +75,5 @@
         from log_visit
         where date (create_time)=curdate()
     </select>
+
 </mapper>

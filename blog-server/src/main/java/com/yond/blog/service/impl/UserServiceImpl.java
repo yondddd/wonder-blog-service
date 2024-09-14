@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl implements UserService {
-
+    
     private final UserMapper userMapper;
-
+    
     public UserServiceImpl(UserMapper userMapper) {
         this.userMapper = userMapper;
     }
-
-
+    
+    
     @Override
     public UserDO getByNameAndPassword(String username, String password) {
         UserDO user = userMapper.getByUserName(username);
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
-
+    
     @Override
     public UserDO getById(Long id) {
         UserDO user = userMapper.getById(id);
@@ -43,23 +43,23 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
-
-    @Override
-    public boolean changeAccount(UserDO user, UserSession userSession) {
-        UserDO currentUser = userMapper.getByGuid(userSession.getGuid());
-        if (currentUser == null) {
-            return false;
-        }
-        if (!currentUser.getUsername().equals(user.getUsername())) {
-            return false;
-        }
-        userMapper.updatePassword(currentUser.getId(), AesUtil.encrypt(user.getPassword()));
-        return true;
-    }
-
+    
     @Override
     public UserDO getByGuid(String guid) {
         return userMapper.getByGuid(guid);
     }
-
+    
+    @Override
+    public String changeAccount(String userName, String pwd, UserSession userSession) {
+        UserDO currentUser = userMapper.getByGuid(userSession.getGuid());
+        if (currentUser == null) {
+            return "当前操作用户查找为空";
+        }
+        if (!currentUser.getUsername().equals(userName)) {
+            return "当前操作用户与修改用户不一致";
+        }
+        userMapper.updatePassword(currentUser.getId(), AesUtil.encrypt(pwd));
+        return null;
+    }
+    
 }

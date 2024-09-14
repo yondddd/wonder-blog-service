@@ -6,10 +6,8 @@ import java.io.Serializable;
 
 /**
  * @Description: 封装响应结果
- * @Author: Naccl
- * @Date: 2020-07-19
+ * @Author: Yond
  */
-
 public class Response<T> implements Serializable {
     
     @Serial
@@ -24,10 +22,6 @@ public class Response<T> implements Serializable {
      * 服务端内部异常状态码
      */
     public static final int FAILURE = 500;
-    /**
-     * 非法参数
-     */
-    public static final int ILLEGAL_PARAMETER = 501;
     
     /**
      * 客户端请求有语法错误，不能被服务器所理解

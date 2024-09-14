@@ -30,8 +30,7 @@ import java.util.stream.Collectors;
 
 /**
  * @Description: 博客评论后台管理
- * @Author: Naccl
- * @Date: 2020-08-03
+ * @Author: Yond
  */
 @RestController
 @RequestMapping("/admin/comment")

@@ -24,32 +24,31 @@ import java.util.stream.Collectors;
 
 /**
  * @Description: 博客分类后台管理
- * @Author: Naccl
- * @Date: 2020-08-02
+ * @Author: Yond
  */
 @RestController
 @RequestMapping("/admin/category")
 public class CategoryAdminController {
-
+    
     @Resource
     private BlogService blogService;
     @Resource
     private CategoryService categoryService;
-
+    
     @PostMapping("/listAll")
     public Response<List<CategoryVO>> listAll() {
         List<CategoryDO> list = categoryService.listAll();
         List<CategoryVO> data = list.stream().map(CategoryConverter::do2vo).collect(Collectors.toList());
         return Response.success(data);
     }
-
+    
     @PostMapping("/page")
     public PageResponse<List<CategoryVO>> page(@RequestBody CategoryPageReq req) {
         Pair<Integer, List<CategoryDO>> pair = categoryService.page(req.getPageNo(), req.getPageSize());
         List<CategoryVO> data = pair.getRight().stream().map(CategoryConverter::do2vo).toList();
         return PageResponse.<List<CategoryVO>>custom().setSuccess().setData(data).setTotal(pair.getLeft());
     }
-
+    
     @OperationLogger("新增分类")
     @PostMapping("/save")
     public Response<Boolean> save(@RequestBody CategoryVO category) {
@@ -58,7 +57,7 @@ public class CategoryAdminController {
         categoryService.insertSelective(CategoryConverter.vo2do(category));
         return Response.success();
     }
-
+    
     @OperationLogger("更新分类")
     @PostMapping("/update")
     public Response<Boolean> updateCategory(@RequestBody CategoryVO category) {
@@ -69,7 +68,7 @@ public class CategoryAdminController {
         categoryService.updateSelective(CategoryConverter.vo2do(category));
         return Response.success();
     }
-
+    
     @OperationLogger("删除分类")
     @PostMapping("/del")
     public Response<Boolean> del(@RequestBody CategoryDelReq req) {
@@ -81,5 +80,5 @@ public class CategoryAdminController {
         categoryService.deleteById(id);
         return Response.success();
     }
-
+    
 }

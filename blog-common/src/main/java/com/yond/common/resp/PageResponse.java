@@ -4,9 +4,8 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * @Author Administrator
- * @Description 分页统一响应
- * @Date 2023/1/20
+ * @Description: 分页统一响应
+ * @Author: Yond
  */
 public class PageResponse<T> implements Serializable {
     
@@ -19,7 +18,7 @@ public class PageResponse<T> implements Serializable {
     /**
      * request id
      */
-    private Long queryId;
+    private Long requestId;
     
     /**
      * 返回值状态码
@@ -147,12 +146,12 @@ public class PageResponse<T> implements Serializable {
         return this;
     }
     
-    public Long getQueryId() {
-        return queryId;
+    public Long getRequestId() {
+        return requestId;
     }
     
-    public PageResponse<T> setQueryId(Long queryId) {
-        this.queryId = queryId;
+    public PageResponse<T> setRequestId(Long requestId) {
+        this.requestId = requestId;
         return this;
     }
     

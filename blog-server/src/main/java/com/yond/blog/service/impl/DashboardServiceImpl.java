@@ -1,28 +1,23 @@
 package com.yond.blog.service.impl;
 
-import com.yond.blog.entity.CategoryDO;
-import com.yond.blog.entity.TagDO;
-import com.yond.blog.entity.VisitCityDO;
-import com.yond.blog.entity.VisitRecordDO;
+import com.yond.blog.entity.*;
 import com.yond.blog.service.*;
-import com.yond.blog.web.blog.view.vo.CategoryBlogCount;
-import com.yond.blog.web.blog.view.vo.TagBlogCount;
+import com.yond.blog.web.blog.admin.vo.*;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Description: 仪表盘业务层实现
- * @Author: Naccl
- * @Date: 2020-10-08
+ * @Author: Yond
  */
 @Service
 public class DashboardServiceImpl implements DashboardService {
-
+    
     @Resource
     private BlogService blogService;
     @Resource
@@ -41,114 +36,83 @@ public class DashboardServiceImpl implements DashboardService {
     private VisitCityService visitCityService;
     //查询最近30天的记录
     private static final int visitRecordLimitNum = 30;
-
+    
     @Override
-    public int countVisitLogByToday() {
+    public Integer countVisitLogByToday() {
         return logVisitService.countVisitLogByToday();
     }
-
+    
     @Override
-    public int getBlogCount() {
-        return blogService.countBlog();
+    public Integer getBlogCount() {
+        return blogService.listEnable().size();
     }
-
+    
     @Override
-    public int getCommentCount() {
-        return commentService.countComment();
+    public Integer getCommentCount() {
+        return commentService.listAll().size();
     }
-
+    
     @Override
-    public Map<String, List> getCategoryBlogCountMap() {
-        //查询分类id对应的博客数量
-        List<CategoryBlogCount> categoryBlogCountList = blogService.getCategoryBlogCountList();
-        //查询所有分类的id和名称
-        List<CategoryDO> categoryList = categoryService.listAll();
-        //所有分类名称的List
+    public StatisticCategoryVO getCategoryBlogCount() {
+        Map<Long, List<BlogDO>> map = blogService.listEnable().stream().collect(Collectors.groupingBy(BlogDO::getCategoryId));
+        Map<Long, String> allCategoryMap = categoryService.listAll().stream()
+                .collect(Collectors.toMap(CategoryDO::getId, CategoryDO::getName));
         List<String> legend = new ArrayList<>();
-        for (CategoryDO category : categoryList) {
-            legend.add(category.getName());
+        List<StatisticCategorySeriesVO> series = new ArrayList<>();
+        for (Map.Entry<Long, List<BlogDO>> entry : map.entrySet()) {
+            String categoryName = allCategoryMap.remove(entry.getKey());
+            legend.add(categoryName);
+            StatisticCategorySeriesVO item = new StatisticCategorySeriesVO();
+            item.setName(categoryName);
+            item.setValue(entry.getValue().size());
+            series.add(item);
         }
-        //分类对应的博客数量List
-        List<CategoryBlogCount> series = new ArrayList<>();
-        if (categoryBlogCountList.size() == categoryList.size()) {
-            Map<Long, String> m = new HashMap<>(16);
-            for (CategoryDO c : categoryList) {
-                m.put(c.getId(), c.getName());
-            }
-            for (CategoryBlogCount c : categoryBlogCountList) {
-                c.setName(m.get(c.getId()));
-                series.add(c);
-            }
-        } else {
-            Map<Long, Integer> m = new HashMap<>(16);
-            for (CategoryBlogCount c : categoryBlogCountList) {
-                m.put(c.getId(), c.getValue());
-            }
-            for (CategoryDO c : categoryList) {
-                CategoryBlogCount categoryBlogCount = new CategoryBlogCount();
-                categoryBlogCount.setName(c.getName());
-                Integer count = m.get(c.getId());
-                if (count == null) {
-                    categoryBlogCount.setValue(0);
-                } else {
-                    categoryBlogCount.setValue(count);
-                }
-                series.add(categoryBlogCount);
-            }
+        // default 0
+        for (Map.Entry<Long, String> entry : allCategoryMap.entrySet()) {
+            String categoryName = entry.getValue();
+            legend.add(categoryName);
+            StatisticCategorySeriesVO item = new StatisticCategorySeriesVO();
+            item.setName(categoryName);
+            item.setValue(0);
+            series.add(item);
         }
-        Map<String, List> map = new HashMap<>(4);
-        map.put("legend", legend);
-        map.put("series", series);
-        return map;
+        StatisticCategoryVO data = new StatisticCategoryVO();
+        data.setLegend(legend);
+        data.setSeries(series);
+        return data;
     }
-
+    
     @Override
-    public Map<String, List> getTagBlogCountMap() {
-        //查询标签id对应的博客数量
-        List<TagBlogCount> tagBlogCountList = blogTagService.getTagBlogCount();
-        //查询所有标签的id和名称
-        List<TagDO> tagList = tagService.listAll();
-        //所有标签名称的List
+    public StatisticTagVO getTagBlogCount() {
         List<String> legend = new ArrayList<>();
-        for (TagDO tag : tagList) {
-            legend.add(tag.getName());
+        List<StatisticTagSeriesVO> series = new ArrayList<>();
+        Map<Long, String> tagMap = tagService.listAll().stream()
+                .collect(Collectors.toMap(TagDO::getId, TagDO::getName));
+        Map<Long, List<BlogTagDO>> map = blogTagService.listAll().stream().collect(Collectors.groupingBy(BlogTagDO::getTagId));
+        for (Map.Entry<Long, List<BlogTagDO>> entry : map.entrySet()) {
+            String tagName = tagMap.remove(entry.getKey());
+            legend.add(tagName);
+            StatisticTagSeriesVO count = new StatisticTagSeriesVO();
+            count.setName(tagName);
+            count.setValue(entry.getValue().size());
+            series.add(count);
         }
-        //标签对应的博客数量List
-        List<TagBlogCount> series = new ArrayList<>();
-        if (tagBlogCountList.size() == tagList.size()) {
-            Map<Long, String> m = new HashMap<>(64);
-            for (TagDO t : tagList) {
-                m.put(t.getId(), t.getName());
-            }
-            for (TagBlogCount t : tagBlogCountList) {
-                t.setName(m.get(t.getId()));
-                series.add(t);
-            }
-        } else {
-            Map<Long, Integer> m = new HashMap<>(64);
-            for (TagBlogCount t : tagBlogCountList) {
-                m.put(t.getId(), t.getValue());
-            }
-            for (TagDO t : tagList) {
-                TagBlogCount tagBlogCount = new TagBlogCount();
-                tagBlogCount.setName(t.getName());
-                Integer count = m.get(t.getId());
-                if (count == null) {
-                    tagBlogCount.setValue(0);
-                } else {
-                    tagBlogCount.setValue(count);
-                }
-                series.add(tagBlogCount);
-            }
+        for (Map.Entry<Long, String> entry : tagMap.entrySet()) {
+            String tagName = entry.getValue();
+            legend.add(tagName);
+            StatisticTagSeriesVO count = new StatisticTagSeriesVO();
+            count.setName(tagName);
+            count.setValue(0);
+            series.add(count);
         }
-        Map<String, List> map = new HashMap<>(4);
-        map.put("legend", legend);
-        map.put("series", series);
-        return map;
+        StatisticTagVO data = new StatisticTagVO();
+        data.setLegend(legend);
+        data.setSeries(series);
+        return data;
     }
-
+    
     @Override
-    public Map<String, List> getVisitRecordMap() {
+    public StatisticVisitRecordVO getVisitRecord() {
         List<VisitRecordDO> visitRecordList = visitRecordService.listByLimit(visitRecordLimitNum);
         List<String> date = new ArrayList<>(visitRecordList.size());
         List<Integer> pv = new ArrayList<>(visitRecordList.size());
@@ -159,16 +123,23 @@ public class DashboardServiceImpl implements DashboardService {
             pv.add(visitRecord.getPv());
             uv.add(visitRecord.getUv());
         }
-        Map<String, List> map = new HashMap<>(8);
-        map.put("date", date);
-        map.put("pv", pv);
-        map.put("uv", uv);
-        return map;
+        StatisticVisitRecordVO data = new StatisticVisitRecordVO();
+        data.setDate(date);
+        data.setPv(pv);
+        data.setUv(uv);
+        return data;
     }
-
+    
     @Override
-    public List<VisitCityDO> getCityVisitorList() {
-        return visitCityService.listAll();
+    public List<StatisticCityVO> getCityVisitorList() {
+        List<StatisticCityVO> data = new ArrayList<>();
+        visitCityService.listAll().forEach(x -> {
+            StatisticCityVO item = new StatisticCityVO();
+            item.setCity(x.getCity());
+            item.setUv(x.getUv());
+            data.add(item);
+        });
+        return data;
     }
-
+    
 }
