@@ -11,9 +11,13 @@ import com.yond.blog.web.blog.view.vo.FriendInfo;
 import com.yond.common.constant.SiteSettingConstant;
 import com.yond.common.enums.SiteSettingTypeEnum;
 import com.yond.common.exception.PersistenceException;
+import com.yond.common.utils.page.PageUtil;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -24,25 +28,33 @@ import java.util.List;
  */
 @Service
 public class FriendServiceImpl implements FriendService {
-
-    private final FriendMapper friendMapper;
-    private final SiteConfigService siteConfigService;
-
-    public FriendServiceImpl(FriendMapper friendMapper, SiteConfigService siteConfigService) {
-        this.friendMapper = friendMapper;
-        this.siteConfigService = siteConfigService;
+    
+    @Resource
+    private FriendMapper friendMapper;
+    @Resource
+    private SiteConfigService siteConfigService;
+    
+    private List<FriendDO> listAll() {
+        List<FriendDO> cache = FriendCache.getAll();
+        if (cache != null) {
+            return cache;
+        }
+        cache = friendMapper.listAll();
+        return cache;
     }
-
+    
     @Override
-    public List<FriendDO> getFriendList() {
-        return friendMapper.getFriendList();
+    public Pair<Integer, List<FriendDO>> page(Integer pageNo, Integer pageSize) {
+        List<FriendDO> all = this.listAll();
+        all.sort(Comparator.comparing(FriendDO::getId).reversed());
+        return Pair.of(all.size(), PageUtil.pageList(all, pageNo, pageSize));
     }
-
+    
     @Override
     public List<com.yond.blog.web.blog.view.vo.Friend> getFriendVOList() {
         return friendMapper.getFriendVOList();
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateFriendPublishedById(Long friendId, Boolean published) {
@@ -50,7 +62,7 @@ public class FriendServiceImpl implements FriendService {
             throw new PersistenceException("操作失败");
         }
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveFriend(FriendDO friend) {
@@ -60,7 +72,7 @@ public class FriendServiceImpl implements FriendService {
             throw new PersistenceException("添加失败");
         }
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateFriend(com.yond.blog.web.blog.view.dto.Friend friend) {
@@ -68,7 +80,7 @@ public class FriendServiceImpl implements FriendService {
             throw new PersistenceException("修改失败");
         }
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteFriend(Long id) {
@@ -76,7 +88,7 @@ public class FriendServiceImpl implements FriendService {
             throw new PersistenceException("删除失败");
         }
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateViewsByNickname(String nickname) {
@@ -84,7 +96,7 @@ public class FriendServiceImpl implements FriendService {
             throw new PersistenceException("操作失败");
         }
     }
-
+    
     @Override
     public FriendInfo getFriendInfo(boolean cache, boolean md) {
         if (cache) {
@@ -112,26 +124,36 @@ public class FriendServiceImpl implements FriendService {
         }
         return friendInfo;
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateFriendInfoContent(String content) {
         siteConfigService.updateValue(SiteSettingConstant.FRIEND_CONTENT, content);
         deleteFriendInfoRedisCache();
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateFriendInfoCommentEnabled(Boolean commentEnabled) {
         siteConfigService.updateValue(SiteSettingConstant.FRIEND_COMMENT_ENABLED, commentEnabled.toString());
         deleteFriendInfoRedisCache();
     }
-
+    
+    @Override
+    public void insertSelective(FriendDO friendDO) {
+        friendMapper.insertSelective(friendDO);
+    }
+    
+    @Override
+    public void updateSelective(FriendDO friendDO) {
+        friendMapper.updateSelective(friendDO);
+    }
+    
     /**
      * 删除友链页面缓存
      */
     private void deleteFriendInfoRedisCache() {
-        FriendCache.del();
+        FriendCache.delAll();
     }
-
+    
 }

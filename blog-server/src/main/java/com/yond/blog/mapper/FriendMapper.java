@@ -1,8 +1,8 @@
 package com.yond.blog.mapper;
 
+import com.yond.blog.entity.FriendDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import com.yond.blog.entity.FriendDO;
 
 import java.util.List;
 
@@ -14,17 +14,22 @@ import java.util.List;
 @Mapper
 @Repository
 public interface FriendMapper {
-	List<FriendDO> getFriendList();
-
-	List<com.yond.blog.web.blog.view.vo.Friend> getFriendVOList();
-
-	int updateFriendPublishedById(Long id, Boolean published);
-
-	int saveFriend(FriendDO friend);
-
-	int updateFriend(com.yond.blog.web.blog.view.dto.Friend friend);
-
-	int deleteFriend(Long id);
-
-	int updateViewsByNickname(String nickname);
+    
+    List<FriendDO> listAll();
+    
+    List<com.yond.blog.web.blog.view.vo.Friend> getFriendVOList();
+    
+    int updateFriendPublishedById(Long id, Boolean published);
+    
+    int saveFriend(FriendDO friend);
+    
+    int updateFriend(com.yond.blog.web.blog.view.dto.Friend friend);
+    
+    int deleteFriend(Long id);
+    
+    int updateViewsByNickname(String nickname);
+    
+    int insertSelective(FriendDO friendDO);
+    
+    int updateSelective(FriendDO friendDO);
 }

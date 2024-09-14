@@ -1,10 +1,10 @@
 package com.yond.blog.cache.local;
 
-import cn.hutool.core.thread.ThreadFactoryBuilder;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Scheduler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -13,11 +13,18 @@ public class LocalCache {
     
     private final static AtomicInteger NUM = new AtomicInteger(-1);
     
-    private final static ThreadFactory THREAD_FACTORY = new ThreadFactoryBuilder()
-            .setNamePrefix("local-cache-flush")
-            .setDaemon(true)
-            .setPriority(Thread.NORM_PRIORITY)
-            .build();
+    private final static ThreadFactory THREAD_FACTORY = new ThreadFactory() {
+        
+        private final AtomicInteger threadNumber = new AtomicInteger(1);
+        
+        @Override
+        public Thread newThread(@NotNull Runnable r) {
+            Thread thread = new Thread(r, "local-cache-flush-" + threadNumber.getAndIncrement());
+//            thread.setDaemon(true);
+//            thread.setPriority(Thread.NORM_PRIORITY);
+            return thread;
+        }
+    };
     
     private static final Executor EXECUTOR = new ThreadPoolExecutor(
             1,

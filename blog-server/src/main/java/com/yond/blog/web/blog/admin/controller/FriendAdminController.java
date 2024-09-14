@@ -1,14 +1,19 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.FriendDO;
 import com.yond.blog.service.FriendService;
+import com.yond.blog.web.blog.admin.convert.FriendConverter;
+import com.yond.blog.web.blog.admin.req.FriendPageReq;
+import com.yond.blog.web.blog.admin.req.FriendPublishedReq;
+import com.yond.blog.web.blog.admin.vo.FriendVO;
 import com.yond.common.annotation.OperationLogger;
+import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,37 +27,24 @@ public class FriendAdminController {
     @Resource
     private FriendService friendService;
     
-    @GetMapping("/friends")
-    public Response friends(@RequestParam(defaultValue = "1") Integer pageNum,
-                            @RequestParam(defaultValue = "10") Integer pageSize) {
-        String orderBy = "create_time asc";
-        PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<FriendDO> pageInfo = new PageInfo<>(friendService.getFriendList());
-        return Response.success(pageInfo);
+    @PostMapping("/page")
+    public PageResponse<List<FriendVO>> page(@RequestBody FriendPageReq req) {
+        Pair<Integer, List<FriendDO>> pair = friendService.page(req.getPageNo(), req.getPageSize());
+        List<FriendVO> data = pair.getRight().stream().map(FriendConverter::do2vo).toList();
+        return PageResponse.<List<FriendVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize()).setSuccess();
     }
     
-    /**
-     * 更新友链公开状态
-     *
-     * @param id        友链id
-     * @param published 是否公开
-     * @return
-     */
     @OperationLogger("更新友链公开状态")
-    @PutMapping("/friend/published")
-    public Response updatePublished(@RequestParam Long id, @RequestParam Boolean published) {
-        friendService.updateFriendPublishedById(id, published);
-        return Response.ok("操作成功");
+    @PutMapping("/published")
+    public Response<Boolean> published(@RequestBody FriendPublishedReq req) {
+        FriendDO update = FriendDO.custom().setId(req.getId())
+                .setPublished(req.getPublished());
+        friendService.updateSelective(update);
+        return Response.success();
     }
     
-    /**
-     * 添加友链
-     *
-     * @param friend 友链DTO
-     * @return
-     */
     @OperationLogger("添加友链")
-    @PostMapping("/friend")
+    @PostMapping("/add")
     public Response saveFriend(@RequestBody FriendDO friend) {
         friendService.saveFriend(friend);
         return Response.ok("添加成功");

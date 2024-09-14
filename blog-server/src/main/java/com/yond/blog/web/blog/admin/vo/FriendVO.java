@@ -1,39 +1,31 @@
-package com.yond.blog.entity;
+package com.yond.blog.web.blog.admin.vo;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Description: 友链
  * @Author: Yond
  */
-public class FriendDO implements Serializable {
+public class FriendVO implements Serializable {
     
     @Serial
-    private static final long serialVersionUID = -4190032465499825315L;
+    private static final long serialVersionUID = 6311125875955281552L;
     
     private Long id;
-    private String nickname;//昵称
-    private String description;//描述
-    private String website;//站点
-    private String avatar;//头像
-    private Boolean published;//公开或隐藏
-    private Integer views;//浏览次数
-    private Date createTime;//创建时间
-    
-    public static FriendDO custom() {
-        return new FriendDO();
-    }
-    
-    public FriendDO() {
-    }
+    private String nickname;
+    private String description;
+    private String website;
+    private String avatar;
+    private Boolean published;
+    private Integer views;
+    private Date createTime;
     
     public Long getId() {
         return id;
     }
     
-    public FriendDO setId(Long id) {
+    public FriendVO setId(Long id) {
         this.id = id;
         return this;
     }
@@ -42,7 +34,7 @@ public class FriendDO implements Serializable {
         return nickname;
     }
     
-    public FriendDO setNickname(String nickname) {
+    public FriendVO setNickname(String nickname) {
         this.nickname = nickname;
         return this;
     }
@@ -51,7 +43,7 @@ public class FriendDO implements Serializable {
         return description;
     }
     
-    public FriendDO setDescription(String description) {
+    public FriendVO setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -60,7 +52,7 @@ public class FriendDO implements Serializable {
         return website;
     }
     
-    public FriendDO setWebsite(String website) {
+    public FriendVO setWebsite(String website) {
         this.website = website;
         return this;
     }
@@ -69,7 +61,7 @@ public class FriendDO implements Serializable {
         return avatar;
     }
     
-    public FriendDO setAvatar(String avatar) {
+    public FriendVO setAvatar(String avatar) {
         this.avatar = avatar;
         return this;
     }
@@ -78,7 +70,7 @@ public class FriendDO implements Serializable {
         return published;
     }
     
-    public FriendDO setPublished(Boolean published) {
+    public FriendVO setPublished(Boolean published) {
         this.published = published;
         return this;
     }
@@ -87,7 +79,7 @@ public class FriendDO implements Serializable {
         return views;
     }
     
-    public FriendDO setViews(Integer views) {
+    public FriendVO setViews(Integer views) {
         this.views = views;
         return this;
     }
@@ -96,15 +88,14 @@ public class FriendDO implements Serializable {
         return createTime;
     }
     
-    public FriendDO setCreateTime(Date createTime) {
+    public FriendVO setCreateTime(Date createTime) {
         this.createTime = createTime;
         return this;
     }
     
     @Override
     public String toString() {
-        return "FriendDO{" +
-                "id=" + id +
+        String sb = "FriendVO{" + "id=" + id +
                 ", nickname='" + nickname + '\'' +
                 ", description='" + description + '\'' +
                 ", website='" + website + '\'' +
@@ -113,5 +104,6 @@ public class FriendDO implements Serializable {
                 ", views=" + views +
                 ", createTime=" + createTime +
                 '}';
+        return sb;
     }
 }

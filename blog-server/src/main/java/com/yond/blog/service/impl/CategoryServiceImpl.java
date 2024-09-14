@@ -16,24 +16,23 @@ import java.util.List;
 
 /**
  * @Description: 博客分类业务层实现
- * @Author: Naccl
- * @Date: 2020-07-29
+ * @Author: Yond
  */
 @Service
 public class CategoryServiceImpl implements CategoryService {
-
+    
     private final CategoryMapper categoryMapper;
-
+    
     public CategoryServiceImpl(CategoryMapper categoryMapper) {
         this.categoryMapper = categoryMapper;
     }
-
+    
     @Override
     public Pair<Integer, List<CategoryDO>> page(Integer pageNo, Integer pageSize) {
         List<CategoryDO> all = this.listAll();
         return Pair.of(all.size(), PageUtil.pageList(all, pageNo, pageSize));
     }
-
+    
     @Override
     public List<CategoryDO> listAll() {
         List<CategoryDO> data = CategoryCache.get();
@@ -44,33 +43,33 @@ public class CategoryServiceImpl implements CategoryService {
         CategoryCache.set(data);
         return data;
     }
-
-
+    
+    
     @Override
     public CategoryDO getById(Long id) {
         return this.listAll().stream()
                 .filter(x -> id.equals(x.getId())).findFirst().orElse(null);
     }
-
+    
     @Override
     public List<CategoryDO> listByIds(List<Long> ids) {
         return this.listAll().stream()
                 .filter(x -> new HashSet<>(ids).contains(x.getId())).toList();
     }
-
+    
     @Override
     public CategoryDO getByName(String name) {
         return this.listAll().stream()
                 .filter(x -> name.equals(x.getName())).findFirst().orElse(null);
     }
-
+    
     @Override
     public Long insertSelective(CategoryDO category) {
         categoryMapper.insertSelective(category);
         CategoryCache.del();
         return category.getId();
     }
-
+    
     @Override
     public void updateSelective(CategoryDO category) {
         if (categoryMapper.updateSelective(category) != 1) {
@@ -81,7 +80,7 @@ public class CategoryServiceImpl implements CategoryService {
         // todo 只缓存数据库层
         BlogCache.delInfo();
     }
-
+    
     @Override
     public void deleteById(Long id) {
         if (categoryMapper.deleteById(id) != 1) {
@@ -89,7 +88,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
         CategoryCache.del();
     }
-
+    
     @Override
     public Long saveIfAbsent(String name) {
         Assert.hasText(name, "分类名称为空");

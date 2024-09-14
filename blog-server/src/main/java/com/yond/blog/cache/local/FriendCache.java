@@ -1,7 +1,9 @@
 package com.yond.blog.cache.local;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import com.yond.blog.web.blog.view.vo.FriendInfo;
+import com.yond.blog.entity.FriendDO;
+
+import java.util.List;
 
 /**
  * @author yond
@@ -9,22 +11,22 @@ import com.yond.blog.web.blog.view.vo.FriendInfo;
  * @description fried cache
  */
 public class FriendCache {
-
-    private final static String KEY = "friendInfo";
-
-    private final static Cache<String, FriendInfo> cache = LocalCache.buildCache(1);
-
-
-    public static FriendInfo get() {
+    
+    private final static String KEY = "friendAll";
+    
+    private final static Cache<String, List<FriendDO>> cache = LocalCache.buildCache(1);
+    
+    
+    public static List<FriendDO> getAll() {
         return cache.getIfPresent(KEY);
     }
-
-    public static void set(FriendInfo info) {
-        cache.put(KEY, info);
+    
+    public static void setAll(List<FriendDO> data) {
+        cache.put(KEY, data);
     }
-
-    public static void del() {
+    
+    public static void delAll() {
         cache.invalidate(KEY);
     }
-
+    
 }

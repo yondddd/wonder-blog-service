@@ -1,6 +1,5 @@
 package com.yond.blog.web.blog.admin.vo;
 
-import com.yond.blog.web.blog.view.vo.BlogIdAndTitle;
 import com.yond.common.enums.CommentPageEnum;
 
 import java.io.Serial;
@@ -40,7 +39,8 @@ public class CommentVO implements Serializable {
     /**
      * 所属博客
      */
-    private BlogIdAndTitle blog;
+    private Long blogId;
+    private String blogTitle;
     private final List<CommentVO> reply = new ArrayList<>();
     
     public Boolean getPublished() {
@@ -169,12 +169,21 @@ public class CommentVO implements Serializable {
         return this;
     }
     
-    public BlogIdAndTitle getBlog() {
-        return blog;
+    public Long getBlogId() {
+        return blogId;
     }
     
-    public CommentVO setBlog(BlogIdAndTitle blog) {
-        this.blog = blog;
+    public CommentVO setBlogId(Long blogId) {
+        this.blogId = blogId;
+        return this;
+    }
+    
+    public String getBlogTitle() {
+        return blogTitle;
+    }
+    
+    public CommentVO setBlogTitle(String blogTitle) {
+        this.blogTitle = blogTitle;
         return this;
     }
     
@@ -199,7 +208,8 @@ public class CommentVO implements Serializable {
                 ", adminComment=" + adminComment +
                 ", notice=" + notice +
                 ", qq='" + qq + '\'' +
-                ", blog=" + blog +
+                ", blogId=" + blogId +
+                ", blogTitle='" + blogTitle + '\'' +
                 ", reply=" + reply +
                 '}';
     }

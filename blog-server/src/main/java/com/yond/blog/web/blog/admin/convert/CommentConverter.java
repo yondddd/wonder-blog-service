@@ -2,7 +2,6 @@ package com.yond.blog.web.blog.admin.convert;
 
 import com.yond.blog.entity.BlogDO;
 import com.yond.blog.web.blog.admin.dto.CommentDTO;
-import com.yond.blog.web.blog.admin.vo.BlogVO;
 import com.yond.blog.web.blog.admin.vo.CommentVO;
 import com.yond.common.enums.CommentPageEnum;
 
@@ -11,26 +10,47 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author yond
- * @date 9/7/2024
- * @description
+ * @Author Yond
  */
 public class CommentConverter {
-
-
+    
+    
     public static List<CommentVO> dto2vo(List<CommentDTO> from, Map<Long, BlogDO> blogMap) {
-        List<BlogVO> result = new ArrayList<>();
-        for (CommentDTO commentDTO : from) {
-            BlogDO blogDO = blogMap.get(commentDTO.getBlogId());
-            BlogVO blogVO = new BlogVO();
-            blogVO.setId(commentDTO.getBlogId());
-            if (CommentPageEnum.BLOG.getId().equals(item.getPage())) {
-                BlogDO exist = blogMap.get(item.getBlogId());
-                if (exist == null) {
-                    continue;
+        List<CommentVO> result = new ArrayList<>();
+        for (CommentDTO dto : from) {
+            CommentVO vo = new CommentVO();
+            // Copy properties from DTO to VO
+            vo.setId(dto.getId());
+            vo.setParentId(dto.getParentId());
+            vo.setPage(dto.getPage());
+            vo.setNickname(dto.getNickname());
+            vo.setEmail(dto.getEmail());
+            vo.setContent(dto.getContent());
+            vo.setAvatar(dto.getAvatar());
+            vo.setCreateTime(dto.getCreateTime());
+            vo.setWebsite(dto.getWebsite());
+            vo.setIp(dto.getIp());
+            vo.setPublished(dto.getPublished());
+            vo.setAdminComment(dto.getAdminComment());
+            vo.setNotice(dto.getNotice());
+            vo.setQq(dto.getQq());
+            
+            if (CommentPageEnum.BLOG.getId().equals(dto.getPage())) {
+                BlogDO blog = blogMap.get(dto.getBlogId());
+                if (blog != null) {
+                    vo.setBlogId(blog.getId());
+                    vo.setBlogTitle(blog.getTitle());
                 }
-                item.set
             }
+            
+            // Handle nested replies
+            if (dto.getReply() != null && !dto.getReply().isEmpty()) {
+                vo.getReply().addAll(dto2vo(dto.getReply(), blogMap));
+            }
+            
+            result.add(vo);
         }
+        return result;
     }
+    
 }
