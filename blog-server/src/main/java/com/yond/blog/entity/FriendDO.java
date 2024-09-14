@@ -21,6 +21,7 @@ public class FriendDO implements Serializable {
     private Boolean published;//公开或隐藏
     private Integer views;//浏览次数
     private Date createTime;//创建时间
+    private Integer status;
     
     public static FriendDO custom() {
         return new FriendDO();
@@ -101,6 +102,15 @@ public class FriendDO implements Serializable {
         return this;
     }
     
+    public Integer getStatus() {
+        return status;
+    }
+    
+    public FriendDO setStatus(Integer status) {
+        this.status = status;
+        return this;
+    }
+    
     @Override
     public String toString() {
         return "FriendDO{" +
@@ -112,6 +122,7 @@ public class FriendDO implements Serializable {
                 ", published=" + published +
                 ", views=" + views +
                 ", createTime=" + createTime +
+                ", status=" + status +
                 '}';
     }
 }

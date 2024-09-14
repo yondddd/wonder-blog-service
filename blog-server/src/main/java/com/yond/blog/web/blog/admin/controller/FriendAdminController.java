@@ -3,8 +3,10 @@ package com.yond.blog.web.blog.admin.controller;
 import com.yond.blog.entity.FriendDO;
 import com.yond.blog.service.FriendService;
 import com.yond.blog.web.blog.admin.convert.FriendConverter;
+import com.yond.blog.web.blog.admin.req.FriendAddReq;
 import com.yond.blog.web.blog.admin.req.FriendPageReq;
 import com.yond.blog.web.blog.admin.req.FriendPublishedReq;
+import com.yond.blog.web.blog.admin.req.FriendUpdateReq;
 import com.yond.blog.web.blog.admin.vo.FriendVO;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.resp.PageResponse;
@@ -35,9 +37,10 @@ public class FriendAdminController {
     }
     
     @OperationLogger("更新友链公开状态")
-    @PutMapping("/published")
+    @PostMapping("/published")
     public Response<Boolean> published(@RequestBody FriendPublishedReq req) {
-        FriendDO update = FriendDO.custom().setId(req.getId())
+        FriendDO update = FriendDO.custom()
+                .setId(req.getId())
                 .setPublished(req.getPublished());
         friendService.updateSelective(update);
         return Response.success();
@@ -45,35 +48,42 @@ public class FriendAdminController {
     
     @OperationLogger("添加友链")
     @PostMapping("/add")
-    public Response saveFriend(@RequestBody FriendDO friend) {
-        friendService.saveFriend(friend);
-        return Response.ok("添加成功");
+    public Response<Boolean> add(@RequestBody FriendAddReq req) {
+        FriendDO insert = FriendDO.custom()
+                .setNickname(req.getNickname())
+                .setDescription(req.getDescription())
+                .setWebsite(req.getWebsite())
+                .setAvatar(req.getAvatar())
+                .setPublished(req.getPublished());
+        friendService.insertSelective(insert);
+        return Response.success();
     }
     
-    /**
-     * 更新友链
-     *
-     * @param friend 友链DTO
-     * @return
-     */
+    
     @OperationLogger("更新友链")
-    @PutMapping("/friend")
-    public Response updateFriend(@RequestBody com.yond.blog.web.blog.view.dto.Friend friend) {
-        friendService.updateFriend(friend);
-        return Response.ok("修改成功");
+    @PostMapping("/update")
+    public Response<Boolean> update(@RequestBody FriendUpdateReq req) {
+        FriendDO update = FriendDO.custom()
+                .setId(req.getId())
+                .setNickname(req.getNickname())
+                .setDescription(req.getDescription())
+                .setWebsite(req.getWebsite())
+                .setAvatar(req.getAvatar())
+                .setPublished(req.getPublished());
+        friendService.updateSelective(update);
+        return Response.success();
+        
     }
     
-    /**
-     * 按id删除友链
-     *
-     * @param id
-     * @return
-     */
+    
     @OperationLogger("删除友链")
-    @DeleteMapping("/friend")
-    public Response deleteFriend(@RequestParam Long id) {
-        friendService.deleteFriend(id);
-        return Response.ok("删除成功");
+    @PostMapping("/del")
+    public Response<Boolean> del(@RequestParam Long id) {
+        FriendDO update = FriendDO.custom()
+                .setId(req.getId())
+                        .setStatus()
+        friendService.updateSelective(update);
+        return Response.success();
     }
     
     /**
