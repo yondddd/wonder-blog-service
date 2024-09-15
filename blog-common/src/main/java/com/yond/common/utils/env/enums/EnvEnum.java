@@ -1,4 +1,4 @@
-package com.yond.blog.support.env.enums;
+package com.yond.common.utils.env.enums;
 
 public enum EnvEnum {
 

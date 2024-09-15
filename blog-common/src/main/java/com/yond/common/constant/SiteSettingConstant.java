@@ -3,8 +3,7 @@ package com.yond.common.constant;
 /**
  * 站点设置常量
  *
- * @author: Naccl
- * @date: 2022-01-28
+ * @Author: Yond
  */
 public class SiteSettingConstant {
 
@@ -142,5 +141,5 @@ public class SiteSettingConstant {
      * 评论开关
      */
     public static final String COMMENT_ENABLED = "commentEnabled";
-    
+
 }

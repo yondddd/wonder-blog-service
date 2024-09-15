@@ -22,8 +22,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * @Description: AOP记录操作日志
- * @Author: Naccl
- * @Date: 2020-11-29
+ * @Author: Yond
  */
 @Component
 @Aspect

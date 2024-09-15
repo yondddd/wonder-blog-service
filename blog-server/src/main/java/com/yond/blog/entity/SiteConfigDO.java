@@ -7,12 +7,12 @@ import java.io.Serializable;
 
 /**
  * @Description: 站点设置
- * @Author: Naccl
+ * @Author: Yond
  * @Date: 2020-08-09
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SiteConfigDO implements Serializable {
-    
+
     @Serial
     private static final long serialVersionUID = 975624987598974165L;
     private Long id;

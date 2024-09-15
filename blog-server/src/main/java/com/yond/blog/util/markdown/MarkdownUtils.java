@@ -23,11 +23,10 @@ import java.util.Set;
 
 /**
  * @Description: Markdown转换
- * @Author: Naccl
- * @Date: 2020-04-29
+ * @Author: Yond
  */
 public class MarkdownUtils {
-    
+
     //为h标签生成id 供tocbot目录生成
     private static final Set<Extension> headingAnchorExtensions = Collections.singleton(HeadingAnchorExtension.create());
     //转换table的HTML
@@ -40,7 +39,7 @@ public class MarkdownUtils {
     private static final Set<Extension> heimuExtension = Collections.singleton(HeimuExtension.create());
     //遮盖层
     private static final Set<Extension> coverExtension = Collections.singleton(CoverExtension.create());
-    
+
     private static final Parser parser = Parser.builder()
             .extensions(tableExtension)
             .extensions(taskListExtension)
@@ -48,7 +47,7 @@ public class MarkdownUtils {
             .extensions(heimuExtension)
             .extensions(coverExtension)
             .build();
-    
+
     private static final HtmlRenderer renderer = HtmlRenderer.builder()
             .extensions(headingAnchorExtensions)
             .extensions(tableExtension)
@@ -63,7 +62,7 @@ public class MarkdownUtils {
                 }
             })
             .build();
-    
+
     /**
      * 自定义标签的属性
      */
@@ -87,7 +86,7 @@ public class MarkdownUtils {
             }
         }
     }
-    
+
     /**
      * markdown格式转换成HTML格式
      */
@@ -97,7 +96,7 @@ public class MarkdownUtils {
         HtmlRenderer renderer = HtmlRenderer.builder().build();
         return renderer.render(document);
     }
-    
+
     /**
      * markdown转html
      */
@@ -105,7 +104,7 @@ public class MarkdownUtils {
         Node document = parser.parse(markdown);
         return renderer.render(document);
     }
-    
+
     public static void main(String[] args) {
         System.out.println(markdownToHtmlExtensions(""));
     }

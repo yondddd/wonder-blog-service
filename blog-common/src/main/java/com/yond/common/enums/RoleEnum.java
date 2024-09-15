@@ -1,9 +1,7 @@
 package com.yond.common.enums;
 
 /**
- * @author yond
- * @date 7/5/2024
- * @description role
+ * @Author Yond
  */
 public enum RoleEnum {
 

@@ -13,8 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * @Description: 图片下载保存工具类
- * @Author: Naccl
- * @Date: 2021-11-11
+ * @Author: Yond
  */
 @Component
 @DependsOn("springContextUtils")

@@ -6,7 +6,7 @@ import java.util.Date;
 
 /**
  * @Description: 异常日志
- * @Author: Naccl
+ * @Author: Yond
  * @Date: 2020-12-03
  */
 public class LogExceptionDO implements Serializable {

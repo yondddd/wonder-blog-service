@@ -3,8 +3,7 @@ package com.yond.common.constant;
 /**
  * 页面相关常量
  *
- * @author: Naccl
- * @date: 2022-01-23
+ * @Author: Yond
  */
 public class PageConstant {
     /**

@@ -23,8 +23,7 @@ import java.util.List;
 
 /**
  * @Description: 博客动态后台管理
- * @Author: Naccl
- * @Date: 2020-08-24
+ * @Author: Yond
  */
 @RestController
 @RequestMapping("/admin/moment")

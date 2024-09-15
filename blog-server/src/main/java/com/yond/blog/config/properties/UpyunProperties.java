@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * 又拍云配置(目前用于评论中QQ头像的图床)
  *
- * @author: Naccl
+ * @Author: Yond
  * @date: 2022-05-26
  */
 @Configuration

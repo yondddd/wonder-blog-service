@@ -5,8 +5,7 @@ import java.io.Serializable;
 
 /**
  * @Description: copyright
- * @Author: Naccl
- * @Date: 2020-08-09
+ * @Author: Yond
  */
 public class Copyright implements Serializable {
     @Serial

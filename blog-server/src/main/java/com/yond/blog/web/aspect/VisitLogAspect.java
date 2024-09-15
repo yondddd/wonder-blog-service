@@ -1,6 +1,6 @@
 package com.yond.blog.web.aspect;
 
-import com.yond.blog.cache.remote.VisitCache;
+import com.yond.blog.cache.redis.VisitCache;
 import com.yond.blog.entity.LogVisitDO;
 import com.yond.blog.entity.VisitUserDO;
 import com.yond.blog.service.LogVisitService;
@@ -25,8 +25,7 @@ import java.util.UUID;
 
 /**
  * @Description: AOP记录访问日志
- * @Author: Naccl
- * @Date: 2020-12-04
+ * @Author: Yond
  */
 @Component
 @Aspect

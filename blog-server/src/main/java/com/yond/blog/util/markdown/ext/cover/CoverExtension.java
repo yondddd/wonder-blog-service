@@ -1,5 +1,8 @@
 package com.yond.blog.util.markdown.ext.cover;
 
+import com.yond.blog.util.markdown.ext.cover.internal.CoverDelimiterProcessor;
+import com.yond.blog.util.markdown.ext.cover.internal.CoverHtmlNodeRenderer;
+import com.yond.blog.util.markdown.ext.cover.internal.CoverTextContentNodeRenderer;
 import org.commonmark.Extension;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.NodeRenderer;
@@ -9,14 +12,10 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import org.commonmark.renderer.text.TextContentNodeRendererContext;
 import org.commonmark.renderer.text.TextContentNodeRendererFactory;
 import org.commonmark.renderer.text.TextContentRenderer;
-import com.yond.blog.util.markdown.ext.cover.internal.CoverDelimiterProcessor;
-import com.yond.blog.util.markdown.ext.cover.internal.CoverHtmlNodeRenderer;
-import com.yond.blog.util.markdown.ext.cover.internal.CoverTextContentNodeRenderer;
 
 /**
  * @Description: 自定义遮盖层拓展
- * @Author: Naccl
- * @Date: 2020-05-13
+ * @Author: Yond
  */
 public class CoverExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension, TextContentRenderer.TextContentRendererExtension {
     private CoverExtension() {

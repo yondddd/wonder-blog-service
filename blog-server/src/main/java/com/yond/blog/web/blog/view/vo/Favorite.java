@@ -5,8 +5,7 @@ import java.io.Serializable;
 
 /**
  * @Description: 自定义爱好
- * @Author: Naccl
- * @Date: 2020-08-09
+ * @Author: Yond
  */
 public class Favorite implements Serializable {
     @Serial

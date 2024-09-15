@@ -1,9 +1,7 @@
 package com.yond.common.constant;
 
 /**
- * @author yond
- * @date 6/22/2024
- * @description 关于我
+ * @Author Yond
  */
 public class AboutConstant {
 

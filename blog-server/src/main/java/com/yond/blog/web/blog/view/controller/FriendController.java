@@ -18,8 +18,7 @@ import java.util.Map;
 
 /**
  * @Description: 友链
- * @Author: Naccl
- * @Date: 2020-09-08
+ * @Author: Yond
  */
 @RestController
 public class FriendController {

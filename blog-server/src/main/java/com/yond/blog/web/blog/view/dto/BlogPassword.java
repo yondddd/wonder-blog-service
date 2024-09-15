@@ -2,8 +2,7 @@ package com.yond.blog.web.blog.view.dto;
 
 /**
  * @Description: 受保护文章密码DTO
- * @Author: Naccl
- * @Date: 2020-09-05
+ * @Author: Yond
  */
 public class BlogPassword {
     private Long blogId;

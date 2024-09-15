@@ -2,8 +2,7 @@ package com.yond.blog.web.blog.view.dto;
 
 /**
  * @Description: 博客浏览量
- * @Author: Naccl
- * @Date: 2020-10-06
+ * @Author: Yond
  */
 public class BlogView {
     private Long id;

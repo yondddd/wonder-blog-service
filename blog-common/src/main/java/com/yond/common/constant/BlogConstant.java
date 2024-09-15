@@ -1,9 +1,7 @@
 package com.yond.common.constant;
 
 /**
- * @author yond
- * @date 6/21/2024
- * @description blog canstant
+ * @Author Yond
  */
 public class BlogConstant {
 

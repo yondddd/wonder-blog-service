@@ -7,8 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * @Description: 访问控制
- * @Author: Naccl
- * @Date: 2021-04-04
+ * @Author: Yond
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

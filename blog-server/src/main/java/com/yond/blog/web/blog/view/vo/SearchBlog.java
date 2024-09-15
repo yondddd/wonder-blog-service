@@ -5,8 +5,7 @@ import java.io.Serializable;
 
 /**
  * @Description: 关键字搜索博客
- * @Author: Naccl
- * @Date: 2020-09-06
+ * @Author: Yond
  */
 public class SearchBlog implements Serializable {
     @Serial

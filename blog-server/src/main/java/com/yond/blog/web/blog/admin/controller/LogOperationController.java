@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * @Description: 操作日志后台管理
- * @Author: Naccl
- * @Date: 2020-12-01
+ * @Author: Yond
  */
 @RestController
 @RequestMapping("/admin")

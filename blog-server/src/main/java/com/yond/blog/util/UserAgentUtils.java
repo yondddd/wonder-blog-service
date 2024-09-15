@@ -6,13 +6,12 @@ import nl.basjes.parse.useragent.UserAgentAnalyzer;
 
 /**
  * @Description: UserAgent解析工具类
- * @Author: Naccl
- * @Date: 2020-11-30
+ * @Author: Yond
  */
 public class UserAgentUtils {
-    
+
     private static UserAgentAnalyzer userAgentAnalyzer;
-    
+
     /**
      * 从User-Agent解析客户端操作系统和浏览器版本
      */
@@ -37,5 +36,5 @@ public class UserAgentUtils {
                 .withField(UserAgent.AGENT_NAME_VERSION)
                 .build();
     }
-    
+
 }

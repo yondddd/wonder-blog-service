@@ -5,8 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * @author raxcl
- * @date 2024-01-19 9:54:53
+ * @Author Yond
  */
 public class QqVO implements Serializable {
     @Serial

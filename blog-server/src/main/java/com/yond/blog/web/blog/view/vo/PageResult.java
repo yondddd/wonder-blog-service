@@ -6,8 +6,7 @@ import java.util.List;
 
 /**
  * @Description: 分页结果
- * @Author: Naccl
- * @Date: 2020-08-08
+ * @Author: Yond
  */
 public class PageResult<T> implements Serializable {
 

@@ -6,8 +6,9 @@
     </contextListener>
 
     <property name="LOG_HOME" value="/logs"/>
-    <property name="DEFAULT_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] [%logger{40}] %msg%n{}"/>
-    <property name="OPERATION_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] %msg%n{}"/>
+    <property name="DEFAULT_PATTERN"
+              value="[%X{trace] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] [%logger{40}] %msg%n{}"/>
+    <property name="OPERATION_PATTERN" value="[%X{trace] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] %msg%n{}"/>
 
     <!-- To enable JMX Management -->
     <jmxConfigurator/>

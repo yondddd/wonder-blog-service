@@ -20,8 +20,7 @@ import java.util.List;
 
 /**
  * @Description: 动态
- * @Author: Naccl
- * @Date: 2020-08-25
+ * @Author: Yond
  */
 @RestController
 public class MomentController {
@@ -31,6 +30,7 @@ public class MomentController {
     UserServiceImpl userService;
 
     private static final int pageSize = 5;
+
     /**
      * 分页查询动态List
      *

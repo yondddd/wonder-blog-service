@@ -15,16 +15,15 @@ import java.util.Date;
 
 /**
  * @Description: 定时任务动态管理
- * @Author: Naccl
- * @Date: 2020-11-01
+ * @Author: Yond
  */
 @RestController
 @RequestMapping("/admin")
 public class ScheduleJobController {
     @Autowired
     private ScheduleJobService scheduleJobService;
-    
-    
+
+
     @GetMapping("/jobs")
     public Response jobs(@RequestParam(defaultValue = "1") Integer pageNum,
                          @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -32,7 +31,7 @@ public class ScheduleJobController {
         PageInfo<ScheduleJobDO> pageInfo = new PageInfo<>(scheduleJobService.getJobList());
         return Response.ok("请求成功", pageInfo);
     }
-    
+
     /**
      * 新建定时任务
      *
@@ -48,7 +47,7 @@ public class ScheduleJobController {
         scheduleJobService.saveJob(scheduleJob);
         return Response.ok("添加成功");
     }
-    
+
     /**
      * 修改定时任务
      *
@@ -63,7 +62,7 @@ public class ScheduleJobController {
         scheduleJobService.updateJob(scheduleJob);
         return Response.ok("修改成功");
     }
-    
+
     /**
      * 删除定时任务
      *
@@ -76,7 +75,7 @@ public class ScheduleJobController {
         scheduleJobService.deleteJobById(jobId);
         return Response.ok("删除成功");
     }
-    
+
     /**
      * 立即执行任务
      *
@@ -89,7 +88,7 @@ public class ScheduleJobController {
         scheduleJobService.runJobById(jobId);
         return Response.ok("提交执行");
     }
-    
+
     /**
      * 更新任务状态：暂停或恢复
      *
@@ -103,7 +102,7 @@ public class ScheduleJobController {
         scheduleJobService.updateJobStatusById(jobId, status);
         return Response.ok("更新成功");
     }
-    
+
     /**
      * 分页查询定时任务日志列表
      *
@@ -127,7 +126,7 @@ public class ScheduleJobController {
         PageInfo<LogScheduleJobDO> pageInfo = new PageInfo<>(scheduleJobService.getJobLogListByDate(startDate, endDate));
         return Response.ok("请求成功", pageInfo);
     }
-    
+
     /**
      * 按id删除任务日志
      *

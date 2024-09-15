@@ -6,9 +6,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * @author yond
- * @date 2023/10/21
- * @description token
+ * @Author Yond
  */
 public class TokenVO implements Serializable {
 

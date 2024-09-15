@@ -1,6 +1,6 @@
-package com.yond.blog.support.schedule.task;
+package com.yond.blog.schedule.task;
 
-import com.yond.blog.cache.remote.BlogViewCache;
+import com.yond.blog.cache.redis.BlogViewCache;
 import com.yond.blog.service.BlogService;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,7 @@ import java.util.Set;
 
 /**
  * @Description: Redis相关定时任务
- * @Author: Naccl
+ * @Author: Yond
  * @Date: 2020-11-02
  */
 @Component

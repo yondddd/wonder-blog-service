@@ -1,10 +1,10 @@
-package com.yond.blog.support.schedule.task;
+package com.yond.blog.schedule.task;
 
-import com.yond.blog.cache.remote.VisitCache;
+import com.yond.blog.cache.redis.VisitCache;
 import com.yond.blog.entity.VisitCityDO;
 import com.yond.blog.entity.VisitRecordDO;
-import com.yond.blog.service.VisitCityService;
 import com.yond.blog.service.LogVisitService;
+import com.yond.blog.service.VisitCityService;
 import com.yond.blog.service.VisitRecordService;
 import com.yond.blog.service.VisitUserService;
 import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * @Description: 访客统计相关定时任务
- * @Author: Naccl
+ * @Author: Yond
  * @Date: 2021-02-05
  */
 @Component

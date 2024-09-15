@@ -6,9 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
- * @author yond
- * @date 7/13/2024
- * @description
+ * @Author Yond
  */
 public class AesUtil {
 
@@ -16,7 +14,6 @@ public class AesUtil {
     // todo 存在数据库
     private static final String SECRET_KEY = "0123456789jklahd";
 
-    // AES 加密
     public static String encrypt(String plaintext) {
         try {
             SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY.getBytes(StandardCharsets.UTF_8), AES_ALGORITHM);
@@ -30,7 +27,6 @@ public class AesUtil {
 
     }
 
-    // AES 解密
     public static String decrypt(String encryptedText) {
         try {
             SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY.getBytes(StandardCharsets.UTF_8), AES_ALGORITHM);
@@ -46,5 +42,5 @@ public class AesUtil {
     public static void main(String[] args) {
         System.out.println(AesUtil.encrypt("0412dddd"));
     }
-    
+
 }

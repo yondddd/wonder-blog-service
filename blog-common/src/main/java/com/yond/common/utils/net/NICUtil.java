@@ -1,4 +1,4 @@
-package com.yond.blog.support.env.util;
+package com.yond.common.utils.net;
 
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -23,6 +23,8 @@ public class NICUtil {
         INNER_NET_IP_PREX_LIST.add("172.20.");
         INNER_NET_IP_PREX_LIST.add("192.168.");
     }
+
+    public static final String localIpV4 = NICUtil.getLocalIpV4(null);
 
     public static String getMac() {
         final NetworkInterface anInterface = getNetworkInterface(null);

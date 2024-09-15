@@ -6,9 +6,7 @@ import com.yond.blog.entity.SiteConfigDO;
 import java.util.List;
 
 /**
- * @author yond
- * @date 6/22/2024
- * @description site setting cache
+ * @Author Yond
  */
 public class SiteSettingCache {
 

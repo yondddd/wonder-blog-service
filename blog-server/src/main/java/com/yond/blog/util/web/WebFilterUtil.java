@@ -10,10 +10,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-/**
- * @date 2024-01-19 14:07:21
- * @description
- */
 public class WebFilterUtil {
 
     private final static Logger logger = LoggerFactory.getLogger(WebFilterUtil.class);

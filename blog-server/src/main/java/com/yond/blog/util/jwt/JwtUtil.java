@@ -15,9 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author yond
- * @date 2023/10/21
- * @description jwt
+ * @Author Yond
  */
 public class JwtUtil {
 
@@ -79,10 +77,6 @@ public class JwtUtil {
             LOGGER.error("解析Jwt失败，要解析的token：{}", JsonUtils.toJson(claims), e);
         }
         return claims;
-    }
-
-    public static Map<String, Object> getInfoMapFromRefreshToken(String compactJws, String secret) {
-        return validateJwt(compactJws, secret);
     }
 
 }

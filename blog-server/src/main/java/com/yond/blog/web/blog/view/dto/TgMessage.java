@@ -5,8 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Telegram新消息
  *
- * @author: Naccl
- * @date: 2022-01-24
+ * @Author: Yond
  */
 public class TgMessage {
     @JsonProperty("update_id")

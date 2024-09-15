@@ -1,4 +1,4 @@
-package com.yond.blog.support.schedule;
+package com.yond.blog.schedule;
 
 import com.yond.blog.util.common.SpringContextUtils;
 import org.springframework.util.ReflectionUtils;
@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 /**
  * @Description: 执行定时任务
- * @Author: Naccl
+ * @Author: Yond
  * @Date: 2020-11-01
  */
 public class ScheduleRunnable implements Runnable {

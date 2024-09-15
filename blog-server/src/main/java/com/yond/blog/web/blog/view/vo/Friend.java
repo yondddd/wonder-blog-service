@@ -5,8 +5,7 @@ import java.io.Serializable;
 
 /**
  * @Description: 友链VO
- * @Author: Naccl
- * @Date: 2020-09-08
+ * @Author: Yond
  */
 public class Friend implements Serializable {
     @Serial

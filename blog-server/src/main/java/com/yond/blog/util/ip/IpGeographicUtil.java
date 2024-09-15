@@ -1,8 +1,8 @@
 package com.yond.blog.util.ip;
 
 import com.yond.blog.cache.local.IpCache;
-import com.yond.blog.support.env.env.EnvConstant;
-import com.yond.blog.support.env.env.Environment;
+import com.yond.common.utils.env.env.EnvConstant;
+import com.yond.common.utils.env.env.Environment;
 import com.yond.common.utils.json.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.config.RequestConfig;
@@ -13,7 +13,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,10 +22,9 @@ import java.util.stream.Collectors;
 
 /**
  * @Description: ip地理位置工具类
- * @Date: 2023/5/24
  */
-@Component
 public class IpGeographicUtil {
+
     private static final Logger logger = LoggerFactory.getLogger(IpGeographicUtil.class);
 
     private static final int MAX_REQUESTS_PER_MINUTE = 44;

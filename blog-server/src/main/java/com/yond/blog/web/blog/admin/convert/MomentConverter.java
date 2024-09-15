@@ -4,7 +4,7 @@ import com.yond.blog.entity.MomentDO;
 import com.yond.blog.web.blog.admin.vo.MomentVO;
 
 /**
- * @author yond
+ * @Author Yond
  * @date 8/31/2024
  * @description
  */

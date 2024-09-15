@@ -1,7 +1,7 @@
 package com.yond.common.enums;
 
 /**
- * @author yond
+ * @Author Yond
  * @date 8/25/2024
  * @description
  */

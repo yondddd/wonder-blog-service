@@ -1,8 +1,7 @@
-package com.yond.blog.support.env.env;
+package com.yond.common.utils.env.env;
 
 
-import com.yond.blog.support.env.enums.EnvEnum;
-import com.yond.blog.support.env.util.PropertiesUtil;
+import com.yond.common.utils.env.enums.EnvEnum;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;

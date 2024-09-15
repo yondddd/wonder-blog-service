@@ -1,11 +1,11 @@
 package com.yond.blog.util.upload.channel;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 import com.yond.blog.config.properties.BlogProperties;
 import com.yond.blog.config.properties.UploadProperties;
 import com.yond.blog.util.upload.UploadUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,8 +14,7 @@ import java.util.UUID;
 /**
  * 本地存储方式
  *
- * @author: Naccl
- * @date: 2022-01-23
+ * @Author: Yond
  */
 @Lazy
 @Component

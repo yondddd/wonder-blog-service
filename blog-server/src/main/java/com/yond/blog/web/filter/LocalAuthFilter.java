@@ -22,9 +22,7 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
- * @author yond
- * @date 6/1/2024
- * @description
+ * @Author Yond
  */
 public class LocalAuthFilter implements LocalHttpFilter {
 

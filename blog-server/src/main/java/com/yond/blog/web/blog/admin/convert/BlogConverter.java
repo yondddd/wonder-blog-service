@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author yond
+ * @Author Yond
  * @date 8/20/2024
  * @description
  */
@@ -44,8 +44,8 @@ public class BlogConverter {
         }
         return to;
     }
-    
-    public static BlogDO save2do(BlogSaveReq from){
+
+    public static BlogDO save2do(BlogSaveReq from) {
         BlogDO to = BlogDO.custom()
                 .setId(from.getId())
                 .setTitle(from.getTitle())
@@ -66,5 +66,5 @@ public class BlogConverter {
         to.setReadTime(readTime);
         return to;
     }
-    
+
 }

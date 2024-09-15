@@ -16,18 +16,18 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * @author yond
+ * @Author Yond
  * @date 8/23/2024
  * @description
  */
 @Service
 public class BlogTagServiceImpl implements BlogTagService {
-    
+
     @Resource
     private BlogTagMapper blogTagMapper;
     @Resource
     private TagService tagService;
-    
+
     @Override
     public List<BlogTagDO> listAll() {
         List<BlogTagDO> cache = BlogTagCache.listAll();
@@ -37,26 +37,26 @@ public class BlogTagServiceImpl implements BlogTagService {
         }
         return cache;
     }
-    
+
     @Override
     public List<BlogTagDO> listByBlogId(Long blogId) {
         return this.listAll().stream()
                 .filter(x -> blogId.equals(x.getBlogId())).toList();
     }
-    
+
     @Override
     public List<TagDO> listTagsByBlogId(Long blogId) {
         List<BlogTagDO> blogTags = this.listByBlogId(blogId);
         return tagService.listByIds(blogTags.stream().map(BlogTagDO::getTagId).toList());
     }
-    
+
     @Override
     public Long insertSelective(BlogTagDO record) {
         blogTagMapper.insertSelective(record);
         BlogTagCache.removeAll();
         return record.getId();
     }
-    
+
     @Override
     public void saveBlogTag(Long blogId, List<Long> tagIds) {
         Set<Long> existTagIds = this.listByBlogId(blogId).stream()
@@ -79,11 +79,11 @@ public class BlogTagServiceImpl implements BlogTagService {
             this.deleteByIds(new ArrayList<>(existTagIds));
         }
     }
-    
+
     @Override
     public void deleteByIds(List<Long> ids) {
         blogTagMapper.deleteByIds(ids);
         BlogTagCache.removeAll();
     }
-    
+
 }

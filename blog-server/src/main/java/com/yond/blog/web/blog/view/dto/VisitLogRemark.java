@@ -3,8 +3,7 @@ package com.yond.blog.web.blog.view.dto;
 /**
  * 访问日志备注
  *
- * @author: Naccl
- * @date: 2022-01-08
+ * @Author: Yond
  */
 public class VisitLogRemark {
     /**

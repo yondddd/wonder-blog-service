@@ -5,8 +5,7 @@ import java.io.Serializable;
 
 /**
  * @Description: GitHub徽标
- * @Author: Naccl
- * @Date: 2020-08-09
+ * @Author: Yond
  */
 public class Badge implements Serializable {
     @Serial

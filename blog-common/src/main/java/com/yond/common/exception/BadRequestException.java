@@ -2,8 +2,7 @@ package com.yond.common.exception;
 
 /**
  * @Description: 非法请求异常
- * @Author: Naccl
- * @Date: 2020-07-23
+ * @Author: Yond
  */
 
 public class BadRequestException extends RuntimeException {

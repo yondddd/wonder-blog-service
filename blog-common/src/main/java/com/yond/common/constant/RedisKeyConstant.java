@@ -1,9 +1,8 @@
-package com.yond.blog.cache.constant;
+package com.yond.common.constant;
 
 /**
- * @Description: Redis key配置
- * @Author: Naccl
- * @Date: 2020-09-27
+ * @Description: Redis key前缀
+ * @Author: Yond
  */
 public class RedisKeyConstant {
 

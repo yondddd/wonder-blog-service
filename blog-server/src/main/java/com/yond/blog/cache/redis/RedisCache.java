@@ -1,4 +1,4 @@
-package com.yond.blog.cache.remote;
+package com.yond.blog.cache.redis;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -7,7 +7,7 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author yond
+ * @Author Yond
  * @date 6/20/2024
  * @description redis cache
  */

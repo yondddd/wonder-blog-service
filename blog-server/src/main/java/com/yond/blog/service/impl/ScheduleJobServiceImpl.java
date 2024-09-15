@@ -4,8 +4,8 @@ import com.yond.blog.entity.LogScheduleJobDO;
 import com.yond.blog.entity.ScheduleJobDO;
 import com.yond.blog.mapper.LogScheduleJobMapper;
 import com.yond.blog.mapper.ScheduleJobMapper;
+import com.yond.blog.schedule.BlogSchedulingConfigurer;
 import com.yond.blog.service.ScheduleJobService;
-import com.yond.blog.support.schedule.BlogSchedulingConfigurer;
 import com.yond.common.exception.PersistenceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * @Description: 定时任务业务层实现
- * @Author: Naccl
+ * @Author: Yond
  * @Date: 2020-11-01
  */
 @Service

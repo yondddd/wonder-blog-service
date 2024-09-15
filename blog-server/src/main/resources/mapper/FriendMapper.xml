@@ -14,7 +14,8 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, nickname, description, website, avatar, is_published, views, create_time
+        id
+        , nickname, description, website, avatar, is_published, views, create_time
     </sql>
 
     <resultMap id="friendVO" type="com.yond.blog.web.blog.view.vo.Friend">
@@ -26,34 +27,17 @@
 
     <!--查询友链VO List-->
     <select id="getFriendVOList" resultMap="friendVO">
-        select nickname, description, website, avatar from friend where is_published=true order by rand()
+        select nickname, description, website, avatar
+        from friend
+        where is_published = true
+        order by rand()
     </select>
-
-    <!--更新友链公开状态-->
-    <update id="updateFriendPublishedById">
-        update friend set is_published=#{published} where id=#{id}
-    </update>
-
-    <!--添加友链-->
-    <insert id="saveFriend" parameterType="com.yond.blog.entity.FriendDO" useGeneratedKeys="true" keyProperty="id">
-        insert into friend (nickname, description, website, avatar, is_published, views, create_time)
-        values (#{nickname}, #{description}, #{website}, #{avatar}, #{published}, #{views}, #{createTime})
-    </insert>
-
-    <!--更新友链-->
-    <update id="updateFriend">
-        update friend set nickname=#{nickname}, description=#{description}, website=#{website}, avatar=#{avatar}, is_published=#{published}
-        where id=#{id}
-    </update>
-
-    <!--按id删除友链-->
-    <delete id="deleteFriend">
-        delete from friend where id=#{id}
-    </delete>
 
     <!--增加友链浏览次数-->
     <update id="updateViewsByNickname">
-        update friend set views=views+1 where nickname=#{nickname}
+        update friend
+        set views=views + 1
+        where nickname = #{nickname}
     </update>
 
     <select id="listAll" resultMap="BaseResultMap">

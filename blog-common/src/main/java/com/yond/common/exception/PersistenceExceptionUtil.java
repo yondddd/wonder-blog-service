@@ -1,6 +1,5 @@
-package com.yond.common.exception.util;
+package com.yond.common.exception;
 
-import com.yond.common.exception.PersistenceException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -8,8 +7,6 @@ import java.util.Collection;
 
 /**
  * 持久化异常工具
- *
- * @date 2022/8/11 15:34
  */
 public class PersistenceExceptionUtil {
 

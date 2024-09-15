@@ -1,4 +1,4 @@
-package com.yond.common.utils.api;
+package com.yond.common.utils.date;
 
 @FunctionalInterface
 public interface Factory<T> {

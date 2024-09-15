@@ -1,6 +1,6 @@
 package com.yond.blog.config;
 
-import com.yond.blog.support.env.env.Environment;
+import com.yond.common.utils.env.env.Environment;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSessionFactory;

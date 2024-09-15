@@ -6,8 +6,7 @@ import java.util.Date;
 
 /**
  * @Description: 随机博客
- * @Author: Naccl
- * @Date: 2020-08-17
+ * @Author: Yond
  */
 public class RandomBlog implements Serializable {
     @Serial

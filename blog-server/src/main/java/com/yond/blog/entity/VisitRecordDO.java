@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 /**
  * @Description: 访问记录
- * @Author: Naccl
+ * @Author: Yond
  * @Date: 2021-02-23
  */
 public class VisitRecordDO implements Serializable {

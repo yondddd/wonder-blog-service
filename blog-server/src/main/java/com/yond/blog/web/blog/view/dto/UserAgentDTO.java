@@ -2,8 +2,7 @@ package com.yond.blog.web.blog.view.dto;
 
 /**
  * @Description: UserAgent解析DTO
- * @Author: Naccl
- * @Date: 2022-10-13
+ * @Author: Yond
  */
 public class UserAgentDTO {
     private String os;

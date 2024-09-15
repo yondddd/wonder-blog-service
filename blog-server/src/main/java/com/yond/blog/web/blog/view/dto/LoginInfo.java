@@ -2,8 +2,7 @@ package com.yond.blog.web.blog.view.dto;
 
 /**
  * @Description: 登录账号密码
- * @Author: Naccl
- * @Date: 2020-09-02
+ * @Author: Yond
  */
 public class LoginInfo {
 

@@ -27,8 +27,7 @@ import java.util.Objects;
 
 /**
  * @Description: 评论
- * @Author: Naccl
- * @Date: 2020-08-15
+ * @Author: Yond
  */
 @RestController
 @RequestMapping("/view/comment")

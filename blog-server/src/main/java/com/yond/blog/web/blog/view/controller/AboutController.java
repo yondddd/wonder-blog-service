@@ -16,8 +16,7 @@ import java.util.stream.Collectors;
 
 /**
  * @Description: 关于我页面
- * @Author: Naccl
- * @Date: 2020-08-31
+ * @Author: Yond
  */
 @RestController
 public class AboutController {

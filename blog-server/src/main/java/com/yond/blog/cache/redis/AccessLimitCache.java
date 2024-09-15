@@ -1,10 +1,10 @@
-package com.yond.blog.cache.remote;
+package com.yond.blog.cache.redis;
 
-import com.yond.blog.cache.constant.RedisKeyConstant;
+import com.yond.common.constant.RedisKeyConstant;
 import org.springframework.stereotype.Component;
 
 /**
- * @author yond
+ * @Author Yond
  * @date 6/29/2024
  * @description access limit
  */

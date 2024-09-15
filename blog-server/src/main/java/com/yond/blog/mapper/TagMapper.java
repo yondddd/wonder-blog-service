@@ -8,8 +8,7 @@ import java.util.List;
 
 /**
  * @Description: 博客标签持久层接口
- * @Author: Naccl
- * @Date: 2020-07-30
+ * @Author: Yond
  */
 @Mapper
 @Repository

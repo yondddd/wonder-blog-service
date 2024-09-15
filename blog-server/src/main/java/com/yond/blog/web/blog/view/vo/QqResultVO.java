@@ -6,8 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * @author raxcl
- * @date 2024-01-19 9:54:53
+ * @Author Yond
  */
 public class QqResultVO implements Serializable {
     @Serial

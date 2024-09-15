@@ -5,8 +5,7 @@ import com.yond.blog.util.upload.UploadUtils;
 /**
  * 文件上传方式
  *
- * @author: Naccl
- * @date: 2022-01-23
+ * @Author: Yond
  */
 public interface FileUploadChannel {
     /**

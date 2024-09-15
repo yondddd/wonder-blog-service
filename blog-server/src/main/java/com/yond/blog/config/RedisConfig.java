@@ -1,7 +1,7 @@
 package com.yond.blog.config;
 
 import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
-import com.yond.blog.support.env.env.Environment;
+import com.yond.common.utils.env.env.Environment;
 import io.lettuce.core.ClientOptions;
 import io.lettuce.core.TimeoutOptions;
 import org.apache.commons.lang3.StringUtils;

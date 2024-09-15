@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * @Description: 配置CORS跨域支持、拦截器
- * @Author: Naccl
+ * @Author: Yond
  * @Date: 2020-07-22
  */
 @Configuration
@@ -31,6 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
     private UploadProperties uploadProperties;
     @Resource
     private CurrentUserResolver currentUserResolver;
+
     /**
      * 跨域请求
      *
@@ -80,5 +81,5 @@ public class WebConfig implements WebMvcConfigurer {
         resolvers.add(currentUserResolver);
         WebMvcConfigurer.super.addArgumentResolvers(resolvers);
     }
-    
+
 }

@@ -3,8 +3,7 @@ package com.yond.common.enums;
 /**
  * 访问行为枚举类
  *
- * @author: Naccl
- * @date: 2022-01-08
+ * @Author: Yond
  */
 public enum VisitBehavior {
 

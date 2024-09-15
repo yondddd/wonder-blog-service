@@ -7,12 +7,14 @@ import com.yond.blog.web.filter.local.LocalHttpContext;
 import com.yond.blog.web.filter.local.LocalHttpFilter;
 import com.yond.blog.web.filter.local.LocalHttpFilterChain;
 import com.yond.common.resp.Response;
+import com.yond.common.utils.trace.TraceId;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +44,8 @@ public class ServletFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        // 日志traceId
+        MDC.put("trace", TraceId.nextId());
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         try {
@@ -57,6 +61,8 @@ public class ServletFilter implements Filter {
         } catch (Exception e) {
             WebFilterUtil.returnFail(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Response.custom(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务异常"));
             LOGGER.error("<|>servletPath:{}<|>", request.getServletPath(), e);
+        } finally {
+            MDC.clear();
         }
     }
 

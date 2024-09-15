@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author yond
+ * @Author Yond
  * @date 8/31/2024
  * @description
  */

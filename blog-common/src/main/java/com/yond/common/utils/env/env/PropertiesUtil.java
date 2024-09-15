@@ -1,4 +1,4 @@
-package com.yond.blog.support.env.util;
+package com.yond.common.utils.env.env;
 
 import java.io.File;
 import java.io.IOException;

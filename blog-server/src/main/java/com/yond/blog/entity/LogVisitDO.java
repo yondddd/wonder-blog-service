@@ -6,7 +6,7 @@ import java.util.Date;
 
 /**
  * @Description: 访问日志
- * @Author: Naccl
+ * @Author: Yond
  * @Date: 2020-12-04
  */
 public class LogVisitDO implements Serializable {

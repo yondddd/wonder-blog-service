@@ -10,19 +10,19 @@ import org.springframework.stereotype.Service;
 
 /**
  * @Description: 用户业务层接口实现类
- * @Author: Naccl
+ * @Author: Yond
  * @Date: 2020-07-19
  */
 @Service
 public class UserServiceImpl implements UserService {
-    
+
     private final UserMapper userMapper;
-    
+
     public UserServiceImpl(UserMapper userMapper) {
         this.userMapper = userMapper;
     }
-    
-    
+
+
     @Override
     public UserDO getByNameAndPassword(String username, String password) {
         UserDO user = userMapper.getByUserName(username);
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
-    
+
     @Override
     public UserDO getById(Long id) {
         UserDO user = userMapper.getById(id);
@@ -43,12 +43,12 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
-    
+
     @Override
     public UserDO getByGuid(String guid) {
         return userMapper.getByGuid(guid);
     }
-    
+
     @Override
     public String changeAccount(String userName, String pwd, UserSession userSession) {
         UserDO currentUser = userMapper.getByGuid(userSession.getGuid());
@@ -61,5 +61,5 @@ public class UserServiceImpl implements UserService {
         userMapper.updatePassword(currentUser.getId(), AesUtil.encrypt(pwd));
         return null;
     }
-    
+
 }

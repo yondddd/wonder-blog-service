@@ -1,6 +1,6 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.yond.blog.cache.remote.VisitCache;
+import com.yond.blog.cache.redis.VisitCache;
 import com.yond.blog.service.DashboardService;
 import com.yond.blog.web.blog.admin.vo.StatisticDashboardVO;
 import com.yond.common.resp.Response;
@@ -20,14 +20,14 @@ import java.util.concurrent.Executors;
 @RestController
 @RequestMapping("/admin/statistic")
 public class DashboardAdminController {
-    
+
     @Resource
     private DashboardService dashboardService;
     @Resource
     private VisitCache visitCache;
-    
+
     private static final Executor executor = Executors.newVirtualThreadPerTaskExecutor();
-    
+
     @GetMapping("/dashboard")
     public Response<StatisticDashboardVO> dashboard() {
         StatisticDashboardVO data = new StatisticDashboardVO();
@@ -43,5 +43,5 @@ public class DashboardAdminController {
         ).join();
         return Response.success(data);
     }
-    
+
 }

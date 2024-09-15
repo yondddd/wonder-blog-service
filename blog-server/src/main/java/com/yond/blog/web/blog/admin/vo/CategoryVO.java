@@ -4,7 +4,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * @author yond
+ * @Author Yond
  * @date 8/20/2024
  * @description
  */
@@ -25,7 +25,7 @@ public class CategoryVO implements Serializable {
     public static CategoryVO custom() {
         return new CategoryVO();
     }
-    
+
     public Long getId() {
         return id;
     }

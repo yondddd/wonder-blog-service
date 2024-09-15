@@ -11,8 +11,7 @@ import java.util.List;
 
 /**
  * @Description: 博客详情
- * @Author: Naccl
- * @Date: 2020-08-12
+ * @Author: Yond
  */
 public class BlogDetail implements Serializable {
     @Serial

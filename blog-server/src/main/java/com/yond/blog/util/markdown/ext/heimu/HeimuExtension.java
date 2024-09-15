@@ -15,8 +15,7 @@ import org.commonmark.renderer.text.TextContentRenderer;
 
 /**
  * @Description: 自定义黑幕拓展
- * @Author: Naccl
- * @Date: 2020-05-13
+ * @Author: Yond
  */
 public class HeimuExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension, TextContentRenderer.TextContentRendererExtension {
     private HeimuExtension() {

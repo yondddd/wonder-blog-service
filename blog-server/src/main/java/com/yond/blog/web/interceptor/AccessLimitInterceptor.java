@@ -1,6 +1,6 @@
 package com.yond.blog.web.interceptor;
 
-import com.yond.blog.cache.remote.AccessLimitCache;
+import com.yond.blog.cache.redis.AccessLimitCache;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.web.WebFilterUtil;
 import com.yond.common.annotation.AccessLimit;
@@ -15,8 +15,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
  * @Description: 限流
- * @Author: Naccl
- * @Date: 2021-04-04
+ * @Author: Yond
  */
 @Component
 public class AccessLimitInterceptor implements HandlerInterceptor {

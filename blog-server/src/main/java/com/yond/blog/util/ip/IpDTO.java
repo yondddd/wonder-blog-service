@@ -1,9 +1,7 @@
 package com.yond.blog.util.ip;
 
 /**
- * @author yond
- * @date 2023/5/25
- * @description ip
+ * @Author Yond
  */
 public class IpDTO {
 
@@ -115,5 +113,5 @@ public class IpDTO {
     public void setRegionName(String regionName) {
         this.regionName = regionName;
     }
-    
+
 }

@@ -2,10 +2,8 @@ package com.yond.common.exception;
 
 /**
  * @Description: 404异常
- * @Author: Naccl
- * @Date: 2020-08-14
+ * @Author: Yond
  */
-
 public class NotFoundException extends RuntimeException {
     public NotFoundException() {
     }

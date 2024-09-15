@@ -3,7 +3,7 @@ package com.yond.blog.cache.local;
 import com.github.benmanes.caffeine.cache.Cache;
 
 /**
- * @author yond
+ * @Author Yond
  * @date 7/21/2024
  * @description
  */

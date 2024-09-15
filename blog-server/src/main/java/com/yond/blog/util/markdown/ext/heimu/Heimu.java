@@ -5,8 +5,7 @@ import org.commonmark.node.Delimited;
 
 /**
  * @Description: A heimu node containing text and other inline nodes nodes as children.
- * @Author: Naccl
- * @Date: 2020-05-13
+ * @Author: Yond
  */
 public class Heimu extends CustomNode implements Delimited {
     private static final String DELIMITER = "@@";

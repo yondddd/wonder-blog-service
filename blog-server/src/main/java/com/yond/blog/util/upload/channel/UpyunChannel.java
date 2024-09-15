@@ -1,25 +1,24 @@
 package com.yond.blog.util.upload.channel;
 
 import com.upyun.RestManager;
+import com.yond.blog.config.properties.UpyunProperties;
+import com.yond.blog.util.upload.UploadUtils;
 import okhttp3.Response;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import com.yond.blog.config.properties.UpyunProperties;
-import com.yond.blog.util.upload.UploadUtils;
 
 import java.util.UUID;
 
 /**
  * 又拍云存储上传方式
  *
- * @author: Naccl
- * @date: 2022-05-26
+ * @Author: Yond
  */
 @Lazy
 @Component
 public class UpyunChannel implements FileUploadChannel {
-    private RestManager manager;
-    private UpyunProperties upyunProperties;
+    private final RestManager manager;
+    private final UpyunProperties upyunProperties;
 
     public UpyunChannel(UpyunProperties upyunProperties) {
         this.upyunProperties = upyunProperties;

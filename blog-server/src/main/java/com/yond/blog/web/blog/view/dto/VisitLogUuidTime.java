@@ -4,8 +4,7 @@ import java.util.Date;
 
 /**
  * @Description: 访客更新DTO
- * @Author: Naccl
- * @Date: 2021-02-05
+ * @Author: Yond
  */
 public class VisitLogUuidTime {
     private String uuid;

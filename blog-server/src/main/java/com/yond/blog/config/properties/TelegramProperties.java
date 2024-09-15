@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Telegram配置
  *
- * @author: Naccl
+ * @Author: Yond
  * @date: 2022-01-22
  */
 @Configuration

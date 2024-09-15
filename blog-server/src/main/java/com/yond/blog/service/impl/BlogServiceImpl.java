@@ -2,7 +2,7 @@ package com.yond.blog.service.impl;
 
 import com.github.pagehelper.PageInfo;
 import com.yond.blog.cache.local.BlogCache;
-import com.yond.blog.cache.remote.BlogViewCache;
+import com.yond.blog.cache.redis.BlogViewCache;
 import com.yond.blog.entity.BlogDO;
 import com.yond.blog.mapper.BlogMapper;
 import com.yond.blog.service.BlogService;
@@ -30,12 +30,12 @@ import java.util.stream.Collectors;
 
 /**
  * @Description: 博客文章业务层实现
- * @Author: Naccl
+ * @Author: Yond
  * @Date: 2020-07-29
  */
 @Service
 public class BlogServiceImpl implements BlogService {
-    
+
     @Resource
     private BlogMapper blogMapper;
     @Resource
@@ -46,7 +46,7 @@ public class BlogServiceImpl implements BlogService {
     private CategoryService categoryService;
     @Resource
     private BlogTagService blogTagService;
-    
+
     /**
      * 项目启动时，保存所有博客的浏览量到Redis
      */
@@ -59,7 +59,7 @@ public class BlogServiceImpl implements BlogService {
             blogViewCache.setViewMap(blogViewsMap);
         }
     }
-    
+
     @Override
     public Pair<Integer, List<BlogDO>> pageByTitleLikeAndCategoryId(String title, Integer categoryId, Integer pageNo, Integer pageSize) {
         List<BlogDO> list = this.listEnable().stream()
@@ -69,13 +69,13 @@ public class BlogServiceImpl implements BlogService {
                 .collect(Collectors.toList());
         return Pair.of(list.size(), PageUtil.pageList(list, pageNo, pageSize));
     }
-    
+
     @Override
     public List<BlogDO> listByIds(List<Long> ids) {
         Set<Long> set = Set.copyOf(ids);
         return this.listEnable().stream().filter(x -> set.contains(x.getId())).collect(Collectors.toList());
     }
-    
+
     @Override
     public List<SearchBlog> searchPublic(String query) {
         String lowerCase = query.toLowerCase();
@@ -101,10 +101,10 @@ public class BlogServiceImpl implements BlogService {
         }
         return result;
     }
-    
+
     @Override
     public List<NewBlog> getNewBlogListByIsPublished() {
-        
+
         List<BlogDO> collect = this.listEnable()
                 .stream().filter(BlogDO::getPublished)
                 .sorted(Comparator.comparing(BlogDO::getCreateTime).reversed())
@@ -120,7 +120,7 @@ public class BlogServiceImpl implements BlogService {
         }
         return result;
     }
-    
+
     @Override
     public PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum) {
         List<BlogDO> collect = this.listEnable().stream()
@@ -128,15 +128,15 @@ public class BlogServiceImpl implements BlogService {
                 .sorted(Comparator.comparing(BlogDO::getTop).reversed())
                 .sorted(Comparator.comparing(BlogDO::getCreateTime).reversed())
                 .collect(Collectors.toList());
-        
-        
+
+
         List<BlogInfo> page = PageUtil.pageList(collect, pageNum, BlogConstant.PAGE_SIZE)
                 .stream().map(this::do2BlogInfo).toList();
-        
+
         return new PageResult<>(collect.size(), page);
-        
+
     }
-    
+
     private BlogInfo do2BlogInfo(BlogDO blogDO) {
         BlogInfo blogInfo = new BlogInfo();
         blogInfo.setId(blogDO.getId());
@@ -163,7 +163,7 @@ public class BlogServiceImpl implements BlogService {
         blogInfo.setTags(blogTagService.listTagsByBlogId(blogDO.getId()));
         return blogInfo;
     }
-    
+
     /**
      * 将pageResult中博客对象的浏览量设置为Redis中的最新值
      *
@@ -184,7 +184,7 @@ public class BlogServiceImpl implements BlogService {
              * 2.删除 Redis DB 中 blogViewsMap 这个 key（或者直接清空对应的整个 DB）
              * 3.重新启动程序
              *
-             * 具体请查看: https://github.com/Naccl/NBlog/issues/58
+             * 具体请查看: https://github.com/Yond/NBlog/issues/58
              */
             Integer blogView = blogViewCache.getBlogView(blogId);
             if (blogView != null) {
@@ -193,7 +193,7 @@ public class BlogServiceImpl implements BlogService {
             blogInfos.set(i, blogInfo);
         }
     }
-    
+
     @Override
     public PageResult<BlogInfo> getBlogInfoListByCategoryNameAndIsPublished(String categoryName, Integer pageNum) {
         List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByCategoryNameAndIsPublished(pageNum, BlogConstant.PAGE_SIZE, categoryName));
@@ -202,7 +202,7 @@ public class BlogServiceImpl implements BlogService {
         setBlogViewsFromRedisToPageResult(pageResult);
         return pageResult;
     }
-    
+
     @Override
     public PageResult<BlogInfo> getBlogInfoListByTagNameAndIsPublished(String tagName, Integer pageNum) {
         List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByTagNameAndIsPublished(pageNum, BlogConstant.PAGE_SIZE, tagName));
@@ -211,7 +211,7 @@ public class BlogServiceImpl implements BlogService {
         setBlogViewsFromRedisToPageResult(pageResult);
         return pageResult;
     }
-    
+
     private List<BlogInfo> processBlogInfosPassword(List<BlogInfo> blogInfos) {
         for (BlogInfo blogInfo : blogInfos) {
             if (!"".equals(blogInfo.getPassword())) {
@@ -226,10 +226,10 @@ public class BlogServiceImpl implements BlogService {
         }
         return blogInfos;
     }
-    
+
     @Override
     public Map<String, Object> getArchiveBlogAndCountByIsPublished() {
-        
+
         Map<String, Object> mapFromRedis = BlogCache.getBlogGroup();
         if (mapFromRedis != null) {
             return mapFromRedis;
@@ -255,7 +255,7 @@ public class BlogServiceImpl implements BlogService {
         BlogCache.setBlogGroup(map);
         return map;
     }
-    
+
     @Override
     public List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend() {
         List<RandomBlog> randomBlogs = blogMapper.getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend(BlogConstant.RANDOM_BLOG_LIMIT_NUM);
@@ -269,7 +269,7 @@ public class BlogServiceImpl implements BlogService {
         }
         return randomBlogs;
     }
-    
+
     private Map<Long, Integer> getBlogViewsMap() {
         List<BlogView> blogViewList = blogMapper.getBlogViewsList();
         Map<Long, Integer> blogViewsMap = new HashMap<>(128);
@@ -278,12 +278,12 @@ public class BlogServiceImpl implements BlogService {
         }
         return blogViewsMap;
     }
-    
+
     @Override
     public void updateViewsToRedis(Long blogId) {
         blogViewCache.blogViewIncr(blogId, 1);
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateViews(Long blogId, Integer views) {
@@ -291,7 +291,7 @@ public class BlogServiceImpl implements BlogService {
             throw new PersistenceException("更新失败");
         }
     }
-    
+
     @Override
     public BlogDO getBlogById(Long id) {
         BlogDO blog = this.listEnable()
@@ -310,7 +310,7 @@ public class BlogServiceImpl implements BlogService {
         }
         return blog;
     }
-    
+
     @Override
     public BlogDetail getBlogByIdAndIsPublished(Long id) {
         BlogDetail blog = blogMapper.getBlogByIdAndIsPublished(id);
@@ -329,22 +329,22 @@ public class BlogServiceImpl implements BlogService {
         }
         return blog;
     }
-    
+
     @Override
     public String getBlogPassword(Long blogId) {
         return blogMapper.getBlogPassword(blogId);
     }
-    
+
     @Override
     public int countBlogByIsPublished() {
         return blogMapper.countBlogByIsPublished();
     }
-    
+
     @Override
     public int countByTagId(Long tagId) {
         return blogMapper.countBlogByTagId(tagId);
     }
-    
+
     @Override
     public List<BlogDO> listEnable() {
         List<BlogDO> cache = BlogCache.listEnable();
@@ -353,21 +353,21 @@ public class BlogServiceImpl implements BlogService {
         }
         return cache;
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     public Long insertSelective(BlogDO blog) {
         blogMapper.insertSelective(blog);
         this.deleteBlogCache();
         return blog.getId();
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateSelective(BlogDO blog) {
         blogMapper.updateSelective(blog);
         this.deleteBlogCache();
     }
-    
+
     @Override
     public void delById(Long id) {
         BlogDO del = BlogDO.custom()
@@ -377,7 +377,7 @@ public class BlogServiceImpl implements BlogService {
         // 评论和关联tag不删除
         blogViewCache.deleteBlogView(id);
     }
-    
+
     /**
      * 删除首页缓存、最新推荐缓存、归档页面缓存、博客浏览量缓存
      */
@@ -386,5 +386,5 @@ public class BlogServiceImpl implements BlogService {
         BlogCache.delInfo();
         BlogCache.delBlogGroup();
     }
-    
+
 }

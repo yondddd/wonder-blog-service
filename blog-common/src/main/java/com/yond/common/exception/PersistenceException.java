@@ -4,10 +4,8 @@ import java.io.Serial;
 
 /**
  * @Description: 持久化异常
- * @Author: Naccl
- * @Date: 2020-08-14
+ * @Author: Yond
  */
-
 public class PersistenceException extends RuntimeException {
 
     @Serial

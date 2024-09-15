@@ -6,11 +6,9 @@ import java.io.Serial;
 import java.util.Date;
 
 /**
- * @author yond
- * @date 7/13/2024
- * @description
+ * @Author Yond
  */
-public class VisitorPageReq extends PageReq  {
+public class VisitorPageReq extends PageReq {
 
     @Serial
     private static final long serialVersionUID = -1965632279964606709L;

@@ -89,7 +89,7 @@ public class JsonUtils {
      * <p>
      * 封装不同的输出风格, 使用不同的builder函数创建实例.
      *
-     * @author calvin
+     * @Author calvin
      */
     public static class JsonMapper {
 

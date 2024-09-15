@@ -1,6 +1,6 @@
 package com.yond.blog.service.impl;
 
-import com.yond.blog.cache.remote.VisitCache;
+import com.yond.blog.cache.redis.VisitCache;
 import com.yond.blog.entity.VisitUserDO;
 import com.yond.blog.mapper.VisitUserMapper;
 import com.yond.blog.service.VisitUserService;
@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * @Description: 访客统计业务层实现
- * @Author: Naccl
+ * @Author: Yond
  * @Date: 2021-01-31
  */
 @Service

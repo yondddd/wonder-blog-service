@@ -5,35 +5,35 @@ import java.io.Serializable;
 
 /**
  * @Description:
- * @Author: WangJieLong
+ * @Author: Yond
  * @Date: 2024-09-14
  */
 public class AccountModifyPwdReq implements Serializable {
-    
+
     @Serial
     private static final long serialVersionUID = -2915092810476190536L;
-    
+
     private String userName;
     private String pwd;
-    
+
     public String getUserName() {
         return userName;
     }
-    
+
     public AccountModifyPwdReq setUserName(String userName) {
         this.userName = userName;
         return this;
     }
-    
+
     public String getPwd() {
         return pwd;
     }
-    
+
     public AccountModifyPwdReq setPwd(String pwd) {
         this.pwd = pwd;
         return this;
     }
-    
+
     @Override
     public String toString() {
         return "AccountModifyPwdReq{" +

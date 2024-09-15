@@ -3,8 +3,7 @@ package com.yond.common.constant;
 /**
  * 评论相关常量
  *
- * @author: Naccl
- * @date: 2022-01-22
+ * @Author: Yond
  */
 public class CommentConstant {
     /**

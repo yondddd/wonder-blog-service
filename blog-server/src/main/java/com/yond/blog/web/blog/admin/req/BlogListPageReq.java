@@ -6,7 +6,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * @author yond
+ * @Author Yond
  * @date 8/20/2024
  * @description
  */

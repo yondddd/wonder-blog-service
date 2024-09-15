@@ -1,12 +1,12 @@
 package com.yond.blog.web.handler.session;
 
 /**
- * @author yond
+ * @Author Yond
  * @date 8/25/2024
  * @description
  */
 public class UserSession {
-    
+
     private Long userId;
     private String guid;
     private String userName;
@@ -14,16 +14,16 @@ public class UserSession {
     public static UserSession custom() {
         return new UserSession();
     }
-    
+
     public Long getUserId() {
         return userId;
     }
-    
+
     public UserSession setUserId(Long userId) {
         this.userId = userId;
         return this;
     }
-    
+
     public String getGuid() {
         return guid;
     }
@@ -41,7 +41,7 @@ public class UserSession {
         this.userName = userName;
         return this;
     }
-    
+
     @Override
     public String toString() {
         return "UserSession{" +

@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 /**
  * @Description: 城市访客数量
- * @Author: Naccl
+ * @Author: Yond
  * @Date: 2021-02-26
  */
 public class VisitCityDO implements Serializable {

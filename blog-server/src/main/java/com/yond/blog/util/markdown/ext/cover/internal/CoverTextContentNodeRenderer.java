@@ -6,8 +6,7 @@ import org.commonmark.renderer.text.TextContentWriter;
 
 /**
  * @Description: 文本节点渲染
- * @Author: Naccl
- * @Date: 2020-05-13
+ * @Author: Yond
  */
 public class CoverTextContentNodeRenderer extends AbstractCoverNodeRenderer {
     private final TextContentNodeRendererContext context;

@@ -16,8 +16,7 @@ import java.util.Map;
 
 /**
  * @Description: 邮件工具类
- * @Author: Naccl
- * @Date: 2020-10-10
+ * @Author: Yond
  */
 @EnableAsync
 @Component

@@ -2,8 +2,7 @@ package com.yond.blog.web.blog.view.dto;
 
 /**
  * @Description: 友链DTO
- * @Author: Naccl
- * @Date: 2020-09-08
+ * @Author: Yond
  */
 public class Friend {
     private Long id;

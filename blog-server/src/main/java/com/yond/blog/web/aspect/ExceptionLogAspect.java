@@ -23,8 +23,7 @@ import java.lang.reflect.Method;
 
 /**
  * @Description: AOP记录异常日志
- * @Author: Naccl
- * @Date: 2020-12-03
+ * @Author: Yond
  * todo 修改切面日志
  */
 @Component

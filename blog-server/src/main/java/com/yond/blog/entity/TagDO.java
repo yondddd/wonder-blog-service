@@ -5,8 +5,7 @@ import java.io.Serializable;
 
 /**
  * @Description: 博客标签
- * @Author: Naccl
- * @Date: 2020-07-27
+ * @Author: Yond
  */
 public class TagDO implements Serializable {
     @Serial
@@ -17,38 +16,38 @@ public class TagDO implements Serializable {
 
     public TagDO() {
     }
-    
-    public static TagDO custom(){
+
+    public static TagDO custom() {
         return new TagDO();
     }
-    
+
     public Long getId() {
         return id;
     }
-    
+
     public TagDO setId(Long id) {
         this.id = id;
         return this;
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public TagDO setName(String name) {
         this.name = name;
         return this;
     }
-    
+
     public String getColor() {
         return color;
     }
-    
+
     public TagDO setColor(String color) {
         this.color = color;
         return this;
     }
-    
+
     @Override
     public String toString() {
         return "TagDO{" +

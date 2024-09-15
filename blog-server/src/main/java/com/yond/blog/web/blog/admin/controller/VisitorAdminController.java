@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * @Description: 访客统计
- * @Author: Naccl
+ * @Author: Yond
  * @Date: 2021-02-02
  */
 @RestController
@@ -59,5 +59,5 @@ public class VisitorAdminController {
         visitUserService.deleteVisitor(id, uuid);
         return Response.success();
     }
-    
+
 }

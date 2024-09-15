@@ -6,9 +6,7 @@ import com.yond.blog.entity.TagDO;
 import java.util.List;
 
 /**
- * @author yond
- * @date 6/22/2024
- * @description tag cache
+ * @Author Yond
  */
 public class TagCache {
 

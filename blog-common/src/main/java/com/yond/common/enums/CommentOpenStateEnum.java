@@ -3,8 +3,7 @@ package com.yond.common.enums;
 /**
  * 评论开放状态枚举类
  *
- * @author: Naccl
- * @date: 2022-01-23
+ * @Author: Yond
  */
 public enum CommentOpenStateEnum {
     /**
