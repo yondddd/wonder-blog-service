@@ -1,6 +1,7 @@
 package com.yond.blog.service;
 
 import com.yond.blog.entity.FriendDO;
+import com.yond.blog.web.blog.admin.vo.FriendConfigVO;
 import com.yond.blog.web.blog.view.vo.FriendInfo;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -24,4 +25,5 @@ public interface FriendService {
 
     void updateSelective(FriendDO friendDO);
 
+    FriendConfigVO friendConfig();
 }

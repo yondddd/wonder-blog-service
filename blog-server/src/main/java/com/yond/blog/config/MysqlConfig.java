@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @MapperScan(basePackages = "com.yond.blog.mapper", sqlSessionFactoryRef = "blogSqlSessionFactory")
-public class BlogDataSourceConfig {
+public class MysqlConfig {
 
     @Bean(name = "blogDataSource", initMethod = "", destroyMethod = "")
     @Primary

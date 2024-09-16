@@ -4,8 +4,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 
 /**
  * @Author Yond
- * @date 7/21/2024
- * @description
  */
 public class IpCache {
 

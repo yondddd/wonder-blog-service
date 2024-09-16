@@ -4,6 +4,7 @@ import com.yond.blog.entity.FriendDO;
 import com.yond.blog.service.FriendService;
 import com.yond.blog.web.blog.admin.convert.FriendConverter;
 import com.yond.blog.web.blog.admin.req.*;
+import com.yond.blog.web.blog.admin.vo.FriendConfigVO;
 import com.yond.blog.web.blog.admin.vo.FriendVO;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.enums.EnableStatusEnum;
@@ -85,6 +86,12 @@ public class FriendAdminController {
     @GetMapping("/friendInfo")
     public Response friendInfo() {
         return Response.ok("请求成功", friendService.getFriendInfo(false, false));
+    }
+
+    @PostMapping("/config")
+    public Response<FriendConfigVO> friendConfig() {
+        // 配置
+
     }
 
     @OperationLogger("修改友链页面评论开放状态")

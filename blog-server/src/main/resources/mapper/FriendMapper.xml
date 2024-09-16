@@ -11,11 +11,12 @@
         <result property="published" column="is_published"/>
         <result property="views" column="views"/>
         <result property="createTime" column="create_time"/>
+        <result property="status" column="status"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id
-        , nickname, description, website, avatar, is_published, views, create_time
+        , nickname, description, website, avatar, is_published, views, create_time, status
     </sql>
 
     <resultMap id="friendVO" type="com.yond.blog.web.blog.view.vo.Friend">
@@ -57,6 +58,7 @@
             <if test="published != null">is_published,</if>
             <if test="views != null">views,</if>
             <if test="createTime != null">create_time,</if>
+            <if test="status != null">status,</if>
         </trim>
         values
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -68,9 +70,9 @@
             <if test="published != null">#{published,jdbcType=BOOLEAN},</if>
             <if test="views != null">#{views,jdbcType=NUMERIC},</if>
             <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="status != null">#{status,jdbcType=NUMERIC},</if>
         </trim>
     </insert>
-
     <update id="updateSelective">
         update friend
         <set>
@@ -81,8 +83,10 @@
             <if test="published != null">is_published=#{published,jdbcType=BOOLEAN},</if>
             <if test="views != null">views=#{views,jdbcType=NUMERIC},</if>
             <if test="createTime != null">create_time=#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="status != null">status=#{status,jdbcType=NUMERIC},</if>
         </set>
         where id = #{id,jdbcType=NUMERIC}
     </update>
+
 
 </mapper>

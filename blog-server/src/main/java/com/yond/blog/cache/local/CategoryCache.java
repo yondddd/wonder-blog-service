@@ -7,8 +7,6 @@ import java.util.List;
 
 /**
  * @Author Yond
- * @date 6/22/2024
- * @description category cache
  */
 public class CategoryCache {
 

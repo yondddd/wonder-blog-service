@@ -7,8 +7,10 @@ import com.yond.blog.mapper.FriendMapper;
 import com.yond.blog.service.FriendService;
 import com.yond.blog.service.SiteConfigService;
 import com.yond.blog.util.markdown.MarkdownUtils;
+import com.yond.blog.web.blog.admin.vo.FriendConfigVO;
 import com.yond.blog.web.blog.view.vo.FriendInfo;
 import com.yond.common.constant.SiteSettingConstant;
+import com.yond.common.enums.EnableStatusEnum;
 import com.yond.common.enums.SiteSettingTypeEnum;
 import com.yond.common.exception.PersistenceException;
 import com.yond.common.utils.page.PageUtil;
@@ -38,7 +40,8 @@ public class FriendServiceImpl implements FriendService {
         if (cache != null) {
             return cache;
         }
-        cache = friendMapper.listAll();
+        cache = friendMapper.listAll().stream()
+                .filter(x -> EnableStatusEnum.ENABLE.getVal().equals(x.getStatus())).toList();
         return cache;
     }
 
@@ -112,6 +115,24 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public void updateSelective(FriendDO friendDO) {
         friendMapper.updateSelective(friendDO);
+    }
+
+    @Override
+    public FriendConfigVO friendConfig() {
+        List<SiteConfigDO> siteSettings = siteConfigService.listAll()
+                .stream().filter(x -> SiteSettingTypeEnum.FRIEND.getVal().equals(x.getType())).toList();
+        FriendInfo friendInfo = new FriendInfo();
+        for (SiteConfigDO siteSetting : siteSettings) {
+            if ("friendContent".equals(siteSetting.getNameEn())) {
+                if (md) {
+                    friendInfo.setContent(MarkdownUtils.markdownToHtmlExtensions(siteSetting.getValue()));
+                } else {
+                    friendInfo.setContent(siteSetting.getValue());
+                }
+            } else if ("friendCommentEnabled".equals(siteSetting.getNameEn())) {
+                friendInfo.setCommentEnabled("1".equals(siteSetting.getValue()));
+            }
+        }
     }
 
     /**
