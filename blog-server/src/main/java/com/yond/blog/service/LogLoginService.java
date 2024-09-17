@@ -1,15 +1,19 @@
 package com.yond.blog.service;
 
-import org.springframework.scheduling.annotation.Async;
 import com.yond.blog.entity.LogLoginDO;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.scheduling.annotation.Async;
 
+import java.util.Date;
 import java.util.List;
 
 public interface LogLoginService {
-    List<LogLoginDO> getLoginLogListByDate(String startDate, String endDate);
-
+    
+    Pair<Integer, List<LogLoginDO>> page(Date startDate, Date endDate, Integer pageNo, Integer pageSize);
+    
     @Async
     void saveLoginLog(LogLoginDO log);
-
-    void deleteLoginLogById(Long id);
+    
+    int updateSelective(LogLoginDO log);
+    
 }

@@ -1,56 +1,48 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.LogOperationDO;
 import com.yond.blog.service.LogOperationService;
+import com.yond.blog.web.blog.admin.convert.LogOperationConverter;
+import com.yond.blog.web.blog.admin.req.LogOperationDelReq;
+import com.yond.blog.web.blog.admin.req.LogOperationPageReq;
+import com.yond.blog.web.blog.admin.vo.LogOperationVO;
+import com.yond.common.enums.EnableStatusEnum;
+import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @Description: 操作日志后台管理
  * @Author: Yond
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/logOperation")
 public class LogOperationController {
-    @Autowired
-    LogOperationService logOperationService;
-
-    /**
-     * 分页查询操作日志列表
-     *
-     * @param date     按操作时间查询
-     * @param pageNum  页码
-     * @param pageSize 每页个数
-     * @return
-     */
-    @GetMapping("/operationLogs")
-    public Response operationLogs(@RequestParam(defaultValue = "") String[] date,
-                                  @RequestParam(defaultValue = "1") Integer pageNum,
-                                  @RequestParam(defaultValue = "10") Integer pageSize) {
-        String startDate = null;
-        String endDate = null;
-        if (date.length == 2) {
-            startDate = date[0];
-            endDate = date[1];
-        }
-        String orderBy = "create_time desc";
-        PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<LogOperationDO> pageInfo = new PageInfo<>(logOperationService.getOperationLogListByDate(startDate, endDate));
-        return Response.ok("请求成功", pageInfo);
+    
+    @Resource
+    private LogOperationService logOperationService;
+    
+    @PostMapping("/page")
+    public PageResponse<List<LogOperationVO>> page(@RequestBody LogOperationPageReq req) {
+        Pair<Integer, List<LogOperationDO>> pair = logOperationService.page(req.getStartDate(), req.getEndDate(), req.getPageNo(), req.getPageSize());
+        List<LogOperationVO> data = pair.getRight().stream().map(LogOperationConverter::do2vo).toList();
+        return PageResponse.<List<LogOperationVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize());
     }
-
-    /**
-     * 按id删除操作日志
-     *
-     * @param id 日志id
-     * @return
-     */
-    @DeleteMapping("/operationLog")
-    public Response delete(@RequestParam Long id) {
-        logOperationService.deleteOperationLogById(id);
-        return Response.ok("删除成功");
+    
+    @PostMapping("/del")
+    public Response<Boolean> delete(@RequestBody LogOperationDelReq req) {
+        LogOperationDO update = new LogOperationDO();
+        update.setId(req.getId());
+        update.setStatus(EnableStatusEnum.DELETE.getVal());
+        logOperationService.updateSelective(update);
+        return Response.success();
     }
+    
 }

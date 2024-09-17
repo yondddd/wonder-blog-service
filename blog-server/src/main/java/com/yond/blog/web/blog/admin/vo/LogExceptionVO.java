@@ -1,18 +1,16 @@
-package com.yond.blog.entity;
+package com.yond.blog.web.blog.admin.vo;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Description: 异常日志
  * @Author: Yond
- * @Date: 2020-12-03
  */
-public class LogExceptionDO implements Serializable {
+public class LogExceptionVO implements Serializable {
     
     @Serial
-    private static final long serialVersionUID = 1008690861112709577L;
+    private static final long serialVersionUID = -313110177918686761L;
     
     private Long id;
     private String uri;//请求接口
@@ -28,18 +26,11 @@ public class LogExceptionDO implements Serializable {
     private String userAgent;
     private Integer status;
     
-    public static LogExceptionDO custom() {
-        return new LogExceptionDO();
-    }
-    
-    public LogExceptionDO() {
-    }
-    
     public Long getId() {
         return id;
     }
     
-    public LogExceptionDO setId(Long id) {
+    public LogExceptionVO setId(Long id) {
         this.id = id;
         return this;
     }
@@ -48,7 +39,7 @@ public class LogExceptionDO implements Serializable {
         return uri;
     }
     
-    public LogExceptionDO setUri(String uri) {
+    public LogExceptionVO setUri(String uri) {
         this.uri = uri;
         return this;
     }
@@ -57,7 +48,7 @@ public class LogExceptionDO implements Serializable {
         return method;
     }
     
-    public LogExceptionDO setMethod(String method) {
+    public LogExceptionVO setMethod(String method) {
         this.method = method;
         return this;
     }
@@ -66,7 +57,7 @@ public class LogExceptionDO implements Serializable {
         return param;
     }
     
-    public LogExceptionDO setParam(String param) {
+    public LogExceptionVO setParam(String param) {
         this.param = param;
         return this;
     }
@@ -75,7 +66,7 @@ public class LogExceptionDO implements Serializable {
         return description;
     }
     
-    public LogExceptionDO setDescription(String description) {
+    public LogExceptionVO setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -84,7 +75,7 @@ public class LogExceptionDO implements Serializable {
         return error;
     }
     
-    public LogExceptionDO setError(String error) {
+    public LogExceptionVO setError(String error) {
         this.error = error;
         return this;
     }
@@ -93,7 +84,7 @@ public class LogExceptionDO implements Serializable {
         return ip;
     }
     
-    public LogExceptionDO setIp(String ip) {
+    public LogExceptionVO setIp(String ip) {
         this.ip = ip;
         return this;
     }
@@ -102,7 +93,7 @@ public class LogExceptionDO implements Serializable {
         return ipSource;
     }
     
-    public LogExceptionDO setIpSource(String ipSource) {
+    public LogExceptionVO setIpSource(String ipSource) {
         this.ipSource = ipSource;
         return this;
     }
@@ -111,7 +102,7 @@ public class LogExceptionDO implements Serializable {
         return os;
     }
     
-    public LogExceptionDO setOs(String os) {
+    public LogExceptionVO setOs(String os) {
         this.os = os;
         return this;
     }
@@ -120,7 +111,7 @@ public class LogExceptionDO implements Serializable {
         return browser;
     }
     
-    public LogExceptionDO setBrowser(String browser) {
+    public LogExceptionVO setBrowser(String browser) {
         this.browser = browser;
         return this;
     }
@@ -129,7 +120,7 @@ public class LogExceptionDO implements Serializable {
         return createTime;
     }
     
-    public LogExceptionDO setCreateTime(Date createTime) {
+    public LogExceptionVO setCreateTime(Date createTime) {
         this.createTime = createTime;
         return this;
     }
@@ -138,7 +129,7 @@ public class LogExceptionDO implements Serializable {
         return userAgent;
     }
     
-    public LogExceptionDO setUserAgent(String userAgent) {
+    public LogExceptionVO setUserAgent(String userAgent) {
         this.userAgent = userAgent;
         return this;
     }
@@ -147,14 +138,14 @@ public class LogExceptionDO implements Serializable {
         return status;
     }
     
-    public LogExceptionDO setStatus(Integer status) {
+    public LogExceptionVO setStatus(Integer status) {
         this.status = status;
         return this;
     }
     
     @Override
     public String toString() {
-        return "LogExceptionDO{" +
+        return "LogExceptionVO{" +
                 "id=" + id +
                 ", uri='" + uri + '\'' +
                 ", method='" + method + '\'' +

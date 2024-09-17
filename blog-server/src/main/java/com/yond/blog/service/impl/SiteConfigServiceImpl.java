@@ -9,7 +9,7 @@ import com.yond.blog.web.blog.view.vo.Badge;
 import com.yond.blog.web.blog.view.vo.Copyright;
 import com.yond.blog.web.blog.view.vo.Favorite;
 import com.yond.blog.web.blog.view.vo.Introduction;
-import com.yond.common.constant.SiteSettingConstant;
+import com.yond.common.constant.SiteConfigConstant;
 import com.yond.common.enums.SiteSettingTypeEnum;
 import com.yond.common.exception.PersistenceException;
 import com.yond.common.utils.env.env.EnvConstant;
@@ -35,26 +35,26 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SiteConfigServiceImpl implements SiteConfigService, InitializingBean {
-
+    
     private final SiteConfigMapper siteConfigMapper;
-
+    
     public SiteConfigServiceImpl(SiteConfigMapper siteConfigMapper) {
         this.siteConfigMapper = siteConfigMapper;
     }
-
+    
     private static final Pattern PATTERN = Pattern.compile("\"(.*?)\"");
-
+    
     @Override
     public void afterPropertiesSet() throws Exception {
         List<SiteConfigDO> list = this.listAll();
         for (SiteConfigDO setting : list) {
-            if (SiteSettingConstant.TENCENT_IP_KEY.equals(setting.getNameEn())) {
+            if (SiteConfigConstant.TENCENT_IP_KEY.equals(setting.getNameEn())) {
                 Environment.setProperty(EnvConstant.TENCENT_IP_KET, setting.getValue());
             }
         }
     }
-
-
+    
+    
     @Override
     public Map<String, Object> getSiteInfoForView() {
         List<SiteConfigDO> siteSettings = this.listAll();
@@ -67,7 +67,7 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
             SiteSettingTypeEnum typeEnum = SiteSettingTypeEnum.getByVal(s.getType());
             switch (typeEnum) {
                 case SiteSettingTypeEnum.BLOG_INFO:
-                    if (SiteSettingConstant.COPYRIGHT.equals(s.getNameEn())) {
+                    if (SiteConfigConstant.COPYRIGHT.equals(s.getNameEn())) {
                         Copyright copyright = JacksonUtils.readValue(s.getValue(), Copyright.class);
                         siteInfo.put(s.getNameEn(), copyright);
                     } else {
@@ -76,35 +76,35 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
                     break;
                 case SiteSettingTypeEnum.PERSON_INFO:
                     switch (s.getNameEn()) {
-                        case SiteSettingConstant.AVATAR:
+                        case SiteConfigConstant.AVATAR:
                             introduction.setAvatar(s.getValue());
                             break;
-                        case SiteSettingConstant.NAME:
+                        case SiteConfigConstant.NAME:
                             introduction.setName(s.getValue());
                             break;
-                        case SiteSettingConstant.GITHUB:
+                        case SiteConfigConstant.GITHUB:
                             introduction.setGithub(s.getValue());
                             break;
-                        case SiteSettingConstant.TELEGRAM:
+                        case SiteConfigConstant.TELEGRAM:
                             introduction.setTelegram(s.getValue());
                             break;
-                        case SiteSettingConstant.QQ:
+                        case SiteConfigConstant.QQ:
                             introduction.setQq(s.getValue());
                             break;
-                        case SiteSettingConstant.BILIBILI:
+                        case SiteConfigConstant.BILIBILI:
                             introduction.setBilibili(s.getValue());
                             break;
-                        case SiteSettingConstant.NETEASE:
+                        case SiteConfigConstant.NETEASE:
                             introduction.setNetease(s.getValue());
                             break;
-                        case SiteSettingConstant.EMAIL:
+                        case SiteConfigConstant.EMAIL:
                             introduction.setEmail(s.getValue());
                             break;
-                        case SiteSettingConstant.FAVORITE:
+                        case SiteConfigConstant.FAVORITE:
                             Favorite favorite = JacksonUtils.readValue(s.getValue(), Favorite.class);
                             favorites.add(favorite);
                             break;
-                        case SiteSettingConstant.ROLL_TEXT:
+                        case SiteConfigConstant.ROLL_TEXT:
                             Matcher m = PATTERN.matcher(s.getValue());
                             while (m.find()) {
                                 rollTexts.add(m.group(1));
@@ -130,8 +130,8 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         map.put("badges", badges);
         return map;
     }
-
-
+    
+    
     @Override
     public String getValue(String key) {
         SiteConfigDO exist = this.listAll()
@@ -143,7 +143,7 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         }
         return null;
     }
-
+    
     @Override
     public void updateValue(String key, String value) {
         SiteConfigDO exist = this.listAll()
@@ -156,13 +156,13 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         exist.setValue(value);
         this.updateOneSiteSetting(exist);
     }
-
+    
     @Override
     public List<SiteConfigDO> listByType(SiteSettingTypeEnum typeEnum) {
         return this.listAll().stream()
                 .filter(x -> typeEnum.getVal().equals(x.getType())).collect(Collectors.toList());
     }
-
+    
     @Override
     public List<SiteConfigDO> listAll() {
         List<SiteConfigDO> siteSettings = SiteSettingCache.get();
@@ -172,7 +172,7 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         }
         return siteSettings;
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public synchronized void coverUpdate(List<SiteConfigDO> data) {
@@ -200,26 +200,26 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
             this.updateOneSiteSetting(toUpdate);
         }
     }
-
+    
     private void saveOneSiteSetting(SiteConfigDO siteSetting) {
         if (siteConfigMapper.insertSelective(siteSetting) != 1) {
             throw new PersistenceException("配置添加失败");
         }
         this.deleteSiteInfoRedisCache();
     }
-
+    
     private void updateOneSiteSetting(SiteConfigDO siteSetting) {
         if (siteConfigMapper.updateSelective(siteSetting) != 1) {
             throw new PersistenceException("配置修改失败");
         }
         this.deleteSiteInfoRedisCache();
     }
-
+    
     /**
      * 删除站点信息缓存
      */
     private void deleteSiteInfoRedisCache() {
         SiteSettingCache.del();
     }
-
+    
 }

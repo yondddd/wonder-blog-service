@@ -1,15 +1,19 @@
 package com.yond.blog.service;
 
-import org.springframework.scheduling.annotation.Async;
 import com.yond.blog.entity.LogExceptionDO;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.scheduling.annotation.Async;
 
+import java.util.Date;
 import java.util.List;
 
 public interface LogExceptionService {
-    List<LogExceptionDO> getExceptionLogListByDate(String startDate, String endDate);
-
+    
+    Pair<Integer, List<LogExceptionDO>> page(Date startDate, Date endDate, Integer pageNo, Integer pageSize);
+    
     @Async
     void saveExceptionLog(LogExceptionDO log);
-
-    void deleteExceptionLogById(Long id);
+    
+    int updateSelective(LogExceptionDO log);
+    
 }

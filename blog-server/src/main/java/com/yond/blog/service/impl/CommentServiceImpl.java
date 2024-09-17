@@ -11,9 +11,9 @@ import com.yond.blog.service.CommentService;
 import com.yond.blog.service.FriendService;
 import com.yond.blog.service.SiteConfigService;
 import com.yond.blog.web.blog.admin.dto.CommentDTO;
-import com.yond.blog.web.blog.view.vo.FriendInfo;
+import com.yond.blog.web.blog.admin.dto.FriendConfigDTO;
 import com.yond.common.constant.CommonConstant;
-import com.yond.common.constant.SiteSettingConstant;
+import com.yond.common.constant.SiteConfigConstant;
 import com.yond.common.enums.CommentOpenStateEnum;
 import com.yond.common.enums.CommentPageEnum;
 import com.yond.common.exception.PersistenceException;
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class CommentServiceImpl implements CommentService {
-
+    
     @Resource
     private CommentMapper commentMapper;
     @Resource
@@ -48,23 +48,23 @@ public class CommentServiceImpl implements CommentService {
     private FriendService friendService;
     @Resource
     private BlogService blogService;
-
-
+    
+    
     private final Cache<String, List<CommentDO>> cache = LocalCache.buildCache(1, new CacheLoader<>() {
         @Override
         public @Nullable List<CommentDO> load(String s) throws Exception {
             return commentMapper.listAll();
         }
     });
-
+    
     public List<CommentDO> listAll() {
         return cache.getIfPresent("listAll");
     }
-
+    
     private Map<Long, List<CommentDO>> allToMap(List<CommentDO> list) {
         return list.stream().collect(Collectors.groupingBy(CommentDO::getParentId));
     }
-
+    
     @Override
     public Pair<Integer, List<CommentDTO>> pageBy(CommentPageEnum page, Long blogId, Integer pageNo, Integer pageSize) {
         List<CommentDO> allData = this.listAll();
@@ -75,13 +75,13 @@ public class CommentServiceImpl implements CommentService {
         List<CommentDO> pageList = PageUtil.pageList(root, pageNo, pageSize);
         return Pair.of(root.size(), buildTree(pageList, map));
     }
-
+    
     @Override
     public CommentDO getById(Long id) {
         return this.listAll().stream()
                 .filter(x -> x.getId().equals(id)).findFirst().orElse(null);
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateSelective(CommentDO comment) {
@@ -89,8 +89,8 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论修改失败");
         }
     }
-
-
+    
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void insertSelective(CommentDO comment) {
@@ -98,7 +98,7 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论失败");
         }
     }
-
+    
     @Override
     public CommentOpenStateEnum getPageCommentStatus(Integer page, Long blogId) {
         CommentPageEnum pageEnum = CommentPageEnum.getByValue(page);
@@ -124,21 +124,21 @@ public class CommentServiceImpl implements CommentService {
         }
         //友链页面
         if (CommentPageEnum.FRIEND.equals(pageEnum)) {
-            FriendInfo friendInfo = friendService.getFriendInfo(true, false);
-            if (friendInfo.getCommentEnabled()) {
+            FriendConfigDTO friendConfig = friendService.getFriendConfig();
+            if (friendConfig.getCommentEnabled()) {
                 return CommentOpenStateEnum.OPEN;
             }
         }
         //关于我页面
         if (CommentPageEnum.ABOUT.equals(pageEnum)) {
-            String value = siteConfigService.getValue(SiteSettingConstant.COMMENT_ENABLED);
+            String value = siteConfigService.getValue(SiteConfigConstant.COMMENT_ENABLED);
             if (BooleanUtils.toBoolean(value)) {
                 return CommentOpenStateEnum.OPEN;
             }
         }
         return CommentOpenStateEnum.CLOSE;
     }
-
+    
     public List<CommentDTO> buildTree(List<CommentDO> root, Map<Long, List<CommentDO>> map) {
         List<CommentDTO> result = new ArrayList<>();
         for (CommentDO commentDO : root) {
@@ -151,7 +151,7 @@ public class CommentServiceImpl implements CommentService {
         }
         return result;
     }
-
+    
     private CommentDTO convertToDTO(CommentDO commentDO) {
         CommentDTO dto = new CommentDTO();
         dto.setId(commentDO.getId());
@@ -172,5 +172,5 @@ public class CommentServiceImpl implements CommentService {
         dto.setCreateTime(commentDO.getCreateTime());
         return dto;
     }
-
+    
 }

@@ -1,18 +1,16 @@
-package com.yond.blog.entity;
+package com.yond.blog.web.blog.admin.vo;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Description: 登录日志
  * @Author: Yond
- * @Date: 2020-12-03
  */
-public class LogLoginDO implements Serializable {
+public class LogLoginVO implements Serializable {
     
     @Serial
-    private static final long serialVersionUID = -6801601296035820131L;
+    private static final long serialVersionUID = 3530973002244993310L;
     
     private Long id;
     private String username;//用户名称
@@ -26,23 +24,11 @@ public class LogLoginDO implements Serializable {
     private String userAgent;
     private Integer status;
     
-    public LogLoginDO(String username, String ip, boolean loginStatus, String description, String userAgent) {
-        this.username = username;
-        this.ip = ip;
-        this.loginStatus = loginStatus;
-        this.description = description;
-        this.createTime = new Date();
-        this.userAgent = userAgent;
-    }
-    
-    public LogLoginDO() {
-    }
-    
     public Long getId() {
         return id;
     }
     
-    public LogLoginDO setId(Long id) {
+    public LogLoginVO setId(Long id) {
         this.id = id;
         return this;
     }
@@ -51,7 +37,7 @@ public class LogLoginDO implements Serializable {
         return username;
     }
     
-    public LogLoginDO setUsername(String username) {
+    public LogLoginVO setUsername(String username) {
         this.username = username;
         return this;
     }
@@ -60,7 +46,7 @@ public class LogLoginDO implements Serializable {
         return ip;
     }
     
-    public LogLoginDO setIp(String ip) {
+    public LogLoginVO setIp(String ip) {
         this.ip = ip;
         return this;
     }
@@ -69,7 +55,7 @@ public class LogLoginDO implements Serializable {
         return ipSource;
     }
     
-    public LogLoginDO setIpSource(String ipSource) {
+    public LogLoginVO setIpSource(String ipSource) {
         this.ipSource = ipSource;
         return this;
     }
@@ -78,7 +64,7 @@ public class LogLoginDO implements Serializable {
         return os;
     }
     
-    public LogLoginDO setOs(String os) {
+    public LogLoginVO setOs(String os) {
         this.os = os;
         return this;
     }
@@ -87,7 +73,7 @@ public class LogLoginDO implements Serializable {
         return browser;
     }
     
-    public LogLoginDO setBrowser(String browser) {
+    public LogLoginVO setBrowser(String browser) {
         this.browser = browser;
         return this;
     }
@@ -96,7 +82,7 @@ public class LogLoginDO implements Serializable {
         return loginStatus;
     }
     
-    public LogLoginDO setLoginStatus(Boolean loginStatus) {
+    public LogLoginVO setLoginStatus(Boolean loginStatus) {
         this.loginStatus = loginStatus;
         return this;
     }
@@ -105,7 +91,7 @@ public class LogLoginDO implements Serializable {
         return description;
     }
     
-    public LogLoginDO setDescription(String description) {
+    public LogLoginVO setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -114,7 +100,7 @@ public class LogLoginDO implements Serializable {
         return createTime;
     }
     
-    public LogLoginDO setCreateTime(Date createTime) {
+    public LogLoginVO setCreateTime(Date createTime) {
         this.createTime = createTime;
         return this;
     }
@@ -123,7 +109,7 @@ public class LogLoginDO implements Serializable {
         return userAgent;
     }
     
-    public LogLoginDO setUserAgent(String userAgent) {
+    public LogLoginVO setUserAgent(String userAgent) {
         this.userAgent = userAgent;
         return this;
     }
@@ -132,14 +118,14 @@ public class LogLoginDO implements Serializable {
         return status;
     }
     
-    public LogLoginDO setStatus(Integer status) {
+    public LogLoginVO setStatus(Integer status) {
         this.status = status;
         return this;
     }
     
     @Override
     public String toString() {
-        return "LogLoginDO{" +
+        return "LogLoginVO{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", ip='" + ip + '\'' +

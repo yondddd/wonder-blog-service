@@ -4,6 +4,7 @@ import com.yond.blog.entity.LogLoginDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,10 +15,12 @@ import java.util.List;
 @Mapper
 @Repository
 public interface LogLoginMapper {
-
-    List<LogLoginDO> listByDate(String startDate, String endDate);
-
-    int saveLoginLog(LogLoginDO log);
-
-    int deleteLoginLogById(Long id);
+    
+    int insertSelective(LogLoginDO logLoginDO);
+    
+    int updateSelective(LogLoginDO logLoginDO);
+    
+    Integer countBy(Date startDate, Date endDate);
+    
+    List<LogLoginDO> pageBy(Date startDate, Date endDate, Integer offset, Integer size);
 }

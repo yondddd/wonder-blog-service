@@ -4,6 +4,7 @@ import com.yond.blog.entity.LogExceptionDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,9 +15,13 @@ import java.util.List;
 @Mapper
 @Repository
 public interface LogExceptionMapper {
-    List<LogExceptionDO> getExceptionLogListByDate(String startDate, String endDate);
-
+    
     int insertSelective(LogExceptionDO log);
-
-    int deleteExceptionLogById(Long id);
+    
+    int updateSelective(LogExceptionDO log);
+    
+    Integer countBy(Date startDate, Date endDate);
+    
+    List<LogExceptionDO> pageBy(Date startDate, Date endDate, Integer offset, Integer size);
+    
 }

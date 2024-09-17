@@ -1,56 +1,48 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.LogLoginDO;
 import com.yond.blog.service.LogLoginService;
+import com.yond.blog.web.blog.admin.convert.LogLoginConverter;
+import com.yond.blog.web.blog.admin.req.LogLoginDelReq;
+import com.yond.blog.web.blog.admin.req.LogLoginPageReq;
+import com.yond.blog.web.blog.admin.vo.LogLoginVO;
+import com.yond.common.enums.EnableStatusEnum;
+import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @Description: 登录日志后台管理
  * @Author: Yond
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/logLogin")
 public class LogLoginController {
-    @Autowired
-    LogLoginService logLoginService;
-
-    /**
-     * 分页查询登录日志列表
-     *
-     * @param date     按操作时间查询
-     * @param pageNum  页码
-     * @param pageSize 每页个数
-     * @return
-     */
-    @GetMapping("/loginLogs")
-    public Response loginLogs(@RequestParam(defaultValue = "") String[] date,
-                              @RequestParam(defaultValue = "1") Integer pageNum,
-                              @RequestParam(defaultValue = "10") Integer pageSize) {
-        String startDate = null;
-        String endDate = null;
-        if (date.length == 2) {
-            startDate = date[0];
-            endDate = date[1];
-        }
-        String orderBy = "create_time desc";
-        PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<LogLoginDO> pageInfo = new PageInfo<>(logLoginService.getLoginLogListByDate(startDate, endDate));
-        return Response.ok("请求成功", pageInfo);
+    
+    @Resource
+    private LogLoginService logLoginService;
+    
+    @PostMapping("/page")
+    public PageResponse<List<LogLoginVO>> page(@RequestBody LogLoginPageReq req) {
+        Pair<Integer, List<LogLoginDO>> pair = logLoginService.page(req.getStartDate(), req.getEndDate(), req.getPageNo(), req.getPageSize());
+        List<LogLoginVO> data = pair.getRight().stream().map(LogLoginConverter::do2vo).toList();
+        return PageResponse.<List<LogLoginVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize());
     }
-
-    /**
-     * 按id删除登录日志
-     *
-     * @param id 日志id
-     * @return
-     */
-    @DeleteMapping("/loginLog")
-    public Response delete(@RequestParam Long id) {
-        logLoginService.deleteLoginLogById(id);
-        return Response.ok("删除成功");
+    
+    @PostMapping("/del")
+    public Response<Boolean> del(@RequestBody LogLoginDelReq req) {
+        LogLoginDO update = new LogLoginDO();
+        update.setId(req.getId());
+        update.setStatus(EnableStatusEnum.DELETE.getVal());
+        logLoginService.updateSelective(update);
+        return Response.success();
     }
+    
 }

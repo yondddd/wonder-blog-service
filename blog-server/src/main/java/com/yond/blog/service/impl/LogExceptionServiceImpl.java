@@ -7,10 +7,13 @@ import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.UserAgentUtils;
 import com.yond.blog.web.blog.view.dto.UserAgentDTO;
 import com.yond.common.exception.PersistenceException;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,14 +23,20 @@ import java.util.List;
  */
 @Service
 public class LogExceptionServiceImpl implements LogExceptionService {
-    @Autowired
-    LogExceptionMapper logExceptionMapper;
-
+    
+    @Resource
+    private LogExceptionMapper logExceptionMapper;
+    
     @Override
-    public List<LogExceptionDO> getExceptionLogListByDate(String startDate, String endDate) {
-        return logExceptionMapper.getExceptionLogListByDate(startDate, endDate);
+    public Pair<Integer, List<LogExceptionDO>> page(Date startDate, Date endDate, Integer pageNo, Integer pageSize) {
+        Integer count = logExceptionMapper.countBy(startDate, endDate);
+        if (count <= 0) {
+            return Pair.of(count, Collections.emptyList());
+        }
+        List<LogExceptionDO> list = logExceptionMapper.pageBy(startDate, endDate, (pageNo - 1) * pageSize, pageSize);
+        return Pair.of(count, list);
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveExceptionLog(LogExceptionDO log) {
@@ -40,12 +49,10 @@ public class LogExceptionServiceImpl implements LogExceptionService {
             throw new PersistenceException("日志添加失败");
         }
     }
-
-    @Transactional(rollbackFor = Exception.class)
+    
     @Override
-    public void deleteExceptionLogById(Long id) {
-        if (logExceptionMapper.deleteExceptionLogById(id) != 1) {
-            throw new PersistenceException("删除日志失败");
-        }
+    public int updateSelective(LogExceptionDO log) {
+        return logExceptionMapper.updateSelective(log);
     }
+    
 }

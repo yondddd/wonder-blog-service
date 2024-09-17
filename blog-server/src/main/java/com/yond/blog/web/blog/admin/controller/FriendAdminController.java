@@ -2,20 +2,26 @@ package com.yond.blog.web.blog.admin.controller;
 
 import com.yond.blog.entity.FriendDO;
 import com.yond.blog.service.FriendService;
+import com.yond.blog.service.SiteConfigService;
 import com.yond.blog.web.blog.admin.convert.FriendConverter;
+import com.yond.blog.web.blog.admin.dto.FriendConfigDTO;
 import com.yond.blog.web.blog.admin.req.*;
 import com.yond.blog.web.blog.admin.vo.FriendConfigVO;
 import com.yond.blog.web.blog.admin.vo.FriendVO;
 import com.yond.common.annotation.OperationLogger;
+import com.yond.common.constant.SiteConfigConstant;
 import com.yond.common.enums.EnableStatusEnum;
 import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Description: 友链页面后台管理
@@ -24,17 +30,19 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin/friend")
 public class FriendAdminController {
-
+    
     @Resource
     private FriendService friendService;
-
+    @Resource
+    private SiteConfigService siteConfigService;
+    
     @PostMapping("/page")
     public PageResponse<List<FriendVO>> page(@RequestBody FriendPageReq req) {
         Pair<Integer, List<FriendDO>> pair = friendService.page(req.getPageNo(), req.getPageSize());
         List<FriendVO> data = pair.getRight().stream().map(FriendConverter::do2vo).toList();
         return PageResponse.<List<FriendVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize()).setSuccess();
     }
-
+    
     @OperationLogger("更新友链公开状态")
     @PostMapping("/published")
     public Response<Boolean> published(@RequestBody FriendPublishedReq req) {
@@ -44,7 +52,7 @@ public class FriendAdminController {
         friendService.updateSelective(update);
         return Response.success();
     }
-
+    
     @OperationLogger("添加友链")
     @PostMapping("/add")
     public Response<Boolean> add(@RequestBody FriendAddReq req) {
@@ -57,7 +65,7 @@ public class FriendAdminController {
         friendService.insertSelective(insert);
         return Response.success();
     }
-
+    
     @OperationLogger("更新友链")
     @PostMapping("/update")
     public Response<Boolean> update(@RequestBody FriendUpdateReq req) {
@@ -70,9 +78,8 @@ public class FriendAdminController {
                 .setPublished(req.getPublished());
         friendService.updateSelective(update);
         return Response.success();
-
     }
-
+    
     @OperationLogger("删除友链")
     @PostMapping("/del")
     public Response<Boolean> del(@RequestBody FriendDelReq req) {
@@ -82,29 +89,22 @@ public class FriendAdminController {
         friendService.updateSelective(del);
         return Response.success();
     }
-
-    @GetMapping("/friendInfo")
-    public Response friendInfo() {
-        return Response.ok("请求成功", friendService.getFriendInfo(false, false));
-    }
-
-    @PostMapping("/config")
+    
+    @PostMapping("/getConfig")
     public Response<FriendConfigVO> friendConfig() {
-        // 配置
-
+        FriendConfigDTO friendConfig = friendService.getFriendConfig();
+        FriendConfigVO data = new FriendConfigVO();
+        data.setContent(friendConfig.getContent());
+        data.setCommentEnabled(friendConfig.getCommentEnabled());
+        return Response.success(data);
     }
-
-    @OperationLogger("修改友链页面评论开放状态")
-    @PutMapping("/friendInfo/commentEnabled")
-    public Response updateFriendInfoCommentEnabled(@RequestParam Boolean commentEnabled) {
-        friendService.updateFriendInfoCommentEnabled(commentEnabled);
-        return Response.ok("修改成功");
+    
+    @OperationLogger("修改友链页面配置")
+    @PostMapping("/updateConfig")
+    public Response<Boolean> updateFriendConfig(@RequestBody FriendUpdateConfigReq req) {
+        siteConfigService.updateValue(SiteConfigConstant.FRIEND_CONTENT, req.getContent());
+        siteConfigService.updateValue(SiteConfigConstant.FRIEND_COMMENT_ENABLED, String.valueOf(BooleanUtils.toInteger(req.getCommentEnabled())));
+        return Response.success();
     }
-
-    @OperationLogger("修改友链页面信息")
-    @PutMapping("/friendInfo/content")
-    public Response updateFriendInfoContent(@RequestBody Map map) {
-        friendService.updateFriendInfoContent((String) map.get("content"));
-        return Response.ok("修改成功");
-    }
+    
 }

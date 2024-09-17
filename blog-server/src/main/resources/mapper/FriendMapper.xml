@@ -19,26 +19,11 @@
         , nickname, description, website, avatar, is_published, views, create_time, status
     </sql>
 
-    <resultMap id="friendVO" type="com.yond.blog.web.blog.view.vo.Friend">
-        <result property="nickname" column="nickname"/>
-        <result property="description" column="description"/>
-        <result property="website" column="website"/>
-        <result property="avatar" column="avatar"/>
-    </resultMap>
-
-    <!--查询友链VO List-->
-    <select id="getFriendVOList" resultMap="friendVO">
-        select nickname, description, website, avatar
-        from friend
-        where is_published = true
-        order by rand()
-    </select>
-
     <!--增加友链浏览次数-->
-    <update id="updateViewsByNickname">
+    <update id="incrViewById">
         update friend
         set views=views + 1
-        where nickname = #{nickname}
+        where id = #{id}
     </update>
 
     <select id="listAll" resultMap="BaseResultMap">

@@ -6,11 +6,13 @@ import com.yond.blog.service.LogOperationService;
 import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.UserAgentUtils;
 import com.yond.blog.web.blog.view.dto.UserAgentDTO;
-import com.yond.common.exception.PersistenceException;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,15 +22,22 @@ import java.util.List;
  */
 @Service
 public class LogOperationServiceImpl implements LogOperationService {
-
+    
     @Resource
     private LogOperationMapper logOperationMapper;
-
+    
+    
     @Override
-    public List<LogOperationDO> getOperationLogListByDate(String startDate, String endDate) {
-        return logOperationMapper.listByDate(startDate, endDate);
+    public Pair<Integer, List<LogOperationDO>> page(Date startDate, Date endDate, Integer pageNo, Integer pageSize) {
+        Integer count = logOperationMapper.countBy(startDate, endDate);
+        if (count <= 0) {
+            return Pair.of(count, Collections.emptyList());
+        }
+        List<LogOperationDO> list = logOperationMapper.pageBy(startDate, endDate, (pageNo - 1) * pageSize, pageSize);
+        return Pair.of(count, list);
     }
-
+    
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveOperationLog(LogOperationDO log) {
@@ -39,12 +48,10 @@ public class LogOperationServiceImpl implements LogOperationService {
         log.setBrowser(userAgentDTO.getBrowser());
         logOperationMapper.insertSelective(log);
     }
-
-    @Transactional(rollbackFor = Exception.class)
+    
     @Override
-    public void deleteOperationLogById(Long id) {
-        if (logOperationMapper.deleteById(id) != 1) {
-            throw new PersistenceException("删除日志失败");
-        }
+    public int updateSelective(LogOperationDO log) {
+        return logOperationMapper.updateSelective(log);
     }
+    
 }

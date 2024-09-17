@@ -1,56 +1,48 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.LogExceptionDO;
 import com.yond.blog.service.LogExceptionService;
+import com.yond.blog.web.blog.admin.convert.LogExceptionConverter;
+import com.yond.blog.web.blog.admin.req.LogExceptionDelReq;
+import com.yond.blog.web.blog.admin.req.LogExceptionPageReq;
+import com.yond.blog.web.blog.admin.vo.LogExceptionVO;
+import com.yond.common.enums.EnableStatusEnum;
+import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @Description: 异常日志后台管理
  * @Author: Yond
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/logException")
 public class LogExceptionController {
-    @Autowired
-    LogExceptionService logExceptionService;
-
-    /**
-     * 分页查询异常日志列表
-     *
-     * @param date     按操作时间查询
-     * @param pageNum  页码
-     * @param pageSize 每页个数
-     * @return
-     */
-    @GetMapping("/exceptionLogs")
-    public Response exceptionLogs(@RequestParam(defaultValue = "") String[] date,
-                                  @RequestParam(defaultValue = "1") Integer pageNum,
-                                  @RequestParam(defaultValue = "10") Integer pageSize) {
-        String startDate = null;
-        String endDate = null;
-        if (date.length == 2) {
-            startDate = date[0];
-            endDate = date[1];
-        }
-        String orderBy = "create_time desc";
-        PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<LogExceptionDO> pageInfo = new PageInfo<>(logExceptionService.getExceptionLogListByDate(startDate, endDate));
-        return Response.ok("请求成功", pageInfo);
+    
+    @Resource
+    private LogExceptionService logExceptionService;
+    
+    @PostMapping("/page")
+    public PageResponse<List<LogExceptionVO>> exceptionLogs(LogExceptionPageReq req) {
+        Pair<Integer, List<LogExceptionDO>> pair = logExceptionService.page(req.getStartDate(), req.getEndDate(), req.getPageNo(), req.getPageSize());
+        List<LogExceptionVO> data = pair.getRight().stream().map(LogExceptionConverter::do2vo).toList();
+        return PageResponse.<List<LogExceptionVO>>custom().setTotal(pair.getLeft()).setData(data).setPageNo(req.getPageNo()).setPageSize(req.getPageSize()).setSuccess();
     }
-
-    /**
-     * 按id删除异常日志
-     *
-     * @param id 日志id
-     * @return
-     */
-    @DeleteMapping("/exceptionLog")
-    public Response delete(@RequestParam Long id) {
-        logExceptionService.deleteExceptionLogById(id);
-        return Response.ok("删除成功");
+    
+    @PostMapping("/del")
+    public Response<Boolean> del(@RequestBody LogExceptionDelReq req) {
+        LogExceptionDO update = new LogExceptionDO();
+        update.setId(req.getId());
+        update.setStatus(EnableStatusEnum.DELETE.getVal());
+        logExceptionService.updateSelective(update);
+        return Response.success();
     }
+    
 }

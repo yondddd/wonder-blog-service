@@ -1,56 +1,54 @@
 package com.yond.blog.web.blog.view.controller;
 
+import com.yond.blog.entity.FriendDO;
 import com.yond.blog.service.FriendService;
-import com.yond.blog.web.blog.view.vo.Friend;
-import com.yond.blog.web.blog.view.vo.FriendInfo;
+import com.yond.blog.web.blog.admin.dto.FriendConfigDTO;
+import com.yond.blog.web.blog.view.convert.FriendViewConverter;
+import com.yond.blog.web.blog.view.req.FriendClickReq;
+import com.yond.blog.web.blog.view.vo.FriendViewVO;
 import com.yond.common.annotation.VisitLogger;
 import com.yond.common.enums.VisitBehavior;
 import com.yond.common.resp.Response;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Description: 友链
  * @Author: Yond
  */
 @RestController
+@RequestMapping("/view/friend")
 public class FriendController {
-    @Autowired
-    FriendService friendService;
-
-    /**
-     * 获取友链页面
-     *
-     * @return
-     */
+    
+    @Resource
+    private FriendService friendService;
+    
     @VisitLogger(VisitBehavior.FRIEND)
-    @GetMapping("/view/friends")
-    public Response friends() {
-        List<Friend> friendList = friendService.getFriendVOList();
-        FriendInfo friendInfo = friendService.getFriendInfo(true, true);
-        Map<String, Object> map = new HashMap<>(4);
-        map.put("friendList", friendList);
-        map.put("friendInfo", friendInfo);
-        return Response.ok("获取成功", map);
+    @PostMapping("/list")
+    public Response<FriendViewVO> friends() {
+        FriendViewVO data = new FriendViewVO();
+        List<FriendDO> list = new ArrayList<>(friendService.listAll().stream().filter(FriendDO::getPublished).toList());
+        // 打乱
+        Collections.shuffle(list);
+        FriendConfigDTO friendConfig = friendService.getFriendConfig();
+        data.setContent(friendConfig.getContent());
+        data.setCommentEnabled(friendConfig.getCommentEnabled());
+        data.setFriendList(list.stream().map(FriendViewConverter::do2vo).toList());
+        return Response.success(data);
     }
-
-    /**
-     * 按昵称增加友链浏览次数
-     *
-     * @param nickname 友链昵称
-     * @return
-     */
+    
     @VisitLogger(VisitBehavior.CLICK_FRIEND)
-    @PostMapping("/view/friend")
-    public Response addViews(@RequestParam String nickname) {
-        friendService.updateViewsByNickname(nickname);
-        return Response.ok("请求成功");
+    @PostMapping("/friendClick")
+    public Response<Boolean> friendClick(@RequestBody FriendClickReq req) {
+        friendService.incrViewById(req.getId());
+        return Response.success();
     }
+    
 }
