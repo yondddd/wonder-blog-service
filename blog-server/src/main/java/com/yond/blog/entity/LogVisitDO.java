@@ -24,7 +24,7 @@ public class LogVisitDO implements Serializable {
     private String ipSource;//ip来源
     private String os;//操作系统
     private String browser;//浏览器
-    private Integer times;//请求耗时（毫秒）
+    private Integer duration;//请求耗时（毫秒）
     private Date createTime;//访问时间
     private String userAgent;
     private Integer status;
@@ -145,12 +145,12 @@ public class LogVisitDO implements Serializable {
         return this;
     }
 
-    public Integer getTimes() {
-        return times;
+    public Integer getDuration() {
+        return duration;
     }
 
-    public LogVisitDO setTimes(Integer times) {
-        this.times = times;
+    public LogVisitDO setDuration(Integer duration) {
+        this.duration = duration;
         return this;
     }
 
@@ -196,7 +196,7 @@ public class LogVisitDO implements Serializable {
                 ", ipSource='" + ipSource + '\'' +
                 ", os='" + os + '\'' +
                 ", browser='" + browser + '\'' +
-                ", times=" + times +
+                ", times=" + duration +
                 ", createTime=" + createTime +
                 ", userAgent='" + userAgent + '\'' +
                 ", status=" + status +

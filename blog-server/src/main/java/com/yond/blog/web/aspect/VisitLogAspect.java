@@ -75,7 +75,7 @@ public class VisitLogAspect {
                 .setBehavior(behavior)
                 .setContent(content)
                 .setIp(ip)
-                .setTimes(duration)
+                .setDuration(duration)
                 .setUserAgent(userAgent);
         log.setParam(params);
         logVisitService.saveVisitLog(log);

@@ -15,14 +15,14 @@
         <result property="ipSource" column="ip_source"/>
         <result property="os" column="os"/>
         <result property="browser" column="browser"/>
-        <result property="times" column="times"/>
+        <result property="duration" column="duration"/>
         <result property="createTime" column="create_time"/>
         <result property="userAgent" column="user_agent"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id
-        , uuid, uri, `method`, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time,status
+        , uuid, uri, `method`, param, behavior, content, remark, ip, ip_source, os, browser, duration, create_time,status
     </sql>
 
     <resultMap id="logDTO" type="com.yond.blog.web.blog.view.dto.VisitLogUuidTime">
@@ -61,7 +61,7 @@
             <if test="ipSource != null">ip_source,</if>
             <if test="os != null">os,</if>
             <if test="browser != null">browser,</if>
-            <if test="times != null">times,</if>
+            <if test="duration != null">duration,</if>
             <if test="createTime != null">create_time,</if>
             <if test="userAgent != null">user_agent,</if>
             <if test="status != null">status,</if>
@@ -80,8 +80,8 @@
             <if test="ipSource != null">#{ipSource,jdbcType=VARCHAR},</if>
             <if test="os != null">#{os,jdbcType=VARCHAR},</if>
             <if test="browser != null">#{browser,jdbcType=VARCHAR},</if>
-            <if test="times != null">#{times,jdbcType=NUMERIC},</if>
-            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="duration != null">#{duration,jdbcType=NUMERIC},</if>
+            <if test="createTime != null">#{createTime,jdbcType=durationTAMP},</if>
             <if test="userAgent != null">#{userAgent,jdbcType=VARCHAR},</if>
             <if test="status != null">#{status,jdbcType=NUMERIC},</if>
         </trim>
@@ -101,8 +101,8 @@
             <if test="ipSource != null">ip_source=#{ipSource,jdbcType=VARCHAR},</if>
             <if test="os != null">os=#{os,jdbcType=VARCHAR},</if>
             <if test="browser != null">browser=#{browser,jdbcType=VARCHAR},</if>
-            <if test="times != null">times=#{times,jdbcType=NUMERIC},</if>
-            <if test="createTime != null">create_time=#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="duration != null">duration=#{duration,jdbcType=NUMERIC},</if>
+            <if test="createTime != null">create_time=#{createTime,jdbcType=durationTAMP},</if>
             <if test="userAgent != null">user_agent=#{userAgent,jdbcType=VARCHAR},</if>
             <if test="status != null">status=#{status,jdbcType=NUMERIC},</if>
         </set>
