@@ -22,24 +22,8 @@
 
     <sql id="Base_Column_List">
         id
-        , uuid, uri, `method`, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time
+        , uuid, uri, `method`, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time,status
     </sql>
-
-    <!--查询日志-->
-    <select id="getVisitLogListByUUIDAndDate" resultMap="log">
-        <bind name="uuidPattern" value="'%' + uuid + '%'"/>
-        select
-        <include refid="Base_Column_List"/>
-        from log_visit
-        <where>
-            <if test="uuid!=null and uuid!=''">
-                uuid like #{uuidPattern}
-            </if>
-            <if test="startDate!=null and startDate!='' and endDate!=null and endDate!=''">
-                and create_time between #{startDate} and #{endDate}
-            </if>
-        </where>
-    </select>
 
     <resultMap id="logDTO" type="com.yond.blog.web.blog.view.dto.VisitLogUuidTime">
         <result property="uuid" column="uuid"/>
@@ -51,23 +35,8 @@
         select uuid, create_time
         from log_visit
         where date (create_time)=date_sub(curdate(), interval 1 day)
-        order by create_time desc
+        order by id desc
     </select>
-
-    <!--添加日志-->
-    <insert id="saveVisitLog" parameterType="com.yond.blog.entity.LogVisitDO" useGeneratedKeys="true" keyProperty="id">
-        insert into log_visit (uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times,
-                               create_time, user_agent)
-        values (#{uuid}, #{uri}, #{method}, #{param}, #{behavior}, #{content}, #{remark}, #{ip}, #{ipSource}, #{os},
-                #{browser}, #{times}, #{createTime}, #{userAgent})
-    </insert>
-
-    <!--删除日志-->
-    <delete id="deleteVisitLogById">
-        delete
-        from log_visit
-        where id = #{id}
-    </delete>
 
     <!--查询今日访问量-->
     <select id="countVisitLogByToday" resultType="java.lang.Integer">
@@ -75,5 +44,69 @@
         from log_visit
         where date (create_time)=curdate()
     </select>
+
+
+    <insert id="insertSelective">
+        insert into log_visit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="uuid != null">uuid,</if>
+            <if test="uri != null">uri,</if>
+            <if test="method != null">method,</if>
+            <if test="param != null">param,</if>
+            <if test="behavior != null">behavior,</if>
+            <if test="content != null">content,</if>
+            <if test="remark != null">remark,</if>
+            <if test="ip != null">ip,</if>
+            <if test="ipSource != null">ip_source,</if>
+            <if test="os != null">os,</if>
+            <if test="browser != null">browser,</if>
+            <if test="times != null">times,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="userAgent != null">user_agent,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=NUMERIC},</if>
+            <if test="uuid != null">#{uuid,jdbcType=VARCHAR},</if>
+            <if test="uri != null">#{uri,jdbcType=VARCHAR},</if>
+            <if test="method != null">#{method,jdbcType=VARCHAR},</if>
+            <if test="param != null">#{param,jdbcType=VARCHAR},</if>
+            <if test="behavior != null">#{behavior,jdbcType=VARCHAR},</if>
+            <if test="content != null">#{content,jdbcType=VARCHAR},</if>
+            <if test="remark != null">#{remark,jdbcType=VARCHAR},</if>
+            <if test="ip != null">#{ip,jdbcType=VARCHAR},</if>
+            <if test="ipSource != null">#{ipSource,jdbcType=VARCHAR},</if>
+            <if test="os != null">#{os,jdbcType=VARCHAR},</if>
+            <if test="browser != null">#{browser,jdbcType=VARCHAR},</if>
+            <if test="times != null">#{times,jdbcType=NUMERIC},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="userAgent != null">#{userAgent,jdbcType=VARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=NUMERIC},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSelective">
+        update log_visit
+        <set>
+            <if test="uuid != null">uuid=#{uuid,jdbcType=VARCHAR},</if>
+            <if test="uri != null">uri=#{uri,jdbcType=VARCHAR},</if>
+            <if test="method != null">method=#{method,jdbcType=VARCHAR},</if>
+            <if test="param != null">param=#{param,jdbcType=VARCHAR},</if>
+            <if test="behavior != null">behavior=#{behavior,jdbcType=VARCHAR},</if>
+            <if test="content != null">content=#{content,jdbcType=VARCHAR},</if>
+            <if test="remark != null">remark=#{remark,jdbcType=VARCHAR},</if>
+            <if test="ip != null">ip=#{ip,jdbcType=VARCHAR},</if>
+            <if test="ipSource != null">ip_source=#{ipSource,jdbcType=VARCHAR},</if>
+            <if test="os != null">os=#{os,jdbcType=VARCHAR},</if>
+            <if test="browser != null">browser=#{browser,jdbcType=VARCHAR},</if>
+            <if test="times != null">times=#{times,jdbcType=NUMERIC},</if>
+            <if test="createTime != null">create_time=#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="userAgent != null">user_agent=#{userAgent,jdbcType=VARCHAR},</if>
+            <if test="status != null">status=#{status,jdbcType=NUMERIC},</if>
+        </set>
+        where id = #{id,jdbcType=NUMERIC}
+    </update>
 
 </mapper>

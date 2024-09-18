@@ -9,9 +9,12 @@ import com.yond.blog.web.blog.view.dto.UserAgentDTO;
 import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
 import com.yond.common.exception.PersistenceException;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,20 +24,25 @@ import java.util.List;
  */
 @Service
 public class LogVisitServiceImpl implements LogVisitService {
-
+    
     @Resource
     private LogVisitMapper logVisitMapper;
-
+    
     @Override
-    public List<LogVisitDO> getVisitLogListByUUIDAndDate(String uuid, String startDate, String endDate) {
-        return logVisitMapper.getVisitLogListByUUIDAndDate(uuid, startDate, endDate);
+    public Pair<Integer, List<LogVisitDO>> page(String uuid, Date startDate, Date endDate, Integer pageNo, Integer pageSize) {
+        Integer count = logVisitMapper.countBy(startDate, endDate);
+        if (count <= 0) {
+            return Pair.of(count, Collections.emptyList());
+        }
+        List<LogVisitDO> list = logVisitMapper.pageBy(uuid, startDate, endDate, (pageNo - 1) * pageSize, pageSize);
+        return Pair.of(count, list);
     }
-
+    
     @Override
     public List<VisitLogUuidTime> getUUIDAndCreateTimeByYesterday() {
         return logVisitMapper.getUUIDAndCreateTimeByYesterday();
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveVisitLog(LogVisitDO log) {
@@ -43,19 +51,16 @@ public class LogVisitServiceImpl implements LogVisitService {
         log.setIpSource(ipSource);
         log.setOs(userAgentDTO.getOs());
         log.setBrowser(userAgentDTO.getBrowser());
-        if (logVisitMapper.saveVisitLog(log) != 1) {
+        if (logVisitMapper.insertSelective(log) != 1) {
             throw new PersistenceException("日志添加失败");
         }
     }
-
-    @Transactional(rollbackFor = Exception.class)
+    
     @Override
-    public void deleteVisitLogById(Long id) {
-        if (logVisitMapper.deleteVisitLogById(id) != 1) {
-            throw new PersistenceException("删除日志失败");
-        }
+    public int updateSelective(LogVisitDO log) {
+        return logVisitMapper.updateSelective(log);
     }
-
+    
     @Override
     public int countVisitLogByToday() {
         return logVisitMapper.countVisitLogByToday();

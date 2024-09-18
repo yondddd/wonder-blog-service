@@ -5,6 +5,7 @@ import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,14 +16,17 @@ import java.util.List;
 @Mapper
 @Repository
 public interface LogVisitMapper {
-
-    List<LogVisitDO> getVisitLogListByUUIDAndDate(String uuid, String startDate, String endDate);
-
+    
     List<VisitLogUuidTime> getUUIDAndCreateTimeByYesterday();
-
-    int saveVisitLog(LogVisitDO log);
-
-    int deleteVisitLogById(Long id);
-
+    
     int countVisitLogByToday();
+    
+    int insertSelective(LogVisitDO log);
+    
+    int updateSelective(LogVisitDO log);
+    
+    Integer countBy(Date startDate, Date endDate);
+    
+    List<LogVisitDO> pageBy(String uuid, Date startDate, Date endDate, Integer offset, Integer size);
+    
 }
