@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
  * Telegram配置
  *
  * @Author: Yond
- * @date: 2022-01-22
  */
 @Configuration
 @ConfigurationProperties(prefix = "tg.bot")

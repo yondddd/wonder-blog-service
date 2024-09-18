@@ -7,7 +7,6 @@ import java.util.Date;
 /**
  * @Description: 访客记录
  * @Author: Yond
- * @Date: 2021-01-31
  */
 public class VisitUserDO implements Serializable {
     @Serial

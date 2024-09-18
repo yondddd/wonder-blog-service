@@ -10,17 +10,16 @@ import java.util.List;
 /**
  * @Description: 登录日志持久层接口
  * @Author: Yond
- * @Date: 2020-12-03
  */
 @Mapper
 @Repository
 public interface LogLoginMapper {
-    
+
     int insertSelective(LogLoginDO logLoginDO);
-    
+
     int updateSelective(LogLoginDO logLoginDO);
-    
+
     Integer countBy(Date startDate, Date endDate);
-    
+
     List<LogLoginDO> pageBy(Date startDate, Date endDate, Integer offset, Integer size);
 }

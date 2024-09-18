@@ -5,8 +5,6 @@ import java.io.Serializable;
 
 /**
  * @Author Yond
- * @date 2024/4/6
- * @description page rep
  */
 public class PageReq implements Serializable {
 

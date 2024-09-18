@@ -2,8 +2,6 @@ package com.yond.common.enums;
 
 /**
  * @Author Yond
- * @date 7/21/2024
- * @description
  */
 public enum SiteSettingTypeEnum {
 

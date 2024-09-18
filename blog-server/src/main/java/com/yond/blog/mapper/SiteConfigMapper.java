@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * @Description: 站点设置持久层接口
  * @Author: Yond
- * @Date: 2020-08-03
  */
 @Mapper
 @Repository

@@ -7,7 +7,6 @@ import java.util.Date;
 /**
  * @Description: 博客动态
  * @Author: Yond
- * @Date: 2020-08-24
  */
 public class MomentDO implements Serializable {
 

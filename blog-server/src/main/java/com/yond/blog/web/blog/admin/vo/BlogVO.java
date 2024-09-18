@@ -7,8 +7,6 @@ import java.util.List;
 
 /**
  * @Author Yond
- * @date 8/19/2024
- * @description
  */
 public class BlogVO implements Serializable {
     @Serial

@@ -11,22 +11,21 @@ import java.util.List;
 /**
  * @Description: 访问日志持久层接口
  * @Author: Yond
- * @Date: 2020-12-04
  */
 @Mapper
 @Repository
 public interface LogVisitMapper {
-    
+
     List<VisitLogUuidTime> getUUIDAndCreateTimeByYesterday();
-    
+
     int countVisitLogByToday();
-    
+
     int insertSelective(LogVisitDO log);
-    
+
     int updateSelective(LogVisitDO log);
-    
+
     Integer countBy(Date startDate, Date endDate);
-    
+
     List<LogVisitDO> pageBy(String uuid, Date startDate, Date endDate, Integer offset, Integer size);
-    
+
 }

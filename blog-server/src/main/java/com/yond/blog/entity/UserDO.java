@@ -6,7 +6,6 @@ import java.util.Date;
 /**
  * @Description: 用户实体类
  * @Author: Yond
- * @Date: 2020-07-19
  */
 
 public class UserDO {

@@ -2,8 +2,6 @@ package com.yond.common.utils.env.env;
 
 /**
  * @Author Yond
- * @date 8/2/2024
- * @description
  */
 public class EnvConstant {
 

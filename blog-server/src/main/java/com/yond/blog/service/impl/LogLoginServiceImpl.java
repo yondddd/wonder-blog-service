@@ -19,15 +19,14 @@ import java.util.List;
 /**
  * @Description: 登录日志业务层实现
  * @Author: Yond
- * @Date: 2020-12-03
  */
 @Service
 public class LogLoginServiceImpl implements LogLoginService {
-    
+
     @Resource
     private LogLoginMapper logLoginMapper;
-    
-    
+
+
     @Override
     public Pair<Integer, List<LogLoginDO>> page(Date startDate, Date endDate, Integer pageNo, Integer pageSize) {
         Integer count = logLoginMapper.countBy(startDate, endDate);
@@ -37,8 +36,8 @@ public class LogLoginServiceImpl implements LogLoginService {
         List<LogLoginDO> list = logLoginMapper.pageBy(startDate, endDate, (pageNo - 1) * pageSize, pageSize);
         return Pair.of(count, list);
     }
-    
-    
+
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveLoginLog(LogLoginDO log) {
@@ -51,7 +50,7 @@ public class LogLoginServiceImpl implements LogLoginService {
             throw new PersistenceException("日志添加失败");
         }
     }
-    
+
     @Override
     public int updateSelective(LogLoginDO log) {
         return logLoginMapper.updateSelective(log);

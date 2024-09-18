@@ -8,8 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @Author Yond
- * @date 6/20/2024
- * @description redis cache
  */
 @Component
 public class RedisCache<T> {

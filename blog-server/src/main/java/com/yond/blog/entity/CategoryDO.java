@@ -7,7 +7,6 @@ import java.util.Date;
 /**
  * @Description: 博客分类
  * @Author: Yond
- * @Date: 2020-07-26
  */
 public class CategoryDO implements Serializable {
 

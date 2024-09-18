@@ -25,16 +25,15 @@ import java.util.List;
 /**
  * @Description: 友链业务层实现
  * @Author: Yond
- * @Date: 2020-09-08
  */
 @Service
 public class FriendServiceImpl implements FriendService {
-    
+
     @Resource
     private FriendMapper friendMapper;
     @Resource
     private SiteConfigService siteConfigService;
-    
+
     @Override
     public List<FriendDO> listAll() {
         List<FriendDO> cache = FriendCache.getAll();
@@ -45,14 +44,14 @@ public class FriendServiceImpl implements FriendService {
                 .filter(x -> EnableStatusEnum.ENABLE.getVal().equals(x.getStatus())).toList();
         return cache;
     }
-    
+
     @Override
     public Pair<Integer, List<FriendDO>> page(Integer pageNo, Integer pageSize) {
         List<FriendDO> all = this.listAll();
         all.sort(Comparator.comparing(FriendDO::getId).reversed());
         return Pair.of(all.size(), PageUtil.pageList(all, pageNo, pageSize));
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void incrViewById(Long id) {
@@ -60,19 +59,19 @@ public class FriendServiceImpl implements FriendService {
             throw new PersistenceException("操作失败");
         }
     }
-    
+
     @Override
     public void insertSelective(FriendDO friendDO) {
         friendMapper.insertSelective(friendDO);
         FriendCache.delAll();
     }
-    
+
     @Override
     public void updateSelective(FriendDO friendDO) {
         friendMapper.updateSelective(friendDO);
         FriendCache.delAll();
     }
-    
+
     @Override
     public FriendConfigDTO getFriendConfig() {
         List<SiteConfigDO> siteSettings = siteConfigService.listAll()
@@ -88,5 +87,5 @@ public class FriendServiceImpl implements FriendService {
         }
         return config;
     }
-    
+
 }

@@ -7,8 +7,6 @@ import java.util.List;
 
 /**
  * @Author Yond
- * @date 8/23/2024
- * @description
  */
 public interface BlogTagService {
 

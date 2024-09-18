@@ -5,8 +5,6 @@ import java.io.Serializable;
 
 /**
  * @Author Yond
- * @date 8/20/2024
- * @description
  */
 public class TagVO implements Serializable {
 

@@ -35,11 +35,10 @@ import java.util.stream.Collectors;
 /**
  * @Description: 博客评论业务层实现
  * @Author: Yond
- * @Date: 2020-08-03
  */
 @Service
 public class CommentServiceImpl implements CommentService {
-    
+
     @Resource
     private CommentMapper commentMapper;
     @Resource
@@ -48,23 +47,23 @@ public class CommentServiceImpl implements CommentService {
     private FriendService friendService;
     @Resource
     private BlogService blogService;
-    
-    
+
+
     private final Cache<String, List<CommentDO>> cache = LocalCache.buildCache(1, new CacheLoader<>() {
         @Override
         public @Nullable List<CommentDO> load(String s) throws Exception {
             return commentMapper.listAll();
         }
     });
-    
+
     public List<CommentDO> listAll() {
         return cache.getIfPresent("listAll");
     }
-    
+
     private Map<Long, List<CommentDO>> allToMap(List<CommentDO> list) {
         return list.stream().collect(Collectors.groupingBy(CommentDO::getParentId));
     }
-    
+
     @Override
     public Pair<Integer, List<CommentDTO>> pageBy(CommentPageEnum page, Long blogId, Integer pageNo, Integer pageSize) {
         List<CommentDO> allData = this.listAll();
@@ -75,13 +74,13 @@ public class CommentServiceImpl implements CommentService {
         List<CommentDO> pageList = PageUtil.pageList(root, pageNo, pageSize);
         return Pair.of(root.size(), buildTree(pageList, map));
     }
-    
+
     @Override
     public CommentDO getById(Long id) {
         return this.listAll().stream()
                 .filter(x -> x.getId().equals(id)).findFirst().orElse(null);
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateSelective(CommentDO comment) {
@@ -89,8 +88,8 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论修改失败");
         }
     }
-    
-    
+
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void insertSelective(CommentDO comment) {
@@ -98,7 +97,7 @@ public class CommentServiceImpl implements CommentService {
             throw new PersistenceException("评论失败");
         }
     }
-    
+
     @Override
     public CommentOpenStateEnum getPageCommentStatus(Integer page, Long blogId) {
         CommentPageEnum pageEnum = CommentPageEnum.getByValue(page);
@@ -138,7 +137,7 @@ public class CommentServiceImpl implements CommentService {
         }
         return CommentOpenStateEnum.CLOSE;
     }
-    
+
     public List<CommentDTO> buildTree(List<CommentDO> root, Map<Long, List<CommentDO>> map) {
         List<CommentDTO> result = new ArrayList<>();
         for (CommentDO commentDO : root) {
@@ -151,7 +150,7 @@ public class CommentServiceImpl implements CommentService {
         }
         return result;
     }
-    
+
     private CommentDTO convertToDTO(CommentDO commentDO) {
         CommentDTO dto = new CommentDTO();
         dto.setId(commentDO.getId());
@@ -172,5 +171,5 @@ public class CommentServiceImpl implements CommentService {
         dto.setCreateTime(commentDO.getCreateTime());
         return dto;
     }
-    
+
 }

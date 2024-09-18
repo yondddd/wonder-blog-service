@@ -8,7 +8,6 @@ import java.io.Serializable;
 /**
  * @Description: 站点设置
  * @Author: Yond
- * @Date: 2020-08-09
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SiteConfigDO implements Serializable {

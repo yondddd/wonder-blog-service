@@ -5,8 +5,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * @Author Yond
- * @date 6/29/2024
- * @description access limit
  */
 @Component
 public class AccessLimitCache {

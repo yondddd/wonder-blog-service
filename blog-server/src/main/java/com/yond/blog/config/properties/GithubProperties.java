@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
  * GitHub配置(目前用于评论中QQ头像的图床)
  *
  * @Author: Yond
- * @date: 2022-01-23
  */
 @Configuration
 @ConfigurationProperties(prefix = "upload.github")

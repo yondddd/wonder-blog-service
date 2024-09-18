@@ -7,7 +7,6 @@ import java.util.Date;
 /**
  * @Description: 定时任务日志
  * @Author: Yond
- * @Date: 2020-11-01
  */
 public class LogScheduleJobDO implements Serializable {
     @Serial

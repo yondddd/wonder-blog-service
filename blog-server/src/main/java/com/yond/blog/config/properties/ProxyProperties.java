@@ -8,7 +8,6 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
  * 代理配置(目前用于RestTemplate发送tg消息)
  *
  * @Author: Yond
- * @date: 2022-01-22
  */
 @Configuration
 @ConfigurationProperties(prefix = "http.proxy.server")

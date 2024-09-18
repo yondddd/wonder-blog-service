@@ -5,8 +5,6 @@ import com.yond.blog.web.blog.admin.vo.CategoryVO;
 
 /**
  * @Author Yond
- * @date 8/20/2024
- * @description
  */
 public class CategoryConverter {
 

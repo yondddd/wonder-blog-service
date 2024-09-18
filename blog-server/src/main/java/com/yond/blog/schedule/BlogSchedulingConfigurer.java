@@ -26,7 +26,6 @@ import java.util.Map;
 /**
  * @Description: 单位同步配置定时任务
  * @Author: yond
- * @Date: 2023-10-30
  */
 @Configuration
 @EnableScheduling

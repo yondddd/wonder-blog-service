@@ -15,7 +15,6 @@ import java.net.Proxy;
  * RestTemplate相关的Bean配置
  *
  * @Author: Yond
- * @date: 2022-01-22
  */
 @Configuration
 public class RestTemplateConfig {

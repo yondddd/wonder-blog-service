@@ -8,8 +8,6 @@ import java.util.Map;
 
 /**
  * @Author Yond
- * @date 6/29/2024
- * @description blog view
  */
 @Component
 public class BlogViewCache {

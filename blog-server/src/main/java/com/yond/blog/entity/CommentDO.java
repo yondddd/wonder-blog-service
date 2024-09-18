@@ -7,7 +7,6 @@ import java.util.Date;
 /**
  * @Description: 博客评论
  * @Author: Yond
- * @Date: 2020-07-27
  */
 public class CommentDO implements Serializable {
 

@@ -5,8 +5,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * @Author Yond
- * @date 6/29/2024
- * @description visit cache
  */
 @Component
 public class VisitCache {
