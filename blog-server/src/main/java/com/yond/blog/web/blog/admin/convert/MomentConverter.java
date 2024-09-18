@@ -5,8 +5,6 @@ import com.yond.blog.web.blog.admin.vo.MomentVO;
 
 /**
  * @Author Yond
- * @date 8/31/2024
- * @description
  */
 public class MomentConverter {
 

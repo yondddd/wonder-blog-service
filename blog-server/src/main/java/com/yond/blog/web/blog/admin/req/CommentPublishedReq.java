@@ -6,7 +6,6 @@ import java.io.Serializable;
 /**
  * @Description: 更新评论公开状态
  * @Author: Yond
- * @Date: 2024-09-13
  */
 public class CommentPublishedReq implements Serializable {
 

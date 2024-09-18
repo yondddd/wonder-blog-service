@@ -9,8 +9,6 @@ import java.util.List;
 
 /**
  * @Author Yond
- * @date 8/25/2024
- * @description save blog
  */
 public class BlogSaveReq implements Serializable {
 

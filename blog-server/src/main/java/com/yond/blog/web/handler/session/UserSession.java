@@ -2,8 +2,6 @@ package com.yond.blog.web.handler.session;
 
 /**
  * @Author Yond
- * @date 8/25/2024
- * @description
  */
 public class UserSession {
 

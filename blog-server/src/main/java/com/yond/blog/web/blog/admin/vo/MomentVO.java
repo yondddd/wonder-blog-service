@@ -6,8 +6,6 @@ import java.util.Date;
 
 /**
  * @Author Yond
- * @date 8/31/2024
- * @description
  */
 public class MomentVO implements Serializable {
 

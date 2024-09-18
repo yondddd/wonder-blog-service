@@ -10,8 +10,6 @@ import java.util.List;
 
 /**
  * @Author Yond
- * @date 9/1/2024
- * @description
  */
 public class CommentVO implements Serializable {
 

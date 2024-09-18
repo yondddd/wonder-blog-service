@@ -5,8 +5,6 @@ import java.io.Serializable;
 
 /**
  * @Author Yond
- * @date 9/1/2024
- * @description
  */
 public class CommentSelectVO implements Serializable {
     @Serial

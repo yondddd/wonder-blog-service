@@ -5,8 +5,6 @@ import java.io.Serializable;
 
 /**
  * @Author Yond
- * @date 8/21/2024
- * @description
  */
 public class BlogTopReq implements Serializable {
 

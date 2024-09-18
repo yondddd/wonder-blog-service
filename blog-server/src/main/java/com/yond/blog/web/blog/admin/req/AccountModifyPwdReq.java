@@ -6,7 +6,6 @@ import java.io.Serializable;
 /**
  * @Description:
  * @Author: Yond
- * @Date: 2024-09-14
  */
 public class AccountModifyPwdReq implements Serializable {
 

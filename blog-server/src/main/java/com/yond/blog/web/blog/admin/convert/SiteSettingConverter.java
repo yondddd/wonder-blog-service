@@ -6,7 +6,6 @@ import com.yond.blog.web.blog.admin.vo.SiteSettingVO;
 /**
  * @Description:
  * @Author: yond
- * @Date: 2024-08-30
  */
 public class SiteSettingConverter {
 

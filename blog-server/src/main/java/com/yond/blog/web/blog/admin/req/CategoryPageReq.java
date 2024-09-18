@@ -6,8 +6,6 @@ import java.io.Serial;
 
 /**
  * @Author Yond
- * @date 8/31/2024
- * @description
  */
 public class CategoryPageReq extends PageReq {
     @Serial

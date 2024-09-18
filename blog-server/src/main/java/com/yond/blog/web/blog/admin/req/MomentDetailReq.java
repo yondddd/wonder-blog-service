@@ -5,8 +5,6 @@ import java.io.Serializable;
 
 /**
  * @Author Yond
- * @date 8/31/2024
- * @description
  */
 public class MomentDetailReq implements Serializable {
 
