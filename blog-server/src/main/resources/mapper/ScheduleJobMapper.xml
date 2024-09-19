@@ -60,4 +60,5 @@
         set status=#{status}
         where id = #{jobId}
     </update>
+
 </mapper>

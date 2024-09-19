@@ -13,9 +13,12 @@ import java.util.List;
 @Mapper
 @Repository
 public interface LogScheduleJobMapper {
+    
     List<LogScheduleJobDO> getJobLogListByDate(String startDate, String endDate);
-
+    
     int saveJobLog(LogScheduleJobDO jobLog);
-
+    
     int deleteJobLogByLogId(Long logId);
+    
+    updateSelective
 }

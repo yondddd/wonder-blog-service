@@ -2,8 +2,10 @@ package com.yond.blog.schedule;
 
 import com.yond.blog.entity.LogScheduleJobDO;
 import com.yond.blog.entity.ScheduleJobDO;
+import com.yond.blog.service.LogScheduleJobService;
 import com.yond.blog.service.ScheduleJobService;
 import com.yond.common.utils.json.util.JsonUtils;
+import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,28 +26,27 @@ import java.util.Map;
 
 
 /**
- * @Description: 单位同步配置定时任务
  * @Author: yond
  */
 @Configuration
 @EnableScheduling
 public class BlogSchedulingConfigurer implements SchedulingConfigurer {
-
-    public BlogSchedulingConfigurer(@Lazy ScheduleJobService scheduleJobService, TaskScheduler taskScheduler) {
-        this.scheduleJobService = scheduleJobService;
-        this.taskScheduler = taskScheduler;
-    }
-
-    private final TaskScheduler taskScheduler;
-
-    private final ScheduleJobService scheduleJobService;
-
+    
+    @Resource
+    private TaskScheduler taskScheduler;
+    @Resource
+    @Lazy
+    private ScheduleJobService scheduleJobService;
+    @Resource
+    @Lazy
+    private LogScheduleJobService logScheduleJobService;
+    
     private ScheduledTaskRegistrar taskRegistrar;
-
+    
     private final Map<String, ScheduledTask> scheduledTasks = new HashMap<>();
-
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(BlogSchedulingConfigurer.class);
-
+    
     @Override
     @Async
     public void configureTasks(@NotNull ScheduledTaskRegistrar taskRegistrar) {
@@ -56,7 +57,7 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
             addJob(job);
         }
     }
-
+    
     public void addJob(ScheduleJobDO job) {
         ScheduledTaskWrapper task = null;
         try {
@@ -68,7 +69,7 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
         scheduledTasks.put(String.valueOf(job.getId()), scheduledTask);
         LOGGER.info("<|>BlogSchedulingConfigurer_addJob<|>job:{}<|>", JsonUtils.toJson(job));
     }
-
+    
     public void removeJob(String jobId) {
         ScheduledTask scheduledTask = scheduledTasks.remove(jobId);
         if (scheduledTask != null) {
@@ -78,13 +79,13 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
             LOGGER.error("<|>BlogSchedulingConfigurer_removeJob_notFound<|>jobId:{}<|>", JsonUtils.toJson(jobId));
         }
     }
-
+    
     public void updateJob(ScheduleJobDO job) {
         this.removeJob(String.valueOf(job.getId()));
         this.addJob(job);
         LOGGER.info("<|>BlogSchedulingConfigurer_updateJob<|>job:{}<|>", JsonUtils.toJson(job));
     }
-
+    
     public void runJob(String jobId) {
         ScheduledTask task = scheduledTasks.get(jobId);
         if (task != null) {
@@ -92,16 +93,16 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
             LOGGER.info("<|>BlogSchedulingConfigurer_runJob<|>jobId:{}<|>", JsonUtils.toJson(jobId));
         }
     }
-
-
+    
+    
     private class ScheduledTaskWrapper implements Runnable {
-
+        
         private final ScheduleRunnable task;
-
+        
         ScheduledTaskWrapper(ScheduleRunnable task) {
             this.task = task;
         }
-
+        
         @Override
         public void run() {
             ScheduleJobDO job = scheduleJobService.getJobById(task.getJobId());
@@ -114,16 +115,16 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
             jobLog.setCreateTime(new Date(start));
             try {
                 task.run();
-                jobLog.setStatus(true);
+                jobLog.setRunStatus(true);
             } catch (Exception e) {
-                jobLog.setStatus(false);
+                jobLog.setRunStatus(false);
                 jobLog.setError(e.toString());
             } finally {
                 long duration = System.currentTimeMillis() - start;
-                jobLog.setTimes((int) duration);
-                scheduleJobService.saveJobLog(jobLog);
+                jobLog.setDuration((int) duration);
+                logScheduleJobService.saveJobLog(jobLog);
             }
         }
     }
-
+    
 }

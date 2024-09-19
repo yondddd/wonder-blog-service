@@ -1,15 +1,16 @@
 package com.yond.blog.service.impl;
 
-import com.yond.blog.entity.LogScheduleJobDO;
 import com.yond.blog.entity.ScheduleJobDO;
-import com.yond.blog.mapper.LogScheduleJobMapper;
 import com.yond.blog.mapper.ScheduleJobMapper;
 import com.yond.blog.schedule.BlogSchedulingConfigurer;
 import com.yond.blog.service.ScheduleJobService;
 import com.yond.common.exception.PersistenceException;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,22 +19,17 @@ import java.util.List;
  */
 @Service
 public class ScheduleJobServiceImpl implements ScheduleJobService {
-
-    private final ScheduleJobMapper schedulerJobMapper;
-    private final LogScheduleJobMapper logScheduleJobMapper;
-    private final BlogSchedulingConfigurer blogSchedulingConfigurer;
-
-    public ScheduleJobServiceImpl(ScheduleJobMapper schedulerJobMapper, LogScheduleJobMapper logScheduleJobMapper, BlogSchedulingConfigurer blogSchedulingConfigurer) {
-        this.schedulerJobMapper = schedulerJobMapper;
-        this.logScheduleJobMapper = logScheduleJobMapper;
-        this.blogSchedulingConfigurer = blogSchedulingConfigurer;
-    }
-
+    
+    @Resource
+    private ScheduleJobMapper schedulerJobMapper;
+    @Resource
+    private BlogSchedulingConfigurer blogSchedulingConfigurer;
+    
     @Override
     public List<ScheduleJobDO> getJobList() {
         return schedulerJobMapper.getJobList();
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveJob(ScheduleJobDO scheduleJob) {
@@ -42,7 +38,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         }
         blogSchedulingConfigurer.addJob(scheduleJob);
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateJob(ScheduleJobDO scheduleJob) {
@@ -51,7 +47,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         }
         blogSchedulingConfigurer.updateJob(scheduleJob);
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteJobById(Long jobId) {
@@ -60,12 +56,12 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
             throw new PersistenceException("删除失败");
         }
     }
-
+    
     @Override
     public void runJobById(Long jobId) {
         blogSchedulingConfigurer.runJob(String.valueOf(jobId));
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateJobStatusById(Long jobId, Boolean status) {
@@ -80,30 +76,21 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
             throw new PersistenceException("修改失败");
         }
     }
-
-    @Override
-    public List<LogScheduleJobDO> getJobLogListByDate(String startDate, String endDate) {
-        return logScheduleJobMapper.getJobLogListByDate(startDate, endDate);
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void saveJobLog(LogScheduleJobDO jobLog) {
-        if (logScheduleJobMapper.saveJobLog(jobLog) != 1) {
-            throw new PersistenceException("日志添加失败");
-        }
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void deleteJobLogByLogId(Long logId) {
-        if (logScheduleJobMapper.deleteJobLogByLogId(logId) != 1) {
-            throw new PersistenceException("日志删除失败");
-        }
-    }
-
+    
+    
     @Override
     public ScheduleJobDO getJobById(Long jobId) {
         return schedulerJobMapper.getJobById(jobId);
     }
+    
+    @Override
+    public Pair<Integer, List<ScheduleJobDO>> page(Integer pageNo, Integer pageSize) {
+        Integer count = schedulerJobMapper.countBy();
+        if (count <= 0) {
+            return Pair.of(count, Collections.emptyList());
+        }
+        List<ScheduleJobDO> list = schedulerJobMapper.pageBy((pageNo - 1) * pageSize, pageSize);
+        return Pair.of(count, list);
+    }
+    
 }

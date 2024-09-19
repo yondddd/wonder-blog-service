@@ -23,25 +23,25 @@ import java.util.List;
  */
 @Service
 public class LogVisitServiceImpl implements LogVisitService {
-
+    
     @Resource
     private LogVisitMapper logVisitMapper;
-
+    
     @Override
     public Pair<Integer, List<LogVisitDO>> page(String uuid, Date startDate, Date endDate, Integer pageNo, Integer pageSize) {
-        Integer count = logVisitMapper.countBy(startDate, endDate);
+        Integer count = logVisitMapper.countBy(uuid, startDate, endDate);
         if (count <= 0) {
             return Pair.of(count, Collections.emptyList());
         }
         List<LogVisitDO> list = logVisitMapper.pageBy(uuid, startDate, endDate, (pageNo - 1) * pageSize, pageSize);
         return Pair.of(count, list);
     }
-
+    
     @Override
     public List<VisitLogUuidTime> getUUIDAndCreateTimeByYesterday() {
         return logVisitMapper.getUUIDAndCreateTimeByYesterday();
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveVisitLog(LogVisitDO log) {
@@ -54,12 +54,12 @@ public class LogVisitServiceImpl implements LogVisitService {
             throw new PersistenceException("日志添加失败");
         }
     }
-
+    
     @Override
     public int updateSelective(LogVisitDO log) {
         return logVisitMapper.updateSelective(log);
     }
-
+    
     @Override
     public int countVisitLogByToday() {
         return logVisitMapper.countVisitLogByToday();

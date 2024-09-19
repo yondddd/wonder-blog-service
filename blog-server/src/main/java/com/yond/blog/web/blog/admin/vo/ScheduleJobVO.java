@@ -1,36 +1,32 @@
-package com.yond.blog.entity;
+package com.yond.blog.web.blog.admin.vo;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Description: 定时任务
  * @Author: Yond
  */
-public class ScheduleJobDO implements Serializable {
+public class ScheduleJobVO implements Serializable {
     
     @Serial
-    private static final long serialVersionUID = 1842150725534943656L;
+    private static final long serialVersionUID = 487171220122897673L;
     
-    private Long id;//任务id
-    private String beanName;//spring bean名称
-    private String methodName;//方法名
-    private String params;//参数
-    private String cron;//cron表达式
-    private Boolean runStatus;//任务状态
+    private Long id;
+    private String beanName;
+    private String methodName;
+    private String params;
+    private String cron;
+    private Boolean runStatus;
     private Integer status;
-    private String remark;//备注
-    private Date createTime;//创建时间
-    
-    public ScheduleJobDO() {
-    }
+    private String remark;
+    private Date createTime;
     
     public Long getId() {
         return id;
     }
     
-    public ScheduleJobDO setId(Long id) {
+    public ScheduleJobVO setId(Long id) {
         this.id = id;
         return this;
     }
@@ -39,7 +35,7 @@ public class ScheduleJobDO implements Serializable {
         return beanName;
     }
     
-    public ScheduleJobDO setBeanName(String beanName) {
+    public ScheduleJobVO setBeanName(String beanName) {
         this.beanName = beanName;
         return this;
     }
@@ -48,7 +44,7 @@ public class ScheduleJobDO implements Serializable {
         return methodName;
     }
     
-    public ScheduleJobDO setMethodName(String methodName) {
+    public ScheduleJobVO setMethodName(String methodName) {
         this.methodName = methodName;
         return this;
     }
@@ -57,7 +53,7 @@ public class ScheduleJobDO implements Serializable {
         return params;
     }
     
-    public ScheduleJobDO setParams(String params) {
+    public ScheduleJobVO setParams(String params) {
         this.params = params;
         return this;
     }
@@ -66,7 +62,7 @@ public class ScheduleJobDO implements Serializable {
         return cron;
     }
     
-    public ScheduleJobDO setCron(String cron) {
+    public ScheduleJobVO setCron(String cron) {
         this.cron = cron;
         return this;
     }
@@ -75,7 +71,7 @@ public class ScheduleJobDO implements Serializable {
         return runStatus;
     }
     
-    public ScheduleJobDO setRunStatus(Boolean runStatus) {
+    public ScheduleJobVO setRunStatus(Boolean runStatus) {
         this.runStatus = runStatus;
         return this;
     }
@@ -84,7 +80,7 @@ public class ScheduleJobDO implements Serializable {
         return status;
     }
     
-    public ScheduleJobDO setStatus(Integer status) {
+    public ScheduleJobVO setStatus(Integer status) {
         this.status = status;
         return this;
     }
@@ -93,7 +89,7 @@ public class ScheduleJobDO implements Serializable {
         return remark;
     }
     
-    public ScheduleJobDO setRemark(String remark) {
+    public ScheduleJobVO setRemark(String remark) {
         this.remark = remark;
         return this;
     }
@@ -102,14 +98,14 @@ public class ScheduleJobDO implements Serializable {
         return createTime;
     }
     
-    public ScheduleJobDO setCreateTime(Date createTime) {
+    public ScheduleJobVO setCreateTime(Date createTime) {
         this.createTime = createTime;
         return this;
     }
     
     @Override
     public String toString() {
-        return "ScheduleJobDO{" +
+        return "ScheduleJobVO{" +
                 "id=" + id +
                 ", beanName='" + beanName + '\'' +
                 ", methodName='" + methodName + '\'' +

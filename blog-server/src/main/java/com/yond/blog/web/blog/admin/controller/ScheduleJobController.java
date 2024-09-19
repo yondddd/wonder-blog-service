@@ -1,45 +1,42 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.yond.blog.entity.LogScheduleJobDO;
 import com.yond.blog.entity.ScheduleJobDO;
 import com.yond.blog.service.ScheduleJobService;
 import com.yond.blog.util.common.ValidatorUtils;
+import com.yond.blog.web.blog.admin.convert.ScheduleJobConverter;
+import com.yond.blog.web.blog.admin.req.ScheduleJobPageReq;
+import com.yond.blog.web.blog.admin.vo.ScheduleJobVO;
 import com.yond.common.annotation.OperationLogger;
+import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Description: 定时任务动态管理
  * @Author: Yond
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/job")
 public class ScheduleJobController {
-    @Autowired
+    
+    @Resource
     private ScheduleJobService scheduleJobService;
-
-
-    @GetMapping("/jobs")
-    public Response jobs(@RequestParam(defaultValue = "1") Integer pageNum,
-                         @RequestParam(defaultValue = "10") Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        PageInfo<ScheduleJobDO> pageInfo = new PageInfo<>(scheduleJobService.getJobList());
-        return Response.ok("请求成功", pageInfo);
+    
+    @PostMapping("/page")
+    public PageResponse<List<ScheduleJobVO>> page(@RequestBody ScheduleJobPageReq req) {
+        Pair<Integer, List<ScheduleJobDO>> pair = scheduleJobService.page(req.getPageNo(), req.getPageSize());
+        List<ScheduleJobVO> data = pair.getRight().stream().map(ScheduleJobConverter::do2vo).toList();
+        return PageResponse.<List<ScheduleJobVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize());
     }
-
-    /**
-     * 新建定时任务
-     *
-     * @param scheduleJob
-     * @return
-     */
+    
+    
     @OperationLogger("新建定时任务")
-    @PostMapping("/job")
+    @PostMapping("/add")
     public Response saveJob(@RequestBody ScheduleJobDO scheduleJob) {
         scheduleJob.setStatus(false);
         scheduleJob.setCreateTime(new Date());
@@ -47,95 +44,40 @@ public class ScheduleJobController {
         scheduleJobService.saveJob(scheduleJob);
         return Response.ok("添加成功");
     }
-
-    /**
-     * 修改定时任务
-     *
-     * @param scheduleJob
-     * @return
-     */
+    
+    
     @OperationLogger("修改定时任务")
-    @PutMapping("/job")
+    @PostMapping("/edit")
     public Response updateJob(@RequestBody ScheduleJobDO scheduleJob) {
         scheduleJob.setStatus(false);
         ValidatorUtils.validateEntity(scheduleJob);
         scheduleJobService.updateJob(scheduleJob);
         return Response.ok("修改成功");
     }
-
-    /**
-     * 删除定时任务
-     *
-     * @param jobId 任务id
-     * @return
-     */
+    
+    
     @OperationLogger("删除定时任务")
-    @DeleteMapping("/job")
+    @PostMapping("/del")
     public Response deleteJob(@RequestParam Long jobId) {
         scheduleJobService.deleteJobById(jobId);
         return Response.ok("删除成功");
     }
-
-    /**
-     * 立即执行任务
-     *
-     * @param jobId 任务id
-     * @return
-     */
+    
+    
     @OperationLogger("立即执行定时任务")
-    @PostMapping("/job/run")
+    @PostMapping("/run")
     public Response runJob(@RequestParam Long jobId) {
         scheduleJobService.runJobById(jobId);
         return Response.ok("提交执行");
     }
-
-    /**
-     * 更新任务状态：暂停或恢复
-     *
-     * @param jobId  任务id
-     * @param status 状态
-     * @return
-     */
+    
+    
     @OperationLogger("更新任务状态")
-    @PutMapping("/job/status")
+    @PostMapping("/updateStatus")
     public Response updateJobStatus(@RequestParam Long jobId, @RequestParam Boolean status) {
         scheduleJobService.updateJobStatusById(jobId, status);
         return Response.ok("更新成功");
     }
-
-    /**
-     * 分页查询定时任务日志列表
-     *
-     * @param date     按执行时间查询
-     * @param pageNum  页码
-     * @param pageSize 每页条数
-     * @return
-     */
-    @GetMapping("/job/logs")
-    public Response logs(@RequestParam(defaultValue = "") String[] date,
-                         @RequestParam(defaultValue = "1") Integer pageNum,
-                         @RequestParam(defaultValue = "10") Integer pageSize) {
-        String startDate = null;
-        String endDate = null;
-        if (date.length == 2) {
-            startDate = date[0];
-            endDate = date[1];
-        }
-        String orderBy = "create_time desc";
-        PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<LogScheduleJobDO> pageInfo = new PageInfo<>(scheduleJobService.getJobLogListByDate(startDate, endDate));
-        return Response.ok("请求成功", pageInfo);
-    }
-
-    /**
-     * 按id删除任务日志
-     *
-     * @param logId 日志id
-     * @return
-     */
-    @DeleteMapping("/job/log")
-    public Response delete(@RequestParam Long logId) {
-        scheduleJobService.deleteJobLogByLogId(logId);
-        return Response.ok("删除成功");
-    }
+    
+    
 }

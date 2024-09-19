@@ -15,17 +15,17 @@ import java.util.List;
 @Mapper
 @Repository
 public interface LogVisitMapper {
-
+    
     List<VisitLogUuidTime> getUUIDAndCreateTimeByYesterday();
-
+    
     int countVisitLogByToday();
-
+    
     int insertSelective(LogVisitDO log);
-
+    
     int updateSelective(LogVisitDO log);
-
-    Integer countBy(Date startDate, Date endDate);
-
+    
+    Integer countBy(String uuid, Date startDate, Date endDate);
+    
     List<LogVisitDO> pageBy(String uuid, Date startDate, Date endDate, Integer offset, Integer size);
-
+    
 }

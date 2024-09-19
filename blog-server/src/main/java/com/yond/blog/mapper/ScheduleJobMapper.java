@@ -13,16 +13,21 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ScheduleJobMapper {
-
+    
     List<ScheduleJobDO> getJobList();
-
+    
     ScheduleJobDO getJobById(Long jobId);
-
+    
     int saveJob(ScheduleJobDO scheduleJob);
-
+    
     int updateJob(ScheduleJobDO scheduleJob);
-
+    
     int deleteJobById(Long jobId);
-
+    
     int updateJobStatusById(Long jobId, Boolean status);
+    
+    Integer countBy();
+    
+    List<ScheduleJobDO> pageBy(Integer offset, Integer size);
+    
 }

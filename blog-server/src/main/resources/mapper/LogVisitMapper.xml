@@ -109,4 +109,32 @@
         where id = #{id,jdbcType=NUMERIC}
     </update>
 
+    <select id="countBy" resultType="java.lang.Integer">
+        select count(*) from log_visit
+        <include refid="pageWhere"/>
+    </select>
+
+    <select id="pageBy" resultType="com.yond.blog.entity.LogVisitDO">
+        select <include refid="Base_Column_List"/>
+        from log_visit
+        <include refid="pageWhere"/>
+        order by id desc
+        limit #{offset,size}
+    </select>
+
+    <sql id="pageWhere">
+        <where>
+            status = 1
+            <if test="startDate != null">
+                and create_time >= #{startDate}
+            </if>
+            <if test="endDate != null">
+                and create_time &lt;= #{endDate}
+            </if>
+            <if test="uuid != null">
+                and uuid like CONCAT('%', #{uuid}, '%')
+            </if>
+        </where>
+    </sql>
+
 </mapper>

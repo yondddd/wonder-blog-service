@@ -3,19 +3,24 @@
 <mapper namespace="com.yond.blog.mapper.LogScheduleJobMapper">
 
     <resultMap id="log" type="com.yond.blog.entity.LogScheduleJobDO">
-        <id property="logId" column="id"/>
+        <id property="id" column="id"/>
         <result property="jobId" column="job_id"/>
         <result property="beanName" column="bean_name"/>
         <result property="methodName" column="method_name"/>
         <result property="params" column="params"/>
         <result property="status" column="status"/>
         <result property="error" column="error"/>
-        <result property="times" column="times"/>
+        <result property="duration" column="duration"/>
         <result property="createTime" column="create_time"/>
     </resultMap>
 
+    <sql id="Base_Column_List">
+        select id, job_id, bean_name, method_name, params, runStatus, status, error, duration, create_time
+    </sql>
+
+
     <select id="getJobLogListByDate" resultMap="log">
-        select id, job_id, bean_name, method_name, params, status, error, times, create_time
+        select id, job_id, bean_name, method_name, params, runStatus, status, error, duration, create_time
         from log_schedule_job
         <where>
             <if test="startDate!=null and startDate!='' and endDate!=null and endDate!=''">
@@ -27,8 +32,8 @@
 
     <insert id="saveJobLog" parameterType="com.yond.blog.entity.LogScheduleJobDO" useGeneratedKeys="true"
             keyProperty="logId">
-        insert into log_schedule_job (job_id, bean_name, method_name, params, status, error, times, create_time)
-        values (#{jobId}, #{beanName}, #{methodName}, #{params}, #{status}, #{error}, #{times}, #{createTime})
+        insert into log_schedule_job (job_id, bean_name, method_name, params, status, error, duration, create_time)
+        values (#{jobId}, #{beanName}, #{methodName}, #{params}, #{status}, #{error}, #{duration}, #{createTime})
     </insert>
 
     <delete id="deleteJobLogByLogId">
