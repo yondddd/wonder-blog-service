@@ -93,7 +93,7 @@ public class CommentController {
         }
         // 正常回复就行 不考虑那么多
         CommentDO reply = CommentDO.custom();
-        commentService.insertSelective();
+        commentService.insertSelective(reply);
         return Response.ok("评论成功");
     }
 

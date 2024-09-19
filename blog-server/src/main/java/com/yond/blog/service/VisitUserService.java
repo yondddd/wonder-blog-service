@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface VisitUserService {
 
-    List<VisitUserDO> listByDate(String startDate, String endDate);
-
     Pair<Integer, List<VisitUserDO>> page(Integer pageNo, Integer pageSize, Date startDate, Date endDate);
 
     List<String> getNewVisitorIpSourceByYesterday();
@@ -24,4 +22,5 @@ public interface VisitUserService {
     void updatePVAndLastTimeByUUID(VisitLogUuidTime dto);
 
     void deleteVisitor(Long id, String uuid);
+    
 }

@@ -12,6 +12,7 @@ import com.yond.blog.service.FriendService;
 import com.yond.blog.service.SiteConfigService;
 import com.yond.blog.web.blog.admin.dto.CommentDTO;
 import com.yond.blog.web.blog.admin.dto.FriendConfigDTO;
+import com.yond.blog.web.blog.view.vo.CommentViewVO;
 import com.yond.common.constant.CommonConstant;
 import com.yond.common.constant.SiteConfigConstant;
 import com.yond.common.enums.CommentOpenStateEnum;
@@ -136,6 +137,11 @@ public class CommentServiceImpl implements CommentService {
             }
         }
         return CommentOpenStateEnum.CLOSE;
+    }
+
+    @Override
+    public Pair<Integer, List<CommentViewVO>> viewPageBy(Integer page, Long blogId, Integer pageNo, Integer pageSize) {
+        return null;
     }
 
     public List<CommentDTO> buildTree(List<CommentDO> root, Map<Long, List<CommentDO>> map) {

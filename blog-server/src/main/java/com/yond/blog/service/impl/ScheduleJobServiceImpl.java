@@ -4,6 +4,7 @@ import com.yond.blog.entity.ScheduleJobDO;
 import com.yond.blog.mapper.ScheduleJobMapper;
 import com.yond.blog.schedule.BlogSchedulingConfigurer;
 import com.yond.blog.service.ScheduleJobService;
+import com.yond.common.enums.EnableStatusEnum;
 import com.yond.common.exception.PersistenceException;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.tuple.Pair;
@@ -19,70 +20,72 @@ import java.util.List;
  */
 @Service
 public class ScheduleJobServiceImpl implements ScheduleJobService {
-    
+
     @Resource
     private ScheduleJobMapper schedulerJobMapper;
     @Resource
     private BlogSchedulingConfigurer blogSchedulingConfigurer;
-    
+
     @Override
-    public List<ScheduleJobDO> getJobList() {
-        return schedulerJobMapper.getJobList();
+    public List<ScheduleJobDO> listJobs() {
+        return schedulerJobMapper.listAllByStatus(EnableStatusEnum.ENABLE.getVal());
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveJob(ScheduleJobDO scheduleJob) {
-        if (schedulerJobMapper.saveJob(scheduleJob) != 1) {
+        if (schedulerJobMapper.insertSelective(scheduleJob) != 1) {
             throw new PersistenceException("添加失败");
         }
         blogSchedulingConfigurer.addJob(scheduleJob);
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateJob(ScheduleJobDO scheduleJob) {
-        if (schedulerJobMapper.updateJob(scheduleJob) != 1) {
+        if (schedulerJobMapper.updateSelective(scheduleJob) != 1) {
             throw new PersistenceException("更新失败");
         }
         blogSchedulingConfigurer.updateJob(scheduleJob);
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteJobById(Long jobId) {
         blogSchedulingConfigurer.removeJob(String.valueOf(jobId));
-        if (schedulerJobMapper.deleteJobById(jobId) != 1) {
+        ScheduleJobDO del = ScheduleJobDO.custom()
+                .setId(jobId)
+                .setStatus(EnableStatusEnum.DELETE.getVal());
+        if (schedulerJobMapper.updateSelective(del) != 1) {
             throw new PersistenceException("删除失败");
         }
     }
-    
+
     @Override
     public void runJobById(Long jobId) {
         blogSchedulingConfigurer.runJob(String.valueOf(jobId));
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateJobStatusById(Long jobId, Boolean status) {
-        ScheduleJobDO job = schedulerJobMapper.getJobById(jobId);
+        ScheduleJobDO job = this.getJobById(jobId);
         if (status) {
             blogSchedulingConfigurer.removeJob(String.valueOf(jobId));
             blogSchedulingConfigurer.addJob(job);
         } else {
             blogSchedulingConfigurer.removeJob(String.valueOf(jobId));
         }
-        if (schedulerJobMapper.updateJobStatusById(jobId, status) != 1) {
-            throw new PersistenceException("修改失败");
-        }
+        ScheduleJobDO update = ScheduleJobDO.custom().setId(jobId).setRunStatus(status);
+        schedulerJobMapper.updateSelective(update);
     }
-    
-    
+
+
     @Override
     public ScheduleJobDO getJobById(Long jobId) {
-        return schedulerJobMapper.getJobById(jobId);
+        return this.listJobs().stream().filter(x -> x.getId().equals(jobId)).findFirst().orElse(null);
     }
-    
+
     @Override
     public Pair<Integer, List<ScheduleJobDO>> page(Integer pageNo, Integer pageSize) {
         Integer count = schedulerJobMapper.countBy();
@@ -92,5 +95,5 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         List<ScheduleJobDO> list = schedulerJobMapper.pageBy((pageNo - 1) * pageSize, pageSize);
         return Pair.of(count, list);
     }
-    
+
 }

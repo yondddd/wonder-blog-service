@@ -30,10 +30,6 @@ public class VisitUserServiceImpl implements VisitUserService {
     @Resource
     private VisitCache visitCache;
 
-    @Override
-    public List<VisitUserDO> listByDate(String startDate, String endDate) {
-        return visitUserMapper.listByDate(startDate, endDate);
-    }
 
     @Override
     public Pair<Integer, List<VisitUserDO>> page(Integer pageNo, Integer pageSize, Date startDate, Date endDate) {

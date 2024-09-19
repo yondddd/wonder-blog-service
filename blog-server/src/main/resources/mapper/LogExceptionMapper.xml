@@ -19,7 +19,8 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        select id, uri, method, param, description, error, ip, ip_source, os, browser, create_time, status
+        id
+        , uri, method, param, description, error, ip, ip_source, os, browser, create_time, status
     </sql>
 
     <insert id="insertSelective">
@@ -83,7 +84,8 @@
     </select>
 
     <select id="pageBy" resultType="com.yond.blog.entity.LogExceptionDO">
-        select <include refid="Base_Column_List"/>
+        select
+        <include refid="Base_Column_List"/>
         from log_exception
         <include refid="pageWhere"/>
         order by id desc

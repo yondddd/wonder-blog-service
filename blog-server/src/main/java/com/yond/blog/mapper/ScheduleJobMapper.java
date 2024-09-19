@@ -2,6 +2,7 @@ package com.yond.blog.mapper;
 
 import com.yond.blog.entity.ScheduleJobDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,13 +14,15 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ScheduleJobMapper {
-    
+
+    List<ScheduleJobDO> listAllByStatus(@Param("status") Integer status);
+
     int insertSelective(ScheduleJobDO job);
-    
+
     int updateSelective(ScheduleJobDO job);
-    
+
     Integer countBy();
-    
+
     List<ScheduleJobDO> pageBy(Integer offset, Integer size);
-    
+
 }

@@ -4,24 +4,34 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * @Author: Yond
+ * @author Yond
  */
-public class ScheduleJobAddReq implements Serializable {
+public class ScheduleJobEditReq implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -526171277334531828L;
+    private static final long serialVersionUID = 8000903117318918536L;
 
+    private Long id;
     private String beanName;
     private String methodName;
     private String params;
     private String cron;
     private String remark;
 
+    public Long getId() {
+        return id;
+    }
+
+    public ScheduleJobEditReq setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public String getBeanName() {
         return beanName;
     }
 
-    public ScheduleJobAddReq setBeanName(String beanName) {
+    public ScheduleJobEditReq setBeanName(String beanName) {
         this.beanName = beanName;
         return this;
     }
@@ -30,7 +40,7 @@ public class ScheduleJobAddReq implements Serializable {
         return methodName;
     }
 
-    public ScheduleJobAddReq setMethodName(String methodName) {
+    public ScheduleJobEditReq setMethodName(String methodName) {
         this.methodName = methodName;
         return this;
     }
@@ -39,7 +49,7 @@ public class ScheduleJobAddReq implements Serializable {
         return params;
     }
 
-    public ScheduleJobAddReq setParams(String params) {
+    public ScheduleJobEditReq setParams(String params) {
         this.params = params;
         return this;
     }
@@ -48,7 +58,7 @@ public class ScheduleJobAddReq implements Serializable {
         return cron;
     }
 
-    public ScheduleJobAddReq setCron(String cron) {
+    public ScheduleJobEditReq setCron(String cron) {
         this.cron = cron;
         return this;
     }
@@ -57,15 +67,16 @@ public class ScheduleJobAddReq implements Serializable {
         return remark;
     }
 
-    public ScheduleJobAddReq setRemark(String remark) {
+    public ScheduleJobEditReq setRemark(String remark) {
         this.remark = remark;
         return this;
     }
 
     @Override
     public String toString() {
-        return "ScheduleJobAddReq{" +
-                "beanName='" + beanName + '\'' +
+        return "ScheduleJobEditReq{" +
+                "id=" + id +
+                ", beanName='" + beanName + '\'' +
                 ", methodName='" + methodName + '\'' +
                 ", params='" + params + '\'' +
                 ", cron='" + cron + '\'' +

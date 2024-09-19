@@ -20,17 +20,6 @@
         , uuid, ip, ip_source, os, browser, create_time, last_time, pv
     </sql>
 
-    <!--查询访客-->
-    <select id="listByDate" resultMap="visitor">
-        select
-        <include refid="Base_Column_List"/>
-        from visit_user
-        <where>
-            <if test="startDate!=null and startDate!='' and endDate!=null and endDate!=''">
-                last_time between #{startDate} and #{endDate}
-            </if>
-        </where>
-    </select>
 
     <!--查询昨天的所有新增访客的ip来源-->
     <select id="getNewVisitorIpSourceByYesterday" resultType="java.lang.String">
@@ -43,7 +32,6 @@
     <select id="hasUUID" resultType="java.lang.Integer">
         select ifnull((select 1 from visit_user where uuid = #{uuid} limit 1), 0)
     </select>
-
 
     <!--添加访客-->
     <insert id="saveVisitor" parameterType="com.yond.blog.entity.VisitUserDO" useGeneratedKeys="true" keyProperty="id">

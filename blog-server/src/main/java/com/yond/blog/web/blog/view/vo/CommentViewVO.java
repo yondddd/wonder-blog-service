@@ -13,6 +13,7 @@ import java.util.List;
 public class CommentViewVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 2156320836527320699L;
+
     private Long id;
     private String nickname;//昵称
     private String content;//评论内容

@@ -16,9 +16,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface VisitUserMapper {
-
-    List<VisitUserDO> listByDate(String startDate, String endDate);
-
+    
     List<String> getNewVisitorIpSourceByYesterday();
 
     int hasUUID(String uuid);

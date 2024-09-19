@@ -11,6 +11,7 @@ import java.util.Date;
 public class VisitUserDO implements Serializable {
     @Serial
     private static final long serialVersionUID = -6715140594847056682L;
+    
     private Long id;
     private String uuid;//访客标识码
     private String ip;//ip

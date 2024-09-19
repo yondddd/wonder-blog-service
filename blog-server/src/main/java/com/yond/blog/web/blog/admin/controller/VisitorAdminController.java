@@ -1,46 +1,46 @@
 package com.yond.blog.web.blog.admin.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.yond.blog.entity.VisitUserDO;
 import com.yond.blog.service.VisitUserService;
+import com.yond.blog.web.blog.admin.convert.VisitUserConverter;
+import com.yond.blog.web.blog.admin.req.VisitUserDelReq;
+import com.yond.blog.web.blog.admin.req.VisitUserPageReq;
+import com.yond.blog.web.blog.admin.vo.VisitUserVO;
+import com.yond.common.annotation.OperationLogger;
+import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.*;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @Description: 访客统计
  * @Author: Yond
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/visit")
 public class VisitorAdminController {
-    
+
     @Resource
     private VisitUserService visitUserService;
-    
-    
-    @GetMapping("/visitors")
-    public Response visitors(@RequestParam(defaultValue = "") String[] date,
-                             @RequestParam(defaultValue = "1") Integer pageNum,
-                             @RequestParam(defaultValue = "10") Integer pageSize) {
-        String startDate = null;
-        String endDate = null;
-        if (date.length == 2) {
-            startDate = date[0];
-            endDate = date[1];
-        }
-        String orderBy = "create_time desc";
-        PageHelper.startPage(pageNum, pageSize, orderBy);
-        PageInfo<VisitUserDO> pageInfo = new PageInfo<>(visitUserService.listByDate(startDate, endDate));
-        return Response.ok("请求成功", pageInfo);
+
+    @PostMapping("/page")
+    public PageResponse<List<VisitUserVO>> page(@RequestBody VisitUserPageReq req) {
+        Pair<Integer, List<VisitUserDO>> pair = visitUserService.page(req.getPageNo(), req.getPageSize(), req.getStartDate(), req.getEndDate());
+        List<VisitUserVO> data = pair.getRight().stream().map(VisitUserConverter::do2vo).toList();
+        return PageResponse.<List<VisitUserVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize());
     }
-    
-    
-    @DeleteMapping("/visitor")
-    public Response<Boolean> delete(@RequestParam Long id, @RequestParam String uuid) {
-        visitUserService.deleteVisitor(id, uuid);
+
+    @OperationLogger("删除访客记录")
+    @PostMapping("/del")
+    public Response<Boolean> delete(@RequestBody VisitUserDelReq req) {
+        visitUserService.deleteVisitor(req.getId(), req.getUuid());
         return Response.success();
     }
-    
+
 }

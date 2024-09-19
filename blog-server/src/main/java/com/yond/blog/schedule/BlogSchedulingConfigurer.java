@@ -31,7 +31,7 @@ import java.util.Map;
 @Configuration
 @EnableScheduling
 public class BlogSchedulingConfigurer implements SchedulingConfigurer {
-    
+
     @Resource
     private TaskScheduler taskScheduler;
     @Resource
@@ -39,24 +39,24 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
     @Resource
     @Lazy
     private ScheduleJobService scheduleJobService;
-    
+
     private ScheduledTaskRegistrar taskRegistrar;
-    
+
     private final Map<String, ScheduledTask> scheduledTasks = new HashMap<>();
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(BlogSchedulingConfigurer.class);
-    
+
     @Override
     @Async
     public void configureTasks(@NotNull ScheduledTaskRegistrar taskRegistrar) {
         taskRegistrar.setTaskScheduler(taskScheduler);
         this.taskRegistrar = taskRegistrar;
-        List<ScheduleJobDO> jobList = scheduleJobService.getJobList();
+        List<ScheduleJobDO> jobList = scheduleJobService.listJobs();
         for (ScheduleJobDO job : jobList) {
             addJob(job);
         }
     }
-    
+
     public void addJob(ScheduleJobDO job) {
         ScheduledTaskWrapper task = null;
         try {
@@ -68,7 +68,7 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
         scheduledTasks.put(String.valueOf(job.getId()), scheduledTask);
         LOGGER.info("<|>BlogSchedulingConfigurer_addJob<|>job:{}<|>", JsonUtils.toJson(job));
     }
-    
+
     public void removeJob(String jobId) {
         ScheduledTask scheduledTask = scheduledTasks.remove(jobId);
         if (scheduledTask != null) {
@@ -78,13 +78,13 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
             LOGGER.error("<|>BlogSchedulingConfigurer_removeJob_notFound<|>jobId:{}<|>", JsonUtils.toJson(jobId));
         }
     }
-    
+
     public void updateJob(ScheduleJobDO job) {
         this.removeJob(String.valueOf(job.getId()));
         this.addJob(job);
         LOGGER.info("<|>BlogSchedulingConfigurer_updateJob<|>job:{}<|>", JsonUtils.toJson(job));
     }
-    
+
     public void runJob(String jobId) {
         ScheduledTask task = scheduledTasks.get(jobId);
         if (task != null) {
@@ -92,16 +92,16 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
             LOGGER.info("<|>BlogSchedulingConfigurer_runJob<|>jobId:{}<|>", JsonUtils.toJson(jobId));
         }
     }
-    
-    
+
+
     private class ScheduledTaskWrapper implements Runnable {
-        
+
         private final ScheduleRunnable task;
-        
+
         ScheduledTaskWrapper(ScheduleRunnable task) {
             this.task = task;
         }
-        
+
         @Override
         public void run() {
             ScheduleJobDO job = scheduleJobService.getJobById(task.getJobId());
@@ -125,5 +125,5 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
             }
         }
     }
-    
+
 }
