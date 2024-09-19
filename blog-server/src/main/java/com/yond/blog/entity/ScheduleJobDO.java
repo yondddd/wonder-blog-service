@@ -23,6 +23,10 @@ public class ScheduleJobDO implements Serializable {
     private String remark;//备注
     private Date createTime;//创建时间
     
+    public static ScheduleJobDO custom() {
+        return new ScheduleJobDO();
+    }
+    
     public ScheduleJobDO() {
     }
     

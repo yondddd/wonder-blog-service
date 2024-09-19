@@ -35,11 +35,10 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
     @Resource
     private TaskScheduler taskScheduler;
     @Resource
-    @Lazy
-    private ScheduleJobService scheduleJobService;
+    private LogScheduleJobService logScheduleJobService;
     @Resource
     @Lazy
-    private LogScheduleJobService logScheduleJobService;
+    private ScheduleJobService scheduleJobService;
     
     private ScheduledTaskRegistrar taskRegistrar;
     
@@ -122,7 +121,7 @@ public class BlogSchedulingConfigurer implements SchedulingConfigurer {
             } finally {
                 long duration = System.currentTimeMillis() - start;
                 jobLog.setDuration((int) duration);
-                logScheduleJobService.saveJobLog(jobLog);
+                logScheduleJobService.insertSelective(jobLog);
             }
         }
     }

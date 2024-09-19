@@ -19,7 +19,6 @@ public interface ScheduleJobService {
     
     void updateJobStatusById(Long jobId, Boolean status);
     
-    
     ScheduleJobDO getJobById(Long jobId);
     
     Pair<Integer, List<ScheduleJobDO>> page(Integer pageNo, Integer pageSize);

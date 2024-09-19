@@ -9,7 +9,7 @@ import com.yond.blog.service.TagService;
 import com.yond.blog.web.blog.view.vo.NewBlog;
 import com.yond.blog.web.blog.view.vo.RandomBlog;
 import com.yond.common.resp.Response;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,16 +22,16 @@ import java.util.Map;
  */
 @RestController
 public class IndexController {
-
-    @Autowired
-    SiteConfigService siteConfigService;
-    @Autowired
-    BlogService blogService;
-    @Autowired
-    CategoryService categoryService;
-    @Autowired
-    TagService tagService;
-
+    
+    @Resource
+    private SiteConfigService siteConfigService;
+    @Resource
+    private BlogService blogService;
+    @Resource
+    private CategoryService categoryService;
+    @Resource
+    private TagService tagService;
+    
     /**
      * 获取站点配置信息、最新推荐博客、分类列表、标签云、随机博客
      *
@@ -50,5 +50,5 @@ public class IndexController {
         map.put("randomBlogList", randomBlogList);
         return Response.ok("请求成功", map);
     }
-
+    
 }

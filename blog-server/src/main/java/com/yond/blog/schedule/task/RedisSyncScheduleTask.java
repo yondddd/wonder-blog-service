@@ -2,6 +2,7 @@ package com.yond.blog.schedule.task;
 
 import com.yond.blog.cache.redis.BlogViewCache;
 import com.yond.blog.service.BlogService;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -13,15 +14,12 @@ import java.util.Set;
  */
 @Component
 public class RedisSyncScheduleTask {
-
-    private final BlogViewCache blogViewCache;
-    private final BlogService blogService;
-
-    public RedisSyncScheduleTask(BlogViewCache blogViewCache, BlogService blogService) {
-        this.blogViewCache = blogViewCache;
-        this.blogService = blogService;
-    }
-
+    
+    @Resource
+    private BlogViewCache blogViewCache;
+    @Resource
+    private BlogService blogService;
+    
     /**
      * 从Redis同步博客文章浏览量到数据库
      */
@@ -33,5 +31,5 @@ public class RedisSyncScheduleTask {
             blogService.updateViews(key, views);
         }
     }
-
+    
 }

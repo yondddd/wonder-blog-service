@@ -14,17 +14,9 @@ import java.util.List;
 @Repository
 public interface ScheduleJobMapper {
     
-    List<ScheduleJobDO> getJobList();
+    int insertSelective(ScheduleJobDO job);
     
-    ScheduleJobDO getJobById(Long jobId);
-    
-    int saveJob(ScheduleJobDO scheduleJob);
-    
-    int updateJob(ScheduleJobDO scheduleJob);
-    
-    int deleteJobById(Long jobId);
-    
-    int updateJobStatusById(Long jobId, Boolean status);
+    int updateSelective(ScheduleJobDO job);
     
     Integer countBy();
     

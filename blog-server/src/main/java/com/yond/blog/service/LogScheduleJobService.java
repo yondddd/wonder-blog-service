@@ -1,7 +1,9 @@
 package com.yond.blog.service;
 
 import com.yond.blog.entity.LogScheduleJobDO;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,10 +11,10 @@ import java.util.List;
  */
 public interface LogScheduleJobService {
     
-    List<LogScheduleJobDO> getJobLogListByDate(String startDate, String endDate);
+    void insertSelective(LogScheduleJobDO log);
     
-    void saveJobLog(LogScheduleJobDO log);
+    void updateSelective(LogScheduleJobDO log);
     
-    void deleteJobLogByLogId(Long logId);
+    Pair<Integer, List<LogScheduleJobDO>> page(Date startDate, Date endDate, Integer pageNo, Integer pageSize);
     
 }

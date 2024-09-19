@@ -4,9 +4,11 @@ import com.yond.blog.entity.ScheduleJobDO;
 import com.yond.blog.service.ScheduleJobService;
 import com.yond.blog.util.common.ValidatorUtils;
 import com.yond.blog.web.blog.admin.convert.ScheduleJobConverter;
+import com.yond.blog.web.blog.admin.req.ScheduleJobAddReq;
 import com.yond.blog.web.blog.admin.req.ScheduleJobPageReq;
 import com.yond.blog.web.blog.admin.vo.ScheduleJobVO;
 import com.yond.common.annotation.OperationLogger;
+import com.yond.common.enums.EnableStatusEnum;
 import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import jakarta.annotation.Resource;
@@ -34,17 +36,21 @@ public class ScheduleJobController {
         return PageResponse.<List<ScheduleJobVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize());
     }
     
-    
     @OperationLogger("新建定时任务")
     @PostMapping("/add")
-    public Response saveJob(@RequestBody ScheduleJobDO scheduleJob) {
-        scheduleJob.setStatus(false);
-        scheduleJob.setCreateTime(new Date());
-        ValidatorUtils.validateEntity(scheduleJob);
+    public Response<Boolean> saveJob(@RequestBody ScheduleJobAddReq req) {
+        ScheduleJobDO.custom()
+                .setBeanName(req.getBeanName())
+                .setMethodName(req.getMethodName())
+                .setParams(req.getParams())
+                .setCron(req.getCron())
+                .setRemark(req.getRemark())
+                .setRunStatus(false)
+                .setStatus(EnableStatusEnum.ENABLE.getVal())
+                .setCreateTime(new Date());
         scheduleJobService.saveJob(scheduleJob);
         return Response.ok("添加成功");
     }
-    
     
     @OperationLogger("修改定时任务")
     @PostMapping("/edit")
@@ -55,14 +61,12 @@ public class ScheduleJobController {
         return Response.ok("修改成功");
     }
     
-    
     @OperationLogger("删除定时任务")
     @PostMapping("/del")
     public Response deleteJob(@RequestParam Long jobId) {
         scheduleJobService.deleteJobById(jobId);
         return Response.ok("删除成功");
     }
-    
     
     @OperationLogger("立即执行定时任务")
     @PostMapping("/run")
@@ -71,13 +75,11 @@ public class ScheduleJobController {
         return Response.ok("提交执行");
     }
     
-    
     @OperationLogger("更新任务状态")
     @PostMapping("/updateStatus")
     public Response updateJobStatus(@RequestParam Long jobId, @RequestParam Boolean status) {
         scheduleJobService.updateJobStatusById(jobId, status);
         return Response.ok("更新成功");
     }
-    
     
 }

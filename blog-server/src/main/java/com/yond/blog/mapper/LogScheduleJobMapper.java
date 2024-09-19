@@ -4,6 +4,7 @@ import com.yond.blog.entity.LogScheduleJobDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,11 +15,12 @@ import java.util.List;
 @Repository
 public interface LogScheduleJobMapper {
     
-    List<LogScheduleJobDO> getJobLogListByDate(String startDate, String endDate);
+    int insertSelective(LogScheduleJobDO log);
     
-    int saveJobLog(LogScheduleJobDO jobLog);
+    int updateSelective(LogScheduleJobDO log);
     
-    int deleteJobLogByLogId(Long logId);
+    Integer countBy(Date startDate, Date endDate);
     
-    updateSelective
+    List<LogScheduleJobDO> pageBy(Date startDate, Date endDate, Integer offset, Integer size);
+    
 }

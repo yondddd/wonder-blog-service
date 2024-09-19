@@ -8,8 +8,8 @@ import com.yond.blog.service.VisitCityService;
 import com.yond.blog.service.VisitRecordService;
 import com.yond.blog.service.VisitUserService;
 import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.time.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -24,18 +24,18 @@ import java.util.Map;
  */
 @Component
 public class VisitorSyncScheduleTask {
-
-    @Autowired
-    LogVisitService logVisitService;
-    @Autowired
-    VisitUserService visitUserService;
-    @Autowired
-    VisitRecordService visitRecordService;
-    @Autowired
-    VisitCityService visitCityService;
-    @Autowired
-    VisitCache visitCache;
-
+    
+    @Resource
+    private LogVisitService logVisitService;
+    @Resource
+    private VisitUserService visitUserService;
+    @Resource
+    private VisitRecordService visitRecordService;
+    @Resource
+    private VisitCityService visitCityService;
+    @Resource
+    private VisitCache visitCache;
+    
     /**
      * 这个方法不应该被直接调用，应当作为定时任务的task，在每天0点执行
      * 每日访问量很大时，这个任务可能很耗时

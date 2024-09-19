@@ -6,6 +6,7 @@ import com.yond.blog.web.blog.admin.convert.LogScheduleJobConverter;
 import com.yond.blog.web.blog.admin.req.LogScheduleJobDelReq;
 import com.yond.blog.web.blog.admin.req.LogScheduleJobPageReq;
 import com.yond.blog.web.blog.admin.vo.LogScheduleJobVO;
+import com.yond.common.enums.EnableStatusEnum;
 import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import jakarta.annotation.Resource;
@@ -36,8 +37,11 @@ public class LogScheduleJobController {
     
     @PostMapping("/del")
     public Response<Boolean> delete(@RequestBody LogScheduleJobDelReq req) {
-        logScheduleJobService.deleteJobLogByLogId(logId);
-        return Response.ok("删除成功");
+        LogScheduleJobDO update = new LogScheduleJobDO();
+        update.setId(req.getId());
+        update.setStatus(EnableStatusEnum.DELETE.getVal());
+        logScheduleJobService.updateSelective(update);
+        return Response.success();
     }
     
 }
