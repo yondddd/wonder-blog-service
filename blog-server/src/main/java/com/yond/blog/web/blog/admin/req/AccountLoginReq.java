@@ -4,13 +4,14 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * @Description:
- * @Author: Yond
+ * @author yond
+ * @date 9/20/2024
+ * @description
  */
-public class AccountModifyPwdReq implements Serializable {
+public class AccountLoginReq implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -2915092810476190536L;
+    private static final long serialVersionUID = -6983814585659310089L;
 
     private String username;
     private String password;
@@ -19,7 +20,7 @@ public class AccountModifyPwdReq implements Serializable {
         return username;
     }
 
-    public AccountModifyPwdReq setUsername(String username) {
+    public AccountLoginReq setUsername(String username) {
         this.username = username;
         return this;
     }
@@ -28,14 +29,14 @@ public class AccountModifyPwdReq implements Serializable {
         return password;
     }
 
-    public AccountModifyPwdReq setPassword(String password) {
+    public AccountLoginReq setPassword(String password) {
         this.password = password;
         return this;
     }
 
     @Override
     public String toString() {
-        return "AccountModifyPwdReq{" +
+        return "AccountLoginReq{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';

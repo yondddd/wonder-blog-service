@@ -66,7 +66,7 @@ public class OperationLogAspect {
                 .setMethod(method)
                 .setDescription(operationLogger.value())
                 .setIp(ip)
-                .setTimes(duration)
+                .setDuration(duration)
                 .setUserAgent(userAgent);
         log.setParam(params);
         logOperationService.saveOperationLog(log);

@@ -3,9 +3,7 @@ package com.yond.blog.web.blog.admin.controller;
 import com.yond.blog.entity.ScheduleJobDO;
 import com.yond.blog.service.ScheduleJobService;
 import com.yond.blog.web.blog.admin.convert.ScheduleJobConverter;
-import com.yond.blog.web.blog.admin.req.ScheduleJobAddReq;
-import com.yond.blog.web.blog.admin.req.ScheduleJobEditReq;
-import com.yond.blog.web.blog.admin.req.ScheduleJobPageReq;
+import com.yond.blog.web.blog.admin.req.*;
 import com.yond.blog.web.blog.admin.vo.ScheduleJobVO;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.enums.EnableStatusEnum;
@@ -13,7 +11,10 @@ import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
@@ -33,7 +34,7 @@ public class ScheduleJobController {
     public PageResponse<List<ScheduleJobVO>> page(@RequestBody ScheduleJobPageReq req) {
         Pair<Integer, List<ScheduleJobDO>> pair = scheduleJobService.page(req.getPageNo(), req.getPageSize());
         List<ScheduleJobVO> data = pair.getRight().stream().map(ScheduleJobConverter::do2vo).toList();
-        return PageResponse.<List<ScheduleJobVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize());
+        return PageResponse.<List<ScheduleJobVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize()).setSuccess();
     }
 
     @OperationLogger("新建定时任务")
@@ -71,22 +72,22 @@ public class ScheduleJobController {
 
     @OperationLogger("删除定时任务")
     @PostMapping("/del")
-    public Response<Boolean> deleteJob(@RequestParam Long jobId) {
-        scheduleJobService.deleteJobById(jobId);
+    public Response<Boolean> deleteJob(@RequestBody ScheduleJobIdReq req) {
+        scheduleJobService.deleteJobById(req.getId());
         return Response.success();
     }
 
     @OperationLogger("立即执行定时任务")
     @PostMapping("/run")
-    public Response<Boolean> runJob(@RequestParam Long jobId) {
-        scheduleJobService.runJobById(jobId);
+    public Response<Boolean> runJob(@RequestBody ScheduleJobIdReq req) {
+        scheduleJobService.runJobById(req.getId());
         return Response.success();
     }
 
     @OperationLogger("更新任务状态")
     @PostMapping("/updateStatus")
-    public Response<Boolean> updateJobStatus(@RequestParam Long jobId, @RequestParam Boolean status) {
-        scheduleJobService.updateJobStatusById(jobId, status);
+    public Response<Boolean> updateJobStatus(@RequestBody ScheduleJobStatusReq req) {
+        scheduleJobService.updateJobStatusById(req.getId(), req.getStatus());
         return Response.success();
     }
 

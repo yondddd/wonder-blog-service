@@ -1,7 +1,5 @@
 package com.yond.common.utils.trace;
 
-import com.yond.common.utils.net.NICUtil;
-
 import java.time.DateTimeException;
 
 /**
@@ -10,9 +8,7 @@ import java.time.DateTimeException;
 public class TraceId {
 
     protected static SnowflakeIdWorker idGenerator = new SnowflakeIdWorker();
-
-    private static final String ip = NICUtil.localIpV4;
-
+    
     public static String nextId() {
         long id = 1L;
         for (int i = 0, size = 3; i < size; i++) {
@@ -25,7 +21,7 @@ public class TraceId {
             }
         }
 
-        return ip + "-" + id;
+        return String.valueOf(id);
     }
 
     private synchronized static void rebuildSnowflakeIdWorker() {

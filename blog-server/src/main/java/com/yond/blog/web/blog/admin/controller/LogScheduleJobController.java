@@ -24,17 +24,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/logJob")
 public class LogScheduleJobController {
-    
+
     @Resource
     private LogScheduleJobService logScheduleJobService;
-    
+
     @PostMapping("/page")
     public PageResponse<List<LogScheduleJobVO>> page(@RequestBody LogScheduleJobPageReq req) {
         Pair<Integer, List<LogScheduleJobDO>> pair = logScheduleJobService.page(req.getStartDate(), req.getEndDate(), req.getPageNo(), req.getPageSize());
         List<LogScheduleJobVO> data = pair.getRight().stream().map(LogScheduleJobConverter::do2vo).toList();
-        return PageResponse.<List<LogScheduleJobVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize());
+        return PageResponse.<List<LogScheduleJobVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize()).setSuccess();
     }
-    
+
     @PostMapping("/del")
     public Response<Boolean> delete(@RequestBody LogScheduleJobDelReq req) {
         LogScheduleJobDO update = new LogScheduleJobDO();
@@ -43,5 +43,5 @@ public class LogScheduleJobController {
         logScheduleJobService.updateSelective(update);
         return Response.success();
     }
-    
+
 }

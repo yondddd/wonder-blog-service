@@ -22,7 +22,8 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-
+        id
+        , page, blog_id, parent_id, nickname, email, content, avatar, ip, is_published, is_admin_comment, is_notice, website, qq, status, create_time
     </sql>
 
 
@@ -30,6 +31,7 @@
         select
         <include refid="Base_Column_List"/>
         from comment
+        where status = 1
         order by id desc
     </select>
 

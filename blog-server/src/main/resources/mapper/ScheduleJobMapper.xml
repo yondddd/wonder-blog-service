@@ -87,7 +87,7 @@
         <include refid="Base_Column_List"/>
         from schedule_job
         <include refid="pageWhere"/>
-        limit #{offset,size}
+        limit #{offset},#{size}
     </select>
 
     <sql id="pageWhere">

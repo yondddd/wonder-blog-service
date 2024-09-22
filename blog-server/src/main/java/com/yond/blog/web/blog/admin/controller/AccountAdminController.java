@@ -8,8 +8,8 @@ import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.jwt.JwtUtil;
 import com.yond.blog.util.jwt.PayloadHelper;
 import com.yond.blog.util.jwt.TokenVO;
+import com.yond.blog.web.blog.admin.req.AccountLoginReq;
 import com.yond.blog.web.blog.admin.req.AccountModifyPwdReq;
-import com.yond.blog.web.blog.view.dto.LoginInfo;
 import com.yond.blog.web.handler.session.UserSession;
 import com.yond.common.constant.JwtConstant;
 import com.yond.common.enums.RoleEnum;
@@ -34,33 +34,33 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/admin/account")
 public class AccountAdminController {
-    
+
     @Resource
     private UserService userService;
     @Resource
     private LogLoginService logLoginService;
-    
+
     @PostMapping("/modifyPwd")
     public Response<Boolean> modifyPwd(@RequestBody AccountModifyPwdReq req, UserSession userSession) {
-        String err = userService.changeAccount(req.getUserName(), req.getPwd(), userSession);
+        String err = userService.changeAccount(req.getUsername(), req.getPassword(), userSession);
         if (StringUtils.isNotBlank(err)) {
             return Response.fail(err);
         }
         return Response.success();
     }
-    
+
     @PostMapping("/login")
-    public Response<TokenVO> login(@RequestBody LoginInfo loginInfo) {
-        UserDO user = userService.getByNameAndPassword(loginInfo.getUsername(), loginInfo.getPassword());
+    public Response<TokenVO> login(@RequestBody AccountLoginReq req) {
+        UserDO user = userService.getByNameAndPassword(req.getUsername(), req.getPassword());
         if (user == null) {
-            logLoginService.saveLoginLog(handleLog(loginInfo.getUsername(), false, "用户名或密码错误"));
+            logLoginService.saveLoginLog(handleLog(req.getUsername(), false, "用户名或密码错误"));
             return Response.fail("用户名或密码错误");
         }
         if (!RoleEnum.ADMIN.getVal().equals(user.getRole())) {
             return Response.custom(403, "无权限");
         }
         user.setPassword(null);
-        
+
         TokenVO result = new TokenVO();
         PayloadHelper payloadHelper = new PayloadHelper()
                 .setIssuer(JwtConstant.DEFAULT_CLIENT)
@@ -71,18 +71,18 @@ public class AccountAdminController {
         String token = JwtUtil.creatToken(payloadHelper, JwtConstant.LOGIN_TIME);
         result.setToken(token);
         result.setUser(user);
-        
+
         LogLoginDO log = handleLog(user.getUsername(), true, "登录成功");
         logLoginService.saveLoginLog(log);
-        
+
         return Response.success(result);
     }
-    
+
     private LogLoginDO handleLog(String userName, boolean loginSuccess, String description) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String ip = IpAddressUtils.getIpAddress(request);
         String userAgent = request.getHeader("User-Agent");
         return new LogLoginDO(userName, ip, loginSuccess, description, userAgent);
     }
-    
+
 }

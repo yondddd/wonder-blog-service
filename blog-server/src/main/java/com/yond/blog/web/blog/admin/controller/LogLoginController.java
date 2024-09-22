@@ -25,17 +25,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/logLogin")
 public class LogLoginController {
-    
+
     @Resource
     private LogLoginService logLoginService;
-    
+
     @PostMapping("/page")
     public PageResponse<List<LogLoginVO>> page(@RequestBody LogLoginPageReq req) {
         Pair<Integer, List<LogLoginDO>> pair = logLoginService.page(req.getStartDate(), req.getEndDate(), req.getPageNo(), req.getPageSize());
         List<LogLoginVO> data = pair.getRight().stream().map(LogLoginConverter::do2vo).toList();
-        return PageResponse.<List<LogLoginVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize());
+        return PageResponse.<List<LogLoginVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize()).setSuccess();
     }
-    
+
     @PostMapping("/del")
     public Response<Boolean> del(@RequestBody LogLoginDelReq req) {
         LogLoginDO update = new LogLoginDO();
@@ -44,5 +44,5 @@ public class LogLoginController {
         logLoginService.updateSelective(update);
         return Response.success();
     }
-    
+
 }

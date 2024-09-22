@@ -19,6 +19,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public Pair<Integer, List<FriendDO>> page(Integer pageNo, Integer pageSize) {
-        List<FriendDO> all = this.listAll();
+        List<FriendDO> all = new ArrayList<>(this.listAll());
         all.sort(Comparator.comparing(FriendDO::getId).reversed());
         return Pair.of(all.size(), PageUtil.pageList(all, pageNo, pageSize));
     }

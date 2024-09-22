@@ -17,7 +17,8 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-         id, username, ip, ip_source, os, browser, login_status, description, create_time, user_agent, status
+        id
+        , username, ip, ip_source, os, browser, login_status, description, create_time, user_agent, status
     </sql>
 
     <insert id="insertSelective">
@@ -74,11 +75,12 @@
     </select>
 
     <select id="pageBy" resultType="com.yond.blog.entity.LogLoginDO">
-        select <include refid="Base_Column_List"/>
+        select
+        <include refid="Base_Column_List"/>
         from log_login
         <include refid="pageWhere"/>
         order by id desc
-        limit #{offset,size}
+        limit #{offset},#{size}
     </select>
 
     <sql id="pageWhere">

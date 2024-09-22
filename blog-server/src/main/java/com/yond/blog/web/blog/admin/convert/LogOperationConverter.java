@@ -7,7 +7,7 @@ import com.yond.blog.web.blog.admin.vo.LogOperationVO;
  * @Author: Yond
  */
 public class LogOperationConverter {
-    
+
     public static LogOperationVO do2vo(LogOperationDO from) {
         LogOperationVO to = new LogOperationVO();
         to.setId(from.getId());
@@ -20,12 +20,12 @@ public class LogOperationConverter {
         to.setIpSource(from.getIpSource());
         to.setOs(from.getOs());
         to.setBrowser(from.getBrowser());
-        to.setTimes(from.getTimes());
+        to.setTimes(from.getDuration());
         to.setCreateTime(from.getCreateTime());
         to.setUserAgent(from.getUserAgent());
         to.setStatus(from.getStatus());
         return to;
     }
-    
-    
+
+
 }

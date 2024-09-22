@@ -75,7 +75,7 @@
         from log_operation
         <include refid="pageWhere"/>
         order by id desc
-        limit #{offset,size}
+        limit #{offset},#{size}
     </select>
 
     <sql id="pageWhere">

@@ -1,7 +1,7 @@
 package com.yond.blog.service.impl;
 
-import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.CacheLoader;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.yond.blog.cache.local.LocalCache;
 import com.yond.blog.entity.BlogDO;
 import com.yond.blog.entity.CommentDO;
@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -50,15 +51,15 @@ public class CommentServiceImpl implements CommentService {
     private BlogService blogService;
 
 
-    private final Cache<String, List<CommentDO>> cache = LocalCache.buildCache(1, new CacheLoader<>() {
+    private final LoadingCache<String, List<CommentDO>> cache = LocalCache.buildCache(1, new CacheLoader<>() {
         @Override
-        public @Nullable List<CommentDO> load(String s) throws Exception {
+        public @Nullable List<CommentDO> load(String s) {
             return commentMapper.listAll();
         }
     });
 
     public List<CommentDO> listAll() {
-        return cache.getIfPresent("listAll");
+        return cache.get("listAll");
     }
 
     private Map<Long, List<CommentDO>> allToMap(List<CommentDO> list) {
@@ -70,8 +71,12 @@ public class CommentServiceImpl implements CommentService {
         List<CommentDO> allData = this.listAll();
         Map<Long, List<CommentDO>> map = this.allToMap(allData);
         List<CommentDO> root = map.get(CommonConstant.ROOT_ID);
+        root = root == null ? new ArrayList<>() : root;
         root = root.stream().filter(x -> (page == null || page.getId().equals(x.getPage()))
                 && (blogId == null || blogId.equals(x.getBlogId()))).toList();
+        if (CollectionUtils.isEmpty(root)) {
+            return Pair.of(0, Collections.emptyList());
+        }
         List<CommentDO> pageList = PageUtil.pageList(root, pageNo, pageSize);
         return Pair.of(root.size(), buildTree(pageList, map));
     }
@@ -85,9 +90,8 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateSelective(CommentDO comment) {
-        if (commentMapper.updateSelective(comment) != 1) {
-            throw new PersistenceException("评论修改失败");
-        }
+        commentMapper.updateSelective(comment);
+        cache.invalidateAll();
     }
 
 
@@ -97,6 +101,7 @@ public class CommentServiceImpl implements CommentService {
         if (commentMapper.insertSelective(comment) != 1) {
             throw new PersistenceException("评论失败");
         }
+        cache.invalidateAll();
     }
 
     @Override
