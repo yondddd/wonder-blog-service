@@ -9,7 +9,7 @@ import java.util.Date;
  * @Author: Yond
  */
 public class LogScheduleJobDO implements Serializable {
-    
+
     @Serial
     private static final long serialVersionUID = 5752837225091432926L;
     private Long id;//日志id
@@ -22,91 +22,100 @@ public class LogScheduleJobDO implements Serializable {
     private Integer duration;//耗时(单位：毫秒)
     private Date createTime;//创建时间
     private Integer status;
-    
+
     public LogScheduleJobDO() {
     }
-    
+
     public Long getId() {
-        return this.id;
+        return id;
     }
-    
-    public Long getJobId() {
-        return this.jobId;
-    }
-    
-    public String getBeanName() {
-        return this.beanName;
-    }
-    
-    public String getMethodName() {
-        return this.methodName;
-    }
-    
-    public String getParams() {
-        return this.params;
-    }
-    
-    public Boolean getRunStatus() {
-        return this.runStatus;
-    }
-    
-    public String getError() {
-        return this.error;
-    }
-    
-    public Integer getDuration() {
-        return this.duration;
-    }
-    
-    public Date getCreateTime() {
-        return this.createTime;
-    }
-    
-    public void setId(Long id) {
+
+    public LogScheduleJobDO setId(Long id) {
         this.id = id;
+        return this;
     }
-    
-    public void setJobId(Long jobId) {
+
+    public Long getJobId() {
+        return jobId;
+    }
+
+    public LogScheduleJobDO setJobId(Long jobId) {
         this.jobId = jobId;
+        return this;
     }
-    
-    public void setBeanName(String beanName) {
+
+    public String getBeanName() {
+        return beanName;
+    }
+
+    public LogScheduleJobDO setBeanName(String beanName) {
         this.beanName = beanName;
+        return this;
     }
-    
-    public void setMethodName(String methodName) {
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public LogScheduleJobDO setMethodName(String methodName) {
         this.methodName = methodName;
+        return this;
     }
-    
-    public void setParams(String params) {
+
+    public String getParams() {
+        return params;
+    }
+
+    public LogScheduleJobDO setParams(String params) {
         this.params = params;
+        return this;
     }
-    
-    public void setRunStatus(Boolean runStatus) {
+
+    public Boolean getRunStatus() {
+        return runStatus;
+    }
+
+    public LogScheduleJobDO setRunStatus(Boolean runStatus) {
         this.runStatus = runStatus;
+        return this;
     }
-    
-    public void setError(String error) {
+
+    public String getError() {
+        return error;
+    }
+
+    public LogScheduleJobDO setError(String error) {
         this.error = error;
+        return this;
     }
-    
-    public void setDuration(Integer duration) {
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public LogScheduleJobDO setDuration(Integer duration) {
         this.duration = duration;
+        return this;
     }
-    
-    public void setCreateTime(Date createTime) {
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public LogScheduleJobDO setCreateTime(Date createTime) {
         this.createTime = createTime;
+        return this;
     }
-    
+
     public Integer getStatus() {
         return status;
     }
-    
+
     public LogScheduleJobDO setStatus(Integer status) {
         this.status = status;
         return this;
     }
-    
+
     @Override
     public String toString() {
         return "LogScheduleJobDO{" +
