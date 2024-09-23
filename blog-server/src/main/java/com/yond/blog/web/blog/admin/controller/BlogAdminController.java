@@ -49,8 +49,8 @@ public class BlogAdminController {
     @PostMapping("/page")
     public @ResponseBody PageResponse<List<BlogVO>> page(@RequestBody BlogListPageReq req) {
         
-        Pair<Integer, List<BlogDO>> pair = blogService.pageByTitleLikeAndCategoryId(req.getTitle(), req.getCategoryId(),
-                req.getPageNo(), req.getPageSize());
+        Pair<Integer, List<BlogDO>> pair = blogService.adminPageBy(req.getTitle(), req.getCategoryId(),
+                null, req.getPageNo(), req.getPageSize());
         List<Long> categoryIds = pair.getRight().stream().map(BlogDO::getCategoryId).toList();
         Map<Long, String> map = categoryService.listByIds(categoryIds).stream()
                 .collect(Collectors.toMap(CategoryDO::getId, CategoryDO::getName, (key1, key2) -> key1));

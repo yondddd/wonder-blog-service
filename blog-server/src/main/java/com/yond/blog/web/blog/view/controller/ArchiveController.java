@@ -1,33 +1,30 @@
 package com.yond.blog.web.blog.view.controller;
 
 import com.yond.blog.service.BlogService;
+import com.yond.blog.web.blog.view.vo.ArchiveVO;
 import com.yond.common.annotation.VisitLogger;
 import com.yond.common.enums.VisitBehavior;
 import com.yond.common.resp.Response;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import jakarta.annotation.Resource;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 /**
  * @Description: 归档页面
  * @Author: Yond
  */
 @RestController
+@RequestMapping("/view/archive")
 public class ArchiveController {
-    @Autowired
-    BlogService blogService;
-
-    /**
-     * 按年月分组归档公开博客 统计公开博客总数
-     *
-     * @return
-     */
+    
+    @Resource
+    private BlogService blogService;
+    
     @VisitLogger(VisitBehavior.ARCHIVE)
-    @GetMapping("/view/archives")
-    public Response<Map<String, Object>> archives() {
-        Map<String, Object> archiveBlogMap = blogService.getArchiveBlogAndCountByIsPublished();
-        return Response.success(archiveBlogMap);
+    @PostMapping("/list")
+    public Response<ArchiveVO> list() {
+        return Response.success(blogService.blogArchive());
     }
+    
 }

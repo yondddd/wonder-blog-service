@@ -3,12 +3,15 @@ package com.yond.blog.web.blog.view.controller;
 import com.yond.blog.entity.SiteConfigDO;
 import com.yond.blog.service.SiteConfigService;
 import com.yond.blog.util.markdown.MarkdownUtils;
+import com.yond.blog.web.blog.view.vo.AboutVO;
 import com.yond.common.annotation.VisitLogger;
 import com.yond.common.constant.AboutConstant;
 import com.yond.common.enums.SiteSettingTypeEnum;
 import com.yond.common.enums.VisitBehavior;
 import com.yond.common.resp.Response;
-import org.springframework.web.bind.annotation.GetMapping;
+import jakarta.annotation.Resource;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -19,31 +22,21 @@ import java.util.stream.Collectors;
  * @Author: Yond
  */
 @RestController
+@RequestMapping("/view/about")
 public class AboutController {
-
-    private final SiteConfigService siteConfigService;
-
-    public AboutController(SiteConfigService siteConfigService) {
-        this.siteConfigService = siteConfigService;
-    }
-
-    /**
-     * 获取关于我页面信息
-     *
-     * @return
-     */
+    
+    @Resource
+    private SiteConfigService siteConfigService;
+    
     @VisitLogger(VisitBehavior.ABOUT)
-    @GetMapping("/view/about")
-    public Response<Map<String, String>> about() {
-
+    @PostMapping("/config")
+    public Response<AboutVO> about() {
+        AboutVO data = new AboutVO();
         Map<String, String> map = siteConfigService.listByType(SiteSettingTypeEnum.ABOUT)
                 .stream().collect(Collectors.toMap(SiteConfigDO::getNameEn, SiteConfigDO::getValue));
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (AboutConstant.CONTENT_KEY.equals(entry.getKey())) {
-                entry.setValue(MarkdownUtils.markdownToHtmlExtensions(entry.getValue()));
-            }
-        }
-        return Response.success(map);
+        data.setContent(MarkdownUtils.markdownToHtmlExtensions(map.get(AboutConstant.CONTENT)));
+        data.setCommentEnabled(map.get(AboutConstant.COMMENT_ENABLED));
+        return Response.success(data);
     }
-
+    
 }

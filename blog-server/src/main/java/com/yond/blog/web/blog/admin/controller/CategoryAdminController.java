@@ -73,7 +73,7 @@ public class CategoryAdminController {
     @PostMapping("/del")
     public Response<Boolean> del(@RequestBody CategoryDelReq req) {
         Long id = req.getId();
-        Pair<Integer, List<BlogDO>> pair = blogService.pageByTitleLikeAndCategoryId(null, req.getId().intValue(), 1, 1);
+        Pair<Integer, List<BlogDO>> pair = blogService.adminPageBy(null, req.getId().intValue(), null, 1, 1);
         if (pair.getLeft() != 0) {
             return Response.<Boolean>custom().setFailure("已有博客与此分类关联，不可删除");
         }

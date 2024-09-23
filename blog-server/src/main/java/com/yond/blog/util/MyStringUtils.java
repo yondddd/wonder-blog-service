@@ -8,22 +8,7 @@ import java.io.StringWriter;
  * @Author: Yond
  */
 public class MyStringUtils {
-
-    /**
-     * 判断字符串中是否包含特殊字符
-     *
-     * @param str 待校验字符串
-     * @return
-     */
-    public static boolean hasSpecialChar(String... str) {
-        for (String s : str) {
-            if (s.contains("%") || s.contains("_") || s.contains("[") || s.contains("#") || s.contains("*")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
+    
     /**
      * 获取堆栈信息
      *
@@ -37,4 +22,5 @@ public class MyStringUtils {
             return sw.toString();
         }
     }
+    
 }

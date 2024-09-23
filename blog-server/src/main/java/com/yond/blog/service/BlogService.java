@@ -5,11 +5,20 @@ import com.yond.blog.web.blog.view.vo.*;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
-import java.util.Map;
 
 public interface BlogService {
     
-    Pair<Integer, List<BlogDO>> pageByTitleLikeAndCategoryId(String title, Integer categoryId, Integer pageNo, Integer pageSize);
+    Pair<Integer, List<BlogDO>> adminPageBy(String title,
+                                            Integer categoryId,
+                                            Integer tagId,
+                                            Integer pageNo,
+                                            Integer pageSize);
+    
+    Pair<Integer, List<BlogDO>> viewPageBy(String title,
+                                           Integer categoryId,
+                                           Integer tagId,
+                                           Integer pageNo,
+                                           Integer pageSize);
     
     List<BlogDO> listByIds(List<Long> ids);
     
@@ -18,12 +27,6 @@ public interface BlogService {
     List<NewBlog> getNewBlogListByIsPublished();
     
     PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum);
-    
-    PageResult<BlogInfo> getBlogInfoListByCategoryNameAndIsPublished(String categoryName, Integer pageNum);
-    
-    PageResult<BlogInfo> getBlogInfoListByTagNameAndIsPublished(String tagName, Integer pageNum);
-    
-    Map<String, Object> getArchiveBlogAndCountByIsPublished();
     
     List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
     
@@ -35,10 +38,6 @@ public interface BlogService {
     
     BlogDetail getBlogByIdAndIsPublished(Long id);
     
-    String getBlogPassword(Long blogId);
-    
-    int countBlogByIsPublished();
-    
     int countByTagId(Long tagId);
     
     List<BlogDO> listEnable();
@@ -48,4 +47,6 @@ public interface BlogService {
     void updateSelective(BlogDO blog);
     
     void delById(Long id);
+    
+    ArchiveVO blogArchive();
 }

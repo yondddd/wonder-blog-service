@@ -11,8 +11,8 @@ import com.yond.common.constant.JwtConstant;
 import com.yond.common.enums.VisitBehavior;
 import com.yond.common.resp.Response;
 import io.jsonwebtoken.Claims;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -23,23 +23,18 @@ import java.util.List;
  * @Author: Yond
  */
 @RestController
+@RequestMapping("/view/moment")
 public class MomentController {
-    @Autowired
-    MomentService momentService;
-    @Autowired
-    UserServiceImpl userService;
-
+    
+    @Resource
+    private MomentService momentService;
+    @Resource
+    private UserServiceImpl userService;
+    
     private static final int pageSize = 5;
-
-    /**
-     * 分页查询动态List
-     *
-     * @param pageNum 页码
-     * @param jwt     博主访问Token
-     * @return
-     */
+    
     @VisitLogger(VisitBehavior.MOMENT)
-    @GetMapping("/view/moments")
+    @GetMapping("/page")
     public Response<PageResult<MomentDO>> moments(@RequestParam(defaultValue = "1") Integer pageNum,
                                                   @RequestHeader(value = JwtConstant.TOKEN_HEADER, defaultValue = "") String jwt) {
         boolean adminIdentity = false;
@@ -61,19 +56,13 @@ public class MomentController {
         PageResult<MomentDO> pageResult = new PageResult<>(pair.getLeft(), pair.getRight());
         return Response.success(pageResult);
     }
-
-    /**
-     * 给动态点赞
-     * 简单限制一下点赞
-     *
-     * @param id 动态id
-     * @return
-     */
+    
     @AccessLimit(seconds = 86400, maxCount = 1, msg = "不可以重复点赞哦")
     @VisitLogger(VisitBehavior.LIKE_MOMENT)
-    @PostMapping("/view/moment/like/{id}")
-    public Response like(@PathVariable Long id) {
+    @PostMapping("/like/{id}")
+    public Response<Boolean> like(@PathVariable Long id) {
         momentService.incrLikeById(id);
-        return Response.ok("点赞成功");
+        return Response.success();
     }
+    
 }
