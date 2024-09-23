@@ -20,7 +20,7 @@ public class LogOperationConverter {
         to.setIpSource(from.getIpSource());
         to.setOs(from.getOs());
         to.setBrowser(from.getBrowser());
-        to.setTimes(from.getDuration());
+        to.setDuration(from.getDuration());
         to.setCreateTime(from.getCreateTime());
         to.setUserAgent(from.getUserAgent());
         to.setStatus(from.getStatus());

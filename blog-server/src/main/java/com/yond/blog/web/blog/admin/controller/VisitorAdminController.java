@@ -33,7 +33,7 @@ public class VisitorAdminController {
     public PageResponse<List<VisitUserVO>> page(@RequestBody VisitUserPageReq req) {
         Pair<Integer, List<VisitUserDO>> pair = visitUserService.page(req.getPageNo(), req.getPageSize(), req.getStartDate(), req.getEndDate());
         List<VisitUserVO> data = pair.getRight().stream().map(VisitUserConverter::do2vo).toList();
-        return PageResponse.<List<VisitUserVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize());
+        return PageResponse.<List<VisitUserVO>>custom().setData(data).setTotal(pair.getLeft()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize()).setSuccess();
     }
 
     @OperationLogger("删除访客记录")

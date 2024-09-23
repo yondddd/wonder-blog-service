@@ -25,17 +25,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/logException")
 public class LogExceptionController {
-    
+
     @Resource
     private LogExceptionService logExceptionService;
-    
+
     @PostMapping("/page")
-    public PageResponse<List<LogExceptionVO>> exceptionLogs(LogExceptionPageReq req) {
+    public PageResponse<List<LogExceptionVO>> exceptionLogs(@RequestBody LogExceptionPageReq req) {
         Pair<Integer, List<LogExceptionDO>> pair = logExceptionService.page(req.getStartDate(), req.getEndDate(), req.getPageNo(), req.getPageSize());
         List<LogExceptionVO> data = pair.getRight().stream().map(LogExceptionConverter::do2vo).toList();
         return PageResponse.<List<LogExceptionVO>>custom().setTotal(pair.getLeft()).setData(data).setPageNo(req.getPageNo()).setPageSize(req.getPageSize()).setSuccess();
     }
-    
+
     @PostMapping("/del")
     public Response<Boolean> del(@RequestBody LogExceptionDelReq req) {
         LogExceptionDO update = new LogExceptionDO();
@@ -44,5 +44,5 @@ public class LogExceptionController {
         logExceptionService.updateSelective(update);
         return Response.success();
     }
-    
+
 }

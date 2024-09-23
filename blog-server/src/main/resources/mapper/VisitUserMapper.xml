@@ -65,14 +65,17 @@
         <include refid="Base_Column_List"/>
         from visit_user
         <include refid="pageWhere"/>
-        order by create_time desc
+        order by id desc
         limit #{offset},#{size}
     </select>
 
     <sql id="pageWhere">
         <where>
-            <if test="startDate!=null and startDate!='' and endDate!=null and endDate!=''">
-                last_time between #{startDate} and #{endDate}
+            <if test="startDate != null">
+                and create_time >= #{startDate}
+            </if>
+            <if test="endDate != null">
+                and create_time &lt;= #{endDate}
             </if>
         </where>
     </sql>
