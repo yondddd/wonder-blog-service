@@ -24,7 +24,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
     private AccessLimitCache accessLimitCache;
     
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         boolean process = handler instanceof HandlerMethod;
         if (!process) {
             return true;

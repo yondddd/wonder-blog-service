@@ -57,8 +57,8 @@ public class BlogServiceImpl implements BlogService {
     
     @Override
     public Pair<Integer, List<BlogDO>> adminPageBy(String title,
-                                                   Integer categoryId,
-                                                   Integer tagId,
+                                                   Long categoryId,
+                                                   Long tagId,
                                                    Integer pageNo,
                                                    Integer pageSize) {
         List<BlogDO> list = this.listEnable().stream()
@@ -70,12 +70,15 @@ public class BlogServiceImpl implements BlogService {
     }
     
     @Override
-    public Pair<Integer, List<BlogDO>> viewPageBy(String title,
-                                                  Integer categoryId,
-                                                  Integer tagId,
+    public Pair<Integer, List<BlogDO>> viewPageBy(Long categoryId,
+                                                  Long tagId,
                                                   Integer pageNo,
                                                   Integer pageSize) {
-        return null;
+        List<BlogDO> list = this.listEnable().stream()
+                .filter(x -> categoryId == null || categoryId.equals(x.getCategoryId()))
+                .sorted(Comparator.comparing(BlogDO::getCreateTime).reversed())
+                .collect(Collectors.toList());
+        return Pair.of(list.size(), PageUtil.pageList(list, pageNo, pageSize));
     }
     
     @Override

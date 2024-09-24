@@ -7,6 +7,7 @@ import com.yond.blog.util.jwt.PayloadHelper;
 import com.yond.blog.web.blog.view.dto.BlogPassword;
 import com.yond.blog.web.blog.view.req.BlogPageReq;
 import com.yond.blog.web.blog.view.vo.BlogDetail;
+import com.yond.blog.web.blog.view.vo.BlogInfo;
 import com.yond.blog.web.blog.view.vo.BlogVO;
 import com.yond.blog.web.blog.view.vo.SearchBlog;
 import com.yond.common.annotation.VisitLogger;
@@ -30,36 +31,38 @@ import java.util.List;
 @RestController
 @RequestMapping("/view/blog")
 public class BlogController {
-
+    
     @Resource
     private BlogService blogService;
     @Resource
     private BlogViewCache blogViewCache;
-
+    
     @VisitLogger(VisitBehavior.INDEX)
     @GetMapping("/page")
     public PageResponse<List<BlogVO>> page(@RequestBody BlogPageReq req) {
+        
+        blogService.viewPageBy(req.getCategoryId(),req.getTagId(), req.getPageNo(), req.getPageSize())
         // 加个categoryId
 //        blogService.viewPageBy();
         return null;
     }
-
-
-//    private List<BlogInfo> processBlogInfosPassword(List<BlogInfo> blogInfos) {
-//        for (BlogInfo blogInfo : blogInfos) {
-//            if (!"".equals(blogInfo.getPassword())) {
-//                blogInfo.setPrivacy(true);
-//                blogInfo.setPassword("");
-//                blogInfo.setDescription(BlogConstant.PRIVATE_BLOG_DESCRIPTION);
-//            } else {
-//                blogInfo.setPrivacy(false);
-//                blogInfo.setDescription(MarkdownUtils.markdownToHtmlExtensions(blogInfo.getDescription()));
-//            }
-//            blogInfo.setTags(blogTagService.listTagsByBlogId(blogInfo.getId()));
-//        }
-//        return blogInfos;
-//    }
-
+    
+    
+    private List<BlogInfo> processBlogInfosPassword(List<BlogInfo> blogInfos) {
+        for (BlogInfo blogInfo : blogInfos) {
+            if (!"".equals(blogInfo.getPassword())) {
+                blogInfo.setPrivacy(true);
+                blogInfo.setPassword("");
+                blogInfo.setDescription(BlogConstant.PRIVATE_BLOG_DESCRIPTION);
+            } else {
+                blogInfo.setPrivacy(false);
+                blogInfo.setDescription(MarkdownUtils.markdownToHtmlExtensions(blogInfo.getDescription()));
+            }
+            blogInfo.setTags(blogTagService.listTagsByBlogId(blogInfo.getId()));
+        }
+        return blogInfos;
+    }
+    
     @VisitLogger(VisitBehavior.BLOG)
     @GetMapping("/detail")
     public Response<BlogDetail> getBlog(@RequestParam Long id,
@@ -96,7 +99,7 @@ public class BlogController {
         blogService.updateViewsToRedis(id);
         return Response.success(blog);
     }
-
+    
     /**
      * 校验受保护文章密码是否正确，正确则返回jwt
      *
@@ -118,21 +121,21 @@ public class BlogController {
                 .setSecret(JwtConstant.DEFAULT_SECRET)
                 .setAdditionalInfo(new HashMap<>());
         String token = JwtUtil.creatToken(payloadHelper, JwtConstant.ONE_MONTH_TIME);
-
+        
         return Response.success(token);
     }
-
+    
     @VisitLogger(VisitBehavior.SEARCH)
     @GetMapping("/search")
-    public Response searchBlog(@RequestParam String query) {
+    public Response<List<SearchBlog>> searchBlog(@RequestParam String query) {
         //校验关键字字符串合法性
         if (StringUtils.isBlank(query) || hasSpecialChar(query) || query.trim().length() > 20) {
-            return Response.failure("参数错误");
+            return Response.fail("参数错误");
         }
         List<SearchBlog> searchBlogs = blogService.searchPublic(query.trim());
-        return Response.ok("获取成功", searchBlogs);
+        return Response.success(searchBlogs);
     }
-
+    
     public boolean hasSpecialChar(String... str) {
         for (String s : str) {
             if (s.contains("%") || s.contains("_") || s.contains("[") || s.contains("#") || s.contains("*")) {
@@ -141,5 +144,5 @@ public class BlogController {
         }
         return false;
     }
-
+    
 }

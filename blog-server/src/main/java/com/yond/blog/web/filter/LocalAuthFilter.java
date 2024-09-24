@@ -25,37 +25,32 @@ import java.util.Date;
  * @Author Yond
  */
 public class LocalAuthFilter implements LocalHttpFilter {
-
+    
     private final UserService userService;
-
+    
     public LocalAuthFilter(UserService userService) {
         this.userService = userService;
     }
-
-
+    
+    
     @Override
     public void doFilter(LocalHttpContext context, LocalFilterChain<LocalHttpContext, IOException, ServletException> chain) throws IOException, ServletException {
-
+        
         HttpServletRequest servletRequest = context.getRequest();
         HttpServletResponse servletResponse = context.getResponse();
         String servletPath = servletRequest.getServletPath();
-
+        
         if (HttpMethod.OPTIONS.toString().equals(servletRequest.getMethod())) {
             WebFilterUtil.crossHeader(servletResponse);
             servletResponse.setStatus(HttpServletResponse.SC_OK);
             return;
         }
-
-        if (!servletPath.startsWith("/admin")) {
+        
+        if (!servletPath.startsWith("/admin") || servletPath.contains("login")) {
             chain.doFilter(context);
             return;
         }
-
-        if (servletPath.contains("login") || servletPath.contains("webTitleSuffix")) {
-            chain.doFilter(context);
-            return;
-        }
-
+        
         String header = servletRequest.getHeader(JwtConstant.TOKEN_HEADER);
         if (StringUtils.isBlank(header)) {
             WebFilterUtil.returnFail(servletResponse, HttpServletResponse.SC_UNAUTHORIZED, Response.custom(HttpStatus.UNAUTHORIZED.value(), "token不存在"));
@@ -80,5 +75,5 @@ public class LocalAuthFilter implements LocalHttpFilter {
         servletRequest.setAttribute(JwtConstant.GUID_HEADER, guid);
         chain.doFilter(context);
     }
-
+    
 }

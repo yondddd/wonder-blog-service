@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  */
 @RestControllerAdvice
 public class ControllerExceptionHandler {
-
+    
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    
     /**
      * 捕获自定义的404异常
      *
@@ -28,11 +28,11 @@ public class ControllerExceptionHandler {
      * @return
      */
     @ExceptionHandler(NotFoundException.class)
-    public Response notFoundExceptionHandler(HttpServletRequest request, NotFoundException e) {
+    public Response<Void> notFoundExceptionHandler(HttpServletRequest request, NotFoundException e) {
         logger.error("Request URL : {}, Exception :", request.getRequestURL(), e);
-        return Response.create(HttpStatus.NOT_FOUND.value(), e.getMessage());
+        return Response.custom(HttpStatus.NOT_FOUND.value(), e.getMessage());
     }
-
+    
     /**
      * 捕获自定义的持久化异常
      *
@@ -41,11 +41,11 @@ public class ControllerExceptionHandler {
      * @return
      */
     @ExceptionHandler(PersistenceException.class)
-    public Response persistenceExceptionHandler(HttpServletRequest request, PersistenceException e) {
+    public Response<Void> persistenceExceptionHandler(HttpServletRequest request, PersistenceException e) {
         logger.error("Request URL : {}, Exception :", request.getRequestURL(), e);
-        return Response.create(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+        return Response.custom(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
     }
-
+    
     /**
      * 捕获其它异常
      *
@@ -54,8 +54,8 @@ public class ControllerExceptionHandler {
      * @return
      */
     @ExceptionHandler(Exception.class)
-    public Response exceptionHandler(HttpServletRequest request, Exception e) {
+    public Response<Void> exceptionHandler(HttpServletRequest request, Exception e) {
         logger.error("Request URL : {}, Exception :", request.getRequestURL(), e);
-        return Response.create(HttpStatus.INTERNAL_SERVER_ERROR.value(), "异常错误: " + e.getMessage());
+        return Response.custom(HttpStatus.INTERNAL_SERVER_ERROR.value(), "异常错误: " + e.getMessage());
     }
 }

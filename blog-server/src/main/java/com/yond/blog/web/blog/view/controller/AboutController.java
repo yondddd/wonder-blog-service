@@ -30,7 +30,7 @@ public class AboutController {
     
     @VisitLogger(VisitBehavior.ABOUT)
     @PostMapping("/config")
-    public Response<AboutVO> about() {
+    public Response<AboutVO> config() {
         AboutVO data = new AboutVO();
         Map<String, String> map = siteConfigService.listByType(SiteSettingTypeEnum.ABOUT)
                 .stream().collect(Collectors.toMap(SiteConfigDO::getNameEn, SiteConfigDO::getValue));

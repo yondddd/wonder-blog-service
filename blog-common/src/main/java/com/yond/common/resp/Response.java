@@ -49,22 +49,6 @@ public class Response<T> implements Serializable {
         this.data = data;
     }
     
-    public static Response ok(String msg, Object data) {
-        return new Response(SUCCESS, msg, data);
-    }
-    
-    public static Response ok(String msg) {
-        return new Response(SUCCESS, msg);
-    }
-    
-    public static Response failure(String msg) {
-        return new Response(FAILURE, msg);
-    }
-    
-    public static Response create(Integer code, String msg) {
-        return new Response(code, msg);
-    }
-    
     public Integer getCode() {
         return code;
     }
@@ -129,7 +113,6 @@ public class Response<T> implements Serializable {
         this.data = data;
         return this;
     }
-    
     
     @Override
     public String toString() {

@@ -38,7 +38,7 @@ public class IndexController {
      * @return
      */
     @GetMapping("/view/site")
-    public Response site() {
+    public Response<Map<String, Object>> site() {
         Map<String, Object> map = siteConfigService.getSiteInfoForView();
         List<NewBlog> newBlogList = blogService.getNewBlogListByIsPublished();
         List<CategoryDO> categoryList = categoryService.listAll();
@@ -48,7 +48,7 @@ public class IndexController {
         map.put("categoryList", categoryList);
         map.put("tagList", tagList);
         map.put("randomBlogList", randomBlogList);
-        return Response.ok("请求成功", map);
+        return Response.success(map);
     }
     
 }

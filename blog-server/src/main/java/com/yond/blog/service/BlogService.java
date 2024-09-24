@@ -9,14 +9,13 @@ import java.util.List;
 public interface BlogService {
     
     Pair<Integer, List<BlogDO>> adminPageBy(String title,
-                                            Integer categoryId,
-                                            Integer tagId,
+                                            Long categoryId,
+                                            Long tagId,
                                             Integer pageNo,
                                             Integer pageSize);
     
-    Pair<Integer, List<BlogDO>> viewPageBy(String title,
-                                           Integer categoryId,
-                                           Integer tagId,
+    Pair<Integer, List<BlogDO>> viewPageBy(Long categoryId,
+                                           Long tagId,
                                            Integer pageNo,
                                            Integer pageSize);
     

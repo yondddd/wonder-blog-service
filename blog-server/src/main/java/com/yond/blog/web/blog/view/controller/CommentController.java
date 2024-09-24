@@ -32,10 +32,10 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/view/comment")
 public class CommentController {
-
+    
     @Resource
     private CommentService commentService;
-
+    
     @GetMapping("/page")
     public PageResponse<List<CommentViewVO>> comments(@RequestBody CommentPageViewReq req,
                                                       @RequestHeader(value = JwtConstant.TOKEN_HEADER, defaultValue = "") String jwt) {
@@ -55,14 +55,14 @@ public class CommentController {
         Pair<Integer, List<CommentViewVO>> pair = commentService.viewPageBy(req.getPage(), req.getBlogId(), req.getPage(), req.getPageSize());
         return PageResponse.<List<CommentViewVO>>custom().setData(pair.getRight()).setTotal(pair.getLeft()).setSuccess();
     }
-
-
+    
+    
     @AccessLimit(seconds = 30, maxCount = 1, msg = "30秒内只能提交一次评论")
     @PostMapping("/leave")
     public Response<Boolean> postComment(@RequestBody CommentLeaveReq req,
                                          @RequestHeader(value = JwtConstant.TOKEN_HEADER, defaultValue = "") String jwt,
                                          HttpServletRequest request) {
-
+        
         Assert.hasText(req.getContent(), "评论为空");
         Assert.isTrue(req.getContent().length() <= 250, "评论过长");
         Assert.notNull(req.getPage(), "页面为空");
@@ -94,10 +94,10 @@ public class CommentController {
         // 正常回复就行 不考虑那么多
         CommentDO reply = CommentDO.custom();
         commentService.insertSelective(reply);
-        return Response.ok("评论成功");
+        return Response.success();
     }
-
-
+    
+    
     private String verifyToken(String jwt, Long blogId) {
         boolean tokenIsExist = JwtUtil.judgeTokenIsExist(jwt);
         if (!tokenIsExist) {
@@ -123,5 +123,5 @@ public class CommentController {
         }
         return null;
     }
-
+    
 }

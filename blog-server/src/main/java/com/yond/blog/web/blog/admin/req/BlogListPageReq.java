@@ -9,29 +9,30 @@ import java.io.Serializable;
  * @Author Yond
  */
 public class BlogListPageReq extends PageReq implements Serializable {
-
+    
     @Serial
     private static final long serialVersionUID = -4356438509662111734L;
-
+    
     private String title;
-    private Integer categoryId;
-
+    private Long categoryId;
+    
     public String getTitle() {
         return title;
     }
-
+    
     public void setTitle(String title) {
         this.title = title;
     }
-
-    public Integer getCategoryId() {
+    
+    public Long getCategoryId() {
         return categoryId;
     }
-
-    public void setCategoryId(Integer categoryId) {
+    
+    public BlogListPageReq setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+        return this;
     }
-
+    
     @Override
     public String toString() {
         return "BlogListPageReq{" +

@@ -13,23 +13,23 @@ public class BlogPageReq extends PageReq {
     @Serial
     private static final long serialVersionUID = 7923438536349685877L;
     
-    private Integer categoryId;
-    private Integer tagId;
+    private Long categoryId;
+    private Long tagId;
     
-    public Integer getCategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
     
-    public BlogPageReq setCategoryId(Integer categoryId) {
+    public BlogPageReq setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
         return this;
     }
     
-    public Integer getTagId() {
+    public Long getTagId() {
         return tagId;
     }
     
-    public BlogPageReq setTagId(Integer tagId) {
+    public BlogPageReq setTagId(Long tagId) {
         this.tagId = tagId;
         return this;
     }
