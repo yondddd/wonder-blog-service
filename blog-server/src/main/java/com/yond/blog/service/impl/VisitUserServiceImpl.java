@@ -4,8 +4,8 @@ import com.yond.blog.cache.redis.VisitCache;
 import com.yond.blog.entity.VisitUserDO;
 import com.yond.blog.mapper.VisitUserMapper;
 import com.yond.blog.service.VisitUserService;
-import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.UserAgentUtils;
+import com.yond.blog.util.ip.IpAddressUtils;
 import com.yond.blog.web.blog.view.dto.UserAgentDTO;
 import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
 import com.yond.common.exception.PersistenceException;
@@ -24,13 +24,13 @@ import java.util.List;
  */
 @Service
 public class VisitUserServiceImpl implements VisitUserService {
-
+    
     @Resource
     private VisitUserMapper visitUserMapper;
     @Resource
     private VisitCache visitCache;
-
-
+    
+    
     @Override
     public Pair<Integer, List<VisitUserDO>> page(Integer pageNo, Integer pageSize, Date startDate, Date endDate) {
         Integer count = visitUserMapper.countBy(startDate, endDate);
@@ -40,17 +40,17 @@ public class VisitUserServiceImpl implements VisitUserService {
         List<VisitUserDO> data = visitUserMapper.pageBy((pageNo - 1) * pageSize, pageSize, startDate, endDate);
         return Pair.of(count, data);
     }
-
+    
     @Override
     public List<String> getNewVisitorIpSourceByYesterday() {
         return visitUserMapper.getNewVisitorIpSourceByYesterday();
     }
-
+    
     @Override
     public boolean hasUUID(String uuid) {
         return visitUserMapper.hasUUID(uuid) != 0;
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveVisitor(VisitUserDO visitor) {
@@ -63,13 +63,13 @@ public class VisitUserServiceImpl implements VisitUserService {
             throw new PersistenceException("访客添加失败");
         }
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updatePVAndLastTimeByUUID(VisitLogUuidTime dto) {
         visitUserMapper.updatePVAndLastTimeByUUID(dto);
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteVisitor(Long id, String uuid) {

@@ -7,7 +7,7 @@ import java.io.StringWriter;
  * @Description: 字符串校验
  * @Author: Yond
  */
-public class MyStringUtils {
+public class StackTraceUtil {
     
     /**
      * 获取堆栈信息

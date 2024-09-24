@@ -4,7 +4,6 @@ import com.yond.blog.cache.local.SiteSettingCache;
 import com.yond.blog.entity.SiteConfigDO;
 import com.yond.blog.mapper.SiteConfigMapper;
 import com.yond.blog.service.SiteConfigService;
-import com.yond.blog.util.JacksonUtils;
 import com.yond.blog.web.blog.view.vo.Badge;
 import com.yond.blog.web.blog.view.vo.Copyright;
 import com.yond.blog.web.blog.view.vo.Favorite;
@@ -14,6 +13,7 @@ import com.yond.common.enums.SiteSettingTypeEnum;
 import com.yond.common.exception.PersistenceException;
 import com.yond.common.utils.env.env.EnvConstant;
 import com.yond.common.utils.env.env.Environment;
+import com.yond.common.utils.json.util.JsonUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,15 +34,15 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SiteConfigServiceImpl implements SiteConfigService, InitializingBean {
-
+    
     private final SiteConfigMapper siteConfigMapper;
-
+    
     public SiteConfigServiceImpl(SiteConfigMapper siteConfigMapper) {
         this.siteConfigMapper = siteConfigMapper;
     }
-
+    
     private static final Pattern PATTERN = Pattern.compile("\"(.*?)\"");
-
+    
     @Override
     public void afterPropertiesSet() throws Exception {
         List<SiteConfigDO> list = this.listAll();
@@ -52,8 +52,8 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
             }
         }
     }
-
-
+    
+    
     @Override
     public Map<String, Object> getSiteInfoForView() {
         List<SiteConfigDO> siteSettings = this.listAll();
@@ -67,7 +67,7 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
             switch (typeEnum) {
                 case SiteSettingTypeEnum.BLOG_INFO:
                     if (SiteConfigConstant.COPYRIGHT.equals(s.getNameEn())) {
-                        Copyright copyright = JacksonUtils.readValue(s.getValue(), Copyright.class);
+                        Copyright copyright = JsonUtils.fromJson(s.getValue(), Copyright.class);
                         siteInfo.put(s.getNameEn(), copyright);
                     } else {
                         siteInfo.put(s.getNameEn(), s.getValue());
@@ -100,7 +100,7 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
                             introduction.setEmail(s.getValue());
                             break;
                         case SiteConfigConstant.FAVORITE:
-                            Favorite favorite = JacksonUtils.readValue(s.getValue(), Favorite.class);
+                            Favorite favorite = JsonUtils.fromJson(s.getValue(), Favorite.class);
                             favorites.add(favorite);
                             break;
                         case SiteConfigConstant.ROLL_TEXT:
@@ -114,7 +114,7 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
                     }
                     break;
                 case SiteSettingTypeEnum.BOTTOM_BADGE:
-                    Badge badge = JacksonUtils.readValue(s.getValue(), Badge.class);
+                    Badge badge = JsonUtils.fromJson(s.getValue(), Badge.class);
                     badges.add(badge);
                     break;
                 default:
@@ -129,8 +129,8 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         map.put("badges", badges);
         return map;
     }
-
-
+    
+    
     @Override
     public String getValue(String key) {
         SiteConfigDO exist = this.listAll()
@@ -142,7 +142,7 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         }
         return null;
     }
-
+    
     @Override
     public void updateValue(String key, String value) {
         SiteConfigDO exist = this.listAll()
@@ -155,13 +155,13 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         exist.setValue(value);
         this.updateOneSiteSetting(exist);
     }
-
+    
     @Override
     public List<SiteConfigDO> listByType(SiteSettingTypeEnum typeEnum) {
         return this.listAll().stream()
                 .filter(x -> typeEnum.getVal().equals(x.getType())).collect(Collectors.toList());
     }
-
+    
     @Override
     public List<SiteConfigDO> listAll() {
         List<SiteConfigDO> siteSettings = SiteSettingCache.get();
@@ -171,7 +171,7 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         }
         return siteSettings;
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public synchronized void coverUpdate(List<SiteConfigDO> data) {
@@ -199,26 +199,26 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
             this.updateOneSiteSetting(toUpdate);
         }
     }
-
+    
     private void saveOneSiteSetting(SiteConfigDO siteSetting) {
         if (siteConfigMapper.insertSelective(siteSetting) != 1) {
             throw new PersistenceException("配置添加失败");
         }
         this.deleteSiteInfoRedisCache();
     }
-
+    
     private void updateOneSiteSetting(SiteConfigDO siteSetting) {
         if (siteConfigMapper.updateSelective(siteSetting) != 1) {
             throw new PersistenceException("配置修改失败");
         }
         this.deleteSiteInfoRedisCache();
     }
-
+    
     /**
      * 删除站点信息缓存
      */
     private void deleteSiteInfoRedisCache() {
         SiteSettingCache.del();
     }
-
+    
 }

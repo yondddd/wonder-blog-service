@@ -1,4 +1,4 @@
-package com.yond.blog.util;
+package com.yond.blog.util.spring;
 
 import com.yond.common.utils.json.util.JsonUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +14,7 @@ import java.util.List;
  * @Author: Yond
  */
 public class AopUtils {
-
+    
     public static String getRequestParams(JoinPoint joinPoint) {
         List<Object> data = new ArrayList<>();
         for (Object arg : joinPoint.getArgs()) {
@@ -25,9 +25,9 @@ public class AopUtils {
         }
         return JsonUtils.toJsonIgnoreNull(data);
     }
-
+    
     private static boolean isFilterObject(final Object o) {
         return o instanceof HttpServletRequest || o instanceof HttpServletResponse || o instanceof MultipartFile;
     }
-
+    
 }

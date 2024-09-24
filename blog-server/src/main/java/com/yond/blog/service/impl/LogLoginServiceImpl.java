@@ -3,8 +3,8 @@ package com.yond.blog.service.impl;
 import com.yond.blog.entity.LogLoginDO;
 import com.yond.blog.mapper.LogLoginMapper;
 import com.yond.blog.service.LogLoginService;
-import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.UserAgentUtils;
+import com.yond.blog.util.ip.IpAddressUtils;
 import com.yond.blog.web.blog.view.dto.UserAgentDTO;
 import com.yond.common.exception.PersistenceException;
 import jakarta.annotation.Resource;
@@ -22,11 +22,11 @@ import java.util.List;
  */
 @Service
 public class LogLoginServiceImpl implements LogLoginService {
-
+    
     @Resource
     private LogLoginMapper logLoginMapper;
-
-
+    
+    
     @Override
     public Pair<Integer, List<LogLoginDO>> page(Date startDate, Date endDate, Integer pageNo, Integer pageSize) {
         Integer count = logLoginMapper.countBy(startDate, endDate);
@@ -36,8 +36,8 @@ public class LogLoginServiceImpl implements LogLoginService {
         List<LogLoginDO> list = logLoginMapper.pageBy(startDate, endDate, (pageNo - 1) * pageSize, pageSize);
         return Pair.of(count, list);
     }
-
-
+    
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveLoginLog(LogLoginDO log) {
@@ -50,7 +50,7 @@ public class LogLoginServiceImpl implements LogLoginService {
             throw new PersistenceException("日志添加失败");
         }
     }
-
+    
     @Override
     public int updateSelective(LogLoginDO log) {
         return logLoginMapper.updateSelective(log);

@@ -1,6 +1,6 @@
 package com.yond.blog.schedule;
 
-import com.yond.blog.util.common.SpringContextUtils;
+import com.yond.blog.util.spring.SpringContextUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -11,12 +11,12 @@ import java.lang.reflect.Method;
  * @Author: Yond
  */
 public class ScheduleRunnable implements Runnable {
-
+    
     private final Long jobId;
     private final Object target;
     private final Method method;
     private final String params;
-
+    
     public ScheduleRunnable(Long jobId, String beanName, String methodName, String params) throws NoSuchMethodException, SecurityException {
         this.jobId = jobId;
         this.target = SpringContextUtils.getBean(beanName);
@@ -27,7 +27,7 @@ public class ScheduleRunnable implements Runnable {
             this.method = target.getClass().getDeclaredMethod(methodName);
         }
     }
-
+    
     @Override
     public void run() {
         try {
@@ -41,19 +41,19 @@ public class ScheduleRunnable implements Runnable {
             throw new RuntimeException("执行定时任务失败", e);
         }
     }
-
+    
     public Long getJobId() {
         return this.jobId;
     }
-
+    
     public Object getTarget() {
         return this.target;
     }
-
+    
     public Method getMethod() {
         return this.method;
     }
-
+    
     public String getParams() {
         return this.params;
     }

@@ -1,7 +1,7 @@
 package com.yond.blog.web.interceptor;
 
 import com.yond.blog.cache.redis.AccessLimitCache;
-import com.yond.blog.util.IpAddressUtils;
+import com.yond.blog.util.ip.IpAddressUtils;
 import com.yond.blog.util.web.WebFilterUtil;
 import com.yond.common.annotation.AccessLimit;
 import com.yond.common.resp.Response;
@@ -19,10 +19,10 @@ import org.springframework.web.servlet.HandlerInterceptor;
  */
 @Component
 public class AccessLimitInterceptor implements HandlerInterceptor {
-
+    
     @Resource
     private AccessLimitCache accessLimitCache;
-
+    
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         boolean process = handler instanceof HandlerMethod;
@@ -52,5 +52,5 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
         WebFilterUtil.returnFail(response, HttpStatus.SC_FORBIDDEN, Response.custom(403, accessLimit.msg()));
         return false;
     }
-
+    
 }

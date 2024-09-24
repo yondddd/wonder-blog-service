@@ -3,8 +3,8 @@ package com.yond.blog.service.impl;
 import com.yond.blog.entity.LogOperationDO;
 import com.yond.blog.mapper.LogOperationMapper;
 import com.yond.blog.service.LogOperationService;
-import com.yond.blog.util.IpAddressUtils;
 import com.yond.blog.util.UserAgentUtils;
+import com.yond.blog.util.ip.IpAddressUtils;
 import com.yond.blog.web.blog.view.dto.UserAgentDTO;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.tuple.Pair;
@@ -21,11 +21,11 @@ import java.util.List;
  */
 @Service
 public class LogOperationServiceImpl implements LogOperationService {
-
+    
     @Resource
     private LogOperationMapper logOperationMapper;
-
-
+    
+    
     @Override
     public Pair<Integer, List<LogOperationDO>> page(Date startDate, Date endDate, Integer pageNo, Integer pageSize) {
         Integer count = logOperationMapper.countBy(startDate, endDate);
@@ -35,8 +35,8 @@ public class LogOperationServiceImpl implements LogOperationService {
         List<LogOperationDO> list = logOperationMapper.pageBy(startDate, endDate, (pageNo - 1) * pageSize, pageSize);
         return Pair.of(count, list);
     }
-
-
+    
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveOperationLog(LogOperationDO log) {
@@ -47,10 +47,10 @@ public class LogOperationServiceImpl implements LogOperationService {
         log.setBrowser(userAgentDTO.getBrowser());
         logOperationMapper.insertSelective(log);
     }
-
+    
     @Override
     public int updateSelective(LogOperationDO log) {
         return logOperationMapper.updateSelective(log);
     }
-
+    
 }

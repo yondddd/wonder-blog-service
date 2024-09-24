@@ -1,6 +1,5 @@
-package com.yond.blog.util;
+package com.yond.blog.util.ip;
 
-import com.yond.blog.util.ip.IpGeographicUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 
@@ -8,9 +7,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class IpAddressUtils {
-
+    
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(IpAddressUtils.class);
-
+    
     public static String getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("X-Real-IP");
         if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
@@ -43,8 +42,8 @@ public class IpAddressUtils {
         }
         return org.apache.commons.lang3.StringUtils.substringBefore(ip, ",");
     }
-
-
+    
+    
     public static String getCityInfo(String ip) {
         try {
             return IpGeographicUtil.getAddressByIp(ip);
@@ -53,10 +52,10 @@ public class IpAddressUtils {
         }
         return "";
     }
-
+    
     public static void main(String[] args) throws Exception {
         String cityInfo = IpAddressUtils.getCityInfo("14.215.177.39");
         System.out.println(cityInfo);
     }
-
+    
 }

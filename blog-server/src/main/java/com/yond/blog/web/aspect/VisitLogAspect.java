@@ -5,8 +5,8 @@ import com.yond.blog.entity.LogVisitDO;
 import com.yond.blog.entity.VisitUserDO;
 import com.yond.blog.service.LogVisitService;
 import com.yond.blog.service.VisitUserService;
-import com.yond.blog.util.AopUtils;
-import com.yond.blog.util.IpAddressUtils;
+import com.yond.blog.util.ip.IpAddressUtils;
+import com.yond.blog.util.spring.AopUtils;
 import com.yond.common.annotation.VisitLogger;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,27 +30,27 @@ import java.util.UUID;
 @Component
 @Aspect
 public class VisitLogAspect {
-
+    
     @Resource
     private LogVisitService logVisitService;
     @Resource
     private VisitUserService visitUserService;
     @Resource
     private VisitCache visitCache;
-
+    
     @Pointcut("@annotation(visitLogger)")
     public void logPointcut(VisitLogger visitLogger) {
     }
-
-
+    
+    
     @Around(value = "logPointcut(visitLogger)", argNames = "joinPoint,visitLogger")
     public Object logAround(ProceedingJoinPoint joinPoint, VisitLogger visitLogger) throws Throwable {
         long start = System.currentTimeMillis();
         Object result = joinPoint.proceed();
         int duration = (int) (System.currentTimeMillis() - start);
-
+        
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-
+        
         String uuid = checkIdentification(request);
         String uri = request.getRequestURI();
         String method = request.getMethod();
@@ -59,14 +59,14 @@ public class VisitLogAspect {
         String ip = IpAddressUtils.getIpAddress(request);
         String userAgent = request.getHeader("User-Agent");
         String params = StringUtils.substring(AopUtils.getRequestParams(joinPoint), 0, 2000);
-
+        
         Thread.startVirtualThread(() -> {
             handleLog(uuid, uri, method, behavior, content, ip, userAgent, params, duration);
         });
-
+        
         return result;
     }
-
+    
     private void handleLog(String uuid, String uri, String method, String behavior, String content, String ip, String userAgent, String params, int duration) {
         LogVisitDO log = LogVisitDO.custom()
                 .setUuid(uuid)
@@ -80,8 +80,8 @@ public class VisitLogAspect {
         log.setParam(params);
         logVisitService.saveVisitLog(log);
     }
-
-
+    
+    
     private String checkIdentification(HttpServletRequest request) {
         String identification = request.getHeader("identification");
         if (identification == null) {
@@ -99,7 +99,7 @@ public class VisitLogAspect {
         }
         return identification;
     }
-
+    
     private String saveUUID(HttpServletRequest request) {
         //获取响应对象
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
@@ -129,5 +129,5 @@ public class VisitLogAspect {
         }
         return uuid;
     }
-
+    
 }

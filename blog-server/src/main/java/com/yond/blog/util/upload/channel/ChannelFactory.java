@@ -1,6 +1,6 @@
 package com.yond.blog.util.upload.channel;
 
-import com.yond.blog.util.common.SpringContextUtils;
+import com.yond.blog.util.spring.SpringContextUtils;
 import com.yond.common.constant.UploadConstant;
 
 /**
