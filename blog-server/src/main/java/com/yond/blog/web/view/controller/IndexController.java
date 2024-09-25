@@ -6,6 +6,7 @@ import com.yond.blog.service.BlogService;
 import com.yond.blog.service.CategoryService;
 import com.yond.blog.service.SiteConfigService;
 import com.yond.blog.service.TagService;
+import com.yond.blog.web.view.vo.IndexVO;
 import com.yond.blog.web.view.vo.NewBlog;
 import com.yond.blog.web.view.vo.RandomBlog;
 import com.yond.common.resp.Response;
@@ -38,7 +39,7 @@ public class IndexController {
      * @return
      */
     @GetMapping("/view/site")
-    public Response<Map<String, Object>> site() {
+    public Response<IndexVO> site() {
         Map<String, Object> map = siteConfigService.getSiteInfoForView();
         List<NewBlog> newBlogList = blogService.getNewBlogListByIsPublished();
         List<CategoryDO> categoryList = categoryService.listAll();

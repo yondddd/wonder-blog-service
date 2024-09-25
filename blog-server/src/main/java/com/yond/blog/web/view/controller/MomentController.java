@@ -31,7 +31,7 @@ public class MomentController {
     private MomentService momentService;
     
     @VisitLogger(VisitBehavior.MOMENT)
-    @GetMapping("/page")
+    @PostMapping("/page")
     public Response<PageResult<MomentDO>> moments(@RequestBody MomentPageReq req,
                                                   @RequestHeader(value = JwtConstant.TOKEN_HEADER, defaultValue = "") String jwt) {
         

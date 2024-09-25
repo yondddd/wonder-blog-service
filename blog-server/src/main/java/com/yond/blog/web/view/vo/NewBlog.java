@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class NewBlog implements Serializable {
     @Serial
     private static final long serialVersionUID = -6188444658536941480L;
+    
     private Long id;
     private String title;
     private String password;
