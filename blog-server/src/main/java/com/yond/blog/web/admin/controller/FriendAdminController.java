@@ -6,7 +6,6 @@ import com.yond.blog.service.SiteConfigService;
 import com.yond.blog.web.admin.convert.FriendConverter;
 import com.yond.blog.web.admin.dto.FriendConfigDTO;
 import com.yond.blog.web.admin.req.*;
-import com.yond.blog.web.view.admin.req.*;
 import com.yond.blog.web.admin.vo.FriendConfigVO;
 import com.yond.blog.web.admin.vo.FriendVO;
 import com.yond.common.annotation.OperationLogger;
