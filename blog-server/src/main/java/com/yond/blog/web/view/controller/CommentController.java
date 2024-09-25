@@ -91,8 +91,8 @@ public class CommentController {
         if (CommentOpenStateEnum.CLOSE.equals(openState)) {
             return Response.custom(403, "评论已关闭");
         }
-        // 正常回复就行 不考虑那么多
         CommentDO reply = CommentDO.custom();
+        
         commentService.insertSelective(reply);
         return Response.success();
     }

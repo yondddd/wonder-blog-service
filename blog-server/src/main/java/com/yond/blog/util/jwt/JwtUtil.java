@@ -18,20 +18,17 @@ import java.util.Map;
  * @Author Yond
  */
 public class JwtUtil {
-
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtil.class);
-
+    
     /**
      * 判断token是否存在
-     *
-     * @param token
-     * @return
      */
     public static boolean judgeTokenIsExist(String token) {
         return StringUtils.isNotBlank(token) && !"null".equals(token);
     }
-
-
+    
+    
     public static String creatToken(PayloadHelper payloadHelper, long validTime) {
         final Map<String, Object> header = new HashMap<>(4, 1);
         header.put("alg", "HS256");
@@ -54,8 +51,8 @@ public class JwtUtil {
         LOGGER.info("用户 :{} 生成 token <======> {}", payloadHelper.getSubject(), compactJws);
         return compactJws;
     }
-
-
+    
+    
     /**
      * 在请求 API 之前验证 Token
      *
@@ -78,5 +75,5 @@ public class JwtUtil {
         }
         return claims;
     }
-
+    
 }

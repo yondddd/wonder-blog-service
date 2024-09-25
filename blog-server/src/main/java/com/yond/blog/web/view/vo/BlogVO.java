@@ -22,7 +22,6 @@ public class BlogVO implements Serializable {
     private Integer words;
     private Integer readTime;
     private Boolean top;
-    private String password;
     private Boolean privacy;
     private BlogCategoryVO category;
     private List<BlogTagVO> tagList;
@@ -99,15 +98,6 @@ public class BlogVO implements Serializable {
         return this;
     }
     
-    public String getPassword() {
-        return password;
-    }
-    
-    public BlogVO setPassword(String password) {
-        this.password = password;
-        return this;
-    }
-    
     public Boolean getPrivacy() {
         return privacy;
     }
@@ -146,7 +136,6 @@ public class BlogVO implements Serializable {
                 ", words=" + words +
                 ", readTime=" + readTime +
                 ", top=" + top +
-                ", password='" + password + '\'' +
                 ", privacy=" + privacy +
                 ", category=" + category +
                 ", tagList=" + tagList +

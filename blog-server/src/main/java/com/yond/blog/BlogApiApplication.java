@@ -1,6 +1,6 @@
 package com.yond.blog;
 
-import com.yond.blog.util.UserAgentUtils;
+import com.yond.blog.util.agent.UserAgentUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -40,12 +40,12 @@ import org.springframework.boot.autoconfigure.websocket.servlet.WebSocketMessagi
         BatchAutoConfiguration.class
 })
 public class BlogApiApplication {
-
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(BlogApiApplication.class);
-
+    
     public static void main(String[] args) {
         SpringApplication.run(BlogApiApplication.class, args);
         Thread.startVirtualThread(UserAgentUtils::init);
     }
-
+    
 }

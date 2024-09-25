@@ -22,12 +22,12 @@ import java.util.List;
  */
 @Service
 public class MomentServiceImpl implements MomentService {
-
+    
     @Resource
     private MomentMapper momentMapper;
-
+    
     private static final String PRIVATE_MOMENT_CONTENT = "<p>此条为私密动态，仅发布者可见！</p>";
-
+    
     @Override
     public List<MomentDO> listEnable() {
         List<MomentDO> cache = MomentCache.get();
@@ -38,7 +38,7 @@ public class MomentServiceImpl implements MomentService {
         MomentCache.set(cache);
         return cache;
     }
-
+    
     @Override
     public Pair<Integer, List<MomentDO>> page(boolean admin, boolean frontView, Integer pageNo, Integer pageSize) {
         List<MomentDO> all = this.listEnable();
@@ -55,7 +55,7 @@ public class MomentServiceImpl implements MomentService {
         }
         return Pair.of(all.size(), page);
     }
-
+    
     @Override
     public MomentDO getById(Long id) {
         MomentDO exist = this.listEnable().stream()
@@ -63,7 +63,7 @@ public class MomentServiceImpl implements MomentService {
         Assert.notNull(exist, "动态不存在:" + id);
         return exist;
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void incrLikeById(Long momentId) {
@@ -72,7 +72,7 @@ public class MomentServiceImpl implements MomentService {
         }
         MomentCache.del();
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void insertSelective(MomentDO moment) {
@@ -81,12 +81,12 @@ public class MomentServiceImpl implements MomentService {
         }
         MomentCache.del();
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateSelective(MomentDO moment) {
         momentMapper.updateSelective(moment);
         MomentCache.del();
     }
-
+    
 }

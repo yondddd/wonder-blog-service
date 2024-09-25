@@ -1,22 +1,15 @@
 package com.yond.blog.service.impl;
 
 import com.yond.blog.cache.local.BlogCache;
-import com.yond.blog.cache.redis.BlogViewCache;
 import com.yond.blog.entity.BlogDO;
 import com.yond.blog.mapper.BlogMapper;
 import com.yond.blog.service.BlogService;
-import com.yond.blog.service.BlogTagService;
-import com.yond.blog.service.CategoryService;
-import com.yond.blog.util.markdown.MarkdownUtils;
-import com.yond.blog.web.view.dto.BlogView;
 import com.yond.blog.web.view.vo.*;
 import com.yond.common.constant.BlogConstant;
 import com.yond.common.enums.EnableStatusEnum;
 import com.yond.common.exception.NotFoundException;
-import com.yond.common.exception.PersistenceException;
 import com.yond.common.utils.date.DateUtils;
 import com.yond.common.utils.page.PageUtil;
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -35,25 +28,6 @@ public class BlogServiceImpl implements BlogService {
     
     @Resource
     private BlogMapper blogMapper;
-    @Resource
-    private BlogViewCache blogViewCache;
-    @Resource
-    private CategoryService categoryService;
-    @Resource
-    private BlogTagService blogTagService;
-    
-    /**
-     * 项目启动时，保存所有博客的浏览量到Redis
-     */
-    @PostConstruct
-    private void saveBlogViewsToRedis() {
-        //Redis中没有存储博客浏览量的Hash
-        if (!blogViewCache.existViewMap()) {
-            //从数据库中读取并存入Redis
-            Map<Long, Integer> blogViewsMap = getBlogViewsMap();
-            blogViewCache.setViewMap(blogViewsMap);
-        }
-    }
     
     @Override
     public Pair<Integer, List<BlogDO>> adminPageBy(String title,
@@ -76,7 +50,8 @@ public class BlogServiceImpl implements BlogService {
                                                   Integer pageSize) {
         List<BlogDO> list = this.listEnable().stream()
                 .filter(x -> categoryId == null || categoryId.equals(x.getCategoryId()))
-                .sorted(Comparator.comparing(BlogDO::getCreateTime).reversed())
+                .sorted(Comparator.comparing(BlogDO::getTop).reversed())
+                .sorted(Comparator.comparing(BlogDO::getId).reversed())
                 .collect(Collectors.toList());
         return Pair.of(list.size(), PageUtil.pageList(list, pageNo, pageSize));
     }
@@ -133,49 +108,6 @@ public class BlogServiceImpl implements BlogService {
     }
     
     @Override
-    public PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum) {
-        List<BlogDO> collect = this.listEnable().stream()
-                .filter(BlogDO::getPublished)
-                .sorted(Comparator.comparing(BlogDO::getTop).reversed())
-                .sorted(Comparator.comparing(BlogDO::getCreateTime).reversed())
-                .collect(Collectors.toList());
-        
-        
-        List<BlogInfo> page = PageUtil.pageList(collect, pageNum, BlogConstant.PAGE_SIZE)
-                .stream().map(this::do2BlogInfo).toList();
-        
-        return new PageResult<>(collect.size(), page);
-        
-    }
-    
-    private BlogInfo do2BlogInfo(BlogDO blogDO) {
-        BlogInfo blogInfo = new BlogInfo();
-        blogInfo.setId(blogDO.getId());
-        blogInfo.setTitle(blogDO.getTitle());
-        blogInfo.setDescription(blogDO.getDescription());
-        blogInfo.setCreateTime(blogDO.getCreateTime());
-        // 取缓存里的
-        Integer blogView = blogViewCache.getBlogView(blogDO.getId());
-        if (blogView != null) {
-            blogInfo.setViews(blogDO.getViews());
-        }
-        blogInfo.setWords(blogDO.getWords());
-        blogInfo.setReadTime(blogDO.getReadTime());
-        blogInfo.setTop(blogDO.getTop());
-        if (StringUtils.isNotBlank(blogDO.getPassword())) {
-            blogInfo.setPrivacy(true);
-            blogInfo.setPassword("");
-            blogInfo.setDescription(BlogConstant.PRIVATE_BLOG_DESCRIPTION);
-        } else {
-            blogInfo.setPrivacy(false);
-            blogInfo.setDescription(MarkdownUtils.markdownToHtmlExtensions(blogDO.getDescription()));
-        }
-        blogInfo.setCategory(categoryService.getById(blogDO.getCategoryId().longValue()));
-        blogInfo.setTags(blogTagService.listTagsByBlogId(blogDO.getId()));
-        return blogInfo;
-    }
-    
-    @Override
     public List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend() {
         List<RandomBlog> randomBlogs = blogMapper.getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend(BlogConstant.RANDOM_BLOG_LIMIT_NUM);
         for (RandomBlog randomBlog : randomBlogs) {
@@ -189,52 +121,12 @@ public class BlogServiceImpl implements BlogService {
         return randomBlogs;
     }
     
-    private Map<Long, Integer> getBlogViewsMap() {
-        List<BlogView> blogViewList = blogMapper.getBlogViewsList();
-        Map<Long, Integer> blogViewsMap = new HashMap<>(128);
-        for (BlogView blogView : blogViewList) {
-            blogViewsMap.put(blogView.getId(), blogView.getViews());
-        }
-        return blogViewsMap;
-    }
-    
-    @Override
-    public void updateViewsToRedis(Long blogId) {
-        blogViewCache.blogViewIncr(blogId, 1);
-    }
-    
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void updateViews(Long blogId, Integer views) {
-        if (blogMapper.updateViews(blogId, views) != 1) {
-            throw new PersistenceException("更新失败");
-        }
-    }
-    
     @Override
     public BlogDO getBlogById(Long id) {
         BlogDO blog = this.listEnable()
                 .stream().filter(x -> id.equals(x.getId())).findFirst().orElse(null);
         if (blog == null) {
             throw new NotFoundException("博客不存在");
-        }
-        Integer blogView = blogViewCache.getBlogView(blog.getId());
-        if (blogView != null) {
-            blog.setViews(blogView);
-        }
-        return blog;
-    }
-    
-    @Override
-    public BlogDetail getBlogByIdAndIsPublished(Long id) {
-        BlogDetail blog = blogMapper.getBlogByIdAndIsPublished(id);
-        if (blog == null) {
-            throw new NotFoundException("该博客不存在");
-        }
-        blog.setContent(MarkdownUtils.markdownToHtmlExtensions(blog.getContent()));
-        Integer blogView = blogViewCache.getBlogView(blog.getId());
-        if (blogView != null) {
-            blog.setViews(blogView);
         }
         return blog;
     }
@@ -274,7 +166,6 @@ public class BlogServiceImpl implements BlogService {
                 .setStatus(EnableStatusEnum.DELETE.getVal());
         this.updateSelective(del);
         // 评论和关联tag不删除
-        blogViewCache.deleteBlogView(id);
     }
     
     @Override
@@ -308,6 +199,11 @@ public class BlogServiceImpl implements BlogService {
         data.setGroups(groups);
         BlogCache.setBlogArchive(data);
         return data;
+    }
+    
+    @Override
+    public void incrBlogView(List<Long> blogIds, Integer incr) {
+        blogMapper.incrBlogView(blogIds, incr);
     }
     
     /**

@@ -1,8 +1,6 @@
 package com.yond.blog.mapper;
 
 import com.yond.blog.entity.BlogDO;
-import com.yond.blog.web.view.dto.BlogView;
-import com.yond.blog.web.view.vo.BlogDetail;
 import com.yond.blog.web.view.vo.RandomBlog;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -24,12 +22,8 @@ public interface BlogMapper {
     
     List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend(Integer limitNum);
     
-    List<BlogView> getBlogViewsList();
-    
-    int updateViews(Long blogId, Integer views);
-    
-    BlogDetail getBlogByIdAndIsPublished(Long id);
-    
     int countBlogByTagId(Long tagId);
+    
+    void incrBlogView(List<Long> blogIds, Integer incr);
     
 }

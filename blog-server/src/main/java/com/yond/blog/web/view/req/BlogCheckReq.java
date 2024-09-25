@@ -1,14 +1,21 @@
-package com.yond.blog.web.view.dto;
+package com.yond.blog.web.view.req;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * @Description: 受保护文章密码DTO
  * @Author: Yond
  */
-public class BlogPassword {
+public class BlogCheckReq implements Serializable {
+    
+    @Serial
+    private static final long serialVersionUID = 4737643043185798231L;
+    
     private Long blogId;
     private String password;
     
-    public BlogPassword() {
+    public BlogCheckReq() {
     }
     
     public Long getBlogId() {

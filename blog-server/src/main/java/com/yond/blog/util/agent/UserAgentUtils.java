@@ -1,4 +1,4 @@
-package com.yond.blog.util;
+package com.yond.blog.util.agent;
 
 import com.yond.blog.web.view.dto.UserAgentDTO;
 import nl.basjes.parse.useragent.UserAgent;

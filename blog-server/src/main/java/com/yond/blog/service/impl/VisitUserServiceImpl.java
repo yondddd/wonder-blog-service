@@ -4,7 +4,7 @@ import com.yond.blog.cache.redis.VisitCache;
 import com.yond.blog.entity.VisitUserDO;
 import com.yond.blog.mapper.VisitUserMapper;
 import com.yond.blog.service.VisitUserService;
-import com.yond.blog.util.UserAgentUtils;
+import com.yond.blog.util.agent.UserAgentUtils;
 import com.yond.blog.util.ip.IpAddressUtils;
 import com.yond.blog.web.view.dto.UserAgentDTO;
 import com.yond.blog.web.view.dto.VisitLogUuidTime;

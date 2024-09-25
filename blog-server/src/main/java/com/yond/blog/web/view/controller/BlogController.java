@@ -1,13 +1,19 @@
 package com.yond.blog.web.view.controller;
 
-import com.yond.blog.cache.redis.BlogViewCache;
+import com.yond.blog.entity.BlogDO;
+import com.yond.blog.entity.CategoryDO;
+import com.yond.blog.entity.TagDO;
 import com.yond.blog.service.BlogService;
+import com.yond.blog.service.BlogTagService;
+import com.yond.blog.service.CategoryService;
 import com.yond.blog.util.jwt.JwtUtil;
 import com.yond.blog.util.jwt.PayloadHelper;
-import com.yond.blog.web.view.dto.BlogPassword;
+import com.yond.blog.web.view.async.BlogViewFlush;
+import com.yond.blog.web.view.convert.BlogViewConverter;
+import com.yond.blog.web.view.req.BlogCheckReq;
+import com.yond.blog.web.view.req.BlogDetailReq;
 import com.yond.blog.web.view.req.BlogPageReq;
-import com.yond.blog.web.view.vo.BlogDetail;
-import com.yond.blog.web.view.vo.BlogInfo;
+import com.yond.blog.web.view.vo.BlogDetailVO;
 import com.yond.blog.web.view.vo.BlogVO;
 import com.yond.blog.web.view.vo.SearchBlog;
 import com.yond.common.annotation.VisitLogger;
@@ -18,11 +24,13 @@ import com.yond.common.resp.Response;
 import io.jsonwebtoken.Claims;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @Description: 博客相关
@@ -35,80 +43,53 @@ public class BlogController {
     @Resource
     private BlogService blogService;
     @Resource
-    private BlogViewCache blogViewCache;
+    private CategoryService categoryService;
+    @Resource
+    private BlogTagService blogTagService;
+    @Resource
+    private BlogViewFlush blogViewFlush;
     
     @VisitLogger(VisitBehavior.INDEX)
-    @GetMapping("/page")
+    @PostMapping("/page")
     public PageResponse<List<BlogVO>> page(@RequestBody BlogPageReq req) {
         
-        blogService.viewPageBy(req.getCategoryId(),req.getTagId(), req.getPageNo(), req.getPageSize())
-        // 加个categoryId
-//        blogService.viewPageBy();
-        return null;
-    }
-    
-    
-    private List<BlogInfo> processBlogInfosPassword(List<BlogInfo> blogInfos) {
-        for (BlogInfo blogInfo : blogInfos) {
-            if (!"".equals(blogInfo.getPassword())) {
-                blogInfo.setPrivacy(true);
-                blogInfo.setPassword("");
-                blogInfo.setDescription(BlogConstant.PRIVATE_BLOG_DESCRIPTION);
-            } else {
-                blogInfo.setPrivacy(false);
-                blogInfo.setDescription(MarkdownUtils.markdownToHtmlExtensions(blogInfo.getDescription()));
-            }
-            blogInfo.setTags(blogTagService.listTagsByBlogId(blogInfo.getId()));
+        Pair<Integer, List<BlogDO>> pair = blogService.viewPageBy(req.getCategoryId(), req.getTagId(), req.getPageNo(), req.getPageSize());
+        List<Long> blogIds = new ArrayList<>();
+        List<Long> categoryIds = new ArrayList<>();
+        for (BlogDO blogDO : pair.getRight()) {
+            blogIds.add(blogDO.getId());
+            categoryIds.add(blogDO.getCategoryId());
         }
-        return blogInfos;
+        Map<Long, CategoryDO> categoryMap = categoryService.listByIds(categoryIds).stream().collect(Collectors.toMap(CategoryDO::getId, Function.identity()));
+        Map<Long, List<TagDO>> blogTagMap = blogTagService.listTagsByBlogIds(blogIds);
+        List<BlogVO> data = BlogViewConverter.do2vo(pair.getRight(), categoryMap, blogTagMap);
+        return PageResponse.<List<BlogVO>>custom().setData(data).setPageNo(req.getPageNo()).setPageSize(req.getPageSize()).setTotal(pair.getLeft()).setSuccess();
     }
     
     @VisitLogger(VisitBehavior.BLOG)
-    @GetMapping("/detail")
-    public Response<BlogDetail> getBlog(@RequestParam Long id,
-                                        @RequestHeader(value = JwtConstant.TOKEN_HEADER, defaultValue = "") String jwt) {
-        BlogDetail blog = blogService.getBlogByIdAndIsPublished(id);
-        if (StringUtils.isBlank(blog.getPassword())) {
-            blogService.updateViewsToRedis(id);
-            return Response.success(blog);
-        }
-        if (!JwtUtil.judgeTokenIsExist(jwt)) {
-            return Response.custom(403, "此文章受密码保护，请验证密码！");
-        }
-        //对密码保护的文章校验Token
-        try {
-            Claims claims = JwtUtil.validateJwt(jwt, JwtConstant.DEFAULT_SECRET);
-            String subject = claims.getSubject();
-            if (subject.startsWith(JwtConstant.ADMIN_PREFIX)) {
-                //博主身份Token
-                if (claims.getExpiration().before(new Date())) {
-                    return Response.custom(403, "博主身份Token已失效，请重新登录！");
-                }
-            } else {
-                //经密码验证后的Token
-                Long tokenBlogId = Long.parseLong(subject);
-                //博客id不匹配，验证不通过，可能博客id改变或客户端传递了其它密码保护文章的Token
-                if (!tokenBlogId.equals(id)) {
-                    return Response.custom(403, "Token不匹配，请重新验证密码！");
-                }
+    @PostMapping("/detail")
+    public Response<BlogDetailVO> getBlog(@RequestBody BlogDetailReq req,
+                                          @RequestHeader(value = JwtConstant.TOKEN_HEADER, defaultValue = "") String jwt) {
+        
+        BlogDO blog = blogService.getBlogById(req.getId());
+        Assert.notNull(blog, "博客不存在" + req.getId());
+        Assert.isTrue(blog.getPublished(), "博客不公开" + req.getId());
+        if (StringUtils.isNotBlank(blog.getPassword())) {
+            String err = this.checkBlogView(jwt, req.getId());
+            if (StringUtils.isNotBlank(err)) {
+                return Response.custom(403, err);
             }
-        } catch (Exception e) {
-            return Response.custom(403, "Token已失效，请重新验证密码！");
         }
-        blog.setPassword("");
-        blogService.updateViewsToRedis(id);
-        return Response.success(blog);
+        CategoryDO category = categoryService.getById(blog.getId());
+        List<TagDO> tags = blogTagService.listTagsByBlogId(req.getId());
+        blogViewFlush.blogViewIncr(req.getId());
+        return Response.success(BlogViewConverter.do2detail(blog, category, tags));
     }
     
-    /**
-     * 校验受保护文章密码是否正确，正确则返回jwt
-     *
-     * @param req 博客id、密码
-     * @return
-     */
+    
     @VisitLogger(VisitBehavior.CHECK_PASSWORD)
     @PostMapping("/checkPassword")
-    public Response<String> checkBlogPassword(@RequestBody BlogPassword req) {
+    public Response<String> checkBlogPassword(@RequestBody BlogCheckReq req) {
         String password = blogService.getBlogById(req.getBlogId()).getPassword();
         if (!password.equals(req.getPassword())) {
             return Response.custom(403, "密码错误");
@@ -126,9 +107,8 @@ public class BlogController {
     }
     
     @VisitLogger(VisitBehavior.SEARCH)
-    @GetMapping("/search")
+    @PostMapping("/search")
     public Response<List<SearchBlog>> searchBlog(@RequestParam String query) {
-        //校验关键字字符串合法性
         if (StringUtils.isBlank(query) || hasSpecialChar(query) || query.trim().length() > 20) {
             return Response.fail("参数错误");
         }
@@ -143,6 +123,30 @@ public class BlogController {
             }
         }
         return false;
+    }
+    
+    private String checkBlogView(String jwt, Long blogId) {
+        if (!JwtUtil.judgeTokenIsExist(jwt)) {
+            return "此文章受密码保护，请验证密码！";
+        }
+        try {
+            Claims claims = JwtUtil.validateJwt(jwt, JwtConstant.DEFAULT_SECRET);
+            String subject = claims.getSubject();
+            if (subject.startsWith(JwtConstant.ADMIN_PREFIX)) {
+                // 博主身份Token,所有都可以看
+                if (claims.getExpiration().before(new Date())) {
+                    return "博主身份Token已失效，请重新登录！";
+                }
+            } else {
+                Long tokenBlogId = Long.parseLong(subject);
+                if (!tokenBlogId.equals(blogId)) {
+                    return "Token不匹配，请重新验证密码！";
+                }
+            }
+        } catch (Exception e) {
+            return "Token已失效，请重新验证密码！";
+        }
+        return null;
     }
     
 }

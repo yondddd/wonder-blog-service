@@ -2,8 +2,8 @@ package com.yond.blog.web.view.controller;
 
 import com.yond.blog.entity.MomentDO;
 import com.yond.blog.service.MomentService;
-import com.yond.blog.service.impl.UserServiceImpl;
 import com.yond.blog.util.jwt.JwtUtil;
+import com.yond.blog.web.view.req.MomentPageReq;
 import com.yond.blog.web.view.vo.PageResult;
 import com.yond.common.annotation.AccessLimit;
 import com.yond.common.annotation.VisitLogger;
@@ -12,6 +12,7 @@ import com.yond.common.enums.VisitBehavior;
 import com.yond.common.resp.Response;
 import io.jsonwebtoken.Claims;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,31 +29,17 @@ public class MomentController {
     
     @Resource
     private MomentService momentService;
-    @Resource
-    private UserServiceImpl userService;
-    
-    private static final int pageSize = 5;
     
     @VisitLogger(VisitBehavior.MOMENT)
     @GetMapping("/page")
-    public Response<PageResult<MomentDO>> moments(@RequestParam(defaultValue = "1") Integer pageNum,
+    public Response<PageResult<MomentDO>> moments(@RequestBody MomentPageReq req,
                                                   @RequestHeader(value = JwtConstant.TOKEN_HEADER, defaultValue = "") String jwt) {
-        boolean adminIdentity = false;
-        if (JwtUtil.judgeTokenIsExist(jwt)) {
-            try {
-                Claims claims = JwtUtil.validateJwt(jwt, JwtConstant.DEFAULT_SECRET);
-                String subject = claims.getSubject();
-                if (subject.startsWith(JwtConstant.ADMIN_PREFIX)) {
-                    //博主身份Token
-                    if (claims.getExpiration().after(new Date())) {
-                        adminIdentity = true;
-                    }
-                }
-            } catch (Exception e) {
-                return Response.custom(403, "博主身份Token已失效，请重新登录！");
-            }
+        
+        Pair<Boolean, String> check = this.check(jwt);
+        if (StringUtils.isNotBlank(check.getRight())) {
+            return Response.custom(403, check.getRight());
         }
-        Pair<Integer, List<MomentDO>> pair = momentService.page(adminIdentity, true, pageNum, pageSize);
+        Pair<Integer, List<MomentDO>> pair = momentService.page(check.getLeft(), true, req.getPageNo(), req.getPageSize());
         PageResult<MomentDO> pageResult = new PageResult<>(pair.getLeft(), pair.getRight());
         return Response.success(pageResult);
     }
@@ -61,8 +48,29 @@ public class MomentController {
     @VisitLogger(VisitBehavior.LIKE_MOMENT)
     @PostMapping("/like/{id}")
     public Response<Boolean> like(@PathVariable Long id) {
+        // todo 浏览量需要一个统一的方案
         momentService.incrLikeById(id);
         return Response.success();
+    }
+    
+    private Pair<Boolean, String> check(String jwt) {
+        boolean adminIdentity = false;
+        if (!JwtUtil.judgeTokenIsExist(jwt)) {
+            return Pair.of(adminIdentity, null);
+        }
+        try {
+            Claims claims = JwtUtil.validateJwt(jwt, JwtConstant.DEFAULT_SECRET);
+            String subject = claims.getSubject();
+            if (subject.startsWith(JwtConstant.ADMIN_PREFIX)) {
+                //博主身份Token
+                if (claims.getExpiration().after(new Date())) {
+                    adminIdentity = true;
+                }
+            }
+        } catch (Exception e) {
+            return Pair.of(null, "博主身份Token已失效，请重新登录！");
+        }
+        return Pair.of(adminIdentity, null);
     }
     
 }

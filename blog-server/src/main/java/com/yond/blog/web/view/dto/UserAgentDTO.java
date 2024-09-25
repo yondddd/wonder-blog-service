@@ -5,6 +5,7 @@ package com.yond.blog.web.view.dto;
  * @Author: Yond
  */
 public class UserAgentDTO {
+    
     private String os;
     private String browser;
     

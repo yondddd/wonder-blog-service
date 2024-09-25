@@ -1,7 +1,10 @@
 package com.yond.blog.service;
 
 import com.yond.blog.entity.BlogDO;
-import com.yond.blog.web.view.vo.*;
+import com.yond.blog.web.view.vo.ArchiveVO;
+import com.yond.blog.web.view.vo.NewBlog;
+import com.yond.blog.web.view.vo.RandomBlog;
+import com.yond.blog.web.view.vo.SearchBlog;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -25,17 +28,9 @@ public interface BlogService {
     
     List<NewBlog> getNewBlogListByIsPublished();
     
-    PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum);
-    
     List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
     
-    void updateViewsToRedis(Long blogId);
-    
-    void updateViews(Long blogId, Integer views);
-    
     BlogDO getBlogById(Long id);
-    
-    BlogDetail getBlogByIdAndIsPublished(Long id);
     
     int countByTagId(Long tagId);
     
@@ -48,4 +43,7 @@ public interface BlogService {
     void delById(Long id);
     
     ArchiveVO blogArchive();
+    
+    void incrBlogView(List<Long> blogIds, Integer incr);
+    
 }

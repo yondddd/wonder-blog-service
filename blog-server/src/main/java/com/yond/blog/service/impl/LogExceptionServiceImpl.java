@@ -3,7 +3,7 @@ package com.yond.blog.service.impl;
 import com.yond.blog.entity.LogExceptionDO;
 import com.yond.blog.mapper.LogExceptionMapper;
 import com.yond.blog.service.LogExceptionService;
-import com.yond.blog.util.UserAgentUtils;
+import com.yond.blog.util.agent.UserAgentUtils;
 import com.yond.blog.util.ip.IpAddressUtils;
 import com.yond.blog.web.view.dto.UserAgentDTO;
 import com.yond.common.exception.PersistenceException;
