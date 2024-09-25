@@ -1,7 +1,7 @@
 package com.yond.blog.mapper;
 
 import com.yond.blog.entity.LogVisitDO;
-import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
+import com.yond.blog.web.view.dto.VisitLogUuidTime;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

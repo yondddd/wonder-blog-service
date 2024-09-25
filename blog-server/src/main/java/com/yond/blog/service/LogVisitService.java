@@ -1,7 +1,7 @@
 package com.yond.blog.service;
 
 import com.yond.blog.entity.LogVisitDO;
-import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
+import com.yond.blog.web.view.dto.VisitLogUuidTime;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.scheduling.annotation.Async;
 

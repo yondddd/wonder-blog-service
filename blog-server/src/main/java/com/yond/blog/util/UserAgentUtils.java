@@ -1,6 +1,6 @@
 package com.yond.blog.util;
 
-import com.yond.blog.web.blog.view.dto.UserAgentDTO;
+import com.yond.blog.web.view.dto.UserAgentDTO;
 import nl.basjes.parse.useragent.UserAgent;
 import nl.basjes.parse.useragent.UserAgentAnalyzer;
 
@@ -9,9 +9,9 @@ import nl.basjes.parse.useragent.UserAgentAnalyzer;
  * @Author: Yond
  */
 public class UserAgentUtils {
-
+    
     private static UserAgentAnalyzer userAgentAnalyzer;
-
+    
     /**
      * 从User-Agent解析客户端操作系统和浏览器版本
      */
@@ -22,7 +22,7 @@ public class UserAgentUtils {
         String browser = agent.getValue(UserAgent.AGENT_NAME_VERSION);
         return new UserAgentDTO(os, browser);
     }
-
+    
     public static synchronized void init() {
         if (userAgentAnalyzer != null) {
             return;
@@ -36,5 +36,5 @@ public class UserAgentUtils {
                 .withField(UserAgent.AGENT_NAME_VERSION)
                 .build();
     }
-
+    
 }

@@ -2,9 +2,9 @@ package com.yond.blog.cache.local;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.yond.blog.entity.BlogDO;
-import com.yond.blog.web.blog.view.vo.ArchiveVO;
-import com.yond.blog.web.blog.view.vo.BlogInfo;
-import com.yond.blog.web.blog.view.vo.PageResult;
+import com.yond.blog.web.view.vo.ArchiveVO;
+import com.yond.blog.web.view.vo.BlogInfo;
+import com.yond.blog.web.view.vo.PageResult;
 
 import java.util.List;
 

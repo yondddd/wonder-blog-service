@@ -2,11 +2,11 @@ package com.yond.blog.web.aspect;
 
 import com.yond.blog.entity.LogExceptionDO;
 import com.yond.blog.service.LogExceptionService;
-import com.yond.blog.util.StackTraceUtil;
 import com.yond.blog.util.ip.IpAddressUtils;
 import com.yond.blog.util.spring.AopUtils;
 import com.yond.common.annotation.OperationLogger;
 import com.yond.common.annotation.VisitLogger;
+import com.yond.common.exception.ExceptionStackUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -33,7 +33,7 @@ public class ExceptionLogAspect {
     @Autowired
     LogExceptionService logExceptionService;
     
-    @Pointcut("execution(* com.yond.blog.web.blog.admin.controller..*.*(..)) || execution(* com.yond.blog.web.blog.view.controller..*.*(..))")
+    @Pointcut("execution(* com.yond.blog.web.view.admin.controller..*.*(..)) || execution(* com.yond.blog.web.view.view.controller..*.*(..))")
     public void logPointcut() {
     }
     
@@ -48,7 +48,7 @@ public class ExceptionLogAspect {
         String userAgent = request.getHeader("User-Agent");
         String params = StringUtils.substring(AopUtils.getRequestParams(joinPoint), 0, 2000);
         String description = getOperate(joinPoint);
-        String error = StackTraceUtil.getStackTrace(e);
+        String error = ExceptionStackUtil.getStackTrace(e);
         
         Thread.startVirtualThread(() -> {
             handleLog(uri, method, ip, userAgent, description, error, params);

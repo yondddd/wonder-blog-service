@@ -1,7 +1,7 @@
 package com.yond.blog.service;
 
 import com.yond.blog.entity.BlogDO;
-import com.yond.blog.web.blog.view.vo.*;
+import com.yond.blog.web.view.vo.*;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;

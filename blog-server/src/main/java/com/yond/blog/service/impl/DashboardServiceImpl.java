@@ -2,7 +2,7 @@ package com.yond.blog.service.impl;
 
 import com.yond.blog.entity.*;
 import com.yond.blog.service.*;
-import com.yond.blog.web.blog.admin.vo.*;
+import com.yond.blog.web.admin.vo.*;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 

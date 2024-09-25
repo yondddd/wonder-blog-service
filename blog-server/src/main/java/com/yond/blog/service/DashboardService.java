@@ -1,9 +1,9 @@
 package com.yond.blog.service;
 
-import com.yond.blog.web.blog.admin.vo.StatisticCategoryVO;
-import com.yond.blog.web.blog.admin.vo.StatisticCityVO;
-import com.yond.blog.web.blog.admin.vo.StatisticTagVO;
-import com.yond.blog.web.blog.admin.vo.StatisticVisitRecordVO;
+import com.yond.blog.web.admin.vo.StatisticCategoryVO;
+import com.yond.blog.web.admin.vo.StatisticCityVO;
+import com.yond.blog.web.admin.vo.StatisticTagVO;
+import com.yond.blog.web.admin.vo.StatisticVisitRecordVO;
 
 import java.util.List;
 

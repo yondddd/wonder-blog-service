@@ -1,9 +1,9 @@
 package com.yond.blog.mapper;
 
 import com.yond.blog.entity.BlogDO;
-import com.yond.blog.web.blog.view.dto.BlogView;
-import com.yond.blog.web.blog.view.vo.BlogDetail;
-import com.yond.blog.web.blog.view.vo.RandomBlog;
+import com.yond.blog.web.view.dto.BlogView;
+import com.yond.blog.web.view.vo.BlogDetail;
+import com.yond.blog.web.view.vo.RandomBlog;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

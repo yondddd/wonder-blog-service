@@ -5,7 +5,7 @@ import com.yond.blog.mapper.LogExceptionMapper;
 import com.yond.blog.service.LogExceptionService;
 import com.yond.blog.util.UserAgentUtils;
 import com.yond.blog.util.ip.IpAddressUtils;
-import com.yond.blog.web.blog.view.dto.UserAgentDTO;
+import com.yond.blog.web.view.dto.UserAgentDTO;
 import com.yond.common.exception.PersistenceException;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.tuple.Pair;

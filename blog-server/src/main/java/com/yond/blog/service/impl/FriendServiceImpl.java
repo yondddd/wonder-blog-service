@@ -7,7 +7,7 @@ import com.yond.blog.mapper.FriendMapper;
 import com.yond.blog.service.FriendService;
 import com.yond.blog.service.SiteConfigService;
 import com.yond.blog.util.markdown.MarkdownUtils;
-import com.yond.blog.web.blog.admin.dto.FriendConfigDTO;
+import com.yond.blog.web.admin.dto.FriendConfigDTO;
 import com.yond.common.constant.SiteConfigConstant;
 import com.yond.common.enums.EnableStatusEnum;
 import com.yond.common.enums.SiteSettingTypeEnum;

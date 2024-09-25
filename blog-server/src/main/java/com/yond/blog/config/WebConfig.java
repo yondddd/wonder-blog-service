@@ -23,14 +23,14 @@ import java.util.List;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
+    
     @Resource
     private AccessLimitInterceptor accessLimitInterceptor;
     @Resource
     private UploadProperties uploadProperties;
     @Resource
     private CurrentUserResolver currentUserResolver;
-
+    
     /**
      * 跨域请求
      *
@@ -44,7 +44,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
                 .maxAge(3600);
     }
-
+    
     /**
      * 请求拦截器
      *
@@ -64,7 +64,7 @@ public class WebConfig implements WebMvcConfigurer {
             }
         }).addPathPatterns("/**");
     }
-
+    
     /**
      * 本地静态资源路径映射
      *
@@ -74,11 +74,11 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(uploadProperties.getAccessPath()).addResourceLocations(uploadProperties.getResourcesLocations());
     }
-
+    
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(currentUserResolver);
         WebMvcConfigurer.super.addArgumentResolvers(resolvers);
     }
-
+    
 }

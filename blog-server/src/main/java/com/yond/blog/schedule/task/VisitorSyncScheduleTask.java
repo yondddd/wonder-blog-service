@@ -7,7 +7,7 @@ import com.yond.blog.service.LogVisitService;
 import com.yond.blog.service.VisitCityService;
 import com.yond.blog.service.VisitRecordService;
 import com.yond.blog.service.VisitUserService;
-import com.yond.blog.web.blog.view.dto.VisitLogUuidTime;
+import com.yond.blog.web.view.dto.VisitLogUuidTime;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Component;

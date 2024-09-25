@@ -25,7 +25,7 @@
         , uuid, uri, `method`, param, behavior, content, remark, ip, ip_source, os, browser, duration, create_time,status
     </sql>
 
-    <resultMap id="logDTO" type="com.yond.blog.web.blog.view.dto.VisitLogUuidTime">
+    <resultMap id="logDTO" type="com.yond.blog.web.view.dto.VisitLogUuidTime">
         <result property="uuid" column="uuid"/>
         <result property="time" column="create_time"/>
     </resultMap>

@@ -1,7 +1,7 @@
 package com.yond.blog.service;
 
 import com.yond.blog.entity.FriendDO;
-import com.yond.blog.web.blog.admin.dto.FriendConfigDTO;
+import com.yond.blog.web.admin.dto.FriendConfigDTO;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;

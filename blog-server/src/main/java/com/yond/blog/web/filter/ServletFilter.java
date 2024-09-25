@@ -25,15 +25,15 @@ import java.util.List;
 @Component
 @WebFilter(urlPatterns = "/*", asyncSupported = true)
 public class ServletFilter implements Filter {
-
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(ServletFilter.class);
-
+    
     private final UserService userService;
-
+    
     public ServletFilter(UserService userService) {
         this.userService = userService;
     }
-
+    
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         LocalHttpFilterChain.getDefaultChain()
@@ -41,7 +41,7 @@ public class ServletFilter implements Filter {
                 .addFilter(new LocalAuthFilter(userService));
         Filter.super.init(filterConfig);
     }
-
+    
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         // 日志traceId
@@ -52,7 +52,7 @@ public class ServletFilter implements Filter {
             List<LocalHttpFilter> customFilters = request.getServletPath().startsWith("/ping")
                     ? Collections.emptyList()
                     : LocalHttpFilterChain.getDefaultFilters();
-
+            
             LocalHttpFilterChain
                     .custom()
                     .setFilters(customFilters)
@@ -65,5 +65,5 @@ public class ServletFilter implements Filter {
             MDC.clear();
         }
     }
-
+    
 }

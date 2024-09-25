@@ -30,18 +30,18 @@
             ,`status`
     </sql>
 
-    <resultMap id="searchBlog" type="com.yond.blog.web.blog.view.vo.SearchBlog">
+    <resultMap id="searchBlog" type="com.yond.blog.web.view.vo.SearchBlog">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="content" column="content"/>
     </resultMap>
 
-    <resultMap id="blogIdAndTitle" type="com.yond.blog.web.blog.view.vo.BlogIdAndTitle">
+    <resultMap id="blogIdAndTitle" type="com.yond.blog.web.view.vo.BlogIdAndTitle">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
     </resultMap>
 
-    <resultMap id="newBlog" type="com.yond.blog.web.blog.view.vo.NewBlog">
+    <resultMap id="newBlog" type="com.yond.blog.web.view.vo.NewBlog">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="password" column="password"/>
@@ -49,7 +49,7 @@
 
 
 
-    <resultMap id="blogInfo" type="com.yond.blog.web.blog.view.vo.BlogInfo">
+    <resultMap id="blogInfo" type="com.yond.blog.web.view.vo.BlogInfo">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="description" column="description"/>
@@ -64,7 +64,7 @@
         </association>
     </resultMap>
 
-    <resultMap id="randomBlog" type="com.yond.blog.web.blog.view.vo.RandomBlog">
+    <resultMap id="randomBlog" type="com.yond.blog.web.view.vo.RandomBlog">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="password" column="password"/>
@@ -81,7 +81,7 @@
     </select>
 
     <!--查询所有文章的浏览量-->
-    <select id="getBlogViewsList" resultType="com.yond.blog.web.blog.view.dto.BlogView">
+    <select id="getBlogViewsList" resultType="com.yond.blog.web.view.dto.BlogView">
         select id, views from blog
     </select>
 
@@ -90,7 +90,7 @@
         update blog set views=#{views} where id=#{blogId}
     </update>
 
-    <resultMap id="blogDetail" type="com.yond.blog.web.blog.view.vo.BlogDetail">
+    <resultMap id="blogDetail" type="com.yond.blog.web.view.vo.BlogDetail">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="content" column="content"/>
@@ -127,7 +127,7 @@
         select count(*) from blog_tag where tag_id=#{tagId}
     </select>
 
-    <resultMap id="categoryBlogCount" type="com.yond.blog.web.blog.view.vo.CategoryBlogCount">
+    <resultMap id="categoryBlogCount" type="com.yond.blog.web.view.vo.CategoryBlogCount">
         <id property="id" column="category_id"/>
         <result property="value" column="blog_count"/>
     </resultMap>

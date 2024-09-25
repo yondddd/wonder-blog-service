@@ -17,15 +17,15 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
 public class CurrentUserResolver implements HandlerMethodArgumentResolver {
-
+    
     @Resource
     private UserService userService;
-
+    
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
         return this.userService != null && UserSession.class.isAssignableFrom(methodParameter.getParameterType());
     }
-
+    
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
@@ -39,5 +39,5 @@ public class CurrentUserResolver implements HandlerMethodArgumentResolver {
         }
         return null;
     }
-
+    
 }
