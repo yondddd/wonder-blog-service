@@ -16,6 +16,7 @@ public class CommentLeaveReq implements Serializable {
     private Long blogId;
     private Long parentId;
     private String nickname;
+    private String qq;
     private String email;
     private String content;
     private String avatar;
@@ -56,6 +57,14 @@ public class CommentLeaveReq implements Serializable {
     public CommentLeaveReq setNickname(String nickname) {
         this.nickname = nickname;
         return this;
+    }
+    
+    public String getQq() {
+        return qq;
+    }
+    
+    public void setQq(String qq) {
+        this.qq = qq;
     }
     
     public String getEmail() {
@@ -110,6 +119,7 @@ public class CommentLeaveReq implements Serializable {
                 ", blogId=" + blogId +
                 ", parentId=" + parentId +
                 ", nickname='" + nickname + '\'' +
+                ", qq='" + qq + '\'' +
                 ", email='" + email + '\'' +
                 ", content='" + content + '\'' +
                 ", avatar='" + avatar + '\'' +

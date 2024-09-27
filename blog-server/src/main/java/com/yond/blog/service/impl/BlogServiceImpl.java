@@ -89,7 +89,7 @@ public class BlogServiceImpl implements BlogService {
     }
     
     @Override
-    public List<NewBlog> getNewBlogListByIsPublished() {
+    public List<NewBlog> listNewBlog() {
         
         List<BlogDO> collect = this.listEnable()
                 .stream().filter(BlogDO::getPublished)

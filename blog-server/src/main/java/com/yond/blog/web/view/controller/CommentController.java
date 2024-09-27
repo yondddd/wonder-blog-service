@@ -2,6 +2,7 @@ package com.yond.blog.web.view.controller;
 
 import com.yond.blog.entity.CommentDO;
 import com.yond.blog.service.CommentService;
+import com.yond.blog.util.ip.IpAddressUtils;
 import com.yond.blog.util.jwt.JwtUtil;
 import com.yond.blog.web.view.req.CommentLeaveReq;
 import com.yond.blog.web.view.req.CommentPageViewReq;
@@ -11,6 +12,7 @@ import com.yond.common.constant.CommonConstant;
 import com.yond.common.constant.JwtConstant;
 import com.yond.common.enums.CommentOpenStateEnum;
 import com.yond.common.enums.CommentPageEnum;
+import com.yond.common.enums.EnableStatusEnum;
 import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import io.jsonwebtoken.Claims;
@@ -92,7 +94,21 @@ public class CommentController {
             return Response.custom(403, "评论已关闭");
         }
         CommentDO reply = CommentDO.custom();
-        
+        reply.setPage(page);
+        reply.setBlogId(blogId);
+        reply.setParentId(parentId);
+        reply.setNickname(req.getNickname());
+        reply.setEmail(req.getEmail());
+        reply.setContent(req.getContent());
+        reply.setAvatar(req.getAvatar());
+        reply.setWebsite(req.getWebsite());
+        reply.setIp(IpAddressUtils.getIpAddress(request));
+        reply.setPublished(true);
+        reply.setAdminComment(isAdmin(jwt));
+        reply.setNotice(req.getNotice());
+        reply.setQq(req.getQq());
+        reply.setStatus(EnableStatusEnum.ENABLE.getVal());
+        reply.setCreateTime(new Date());
         commentService.insertSelective(reply);
         return Response.success();
     }
@@ -122,6 +138,23 @@ public class CommentController {
             return "Token已失效，请重新验证密码！";
         }
         return null;
+    }
+    
+    private boolean isAdmin(String jwt) {
+        boolean tokenIsExist = JwtUtil.judgeTokenIsExist(jwt);
+        if (!tokenIsExist) {
+            return false;
+        }
+        try {
+            Claims claims = JwtUtil.validateJwt(jwt, JwtConstant.DEFAULT_SECRET);
+            String subject = claims.getSubject();
+            if (subject.startsWith(JwtConstant.ADMIN_PREFIX)) {
+                return claims.getExpiration().after(new Date());
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
     }
     
 }

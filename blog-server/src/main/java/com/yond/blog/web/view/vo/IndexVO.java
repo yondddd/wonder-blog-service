@@ -16,7 +16,6 @@ public class IndexVO implements Serializable {
     private static final long serialVersionUID = 8728104087748512189L;
     
     private List<NewBlog> newBlogList;
-    
     private List<CategoryDO> categoryList;
     private List<TagDO> tagList;
     private List<RandomBlog> randomBlogList;

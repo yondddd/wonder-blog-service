@@ -26,7 +26,7 @@ public interface BlogService {
     
     List<SearchBlog> searchPublic(String query);
     
-    List<NewBlog> getNewBlogListByIsPublished();
+    List<NewBlog> listNewBlog();
     
     List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
     

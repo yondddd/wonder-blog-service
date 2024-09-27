@@ -9,7 +9,7 @@ import java.util.List;
  * @Description: 侧边栏资料卡
  * @Author: Yond
  */
-public class Introduction implements Serializable {
+public class IntroductionVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 8908116814963447260L;
     private String avatar;
@@ -24,7 +24,7 @@ public class Introduction implements Serializable {
     private List<String> rollText = new ArrayList<>();
     private List<Favorite> favorites = new ArrayList<>();
     
-    public Introduction() {
+    public IntroductionVO() {
     }
     
     public String getAvatar() {

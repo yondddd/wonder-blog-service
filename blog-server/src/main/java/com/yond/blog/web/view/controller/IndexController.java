@@ -40,16 +40,18 @@ public class IndexController {
      */
     @GetMapping("/view/site")
     public Response<IndexVO> site() {
+        IndexVO data = new IndexVO();
         Map<String, Object> map = siteConfigService.getSiteInfoForView();
-        List<NewBlog> newBlogList = blogService.getNewBlogListByIsPublished();
+        List<NewBlog> newBlogList = blogService.listNewBlog();
         List<CategoryDO> categoryList = categoryService.listAll();
         List<TagDO> tagList = tagService.listAll();
         List<RandomBlog> randomBlogList = blogService.getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
-        map.put("newBlogList", newBlogList);
-        map.put("categoryList", categoryList);
-        map.put("tagList", tagList);
-        map.put("randomBlogList", randomBlogList);
-        return Response.success(map);
+        data.setNewBlogList(newBlogList);
+        data.setCategoryList(categoryList);
+        data.setTagList(tagList);
+        data.setRandomBlogList(randomBlogList);
+        // 还要放配置
+        return Response.success(data);
     }
     
 }

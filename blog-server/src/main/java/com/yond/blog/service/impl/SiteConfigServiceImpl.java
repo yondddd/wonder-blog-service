@@ -7,7 +7,7 @@ import com.yond.blog.service.SiteConfigService;
 import com.yond.blog.web.view.vo.Badge;
 import com.yond.blog.web.view.vo.Copyright;
 import com.yond.blog.web.view.vo.Favorite;
-import com.yond.blog.web.view.vo.Introduction;
+import com.yond.blog.web.view.vo.IntroductionVO;
 import com.yond.common.constant.SiteConfigConstant;
 import com.yond.common.enums.SiteSettingTypeEnum;
 import com.yond.common.exception.PersistenceException;
@@ -59,7 +59,7 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         List<SiteConfigDO> siteSettings = this.listAll();
         Map<String, Object> siteInfo = new HashMap<>(2);
         List<Badge> badges = new ArrayList<>();
-        Introduction introduction = new Introduction();
+        IntroductionVO introductionVO = new IntroductionVO();
         List<Favorite> favorites = new ArrayList<>();
         List<String> rollTexts = new ArrayList<>();
         for (SiteConfigDO s : siteSettings) {
@@ -76,28 +76,28 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
                 case SiteSettingTypeEnum.PERSON_INFO:
                     switch (s.getNameEn()) {
                         case SiteConfigConstant.AVATAR:
-                            introduction.setAvatar(s.getValue());
+                            introductionVO.setAvatar(s.getValue());
                             break;
                         case SiteConfigConstant.NAME:
-                            introduction.setName(s.getValue());
+                            introductionVO.setName(s.getValue());
                             break;
                         case SiteConfigConstant.GITHUB:
-                            introduction.setGithub(s.getValue());
+                            introductionVO.setGithub(s.getValue());
                             break;
                         case SiteConfigConstant.TELEGRAM:
-                            introduction.setTelegram(s.getValue());
+                            introductionVO.setTelegram(s.getValue());
                             break;
                         case SiteConfigConstant.QQ:
-                            introduction.setQq(s.getValue());
+                            introductionVO.setQq(s.getValue());
                             break;
                         case SiteConfigConstant.BILIBILI:
-                            introduction.setBilibili(s.getValue());
+                            introductionVO.setBilibili(s.getValue());
                             break;
                         case SiteConfigConstant.NETEASE:
-                            introduction.setNetease(s.getValue());
+                            introductionVO.setNetease(s.getValue());
                             break;
                         case SiteConfigConstant.EMAIL:
-                            introduction.setEmail(s.getValue());
+                            introductionVO.setEmail(s.getValue());
                             break;
                         case SiteConfigConstant.FAVORITE:
                             Favorite favorite = JsonUtils.fromJson(s.getValue(), Favorite.class);
@@ -121,10 +121,10 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
                     break;
             }
         }
-        introduction.setFavorites(favorites);
-        introduction.setRollText(rollTexts);
+        introductionVO.setFavorites(favorites);
+        introductionVO.setRollText(rollTexts);
         Map<String, Object> map = new HashMap<>(8);
-        map.put("introduction", introduction);
+        map.put("introduction", introductionVO);
         map.put("siteInfo", siteInfo);
         map.put("badges", badges);
         return map;
