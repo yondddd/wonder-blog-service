@@ -1,21 +1,17 @@
 package com.yond.blog.service;
 
 import com.yond.blog.entity.SiteConfigDO;
-import com.yond.common.enums.SiteSettingTypeEnum;
+import com.yond.common.enums.SiteConfigTypeEnum;
 
 import java.util.List;
-import java.util.Map;
 
 public interface SiteConfigService {
-
-    @Deprecated
-    Map<String, Object> getSiteInfoForView();
 
     String getValue(String key);
 
     void updateValue(String key, String value);
 
-    List<SiteConfigDO> listByType(SiteSettingTypeEnum typeEnum);
+    List<SiteConfigDO> listByType(SiteConfigTypeEnum typeEnum);
 
     List<SiteConfigDO> listAll();
 

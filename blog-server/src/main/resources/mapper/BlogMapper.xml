@@ -25,57 +25,18 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        `id`, `title`, `first_picture`, `content`, `description`, `is_published`, `is_recommend`, `is_appreciation`,
+        `id`
+        , `title`, `first_picture`, `content`, `description`, `is_published`, `is_recommend`, `is_appreciation`,
         `is_comment_enabled`, `create_time`, `update_time`, `views`, `words`, `read_time`, `category_id`, `is_top`, `password`, `user_id`
             ,`status`
     </sql>
 
-    <resultMap id="searchBlog" type="com.yond.blog.web.view.vo.SearchBlog">
-        <id property="id" column="id"/>
-        <result property="title" column="title"/>
-        <result property="content" column="content"/>
-    </resultMap>
-
-    <resultMap id="blogIdAndTitle" type="com.yond.blog.web.view.vo.BlogIdAndTitle">
-        <id property="id" column="id"/>
-        <result property="title" column="title"/>
-    </resultMap>
-
-    <resultMap id="newBlog" type="com.yond.blog.web.view.vo.NewBlog">
-        <id property="id" column="id"/>
-        <result property="title" column="title"/>
-        <result property="password" column="password"/>
-    </resultMap>
-
-    <resultMap id="randomBlog" type="com.yond.blog.web.view.vo.RandomBlog">
-        <id property="id" column="id"/>
-        <result property="title" column="title"/>
-        <result property="password" column="password"/>
-        <result property="createTime" column="create_time"/>
-        <result property="firstPicture" column="first_picture"/>
-    </resultMap>
-
-    <!--查询随机的公开且推荐文章-->
-    <select id="getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend" resultMap="randomBlog">
-        select id, title, password, create_time, first_picture
+    <select id="listByStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
         from blog
-        where is_published=true and is_recommend=true
-        order by rand() limit #{limitNum}
-    </select>
-
-    <!--按标签id查询博客数量-->
-    <select id="countBlogByTagId" resultType="java.lang.Integer">
-        select count(*) from blog_tag where tag_id=#{tagId}
-    </select>
-
-    <resultMap id="categoryBlogCount" type="com.yond.blog.web.view.vo.CategoryBlogCount">
-        <id property="id" column="category_id"/>
-        <result property="value" column="blog_count"/>
-    </resultMap>
-
-    <select id="listAll" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List"/>
-        from blog
+        where
+        status = #{status,jdbcType=NUMERIC}
     </select>
 
     <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
@@ -125,14 +86,6 @@
         </trim>
     </insert>
 
-
-    <select id="listByStatus" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from blog
-        where
-        status = #{status,jdbcType=NUMERIC}
-    </select>
     <update id="updateSelective">
         update blog
         <set>

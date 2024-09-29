@@ -3,11 +3,11 @@ package com.yond.common.enums;
 /**
  * @Author Yond
  */
-public enum SiteSettingTypeEnum {
+public enum SiteConfigTypeEnum {
 
     BLOG_INFO(1, "博客信息"),
 
-    PERSON_INFO(2, "个人信息"),
+    PROFILE(2, "个人信息"),
 
     BOTTOM_BADGE(3, "底部徽标"),
 
@@ -21,7 +21,7 @@ public enum SiteSettingTypeEnum {
     private final int val;
     private final String desc;
 
-    SiteSettingTypeEnum(int val, String desc) {
+    SiteConfigTypeEnum(int val, String desc) {
         this.val = val;
         this.desc = desc;
     }
@@ -34,8 +34,8 @@ public enum SiteSettingTypeEnum {
         return desc;
     }
 
-    public static SiteSettingTypeEnum getByVal(Integer val) {
-        for (SiteSettingTypeEnum item : SiteSettingTypeEnum.values()) {
+    public static SiteConfigTypeEnum getByVal(Integer val) {
+        for (SiteConfigTypeEnum item : SiteConfigTypeEnum.values()) {
             if (item.getVal().equals(val)) {
                 return item;
             }

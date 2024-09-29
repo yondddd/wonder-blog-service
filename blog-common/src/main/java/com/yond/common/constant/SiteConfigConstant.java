@@ -6,140 +6,145 @@ package com.yond.common.constant;
  * @Author: Yond
  */
 public class SiteConfigConstant {
-    
+
     /**
      * 博客名称
      */
-    public static final String BLOG_NAME = "blogName";
-    
+    public static final String BLOG_NAME = "blog_name";
+
     /**
      * 网页标题后缀
      */
-    public static final String WEB_TITLE_SUFFIX = "webTitleSuffix";
-    
+    public static final String BLOG_WEB_TITLE_SUFFIX = "blog_web_title_suffix";
+
     /**
      * 页脚图片标题
      */
-    public static final String FOOTER_IMG_TITLE = "footerImgTitle";
-    
+    public static final String BLOG_FOOTER_IMG_TITLE = "blog_footer_img_title";
+
     /**
      * 页脚图片路径
      */
-    public static final String FOOTER_IMG_URL = "footerImgUrl";
-    
+    public static final String BLOG_FOOTER_IMG_URL = "blog_footer_img_url";
+
     /**
-     * 版权信息
+     * Copyright
      */
-    public static final String COPYRIGHT = "copyright";
-    
+    public static final String BLOG_COPYRIGHT = "blog_copyright";
+
     /**
      * ICP备案号
      */
-    public static final String BEIAN = "beian";
-    
+    public static final String BLOG_ICP = "blog_icp";
+
     /**
      * 赞赏码
      */
-    public static final String REWARD = "reward";
-    
+    public static final String BLOG_REWARD = "blog_reward";
+
     /**
      * 博主评论标识
      */
-    public static final String COMMENT_ADMIN_FLAG = "commentAdminFlag";
-    
+    public static final String BLOG_COMMENT_ADMIN_FLAG = "blog_comment_admin_flag";
+
     /**
      * 播放器平台
      */
-    public static final String PLAYLIST_SERVER = "playlistServer";
-    
+    public static final String BLOG_PLAY_LIST_PLATFORM = "blog_play_list_platform";
+
     /**
-     * 播放器歌单ID
+     * 播放器歌单
      */
-    public static final String PLAYLIST_ID = "playlistId";
-    
+    public static final String BLOG_PLAY_LIST_D = "blog_play_list_d";
+
     /**
      * 头像
      */
-    public static final String AVATAR = "avatar";
-    
+    public static final String PROFILE_AVATAR = "profile_avatar";
+
     /**
      * 昵称
      */
-    public static final String NAME = "name";
-    
+    public static final String PROFILE_NAME = "profile_name";
+
     /**
-     * 滚动个性签名
+     * 滚动个签
      */
-    public static final String ROLL_TEXT = "rollText";
-    
+    public static final String PROFILE_ROLL_TEXT = "profile_rollText";
+
     /**
-     * GitHub地址
+     * GitHub
      */
-    public static final String GITHUB = "github";
-    
+    public static final String PROFILE_GITHUB = "profile_github";
+
     /**
-     * Telegram地址
+     * Telegram
      */
-    public static final String TELEGRAM = "telegram";
-    
+    public static final String PROFILE_TELEGRAM = "profile_telegram";
+
     /**
-     * QQ号码
+     * QQ
      */
-    public static final String QQ = "qq";
-    
+    public static final String PROFILE_QQ = "profile_qq";
+
     /**
-     * 哔哩哔哩地址
+     * bilibili
      */
-    public static final String BILIBILI = "bilibili";
-    
+    public static final String PROFILE_BILIBILI = "profile_bilibili";
+
     /**
-     * 网易云音乐地址
+     * 网易云音乐
      */
-    public static final String NETEASE = "netease";
-    
+    public static final String PROFILE_NETEASE = "profile_netease";
+
     /**
-     * 邮箱地址
+     * email
      */
-    public static final String EMAIL = "email";
-    
+    public static final String PROFILE_EMAIL = "profile_email";
+
     /**
-     * 自定义选项
+     * 资料卡自定义
      */
-    public static final String FAVORITE = "favorite";
-    
+    public static final String PROFILE_FAVORITE = "profile_favorite";
+
+    /**
+     * 底部徽标
+     */
+    public static final String BOTTOM_BADGE = "bottom_badge";
+
     /**
      * 友链页面信息
      */
-    public static final String FRIEND_CONTENT = "friendContent";
-    
+    public static final String FRIEND_CONTENT = "friend_content";
+
     /**
      * 友链页面评论开关
      */
-    public static final String FRIEND_COMMENT_ENABLED = "friendCommentEnabled";
-    
+    public static final String FRIEND_COMMENT_ENABLED = "friend_comment_enabled";
+
     /**
-     * 腾讯地图IP API Key
+     * 腾讯地图ip api key
      */
-    public static final String TENCENT_IP_KEY = "tencentMapIpKey";
-    
+    public static final String KEY_TENCENT_MAP_IP = "key_tencent_map_ip";
+
     /**
-     * 标题
+     * 关于标题
      */
-    public static final String TITLE = "title";
-    
+    public static final String ABOUT_TITLE = "about_title";
+
     /**
-     * 网易云音乐歌曲ID
+     * 网易云歌曲ID
      */
-    public static final String MUSIC_ID = "musicId";
-    
+    public static final String ABOUT_MUSIC_ID = "about_musicId";
+
     /**
-     * 正文Markdown内容
+     * 正文Markdown
      */
-    public static final String CONTENT = "content";
-    
+    public static final String ABOUT_CONTENT = "about_content";
+
     /**
      * 评论开关
      */
-    public static final String COMMENT_ENABLED = "commentEnabled";
-    
+    public static final String ABOUT_COMMENT_ENABLED = "about_comment_enabled";
+
 }

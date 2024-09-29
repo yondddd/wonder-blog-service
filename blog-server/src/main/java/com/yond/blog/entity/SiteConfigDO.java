@@ -1,7 +1,5 @@
 package com.yond.blog.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -9,14 +7,14 @@ import java.io.Serializable;
  * @Description: 站点设置
  * @Author: Yond
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class SiteConfigDO implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 975624987598974165L;
+
     private Long id;
-    private String nameEn;
-    private String nameZh;
+    private String key;
+    private String name;
     private String value;
     private Integer type;
 
@@ -27,12 +25,12 @@ public class SiteConfigDO implements Serializable {
         return this.id;
     }
 
-    public String getNameEn() {
-        return this.nameEn;
+    public String getKey() {
+        return this.key;
     }
 
-    public String getNameZh() {
-        return this.nameZh;
+    public String getName() {
+        return this.name;
     }
 
     public String getValue() {
@@ -47,12 +45,12 @@ public class SiteConfigDO implements Serializable {
         this.id = id;
     }
 
-    public void setNameEn(String nameEn) {
-        this.nameEn = nameEn;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public void setNameZh(String nameZh) {
-        this.nameZh = nameZh;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setValue(String value) {
@@ -67,8 +65,8 @@ public class SiteConfigDO implements Serializable {
     public String toString() {
         return "SiteSettingDO{" +
                 "id=" + id +
-                ", nameEn='" + nameEn + '\'' +
-                ", nameZh='" + nameZh + '\'' +
+                ", nameEn='" + key + '\'' +
+                ", nameZh='" + name + '\'' +
                 ", value='" + value + '\'' +
                 ", type=" + type +
                 '}';

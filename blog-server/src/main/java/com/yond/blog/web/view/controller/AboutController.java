@@ -6,7 +6,7 @@ import com.yond.blog.util.markdown.MarkdownUtils;
 import com.yond.blog.web.view.vo.AboutVO;
 import com.yond.common.annotation.VisitLogger;
 import com.yond.common.constant.AboutConstant;
-import com.yond.common.enums.SiteSettingTypeEnum;
+import com.yond.common.enums.SiteConfigTypeEnum;
 import com.yond.common.enums.VisitBehavior;
 import com.yond.common.resp.Response;
 import jakarta.annotation.Resource;
@@ -24,19 +24,19 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/view/about")
 public class AboutController {
-    
+
     @Resource
     private SiteConfigService siteConfigService;
-    
+
     @VisitLogger(VisitBehavior.ABOUT)
     @PostMapping("/config")
     public Response<AboutVO> config() {
         AboutVO data = new AboutVO();
-        Map<String, String> map = siteConfigService.listByType(SiteSettingTypeEnum.ABOUT)
-                .stream().collect(Collectors.toMap(SiteConfigDO::getNameEn, SiteConfigDO::getValue));
+        Map<String, String> map = siteConfigService.listByType(SiteConfigTypeEnum.ABOUT)
+                .stream().collect(Collectors.toMap(SiteConfigDO::getKey, SiteConfigDO::getValue));
         data.setContent(MarkdownUtils.markdownToHtmlExtensions(map.get(AboutConstant.CONTENT)));
         data.setCommentEnabled(map.get(AboutConstant.COMMENT_ENABLED));
         return Response.success(data);
     }
-    
+
 }

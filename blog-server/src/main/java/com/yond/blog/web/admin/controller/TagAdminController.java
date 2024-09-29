@@ -1,7 +1,9 @@
 package com.yond.blog.web.admin.controller;
 
+import com.yond.blog.entity.BlogTagDO;
 import com.yond.blog.entity.TagDO;
 import com.yond.blog.service.BlogService;
+import com.yond.blog.service.BlogTagService;
 import com.yond.blog.service.TagService;
 import com.yond.blog.web.admin.convert.TagConvert;
 import com.yond.blog.web.admin.req.TagDelReq;
@@ -11,6 +13,7 @@ import com.yond.common.annotation.OperationLogger;
 import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import jakarta.annotation.Resource;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +35,8 @@ public class TagAdminController {
     private BlogService blogService;
     @Resource
     private TagService tagService;
+    @Resource
+    private BlogTagService blogTagService;
 
     @PostMapping("listAll")
     public Response<List<TagVO>> listAll() {
@@ -72,8 +77,8 @@ public class TagAdminController {
     @OperationLogger("删除标签")
     @PostMapping("/del")
     public Response<Boolean> delete(@RequestBody TagDelReq req) {
-        int num = blogService.countByTagId(req.getId());
-        if (num != 0) {
+        List<BlogTagDO> ref = blogTagService.listByTagId(req.getId());
+        if (CollectionUtils.isNotEmpty(ref)) {
             return Response.<Boolean>custom().setFailure("已有博客与此标签关联，不可删除");
         }
         tagService.deleteById(req.getId());

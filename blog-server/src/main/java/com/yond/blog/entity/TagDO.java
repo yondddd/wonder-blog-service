@@ -8,8 +8,10 @@ import java.io.Serializable;
  * @Author: Yond
  */
 public class TagDO implements Serializable {
+
     @Serial
     private static final long serialVersionUID = -19713361186882677L;
+
     private Long id;
     private String name;//标签名称
     private String color;//标签颜色(与Semantic UI提供的颜色对应，可选)

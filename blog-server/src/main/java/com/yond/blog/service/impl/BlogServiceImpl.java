@@ -25,10 +25,10 @@ import java.util.stream.Collectors;
  */
 @Service
 public class BlogServiceImpl implements BlogService {
-    
+
     @Resource
     private BlogMapper blogMapper;
-    
+
     @Override
     public Pair<Integer, List<BlogDO>> adminPageBy(String title,
                                                    Long categoryId,
@@ -42,7 +42,7 @@ public class BlogServiceImpl implements BlogService {
                 .collect(Collectors.toList());
         return Pair.of(list.size(), PageUtil.pageList(list, pageNo, pageSize));
     }
-    
+
     @Override
     public Pair<Integer, List<BlogDO>> viewPageBy(Long categoryId,
                                                   Long tagId,
@@ -55,25 +55,72 @@ public class BlogServiceImpl implements BlogService {
                 .collect(Collectors.toList());
         return Pair.of(list.size(), PageUtil.pageList(list, pageNo, pageSize));
     }
-    
+
     @Override
     public List<BlogDO> listByIds(List<Long> ids) {
         Set<Long> set = Set.copyOf(ids);
         return this.listEnable().stream().filter(x -> set.contains(x.getId())).collect(Collectors.toList());
     }
-    
+
     @Override
-    public List<SearchBlog> searchPublic(String query) {
+    public BlogDO getBlogById(Long id) {
+        BlogDO blog = this.listEnable()
+                .stream().filter(x -> id.equals(x.getId())).findFirst().orElse(null);
+        if (blog == null) {
+            throw new NotFoundException("博客不存在");
+        }
+        return blog;
+    }
+
+    @Override
+    public List<BlogDO> listEnable() {
+        List<BlogDO> cache = BlogCache.listEnable();
+        if (cache == null) {
+            cache = blogMapper.listByStatus(EnableStatusEnum.ENABLE.getVal());
+        }
+        return cache;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Long insertSelective(BlogDO blog) {
+        blogMapper.insertSelective(blog);
+        this.deleteBlogCache();
+        return blog.getId();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateSelective(BlogDO blog) {
+        blogMapper.updateSelective(blog);
+        this.deleteBlogCache();
+    }
+
+    @Override
+    public void delById(Long id) {
+        BlogDO del = BlogDO.custom()
+                .setId(id)
+                .setStatus(EnableStatusEnum.DELETE.getVal());
+        this.updateSelective(del);
+        // 评论和关联tag不删除
+    }
+
+    @Override
+    public void incrBlogView(List<Long> blogIds, Integer incr) {
+        blogMapper.incrBlogView(blogIds, incr);
+    }
+
+    @Override
+    public List<SearchBlogVO> searchPublic(String query) {
         String lowerCase = query.toLowerCase();
         List<BlogDO> searchBlogs = this.listEnable().stream()
                 .filter(BlogDO::getPublished)
                 .filter(x -> StringUtils.isBlank(x.getPassword()))
                 .filter(x -> x.getContent().toLowerCase().contains(lowerCase))
                 .toList();
-        List<SearchBlog> result = new ArrayList<>();
+        List<SearchBlogVO> result = new ArrayList<>();
         // 数据库的处理是不区分大小写的，那么这里的匹配串处理也应该不区分大小写，否则会出现不准确的结果
         for (BlogDO searchBlog : searchBlogs) {
-            SearchBlog item = new SearchBlog();
+            SearchBlogVO item = new SearchBlogVO();
             String content = searchBlog.getContent().toUpperCase();
             int contentLength = content.length();
             int index = content.indexOf(query) - 10;
@@ -87,18 +134,18 @@ public class BlogServiceImpl implements BlogService {
         }
         return result;
     }
-    
+
     @Override
-    public List<NewBlog> listNewBlog() {
-        
+    public List<NewBlogVO> listNewBlog() {
+
         List<BlogDO> collect = this.listEnable()
                 .stream().filter(BlogDO::getPublished)
                 .sorted(Comparator.comparing(BlogDO::getCreateTime).reversed())
                 .toList();
         collect = collect.subList(0, Math.min(collect.size(), BlogConstant.NEW_BLOG_PAGE_SIZE));
-        List<NewBlog> result = new ArrayList<>();
+        List<NewBlogVO> result = new ArrayList<>();
         for (BlogDO blogDO : collect) {
-            NewBlog item = new NewBlog();
+            NewBlogVO item = new NewBlogVO();
             item.setId(blogDO.getId());
             item.setTitle(blogDO.getTitle());
             item.setPrivacy(StringUtils.isNotBlank(blogDO.getPassword()));
@@ -106,68 +153,26 @@ public class BlogServiceImpl implements BlogService {
         }
         return result;
     }
-    
+
     @Override
-    public List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend() {
-        List<RandomBlog> randomBlogs = blogMapper.getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend(BlogConstant.RANDOM_BLOG_LIMIT_NUM);
-        for (RandomBlog randomBlog : randomBlogs) {
-            if (!"".equals(randomBlog.getPassword())) {
-                randomBlog.setPrivacy(true);
-                randomBlog.setPassword("");
-            } else {
-                randomBlog.setPrivacy(false);
-            }
+    public List<RandomBlogVO> listRandomBlog() {
+
+        List<BlogDO> list = this.listEnable().stream().filter(BlogDO::getPublished).filter(BlogDO::getRecommend).collect(Collectors.toList());
+        Collections.shuffle(list);
+        List<BlogDO> page = PageUtil.pageList(list, 1, BlogConstant.RANDOM_BLOG_LIMIT_NUM);
+        List<RandomBlogVO> result = new ArrayList<>();
+        for (BlogDO b : page) {
+            RandomBlogVO r = new RandomBlogVO();
+            r.setId(b.getId());
+            r.setTitle(b.getTitle());
+            r.setFirstPicture(b.getFirstPicture());
+            r.setCreateTime(b.getCreateTime());
+            r.setPrivacy(StringUtils.isNotBlank(b.getPassword()));
+            result.add(r);
         }
-        return randomBlogs;
+        return result;
     }
-    
-    @Override
-    public BlogDO getBlogById(Long id) {
-        BlogDO blog = this.listEnable()
-                .stream().filter(x -> id.equals(x.getId())).findFirst().orElse(null);
-        if (blog == null) {
-            throw new NotFoundException("博客不存在");
-        }
-        return blog;
-    }
-    
-    @Override
-    public int countByTagId(Long tagId) {
-        return blogMapper.countBlogByTagId(tagId);
-    }
-    
-    @Override
-    public List<BlogDO> listEnable() {
-        List<BlogDO> cache = BlogCache.listEnable();
-        if (cache == null) {
-            cache = blogMapper.listByStatus(EnableStatusEnum.ENABLE.getVal());
-        }
-        return cache;
-    }
-    
-    @Transactional(rollbackFor = Exception.class)
-    public Long insertSelective(BlogDO blog) {
-        blogMapper.insertSelective(blog);
-        this.deleteBlogCache();
-        return blog.getId();
-    }
-    
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void updateSelective(BlogDO blog) {
-        blogMapper.updateSelective(blog);
-        this.deleteBlogCache();
-    }
-    
-    @Override
-    public void delById(Long id) {
-        BlogDO del = BlogDO.custom()
-                .setId(id)
-                .setStatus(EnableStatusEnum.DELETE.getVal());
-        this.updateSelective(del);
-        // 评论和关联tag不删除
-    }
-    
+
     @Override
     public ArchiveVO blogArchive() {
         ArchiveVO cache = BlogCache.getBlogArchive();
@@ -200,19 +205,13 @@ public class BlogServiceImpl implements BlogService {
         BlogCache.setBlogArchive(data);
         return data;
     }
-    
-    @Override
-    public void incrBlogView(List<Long> blogIds, Integer incr) {
-        blogMapper.incrBlogView(blogIds, incr);
-    }
-    
+
     /**
      * 删除首页缓存、最新推荐缓存、归档页面缓存、博客浏览量缓存
      */
     private void deleteBlogCache() {
         BlogCache.delAllBlogs();
-        BlogCache.delInfo();
         BlogCache.delBlogGroup();
     }
-    
+
 }

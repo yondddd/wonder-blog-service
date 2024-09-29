@@ -9,9 +9,9 @@ import nl.basjes.parse.useragent.UserAgentAnalyzer;
  * @Author: Yond
  */
 public class UserAgentUtils {
-    
+
     private static UserAgentAnalyzer userAgentAnalyzer;
-    
+
     /**
      * 从User-Agent解析客户端操作系统和浏览器版本
      */
@@ -22,7 +22,7 @@ public class UserAgentUtils {
         String browser = agent.getValue(UserAgent.AGENT_NAME_VERSION);
         return new UserAgentDTO(os, browser);
     }
-    
+
     public static synchronized void init() {
         if (userAgentAnalyzer != null) {
             return;
@@ -30,11 +30,11 @@ public class UserAgentUtils {
         userAgentAnalyzer = UserAgentAnalyzer
                 .newBuilder()
                 .useJava8CompatibleCaching()
-                .withCache(10000)
+                .withCache(500)
                 .hideMatcherLoadStats()
                 .withField(UserAgent.OPERATING_SYSTEM_NAME_VERSION_MAJOR)
                 .withField(UserAgent.AGENT_NAME_VERSION)
                 .build();
     }
-    
+
 }

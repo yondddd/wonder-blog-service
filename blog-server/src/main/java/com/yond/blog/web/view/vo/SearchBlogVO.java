@@ -4,35 +4,44 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * @Description: 自定义爱好
+ * @Description: 关键字搜索博客
  * @Author: Yond
  */
-public class Favorite implements Serializable {
+public class SearchBlogVO implements Serializable {
     @Serial
-    private static final long serialVersionUID = 1003846806944482693L;
+    private static final long serialVersionUID = -154517852364468455L;
+    private Long id;
     private String title;
     private String content;
-    
-    public Favorite() {
+
+    public SearchBlogVO() {
     }
-    
+
+    public Long getId() {
+        return this.id;
+    }
+
     public String getTitle() {
         return this.title;
     }
-    
+
     public String getContent() {
         return this.content;
     }
-    
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     public void setContent(String content) {
         this.content = content;
     }
-    
+
     public String toString() {
-        return "Favorite(title=" + this.getTitle() + ", content=" + this.getContent() + ")";
+        return "SearchBlog(id=" + this.getId() + ", title=" + this.getTitle() + ", content=" + this.getContent() + ")";
     }
 }

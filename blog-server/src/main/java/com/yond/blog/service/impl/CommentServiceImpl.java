@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class CommentServiceImpl implements CommentService {
-    
+
     @Resource
     private CommentMapper commentMapper;
     @Resource
@@ -49,23 +49,23 @@ public class CommentServiceImpl implements CommentService {
     private FriendService friendService;
     @Resource
     private BlogService blogService;
-    
-    
+
+
     private final LoadingCache<String, List<CommentDO>> cache = LocalCache.buildCache(1, new CacheLoader<>() {
         @Override
         public @Nullable List<CommentDO> load(String s) {
             return commentMapper.listAll();
         }
     });
-    
+
     public List<CommentDO> listAll() {
         return cache.get("listAll");
     }
-    
+
     private Map<Long, List<CommentDO>> allToMap(List<CommentDO> list) {
         return list.stream().collect(Collectors.groupingBy(CommentDO::getParentId));
     }
-    
+
     @Override
     public Pair<Integer, List<CommentDTO>> pageBy(CommentPageEnum page, Long blogId, Integer pageNo, Integer pageSize) {
         List<CommentDO> allData = this.listAll();
@@ -80,21 +80,21 @@ public class CommentServiceImpl implements CommentService {
         List<CommentDO> pageList = PageUtil.pageList(root, pageNo, pageSize);
         return Pair.of(root.size(), buildTree(pageList, map));
     }
-    
+
     @Override
     public CommentDO getById(Long id) {
         return this.listAll().stream()
                 .filter(x -> x.getId().equals(id)).findFirst().orElse(null);
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateSelective(CommentDO comment) {
         commentMapper.updateSelective(comment);
         cache.invalidateAll();
     }
-    
-    
+
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void insertSelective(CommentDO comment) {
@@ -103,7 +103,7 @@ public class CommentServiceImpl implements CommentService {
         }
         cache.invalidateAll();
     }
-    
+
     @Override
     public CommentOpenStateEnum getPageCommentStatus(Integer page, Long blogId) {
         CommentPageEnum pageEnum = CommentPageEnum.getByValue(page);
@@ -136,19 +136,19 @@ public class CommentServiceImpl implements CommentService {
         }
         //关于我页面
         if (CommentPageEnum.ABOUT.equals(pageEnum)) {
-            String value = siteConfigService.getValue(SiteConfigConstant.COMMENT_ENABLED);
+            String value = siteConfigService.getValue(SiteConfigConstant.ABOUT_COMMENT_ENABLED);
             if (BooleanUtils.toBoolean(value)) {
                 return CommentOpenStateEnum.OPEN;
             }
         }
         return CommentOpenStateEnum.CLOSE;
     }
-    
+
     @Override
     public Pair<Integer, List<CommentViewVO>> viewPageBy(Integer page, Long blogId, Integer pageNo, Integer pageSize) {
         return null;
     }
-    
+
     public List<CommentDTO> buildTree(List<CommentDO> root, Map<Long, List<CommentDO>> map) {
         List<CommentDTO> result = new ArrayList<>();
         for (CommentDO commentDO : root) {
@@ -161,7 +161,7 @@ public class CommentServiceImpl implements CommentService {
         }
         return result;
     }
-    
+
     private CommentDTO convertToDTO(CommentDO commentDO) {
         CommentDTO dto = new CommentDTO();
         dto.setId(commentDO.getId());
@@ -182,5 +182,5 @@ public class CommentServiceImpl implements CommentService {
         dto.setCreateTime(commentDO.getCreateTime());
         return dto;
     }
-    
+
 }

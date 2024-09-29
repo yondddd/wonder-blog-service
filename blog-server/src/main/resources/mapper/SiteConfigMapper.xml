@@ -9,10 +9,10 @@
     <sql id="ALL_FILED">
         id
         as id,
-        name_en as nameEn,
-        name_zh as nameZh,
-        value as value,
-        type as type
+        `key` as `key`,
+        `name` as `name`,
+        `value` as `value`,
+        `type` as `type`
     </sql>
 
     <select id="listAll" resultMap="BaseResultMap">
@@ -25,17 +25,17 @@
         insert into site_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
-            <if test="nameEn != null">name_en,</if>
-            <if test="nameZh != null">name_zh,</if>
-            <if test="value != null">value,</if>
-            <if test="type != null">type,</if>
+            <if test="`key` != null">`key`,</if>
+            <if test="`name` != null">`name`,</if>
+            <if test="`value` != null">`value`,</if>
+            <if test="type != null">`type`,</if>
         </trim>
-        values
+        `value`s
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id,jdbcType=NUMERIC},</if>
-            <if test="nameEn != null">#{nameEn,jdbcType=VARCHAR},</if>
-            <if test="nameZh != null">#{nameZh,jdbcType=VARCHAR},</if>
-            <if test="value != null">#{value,jdbcType=VARCHAR},</if>
+            <if test="`key` != null">#{`key`,jdbcType=VARCHAR},</if>
+            <if test="`name` != null">#{`name`,jdbcType=VARCHAR},</if>
+            <if test="`value` != null">#{`value`,jdbcType=VARCHAR},</if>
             <if test="type != null">#{type,jdbcType=NUMERIC},</if>
         </trim>
     </insert>
@@ -44,10 +44,10 @@
     <update id="updateSelective">
         update site_config
         <set>
-            <if test="nameEn != null">name_en=#{nameEn,jdbcType=VARCHAR},</if>
-            <if test="nameZh != null">name_zh=#{nameZh,jdbcType=VARCHAR},</if>
-            <if test="value != null">value=#{value,jdbcType=VARCHAR},</if>
-            <if test="type != null">type=#{type,jdbcType=NUMERIC},</if>
+            <if test="`key` != null">`key`=#{`key`,jdbcType=VARCHAR},</if>
+            <if test="`name` != null">`name`=#{`name`,jdbcType=VARCHAR},</if>
+            <if test="`value` != null">`value`=#{`value`,jdbcType=VARCHAR},</if>
+            <if test="type != null">`type`=#{type,jdbcType=NUMERIC},</if>
         </set>
         where id = #{id,jdbcType=NUMERIC}
     </update>

@@ -4,11 +4,11 @@ import com.yond.blog.entity.MomentDO;
 import com.yond.blog.service.MomentService;
 import com.yond.blog.util.jwt.JwtUtil;
 import com.yond.blog.web.view.req.MomentPageReq;
-import com.yond.blog.web.view.vo.PageResult;
 import com.yond.common.annotation.AccessLimit;
 import com.yond.common.annotation.VisitLogger;
 import com.yond.common.constant.JwtConstant;
 import com.yond.common.enums.VisitBehavior;
+import com.yond.common.resp.PageResponse;
 import com.yond.common.resp.Response;
 import io.jsonwebtoken.Claims;
 import jakarta.annotation.Resource;
@@ -26,24 +26,24 @@ import java.util.List;
 @RestController
 @RequestMapping("/view/moment")
 public class MomentController {
-    
+
     @Resource
     private MomentService momentService;
-    
+
     @VisitLogger(VisitBehavior.MOMENT)
     @PostMapping("/page")
-    public Response<PageResult<MomentDO>> moments(@RequestBody MomentPageReq req,
-                                                  @RequestHeader(value = JwtConstant.TOKEN_HEADER, defaultValue = "") String jwt) {
-        
+    public PageResponse<List<MomentDO>> moments(@RequestBody MomentPageReq req,
+                                                @RequestHeader(value = JwtConstant.TOKEN_HEADER, defaultValue = "") String jwt) {
+
         Pair<Boolean, String> check = this.check(jwt);
         if (StringUtils.isNotBlank(check.getRight())) {
-            return Response.custom(403, check.getRight());
+            return PageResponse.<List<MomentDO>>custom().setCode(403).setMessage(check.getRight());
         }
         Pair<Integer, List<MomentDO>> pair = momentService.page(check.getLeft(), true, req.getPageNo(), req.getPageSize());
-        PageResult<MomentDO> pageResult = new PageResult<>(pair.getLeft(), pair.getRight());
-        return Response.success(pageResult);
+        return PageResponse.<List<MomentDO>>custom()
+                .setTotal(pair.getLeft()).setData(pair.getRight()).setPageNo(req.getPageNo()).setPageSize(req.getPageSize()).setSuccess();
     }
-    
+
     @AccessLimit(seconds = 86400, maxCount = 1, msg = "不可以重复点赞哦")
     @VisitLogger(VisitBehavior.LIKE_MOMENT)
     @PostMapping("/like/{id}")
@@ -52,7 +52,7 @@ public class MomentController {
         momentService.incrLikeById(id);
         return Response.success();
     }
-    
+
     private Pair<Boolean, String> check(String jwt) {
         boolean adminIdentity = false;
         if (!JwtUtil.judgeTokenIsExist(jwt)) {
@@ -72,5 +72,5 @@ public class MomentController {
         }
         return Pair.of(adminIdentity, null);
     }
-    
+
 }

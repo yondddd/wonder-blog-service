@@ -4,28 +4,21 @@ import com.yond.blog.cache.local.SiteSettingCache;
 import com.yond.blog.entity.SiteConfigDO;
 import com.yond.blog.mapper.SiteConfigMapper;
 import com.yond.blog.service.SiteConfigService;
-import com.yond.blog.web.view.vo.Badge;
-import com.yond.blog.web.view.vo.Copyright;
-import com.yond.blog.web.view.vo.Favorite;
-import com.yond.blog.web.view.vo.IntroductionVO;
 import com.yond.common.constant.SiteConfigConstant;
-import com.yond.common.enums.SiteSettingTypeEnum;
+import com.yond.common.enums.SiteConfigTypeEnum;
 import com.yond.common.exception.PersistenceException;
 import com.yond.common.utils.env.env.EnvConstant;
 import com.yond.common.utils.env.env.Environment;
-import com.yond.common.utils.json.util.JsonUtils;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -34,107 +27,24 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SiteConfigServiceImpl implements SiteConfigService, InitializingBean {
-    
-    private final SiteConfigMapper siteConfigMapper;
-    
-    public SiteConfigServiceImpl(SiteConfigMapper siteConfigMapper) {
-        this.siteConfigMapper = siteConfigMapper;
-    }
-    
-    private static final Pattern PATTERN = Pattern.compile("\"(.*?)\"");
-    
+
+    @Resource
+    private SiteConfigMapper siteConfigMapper;
+
     @Override
     public void afterPropertiesSet() throws Exception {
         List<SiteConfigDO> list = this.listAll();
         for (SiteConfigDO setting : list) {
-            if (SiteConfigConstant.TENCENT_IP_KEY.equals(setting.getNameEn())) {
+            if (SiteConfigConstant.KEY_TENCENT_MAP_IP.equals(setting.getKey())) {
                 Environment.setProperty(EnvConstant.TENCENT_IP_KET, setting.getValue());
             }
         }
     }
-    
-    
-    @Override
-    public Map<String, Object> getSiteInfoForView() {
-        List<SiteConfigDO> siteSettings = this.listAll();
-        Map<String, Object> siteInfo = new HashMap<>(2);
-        List<Badge> badges = new ArrayList<>();
-        IntroductionVO introductionVO = new IntroductionVO();
-        List<Favorite> favorites = new ArrayList<>();
-        List<String> rollTexts = new ArrayList<>();
-        for (SiteConfigDO s : siteSettings) {
-            SiteSettingTypeEnum typeEnum = SiteSettingTypeEnum.getByVal(s.getType());
-            switch (typeEnum) {
-                case SiteSettingTypeEnum.BLOG_INFO:
-                    if (SiteConfigConstant.COPYRIGHT.equals(s.getNameEn())) {
-                        Copyright copyright = JsonUtils.fromJson(s.getValue(), Copyright.class);
-                        siteInfo.put(s.getNameEn(), copyright);
-                    } else {
-                        siteInfo.put(s.getNameEn(), s.getValue());
-                    }
-                    break;
-                case SiteSettingTypeEnum.PERSON_INFO:
-                    switch (s.getNameEn()) {
-                        case SiteConfigConstant.AVATAR:
-                            introductionVO.setAvatar(s.getValue());
-                            break;
-                        case SiteConfigConstant.NAME:
-                            introductionVO.setName(s.getValue());
-                            break;
-                        case SiteConfigConstant.GITHUB:
-                            introductionVO.setGithub(s.getValue());
-                            break;
-                        case SiteConfigConstant.TELEGRAM:
-                            introductionVO.setTelegram(s.getValue());
-                            break;
-                        case SiteConfigConstant.QQ:
-                            introductionVO.setQq(s.getValue());
-                            break;
-                        case SiteConfigConstant.BILIBILI:
-                            introductionVO.setBilibili(s.getValue());
-                            break;
-                        case SiteConfigConstant.NETEASE:
-                            introductionVO.setNetease(s.getValue());
-                            break;
-                        case SiteConfigConstant.EMAIL:
-                            introductionVO.setEmail(s.getValue());
-                            break;
-                        case SiteConfigConstant.FAVORITE:
-                            Favorite favorite = JsonUtils.fromJson(s.getValue(), Favorite.class);
-                            favorites.add(favorite);
-                            break;
-                        case SiteConfigConstant.ROLL_TEXT:
-                            Matcher m = PATTERN.matcher(s.getValue());
-                            while (m.find()) {
-                                rollTexts.add(m.group(1));
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case SiteSettingTypeEnum.BOTTOM_BADGE:
-                    Badge badge = JsonUtils.fromJson(s.getValue(), Badge.class);
-                    badges.add(badge);
-                    break;
-                default:
-                    break;
-            }
-        }
-        introductionVO.setFavorites(favorites);
-        introductionVO.setRollText(rollTexts);
-        Map<String, Object> map = new HashMap<>(8);
-        map.put("introduction", introductionVO);
-        map.put("siteInfo", siteInfo);
-        map.put("badges", badges);
-        return map;
-    }
-    
-    
+
     @Override
     public String getValue(String key) {
         SiteConfigDO exist = this.listAll()
-                .stream().filter(x -> key.equals(x.getNameEn()))
+                .stream().filter(x -> key.equals(x.getKey()))
                 .findFirst()
                 .orElse(null);
         if (exist != null) {
@@ -142,11 +52,11 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         }
         return null;
     }
-    
+
     @Override
     public void updateValue(String key, String value) {
         SiteConfigDO exist = this.listAll()
-                .stream().filter(x -> key.equals(x.getNameEn()))
+                .stream().filter(x -> key.equals(x.getKey()))
                 .findFirst()
                 .orElse(null);
         if (exist == null) {
@@ -155,13 +65,13 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         exist.setValue(value);
         this.updateOneSiteSetting(exist);
     }
-    
+
     @Override
-    public List<SiteConfigDO> listByType(SiteSettingTypeEnum typeEnum) {
+    public List<SiteConfigDO> listByType(SiteConfigTypeEnum typeEnum) {
         return this.listAll().stream()
                 .filter(x -> typeEnum.getVal().equals(x.getType())).collect(Collectors.toList());
     }
-    
+
     @Override
     public List<SiteConfigDO> listAll() {
         List<SiteConfigDO> siteSettings = SiteSettingCache.get();
@@ -171,18 +81,18 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         }
         return siteSettings;
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public synchronized void coverUpdate(List<SiteConfigDO> data) {
         Map<String, SiteConfigDO> map = this.listAll().stream()
-                .collect(Collectors.toMap(SiteConfigDO::getNameEn, Function.identity(), (key1, key2) -> key1));
+                .collect(Collectors.toMap(SiteConfigDO::getKey, Function.identity(), (key1, key2) -> key1));
         List<SiteConfigDO> insert = new ArrayList<>();
         List<SiteConfigDO> update = new ArrayList<>();
         for (SiteConfigDO datum : data) {
-            SiteConfigDO exist = map.get(datum.getNameEn());
+            SiteConfigDO exist = map.get(datum.getKey());
             if (datum.getId() == null) {
-                Assert.isNull(exist, datum.getNameEn() + " is exist");
+                Assert.isNull(exist, datum.getKey() + " is exist");
                 insert.add(datum);
             } else {
                 update.add(datum);
@@ -195,30 +105,30 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
             SiteConfigDO toUpdate = new SiteConfigDO();
             toUpdate.setId(item.getId());
             toUpdate.setValue(item.getValue());
-            toUpdate.setNameZh(item.getNameZh());
+            toUpdate.setName(item.getName());
             this.updateOneSiteSetting(toUpdate);
         }
     }
-    
+
     private void saveOneSiteSetting(SiteConfigDO siteSetting) {
         if (siteConfigMapper.insertSelective(siteSetting) != 1) {
             throw new PersistenceException("配置添加失败");
         }
         this.deleteSiteInfoRedisCache();
     }
-    
+
     private void updateOneSiteSetting(SiteConfigDO siteSetting) {
         if (siteConfigMapper.updateSelective(siteSetting) != 1) {
             throw new PersistenceException("配置修改失败");
         }
         this.deleteSiteInfoRedisCache();
     }
-    
+
     /**
      * 删除站点信息缓存
      */
     private void deleteSiteInfoRedisCache() {
         SiteSettingCache.del();
     }
-    
+
 }
