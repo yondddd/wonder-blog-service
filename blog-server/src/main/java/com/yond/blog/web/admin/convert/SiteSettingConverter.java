@@ -11,9 +11,8 @@ public class SiteSettingConverter {
 
     public static SiteSettingVO do2vo(SiteConfigDO from) {
         SiteSettingVO to = new SiteSettingVO();
-        to.setId(from.getId());
-        to.setNameEn(from.getKey());
-        to.setNameZh(from.getName());
+        to.setKey(from.getKey());
+        to.setName(from.getName());
         to.setValue(from.getValue());
         to.setType(from.getType());
         return to;
@@ -21,9 +20,8 @@ public class SiteSettingConverter {
 
     public static SiteConfigDO vo2do(SiteSettingVO from) {
         SiteConfigDO to = new SiteConfigDO();
-        to.setId(from.getId());
-        to.setKey(from.getNameEn());
-        to.setName(from.getNameZh());
+        to.setKey(from.getKey());
+        to.setName(from.getName());
         to.setValue(from.getValue());
         to.setType(from.getType());
         return to;

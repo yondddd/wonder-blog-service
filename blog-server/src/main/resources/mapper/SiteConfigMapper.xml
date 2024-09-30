@@ -25,17 +25,17 @@
         insert into site_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
-            <if test="`key` != null">`key`,</if>
-            <if test="`name` != null">`name`,</if>
-            <if test="`value` != null">`value`,</if>
+            <if test="key != null">`key`,</if>
+            <if test="name != null">`name`,</if>
+            <if test="value != null">`value`,</if>
             <if test="type != null">`type`,</if>
         </trim>
-        `value`s
+        values
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id,jdbcType=NUMERIC},</if>
-            <if test="`key` != null">#{`key`,jdbcType=VARCHAR},</if>
-            <if test="`name` != null">#{`name`,jdbcType=VARCHAR},</if>
-            <if test="`value` != null">#{`value`,jdbcType=VARCHAR},</if>
+            <if test="key != null">#{key,jdbcType=VARCHAR},</if>
+            <if test="name != null">#{name,jdbcType=VARCHAR},</if>
+            <if test="value != null">#{value,jdbcType=VARCHAR},</if>
             <if test="type != null">#{type,jdbcType=NUMERIC},</if>
         </trim>
     </insert>
@@ -44,12 +44,11 @@
     <update id="updateSelective">
         update site_config
         <set>
-            <if test="`key` != null">`key`=#{`key`,jdbcType=VARCHAR},</if>
-            <if test="`name` != null">`name`=#{`name`,jdbcType=VARCHAR},</if>
-            <if test="`value` != null">`value`=#{`value`,jdbcType=VARCHAR},</if>
+            <if test="name != null">`name`=#{name,jdbcType=VARCHAR},</if>
+            <if test="value != null">`value`=#{value,jdbcType=VARCHAR},</if>
             <if test="type != null">`type`=#{type,jdbcType=NUMERIC},</if>
         </set>
-        where id = #{id,jdbcType=NUMERIC}
+        where `key` = #{key,jdbcType=VARCHAR}
     </update>
 
 

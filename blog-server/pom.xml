@@ -10,7 +10,7 @@
     </parent>
 
     <name>blog-server</name>
-    <url>https://naccl.top/</url>
+    <url>https://yond.top/</url>
     <description>Blog SERVER</description>
 
     <artifactId>blog-server</artifactId>

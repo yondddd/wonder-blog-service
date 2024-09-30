@@ -12,9 +12,8 @@ public class SiteSettingVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 4625283143459868022L;
 
-    private Long id;
-    private String nameEn;
-    private String nameZh;
+    private String key;
+    private String name;
     private String value;
     private Integer type;
 
@@ -22,30 +21,21 @@ public class SiteSettingVO implements Serializable {
         return new SiteSettingVO();
     }
 
-    public Long getId() {
-        return id;
+    public String getKey() {
+        return key;
     }
 
-    public SiteSettingVO setId(Long id) {
-        this.id = id;
+    public SiteSettingVO setKey(String key) {
+        this.key = key;
         return this;
     }
 
-    public String getNameEn() {
-        return nameEn;
+    public String getName() {
+        return name;
     }
 
-    public SiteSettingVO setNameEn(String nameEn) {
-        this.nameEn = nameEn;
-        return this;
-    }
-
-    public String getNameZh() {
-        return nameZh;
-    }
-
-    public SiteSettingVO setNameZh(String nameZh) {
-        this.nameZh = nameZh;
+    public SiteSettingVO setName(String name) {
+        this.name = name;
         return this;
     }
 
@@ -70,9 +60,8 @@ public class SiteSettingVO implements Serializable {
     @Override
     public String toString() {
         return "SiteSettingVO{" +
-                "id=" + id +
-                ", nameEn='" + nameEn + '\'' +
-                ", nameZh='" + nameZh + '\'' +
+                "key='" + key + '\'' +
+                ", name='" + name + '\'' +
                 ", value='" + value + '\'' +
                 ", type=" + type +
                 '}';

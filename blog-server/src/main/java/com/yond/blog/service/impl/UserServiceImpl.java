@@ -6,6 +6,8 @@ import com.yond.blog.service.UserService;
 import com.yond.blog.util.encrypt.AesUtil;
 import com.yond.blog.web.handler.session.UserSession;
 import com.yond.common.exception.NotFoundException;
+import com.yond.common.utils.env.env.EnvConstant;
+import com.yond.common.utils.env.env.Environment;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,26 +16,26 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl implements UserService {
-    
+
     private final UserMapper userMapper;
-    
+
     public UserServiceImpl(UserMapper userMapper) {
         this.userMapper = userMapper;
     }
-    
-    
+
+
     @Override
     public UserDO getByNameAndPassword(String username, String password) {
         UserDO user = userMapper.getByUserName(username);
         if (user == null) {
             return null;
         }
-        if (!password.equals(AesUtil.decrypt(user.getPassword()))) {
+        if (!password.equals(AesUtil.decrypt(user.getPassword(), Environment.getProperty(EnvConstant.USER_PASSWORD_SECRET_KEY)))) {
             return null;
         }
         return user;
     }
-    
+
     @Override
     public UserDO getById(Long id) {
         UserDO user = userMapper.getById(id);
@@ -42,12 +44,12 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
-    
+
     @Override
     public UserDO getByGuid(String guid) {
         return userMapper.getByGuid(guid);
     }
-    
+
     @Override
     public String changeAccount(String userName, String pwd, UserSession userSession) {
         UserDO currentUser = userMapper.getByGuid(userSession.getGuid());
@@ -57,8 +59,8 @@ public class UserServiceImpl implements UserService {
         if (!currentUser.getUsername().equals(userName)) {
             return "当前操作用户与修改用户不一致";
         }
-        userMapper.updatePassword(currentUser.getId(), AesUtil.encrypt(pwd));
+        userMapper.updatePassword(currentUser.getId(), AesUtil.encrypt(pwd, Environment.getProperty(EnvConstant.USER_PASSWORD_SECRET_KEY)));
         return null;
     }
-    
+
 }

@@ -9,7 +9,6 @@ import com.yond.common.exception.PersistenceException;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +22,10 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SiteConfigServiceImpl implements SiteConfigService {
-    
+
     @Resource
     private SiteConfigMapper siteConfigMapper;
-    
+
     @Override
     public String getValue(String key) {
         SiteConfigDO exist = this.listAll()
@@ -38,7 +37,7 @@ public class SiteConfigServiceImpl implements SiteConfigService {
         }
         return null;
     }
-    
+
     @Override
     public void updateValue(String key, String value) {
         SiteConfigDO exist = this.listAll()
@@ -51,13 +50,13 @@ public class SiteConfigServiceImpl implements SiteConfigService {
         exist.setValue(value);
         this.updateOneSiteSetting(exist);
     }
-    
+
     @Override
     public List<SiteConfigDO> listByType(SiteConfigTypeEnum typeEnum) {
         return this.listAll().stream()
                 .filter(x -> typeEnum.getVal().equals(x.getType())).collect(Collectors.toList());
     }
-    
+
     @Override
     public List<SiteConfigDO> listAll() {
         List<SiteConfigDO> siteSettings = SiteSettingCache.get();
@@ -67,7 +66,7 @@ public class SiteConfigServiceImpl implements SiteConfigService {
         }
         return siteSettings;
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public synchronized void coverUpdate(List<SiteConfigDO> data) {
@@ -77,8 +76,7 @@ public class SiteConfigServiceImpl implements SiteConfigService {
         List<SiteConfigDO> update = new ArrayList<>();
         for (SiteConfigDO datum : data) {
             SiteConfigDO exist = map.get(datum.getKey());
-            if (datum.getId() == null) {
-                Assert.isNull(exist, datum.getKey() + " is exist");
+            if (exist == null) {
                 insert.add(datum);
             } else {
                 update.add(datum);
@@ -89,32 +87,32 @@ public class SiteConfigServiceImpl implements SiteConfigService {
         }
         for (SiteConfigDO item : update) {
             SiteConfigDO toUpdate = new SiteConfigDO();
-            toUpdate.setId(item.getId());
+            toUpdate.setKey(item.getKey());
             toUpdate.setValue(item.getValue());
             toUpdate.setName(item.getName());
             this.updateOneSiteSetting(toUpdate);
         }
     }
-    
+
     private void saveOneSiteSetting(SiteConfigDO siteSetting) {
         if (siteConfigMapper.insertSelective(siteSetting) != 1) {
             throw new PersistenceException("配置添加失败");
         }
         this.deleteSiteInfoRedisCache();
     }
-    
+
     private void updateOneSiteSetting(SiteConfigDO siteSetting) {
         if (siteConfigMapper.updateSelective(siteSetting) != 1) {
             throw new PersistenceException("配置修改失败");
         }
         this.deleteSiteInfoRedisCache();
     }
-    
+
     /**
      * 删除站点信息缓存
      */
     private void deleteSiteInfoRedisCache() {
         SiteSettingCache.del();
     }
-    
+
 }

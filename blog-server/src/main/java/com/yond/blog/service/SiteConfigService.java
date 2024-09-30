@@ -17,8 +17,7 @@ public interface SiteConfigService {
 
     /**
      * 全量覆盖更新
-     * id不存在的新增、id存在的更新
-     * nameEn 不能重复
+     * key不存在的新增、存在的更新
      */
     void coverUpdate(List<SiteConfigDO> data);
 

@@ -22,51 +22,56 @@ public class SiteConfigDO implements Serializable {
     }
 
     public Long getId() {
-        return this.id;
+        return id;
+    }
+
+    public SiteConfigDO setId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public String getKey() {
-        return this.key;
+        return key;
+    }
+
+    public SiteConfigDO setKey(String key) {
+        this.key = key;
+        return this;
     }
 
     public String getName() {
-        return this.name;
+        return name;
+    }
+
+    public SiteConfigDO setName(String name) {
+        this.name = name;
+        return this;
     }
 
     public String getValue() {
-        return this.value;
+        return value;
+    }
+
+    public SiteConfigDO setValue(String value) {
+        this.value = value;
+        return this;
     }
 
     public Integer getType() {
-        return this.type;
+        return type;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public void setType(Integer type) {
+    public SiteConfigDO setType(Integer type) {
         this.type = type;
+        return this;
     }
 
     @Override
     public String toString() {
-        return "SiteSettingDO{" +
+        return "SiteConfigDO{" +
                 "id=" + id +
-                ", nameEn='" + key + '\'' +
-                ", nameZh='" + name + '\'' +
+                ", key='" + key + '\'' +
+                ", name='" + name + '\'' +
                 ", value='" + value + '\'' +
                 ", type=" + type +
                 '}';

@@ -1,8 +1,5 @@
 package com.yond.blog.util.encrypt;
 
-import com.yond.common.utils.env.env.EnvConstant;
-import com.yond.common.utils.env.env.Environment;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
@@ -12,11 +9,10 @@ import java.util.Base64;
  * @Author Yond
  */
 public class AesUtil {
-    
+
     private static final String AES_ALGORITHM = "AES";
-    
-    public static String encrypt(String plaintext) {
-        String secret = Environment.getProperty(EnvConstant.USER_PASSWORD_SECRET_KEY);
+
+    public static String encrypt(String plaintext, String secret) {
         try {
             SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), AES_ALGORITHM);
             Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
@@ -26,11 +22,10 @@ public class AesUtil {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        
+
     }
-    
-    public static String decrypt(String encryptedText) {
-        String secret = Environment.getProperty(EnvConstant.USER_PASSWORD_SECRET_KEY);
+
+    public static String decrypt(String encryptedText, String secret) {
         try {
             SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), AES_ALGORITHM);
             Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
@@ -41,5 +36,5 @@ public class AesUtil {
             throw new RuntimeException(e);
         }
     }
-    
+
 }
