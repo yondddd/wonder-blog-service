@@ -1,6 +1,5 @@
 package com.yond.blog.service.impl;
 
-import com.yond.blog.cache.local.BlogCache;
 import com.yond.blog.cache.local.CategoryCache;
 import com.yond.blog.entity.CategoryDO;
 import com.yond.blog.mapper.CategoryMapper;
@@ -76,9 +75,6 @@ public class CategoryServiceImpl implements CategoryService {
             throw new PersistenceException("分类更新失败");
         }
         CategoryCache.del();
-        // 修改了分类名，可能有首页文章关联了分类，也要更新首页缓存
-        // todo 只缓存数据库层
-        BlogCache.delInfo();
     }
     
     @Override

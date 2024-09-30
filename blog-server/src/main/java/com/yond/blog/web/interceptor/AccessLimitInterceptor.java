@@ -40,13 +40,8 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
         String method = request.getMethod();
         String requestURI = request.getRequestURI();
         String key = ip + ":" + method + ":" + requestURI;
-        Integer count = accessLimitCache.getCount(key);
-        if (count == null) {
-            accessLimitCache.incrBy(key, 1, seconds);
-            return true;
-        }
-        if (count < maxCount) {
-            accessLimitCache.increment(key, 1);
+        Long current = accessLimitCache.incrBy(key, 1, seconds);
+        if (current <= maxCount) {
             return true;
         }
         WebFilterUtil.returnFail(response, HttpStatus.SC_FORBIDDEN, Response.custom(403, accessLimit.msg()));

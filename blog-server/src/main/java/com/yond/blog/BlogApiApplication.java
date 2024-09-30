@@ -1,6 +1,5 @@
 package com.yond.blog;
 
-import com.yond.blog.util.agent.UserAgentUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
@@ -38,10 +37,9 @@ import org.springframework.boot.autoconfigure.websocket.servlet.WebSocketMessagi
         BatchAutoConfiguration.class
 })
 public class BlogApiApplication {
-
+    
     public static void main(String[] args) {
         SpringApplication.run(BlogApiApplication.class, args);
-        Thread.startVirtualThread(UserAgentUtils::init);
     }
-
+    
 }

@@ -14,6 +14,7 @@ import com.yond.common.enums.SiteConfigTypeEnum;
 import com.yond.common.resp.Response;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -25,8 +26,9 @@ import java.util.Map;
  * @Author: Yond
  */
 @RestController
+@RequestMapping("/view/index")
 public class IndexController {
-
+    
     @Resource
     private SiteConfigService siteConfigService;
     @Resource
@@ -35,11 +37,11 @@ public class IndexController {
     private CategoryService categoryService;
     @Resource
     private TagService tagService;
-
+    
     /**
      * 获取站点配置信息、最新推荐博客、分类列表、标签云、随机博客
      */
-    @GetMapping("/view/site")
+    @GetMapping("/site")
     public Response<IndexVO> site() {
         IndexVO data = new IndexVO();
         Map<String, String> map = new HashMap<>();
@@ -60,5 +62,5 @@ public class IndexController {
         data.setTagList(tagList);
         return Response.success(data);
     }
-
+    
 }

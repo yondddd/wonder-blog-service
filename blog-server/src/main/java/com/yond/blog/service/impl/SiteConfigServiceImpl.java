@@ -4,13 +4,9 @@ import com.yond.blog.cache.local.SiteSettingCache;
 import com.yond.blog.entity.SiteConfigDO;
 import com.yond.blog.mapper.SiteConfigMapper;
 import com.yond.blog.service.SiteConfigService;
-import com.yond.common.constant.SiteConfigConstant;
 import com.yond.common.enums.SiteConfigTypeEnum;
 import com.yond.common.exception.PersistenceException;
-import com.yond.common.utils.env.env.EnvConstant;
-import com.yond.common.utils.env.env.Environment;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -26,21 +22,11 @@ import java.util.stream.Collectors;
  * @Author: Yond
  */
 @Service
-public class SiteConfigServiceImpl implements SiteConfigService, InitializingBean {
-
+public class SiteConfigServiceImpl implements SiteConfigService {
+    
     @Resource
     private SiteConfigMapper siteConfigMapper;
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        List<SiteConfigDO> list = this.listAll();
-        for (SiteConfigDO setting : list) {
-            if (SiteConfigConstant.KEY_TENCENT_MAP_IP.equals(setting.getKey())) {
-                Environment.setProperty(EnvConstant.TENCENT_IP_KET, setting.getValue());
-            }
-        }
-    }
-
+    
     @Override
     public String getValue(String key) {
         SiteConfigDO exist = this.listAll()
@@ -52,7 +38,7 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         }
         return null;
     }
-
+    
     @Override
     public void updateValue(String key, String value) {
         SiteConfigDO exist = this.listAll()
@@ -65,13 +51,13 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         exist.setValue(value);
         this.updateOneSiteSetting(exist);
     }
-
+    
     @Override
     public List<SiteConfigDO> listByType(SiteConfigTypeEnum typeEnum) {
         return this.listAll().stream()
                 .filter(x -> typeEnum.getVal().equals(x.getType())).collect(Collectors.toList());
     }
-
+    
     @Override
     public List<SiteConfigDO> listAll() {
         List<SiteConfigDO> siteSettings = SiteSettingCache.get();
@@ -81,7 +67,7 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
         }
         return siteSettings;
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     @Override
     public synchronized void coverUpdate(List<SiteConfigDO> data) {
@@ -109,26 +95,26 @@ public class SiteConfigServiceImpl implements SiteConfigService, InitializingBea
             this.updateOneSiteSetting(toUpdate);
         }
     }
-
+    
     private void saveOneSiteSetting(SiteConfigDO siteSetting) {
         if (siteConfigMapper.insertSelective(siteSetting) != 1) {
             throw new PersistenceException("配置添加失败");
         }
         this.deleteSiteInfoRedisCache();
     }
-
+    
     private void updateOneSiteSetting(SiteConfigDO siteSetting) {
         if (siteConfigMapper.updateSelective(siteSetting) != 1) {
             throw new PersistenceException("配置修改失败");
         }
         this.deleteSiteInfoRedisCache();
     }
-
+    
     /**
      * 删除站点信息缓存
      */
     private void deleteSiteInfoRedisCache() {
         SiteSettingCache.del();
     }
-
+    
 }
