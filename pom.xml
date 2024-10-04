@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.yond</groupId>
-    <artifactId>blog-service</artifactId>
+    <groupId>com.wish</groupId>
+    <artifactId>wish-load-service</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>blog-common</module>
-        <module>blog-server</module>
+        <module>wish-load-common</module>
+        <module>wish-load-server</module>
     </modules>
 
     <parent>

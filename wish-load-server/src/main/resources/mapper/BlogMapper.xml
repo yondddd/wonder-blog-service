@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wish.blog.mapper.BlogMapper">
+
+    <resultMap id="BaseResultMap" type="com.wish.blog.entity.BlogDO">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="firstPicture" column="first_picture"/>
+        <result property="content" column="content"/>
+        <result property="description" column="description"/>
+        <result property="published" column="is_published"/>
+        <result property="recommend" column="is_recommend"/>
+        <result property="appreciation" column="is_appreciation"/>
+        <result property="commentEnabled" column="is_comment_enabled"/>
+        <result property="top" column="is_top"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="views" column="views"/>
+        <result property="words" column="words"/>
+        <result property="readTime" column="read_time"/>
+        <result property="password" column="password"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `id`
+        , `title`, `first_picture`, `content`, `description`, `is_published`, `is_recommend`, `is_appreciation`,
+        `is_comment_enabled`, `create_time`, `update_time`, `views`, `words`, `read_time`, `category_id`, `is_top`, `password`, `user_id`
+            ,`status`
+    </sql>
+
+    <select id="listByStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from blog
+        where
+        status = #{status,jdbcType=NUMERIC}
+    </select>
+
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
+        insert into blog
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="title != null">title,</if>
+            <if test="firstPicture != null">first_picture,</if>
+            <if test="content != null">content,</if>
+            <if test="description != null">description,</if>
+            <if test="published != null">is_published,</if>
+            <if test="recommend != null">is_recommend,</if>
+            <if test="appreciation != null">is_appreciation,</if>
+            <if test="commentEnabled != null">is_comment_enabled,</if>
+            <if test="top != null">is_top,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="views != null">views,</if>
+            <if test="words != null">words,</if>
+            <if test="readTime != null">read_time,</if>
+            <if test="password != null">password,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=NUMERIC},</if>
+            <if test="categoryId != null">#{categoryId,jdbcType=NUMERIC},</if>
+            <if test="userId != null">#{userId,jdbcType=NUMERIC},</if>
+            <if test="title != null">#{title,jdbcType=VARCHAR},</if>
+            <if test="firstPicture != null">#{firstPicture,jdbcType=VARCHAR},</if>
+            <if test="content != null">#{content,jdbcType=VARCHAR},</if>
+            <if test="description != null">#{description,jdbcType=VARCHAR},</if>
+            <if test="published != null">#{published,jdbcType=BOOLEAN},</if>
+            <if test="recommend != null">#{recommend,jdbcType=BOOLEAN},</if>
+            <if test="appreciation != null">#{appreciation,jdbcType=BOOLEAN},</if>
+            <if test="commentEnabled != null">#{commentEnabled,jdbcType=BOOLEAN},</if>
+            <if test="top != null">#{top,jdbcType=BOOLEAN},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null">#{updateTime,jdbcType=TIMESTAMP},</if>
+            <if test="views != null">#{views,jdbcType=NUMERIC},</if>
+            <if test="words != null">#{words,jdbcType=NUMERIC},</if>
+            <if test="readTime != null">#{readTime,jdbcType=NUMERIC},</if>
+            <if test="password != null">#{password,jdbcType=VARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=NUMERIC},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSelective">
+        update blog
+        <set>
+            <if test="categoryId != null">category_id=#{categoryId,jdbcType=NUMERIC},</if>
+            <if test="userId != null">user_id=#{userId,jdbcType=NUMERIC},</if>
+            <if test="title != null">title=#{title,jdbcType=VARCHAR},</if>
+            <if test="firstPicture != null">first_picture=#{firstPicture,jdbcType=VARCHAR},</if>
+            <if test="content != null">content=#{content,jdbcType=VARCHAR},</if>
+            <if test="description != null">description=#{description,jdbcType=VARCHAR},</if>
+            <if test="published != null">is_published=#{published,jdbcType=BOOLEAN},</if>
+            <if test="recommend != null">is_recommend=#{recommend,jdbcType=BOOLEAN},</if>
+            <if test="appreciation != null">is_appreciation=#{appreciation,jdbcType=BOOLEAN},</if>
+            <if test="commentEnabled != null">is_comment_enabled=#{commentEnabled,jdbcType=BOOLEAN},</if>
+            <if test="top != null">is_top=#{top,jdbcType=BOOLEAN},</if>
+            <if test="createTime != null">create_time=#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null">update_time=#{updateTime,jdbcType=TIMESTAMP},</if>
+            <if test="views != null">views=#{views,jdbcType=NUMERIC},</if>
+            <if test="words != null">words=#{words,jdbcType=NUMERIC},</if>
+            <if test="readTime != null">read_time=#{readTime,jdbcType=NUMERIC},</if>
+            <if test="password != null">password=#{password,jdbcType=VARCHAR},</if>
+            <if test="status != null">status=#{status,jdbcType=NUMERIC},</if>
+        </set>
+        where id = #{id,jdbcType=NUMERIC}
+    </update>
+
+    <update id="incrBlogView">
+        update blog set views = views + #{incr}
+        where id in
+        <foreach collection="blogIds" item="id" open="(" close=")" separator=",">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+
+
+</mapper>
