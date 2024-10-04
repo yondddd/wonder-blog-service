@@ -2,14 +2,14 @@
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
     <file url="file://$PROJECT_DIR$/blog-api-annotation/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/blog-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/blog-env/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/blog-extension/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/blog-log/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/blog-server/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/blog-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/wish-load-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/wish-load-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/wish-load-server/src/main/resources" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

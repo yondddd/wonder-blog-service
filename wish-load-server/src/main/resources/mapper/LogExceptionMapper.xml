@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wish.blog.mapper.LogExceptionMapper">
+
+    <resultMap id="BaseResultMap" type="com.wish.blog.entity.LogExceptionDO">
+        <id property="id" column="id"/>
+        <result property="uri" column="uri"/>
+        <result property="method" column="method"/>
+        <result property="param" column="param"/>
+        <result property="description" column="description"/>
+        <result property="error" column="error"/>
+        <result property="ip" column="ip"/>
+        <result property="ipSource" column="ip_source"/>
+        <result property="os" column="os"/>
+        <result property="browser" column="browser"/>
+        <result property="createTime" column="create_time"/>
+        <result property="userAgent" column="user_agent"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        , uri, method, param, description, error, ip, ip_source, os, browser, create_time, status
+    </sql>
+
+    <insert id="insertSelective">
+        insert into log_exception
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="uri != null">uri,</if>
+            <if test="method != null">method,</if>
+            <if test="param != null">param,</if>
+            <if test="description != null">description,</if>
+            <if test="error != null">error,</if>
+            <if test="ip != null">ip,</if>
+            <if test="ipSource != null">ip_source,</if>
+            <if test="os != null">os,</if>
+            <if test="browser != null">browser,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="userAgent != null">user_agent,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=NUMERIC},</if>
+            <if test="uri != null">#{uri,jdbcType=VARCHAR},</if>
+            <if test="method != null">#{method,jdbcType=VARCHAR},</if>
+            <if test="param != null">#{param,jdbcType=VARCHAR},</if>
+            <if test="description != null">#{description,jdbcType=VARCHAR},</if>
+            <if test="error != null">#{error,jdbcType=VARCHAR},</if>
+            <if test="ip != null">#{ip,jdbcType=VARCHAR},</if>
+            <if test="ipSource != null">#{ipSource,jdbcType=VARCHAR},</if>
+            <if test="os != null">#{os,jdbcType=VARCHAR},</if>
+            <if test="browser != null">#{browser,jdbcType=VARCHAR},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="userAgent != null">#{userAgent,jdbcType=VARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=NUMERIC},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSelective">
+        update log_exception
+        <set>
+            <if test="uri != null">uri=#{uri,jdbcType=VARCHAR},</if>
+            <if test="method != null">method=#{method,jdbcType=VARCHAR},</if>
+            <if test="param != null">param=#{param,jdbcType=VARCHAR},</if>
+            <if test="description != null">description=#{description,jdbcType=VARCHAR},</if>
+            <if test="error != null">error=#{error,jdbcType=VARCHAR},</if>
+            <if test="ip != null">ip=#{ip,jdbcType=VARCHAR},</if>
+            <if test="ipSource != null">ip_source=#{ipSource,jdbcType=VARCHAR},</if>
+            <if test="os != null">os=#{os,jdbcType=VARCHAR},</if>
+            <if test="browser != null">browser=#{browser,jdbcType=VARCHAR},</if>
+            <if test="createTime != null">create_time=#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="userAgent != null">user_agent=#{userAgent,jdbcType=VARCHAR},</if>
+            <if test="status != null">status=#{status,jdbcType=NUMERIC},</if>
+        </set>
+        where id = #{id,jdbcType=NUMERIC}
+    </update>
+
+
+    <select id="countBy" resultType="java.lang.Integer">
+        select count(*) from log_exception
+        <include refid="pageWhere"/>
+    </select>
+
+    <select id="pageBy" resultType="com.wish.blog.entity.LogExceptionDO">
+        select
+        <include refid="Base_Column_List"/>
+        from log_exception
+        <include refid="pageWhere"/>
+        order by id desc
+        limit #{offset},#{size}
+    </select>
+
+    <sql id="pageWhere">
+        <where>
+            status = 1
+            <if test="startDate != null">
+                and create_time >= #{startDate}
+            </if>
+            <if test="endDate != null">
+                and create_time &lt;= #{endDate}
+            </if>
+        </where>
+    </sql>
+</mapper>

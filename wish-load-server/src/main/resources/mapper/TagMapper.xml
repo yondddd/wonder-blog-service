@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wish.blog.mapper.TagMapper">
+
+    <resultMap id="tag" type="com.wish.blog.entity.TagDO">
+        <id property="id" column="id"/>
+        <result property="name" column="tag_name"/>
+        <result property="color" column="color"/>
+    </resultMap>
+
+    <sql id="ALL_FILED">
+        id
+        , tag_name, color
+    </sql>
+
+    <select id="listAll" resultMap="tag">
+        select
+        <include refid="ALL_FILED"/>
+        from tag order by id desc
+    </select>
+
+
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
+        insert into tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">tag_name,</if>
+            <if test="color != null">color,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=NUMERIC},</if>
+            <if test="name != null">#{name,jdbcType=VARCHAR},</if>
+            <if test="color != null">#{color,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateSelective">
+        update tag
+        <set>
+            <if test="name != null">tag_name=#{name,jdbcType=VARCHAR},</if>
+            <if test="color != null">color=#{color,jdbcType=VARCHAR},</if>
+        </set>
+        where id = #{id,jdbcType=NUMERIC}
+    </update>
+
+
+    <delete id="deleteById">
+        delete
+        from tag
+        where id = #{id}
+    </delete>
+
+</mapper>
