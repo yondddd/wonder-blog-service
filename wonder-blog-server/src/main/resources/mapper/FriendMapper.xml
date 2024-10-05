@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonder.blog.mapper.FriendMapper">
+
+    <resultMap id="BaseResultMap" type="com.wonder.blog.entity.FriendDO">
+        <id property="id" column="id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="description" column="description"/>
+        <result property="website" column="website"/>
+        <result property="avatar" column="avatar"/>
+        <result property="published" column="is_published"/>
+        <result property="views" column="views"/>
+        <result property="createTime" column="create_time"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        , nickname, description, website, avatar, is_published, views, create_time, status
+    </sql>
+
+    <!--增加友链浏览次数-->
+    <update id="incrViewById">
+        update friend
+        set views=views + 1
+        where id = #{id}
+    </update>
+
+    <select id="listAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from friend
+    </select>
+
+    <insert id="insertSelective">
+        insert into friend
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="nickname != null">nickname,</if>
+            <if test="description != null">description,</if>
+            <if test="website != null">website,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="published != null">is_published,</if>
+            <if test="views != null">views,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=NUMERIC},</if>
+            <if test="nickname != null">#{nickname,jdbcType=VARCHAR},</if>
+            <if test="description != null">#{description,jdbcType=VARCHAR},</if>
+            <if test="website != null">#{website,jdbcType=VARCHAR},</if>
+            <if test="avatar != null">#{avatar,jdbcType=VARCHAR},</if>
+            <if test="published != null">#{published,jdbcType=BOOLEAN},</if>
+            <if test="views != null">#{views,jdbcType=NUMERIC},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="status != null">#{status,jdbcType=NUMERIC},</if>
+        </trim>
+    </insert>
+    <update id="updateSelective">
+        update friend
+        <set>
+            <if test="nickname != null">nickname=#{nickname,jdbcType=VARCHAR},</if>
+            <if test="description != null">description=#{description,jdbcType=VARCHAR},</if>
+            <if test="website != null">website=#{website,jdbcType=VARCHAR},</if>
+            <if test="avatar != null">avatar=#{avatar,jdbcType=VARCHAR},</if>
+            <if test="published != null">is_published=#{published,jdbcType=BOOLEAN},</if>
+            <if test="views != null">views=#{views,jdbcType=NUMERIC},</if>
+            <if test="createTime != null">create_time=#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="status != null">status=#{status,jdbcType=NUMERIC},</if>
+        </set>
+        where id = #{id,jdbcType=NUMERIC}
+    </update>
+
+
+</mapper>
