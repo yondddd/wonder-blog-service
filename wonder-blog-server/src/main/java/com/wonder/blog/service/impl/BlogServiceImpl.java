@@ -39,11 +39,18 @@ public class BlogServiceImpl implements BlogService {
                                                    Long tagId,
                                                    Integer pageNo,
                                                    Integer pageSize) {
+
         List<BlogDO> list = this.listEnable().stream()
                 .filter(x -> StringUtils.isBlank(title) || x.getTitle().contains(title))
                 .filter(x -> categoryId == null || categoryId.equals(x.getCategoryId()))
-                .sorted(Comparator.comparing(BlogDO::getCreateTime).reversed())
+                .sorted(Comparator.comparing(BlogDO::getTop).reversed()
+                        .thenComparing(Comparator.comparing(BlogDO::getUpdateTime).reversed()))
                 .collect(Collectors.toList());
+        if (tagId != null) {
+            List<BlogTagDO> refs = blogTagService.listByTagId(tagId);
+            Set<Long> blogIdSet = refs.stream().map(BlogTagDO::getBlogId).collect(Collectors.toSet());
+            list = list.stream().filter(x -> blogIdSet.contains(x.getId())).collect(Collectors.toList());
+        }
         return Pair.of(list.size(), PageUtil.pageList(list, pageNo, pageSize));
     }
 
@@ -53,6 +60,7 @@ public class BlogServiceImpl implements BlogService {
                                                   Integer pageNo,
                                                   Integer pageSize) {
         List<BlogDO> list = this.listEnable().stream()
+                .filter(BlogDO::getPublished)
                 .filter(x -> categoryId == null || categoryId.equals(x.getCategoryId()))
                 .sorted(Comparator.comparing(BlogDO::getTop).reversed().thenComparing(Comparator.comparing(BlogDO::getId).reversed()))
                 .collect(Collectors.toList());

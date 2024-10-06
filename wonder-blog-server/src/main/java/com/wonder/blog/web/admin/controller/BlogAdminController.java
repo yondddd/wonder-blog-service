@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/admin/blog")
 public class BlogAdminController {
-    
+
     @Resource
     private BlogService blogService;
     @Resource
@@ -44,13 +44,13 @@ public class BlogAdminController {
     private BlogTagService blogTagService;
     @Resource
     private TagService tagService;
-    
-    
+
+
     @PostMapping("/page")
     public @ResponseBody PageResponse<List<BlogVO>> page(@RequestBody BlogListPageReq req) {
-        
+
         Pair<Integer, List<BlogDO>> pair = blogService.adminPageBy(req.getTitle(), req.getCategoryId(),
-                null, req.getPageNo(), req.getPageSize());
+                req.getTagId(), req.getPageNo(), req.getPageSize());
         List<Long> categoryIds = pair.getRight().stream().map(BlogDO::getCategoryId).toList();
         Map<Long, String> map = categoryService.listByIds(categoryIds).stream()
                 .collect(Collectors.toMap(CategoryDO::getId, CategoryDO::getName, (key1, key2) -> key1));
@@ -58,7 +58,7 @@ public class BlogAdminController {
                 .map(x -> BlogConverter.do2vo(x, map.get(x.getCategoryId()), null)).toList();
         return PageResponse.<List<BlogVO>>custom().setData(data).setTotal(pair.getLeft()).setSuccess();
     }
-    
+
     @PostMapping("/detail")
     public Response<BlogVO> getBlog(@RequestBody BlogDetailReq req) {
         BlogDO blog = blogService.getBlogById(req.getId());
@@ -67,7 +67,7 @@ public class BlogAdminController {
         BlogVO data = BlogConverter.do2vo(blog, category.getName(), blogTags);
         return Response.success(data);
     }
-    
+
     @PostMapping("/listAllBase")
     public Response<List<BlogBaseVO>> listAllBase() {
         List<BlogBaseVO> data = new ArrayList<>();
@@ -81,7 +81,7 @@ public class BlogAdminController {
         });
         return Response.success(data);
     }
-    
+
     @OperationLogger("更新博客置顶状态")
     @PostMapping("/top")
     public Response<Boolean> top(UserSession userSession, @RequestBody BlogTopReq req) {
@@ -91,7 +91,7 @@ public class BlogAdminController {
         blogService.updateSelective(update);
         return Response.success();
     }
-    
+
     @OperationLogger("更新博客推荐状态")
     @PostMapping("/recommend")
     public Response<Boolean> recommend(UserSession userSession, @RequestBody BlogRecommendReq req) {
@@ -101,7 +101,7 @@ public class BlogAdminController {
         blogService.updateSelective(update);
         return Response.success();
     }
-    
+
     @OperationLogger("更新博客可见性状态")
     @PostMapping("/visible")
     public Response<Boolean> visible(UserSession userSession, @RequestBody BlogVisibleReq req) {
@@ -116,17 +116,17 @@ public class BlogAdminController {
         blogService.updateSelective(update);
         return Response.success();
     }
-    
+
     @OperationLogger("删除博客")
     @PostMapping("/del")
     public Response<Boolean> delete(UserSession userSession, @RequestBody BlogDelReq req) {
         blogService.delById(req.getId());
         return Response.success();
     }
-    
+
     @OperationLogger("发布博客")
     @PostMapping("/save")
-    public Response<Boolean> saveBlog(UserSession userSession, @RequestBody BlogSaveReq req) {
+    public Response<Long> saveBlog(UserSession userSession, @RequestBody BlogSaveReq req) {
         Assert.notNull(userSession, "用户信息不能为null");
         Assert.isNull(req.getId(), "博客id应为null");
         this.checkBlogSaveParam(req);
@@ -136,9 +136,9 @@ public class BlogAdminController {
         insert.setUserId(userSession.getUserId().intValue());
         Long blogId = blogService.insertSelective(insert);
         blogTagService.saveBlogTag(blogId, tagIds);
-        return Response.success();
+        return Response.success(blogId);
     }
-    
+
     @OperationLogger("更新博客")
     @PostMapping("/update")
     public Response<Boolean> updateBlog(UserSession userSession, @RequestBody BlogSaveReq req) {
@@ -153,14 +153,14 @@ public class BlogAdminController {
         blogTagService.saveBlogTag(update.getId(), tagIds);
         return Response.success();
     }
-    
+
     private Long geCategoryId(CategoryVO category) {
         if (category.getId() != null) {
             return category.getId();
         }
         return categoryService.saveIfAbsent(category.getName());
     }
-    
+
     private List<Long> getTagIds(List<TagVO> tags) {
         Assert.notEmpty(tags, "博客标签不能为空");
         List<Long> result = new ArrayList<>();
@@ -176,7 +176,7 @@ public class BlogAdminController {
         }
         return result;
     }
-    
+
     private void checkBlogSaveParam(BlogSaveReq req) {
         Assert.notNull(req, "请求为空");
         Assert.hasText(req.getTitle(), "标题不能为空");
@@ -193,5 +193,5 @@ public class BlogAdminController {
         Assert.notNull(req.getCategory(), "分类不能为空");
         Assert.notEmpty(req.getTags(), "标签不能为空");
     }
-    
+
 }
