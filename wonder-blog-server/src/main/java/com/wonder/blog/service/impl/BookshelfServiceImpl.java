@@ -64,6 +64,11 @@ public class BookshelfServiceImpl implements BookshelfService {
         this.updateSelective(del);
     }
 
+    @Override
+    public BookshelfDO getById(Integer id) {
+        return this.listAll().stream().filter(x -> id.equals(x.getId())).findFirst().orElse(null);
+    }
+
     private List<BookshelfDO> listAll() {
         List<BookshelfDO> cache = BookCache.get();
         if (cache == null) {

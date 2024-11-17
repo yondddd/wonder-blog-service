@@ -45,13 +45,16 @@ public class LocalAuthFilter implements LocalHttpFilter {
             servletResponse.setStatus(HttpServletResponse.SC_OK);
             return;
         }
-        
-        if (!servletPath.startsWith("/admin") || servletPath.contains("login")) {
+
+        if (!servletPath.startsWith("/admin") || servletPath.contains("login") || servletPath.contains("file/download")) {
             chain.doFilter(context);
             return;
         }
         
         String header = servletRequest.getHeader(JwtConstant.TOKEN_HEADER);
+        if (StringUtils.isBlank(header)) {
+            header = servletRequest.getParameter(JwtConstant.TOKEN_HEADER);
+        }
         if (StringUtils.isBlank(header)) {
             WebFilterUtil.returnFail(servletResponse, HttpServletResponse.SC_UNAUTHORIZED, Response.custom(HttpStatus.UNAUTHORIZED.value(), "token不存在"));
             return;

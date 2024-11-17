@@ -5,6 +5,7 @@ import com.wonder.blog.service.BookshelfService;
 import com.wonder.blog.web.admin.convert.BookshelfConverter;
 import com.wonder.blog.web.admin.convert.CategoryConverter;
 import com.wonder.blog.web.admin.req.BookshelfDelReq;
+import com.wonder.blog.web.admin.req.BookshelfDetailReq;
 import com.wonder.blog.web.admin.req.BookshelfPageReq;
 import com.wonder.blog.web.admin.req.CategoryDelReq;
 import com.wonder.blog.web.admin.vo.BookshelfVO;
@@ -14,6 +15,7 @@ import com.wonder.common.resp.PageResponse;
 import com.wonder.common.resp.Response;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +45,13 @@ public class BookshelfAdminController {
         Pair<Integer, List<BookshelfDO>> pair = bookshelfService.page(req.getPageNo(), req.getPageSize(), req.getAuthorName(), req.getBookName());
         List<BookshelfVO> data = pair.getRight().stream().map(BookshelfConverter::do2vo).toList();
         return PageResponse.<List<BookshelfVO>>custom().setSuccess().setData(data).setTotal(pair.getLeft());
+    }
+
+    @PostMapping("/detail")
+    public Response<BookshelfVO> detail(@RequestBody BookshelfDetailReq req) {
+        BookshelfDO exist = bookshelfService.getById(req.getId());
+        Assert.notNull(exist, "书籍不存在" + req.getId());
+        return Response.success(BookshelfConverter.do2vo(exist));
     }
 
     @OperationLogger("新增书籍")

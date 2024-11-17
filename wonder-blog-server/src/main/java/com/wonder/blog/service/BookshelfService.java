@@ -21,4 +21,6 @@ public interface BookshelfService {
     void updateSelective(BookshelfDO bookshelfDO);
 
     void deleteById(Long id);
+
+    BookshelfDO getById(Integer id);
 }
