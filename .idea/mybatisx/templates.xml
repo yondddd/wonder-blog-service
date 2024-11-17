@@ -15,8 +15,8 @@
             <option name="ignoreFieldSuffix" value="" />
             <option name="ignoreTablePrefix" value="" />
             <option name="ignoreTableSuffix" value="" />
-            <option name="moduleName" value="blog-server" />
-            <option name="modulePath" value="$PROJECT_DIR$/blog-server" />
+            <option name="moduleName" value="wonder-blog-server" />
+            <option name="modulePath" value="$PROJECT_DIR$/wonder-blog-server" />
             <option name="moduleUIInfoList">
               <list>
                 <ModuleInfoGo>
@@ -26,7 +26,7 @@
                   <option name="encoding" value="${domain.encoding}" />
                   <option name="fileName" value="${domain.fileName}Mapper" />
                   <option name="fileNameWithSuffix" value="${domain.fileName}Mapper.java" />
-                  <option name="modulePath" value="$PROJECT_DIR$/blog-server" />
+                  <option name="modulePath" value="$PROJECT_DIR$/wonder-blog-server" />
                   <option name="packageName" value="${domain.basePackage}.mapper" />
                 </ModuleInfoGo>
                 <ModuleInfoGo>
@@ -36,7 +36,7 @@
                   <option name="encoding" value="${domain.encoding}" />
                   <option name="fileName" value="${domain.fileName}Mapper" />
                   <option name="fileNameWithSuffix" value="${domain.fileName}Mapper.xml" />
-                  <option name="modulePath" value="$PROJECT_DIR$/blog-server" />
+                  <option name="modulePath" value="$PROJECT_DIR$/wonder-blog-server" />
                   <option name="packageName" value="mapper" />
                 </ModuleInfoGo>
               </list>
@@ -49,15 +49,15 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="BlogTag" />
-                  <option name="tableName" value="blog_tag" />
+                  <option name="className" value="Bookshelf" />
+                  <option name="tableName" value="bookshelf" />
                 </TableUIInfo>
               </list>
             </option>
             <option name="templatesName" value="default-all" />
           </GenerateConfig>
         </option>
-        <option name="moduleName" value="blog-server" />
+        <option name="moduleName" value="wonder-blog-server" />
         <option name="projectPath" value="$PROJECT_DIR$" />
         <option name="templateName" value="default-all" />
       </TemplateContext>
