@@ -11,7 +11,12 @@ public class SiteConfigConstant {
      * 博客名称
      */
     public static final String BLOG_NAME = "blog_name";
-    
+
+    /**
+     * 博客api域名
+     */
+    public static final String BLOG_API_DOMAIN = "blog_api_domain";
+
     /**
      * 网页标题后缀
      */

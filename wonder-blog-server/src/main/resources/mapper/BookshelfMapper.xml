@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonder.blog.mapper.BookshelfMapper">
+
+    <resultMap id="BaseResultMap" type="com.wonder.blog.entity.BookshelfDO">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="bookName" column="book_name" jdbcType="VARCHAR"/>
+            <result property="bookCover" column="book_cover" jdbcType="VARCHAR"/>
+            <result property="authorName" column="author_name" jdbcType="VARCHAR"/>
+            <result property="storageType" column="storage_type" jdbcType="VARCHAR"/>
+            <result property="url" column="url" jdbcType="VARCHAR"/>
+            <result property="authorInfo" column="author_info" jdbcType="VARCHAR"/>
+            <result property="bookInfo" column="book_info" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,book_name,book_cover,
+        author_name,storage_type,url,
+        author_info,book_info,status,
+        create_time,update_time
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from bookshelf
+        where  id = #{id,jdbcType=INTEGER} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from bookshelf
+        where  id = #{id,jdbcType=INTEGER} 
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.wonder.blog.entity.BookshelfDO" useGeneratedKeys="true">
+        insert into bookshelf
+        ( id,book_name,book_cover
+        ,author_name,storage_type,url
+        ,author_info,book_info,status
+        ,create_time,update_time)
+        values (#{id,jdbcType=INTEGER},#{bookName,jdbcType=VARCHAR},#{bookCover,jdbcType=VARCHAR}
+        ,#{authorName,jdbcType=VARCHAR},#{storageType,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR}
+        ,#{authorInfo,jdbcType=VARCHAR},#{bookInfo,jdbcType=VARCHAR},#{status,jdbcType=TINYINT}
+        ,#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.wonder.blog.entity.BookshelfDO" useGeneratedKeys="true">
+        insert into bookshelf
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="bookName != null">book_name,</if>
+                <if test="bookCover != null">book_cover,</if>
+                <if test="authorName != null">author_name,</if>
+                <if test="storageType != null">storage_type,</if>
+                <if test="url != null">url,</if>
+                <if test="authorInfo != null">author_info,</if>
+                <if test="bookInfo != null">book_info,</if>
+                <if test="status != null">status,</if>
+                <if test="createTime != null">create_time,</if>
+                <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null"> #{id,jdbcType=INTEGER},</if>
+                <if test="bookName != null"> #{bookName,jdbcType=VARCHAR},</if>
+                <if test="bookCover != null"> #{bookCover,jdbcType=VARCHAR},</if>
+                <if test="authorName != null"> #{authorName,jdbcType=VARCHAR},</if>
+                <if test="storageType != null"> #{storageType,jdbcType=VARCHAR},</if>
+                <if test="url != null"> #{url,jdbcType=VARCHAR},</if>
+                <if test="authorInfo != null"> #{authorInfo,jdbcType=VARCHAR},</if>
+                <if test="bookInfo != null"> #{bookInfo,jdbcType=VARCHAR},</if>
+                <if test="status != null"> #{status,jdbcType=TINYINT},</if>
+                <if test="createTime != null"> #{createTime,jdbcType=TIMESTAMP},</if>
+                <if test="updateTime != null"> #{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wonder.blog.entity.BookshelfDO">
+        update bookshelf
+        <set>
+                <if test="bookName != null">
+                    book_name = #{bookName,jdbcType=VARCHAR},
+                </if>
+                <if test="bookCover != null">
+                    book_cover = #{bookCover,jdbcType=VARCHAR},
+                </if>
+                <if test="authorName != null">
+                    author_name = #{authorName,jdbcType=VARCHAR},
+                </if>
+                <if test="storageType != null">
+                    storage_type = #{storageType,jdbcType=VARCHAR},
+                </if>
+                <if test="url != null">
+                    url = #{url,jdbcType=VARCHAR},
+                </if>
+                <if test="authorInfo != null">
+                    author_info = #{authorInfo,jdbcType=VARCHAR},
+                </if>
+                <if test="bookInfo != null">
+                    book_info = #{bookInfo,jdbcType=VARCHAR},
+                </if>
+                <if test="status != null">
+                    status = #{status,jdbcType=TINYINT},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="updateTime != null">
+                    update_time = #{updateTime,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where   id = #{id,jdbcType=INTEGER} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.wonder.blog.entity.BookshelfDO">
+        update bookshelf
+        set 
+            book_name =  #{bookName,jdbcType=VARCHAR},
+            book_cover =  #{bookCover,jdbcType=VARCHAR},
+            author_name =  #{authorName,jdbcType=VARCHAR},
+            storage_type =  #{storageType,jdbcType=VARCHAR},
+            url =  #{url,jdbcType=VARCHAR},
+            author_info =  #{authorInfo,jdbcType=VARCHAR},
+            book_info =  #{bookInfo,jdbcType=VARCHAR},
+            status =  #{status,jdbcType=TINYINT},
+            create_time =  #{createTime,jdbcType=TIMESTAMP},
+            update_time =  #{updateTime,jdbcType=TIMESTAMP}
+        where   id = #{id,jdbcType=INTEGER} 
+    </update>
+    <select id="listAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bookshelf
+    </select>
+</mapper>

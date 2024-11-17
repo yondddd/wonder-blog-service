@@ -39,6 +39,8 @@ public class InitManager implements InitializingBean {
                         Environment.setProperty(EnvConstant.TENCENT_IP_KEY, setting.getValue());
                 case SiteConfigConstant.KEY_USER_PASSWORD_SECRET ->
                         Environment.setProperty(EnvConstant.USER_PASSWORD_SECRET_KEY, setting.getValue());
+                case SiteConfigConstant.BLOG_API_DOMAIN ->
+                        Environment.setProperty(EnvConstant.BLOG_API_DOMAIN, setting.getValue());
                 default -> {
                 }
             }
