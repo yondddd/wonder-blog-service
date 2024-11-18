@@ -9,7 +9,6 @@
             <result property="bookName" column="book_name" jdbcType="VARCHAR"/>
             <result property="bookCover" column="book_cover" jdbcType="VARCHAR"/>
             <result property="authorName" column="author_name" jdbcType="VARCHAR"/>
-            <result property="storageType" column="storage_type" jdbcType="VARCHAR"/>
             <result property="url" column="url" jdbcType="VARCHAR"/>
             <result property="authorInfo" column="author_info" jdbcType="VARCHAR"/>
             <result property="bookInfo" column="book_info" jdbcType="VARCHAR"/>
@@ -20,7 +19,7 @@
 
     <sql id="Base_Column_List">
         id,book_name,book_cover,
-        author_name,storage_type,url,
+        author_name,url,
         author_info,book_info,status,
         create_time,update_time
     </sql>
@@ -39,11 +38,11 @@
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.wonder.blog.entity.BookshelfDO" useGeneratedKeys="true">
         insert into bookshelf
         ( id,book_name,book_cover
-        ,author_name,storage_type,url
+        , author_name, url
         ,author_info,book_info,status
         ,create_time,update_time)
         values (#{id,jdbcType=INTEGER},#{bookName,jdbcType=VARCHAR},#{bookCover,jdbcType=VARCHAR}
-        ,#{authorName,jdbcType=VARCHAR},#{storageType,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR}
+               , #{authorName,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}
         ,#{authorInfo,jdbcType=VARCHAR},#{bookInfo,jdbcType=VARCHAR},#{status,jdbcType=TINYINT}
         ,#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
     </insert>
@@ -54,7 +53,6 @@
                 <if test="bookName != null">book_name,</if>
                 <if test="bookCover != null">book_cover,</if>
                 <if test="authorName != null">author_name,</if>
-                <if test="storageType != null">storage_type,</if>
                 <if test="url != null">url,</if>
                 <if test="authorInfo != null">author_info,</if>
                 <if test="bookInfo != null">book_info,</if>
@@ -67,7 +65,6 @@
                 <if test="bookName != null"> #{bookName,jdbcType=VARCHAR},</if>
                 <if test="bookCover != null"> #{bookCover,jdbcType=VARCHAR},</if>
                 <if test="authorName != null"> #{authorName,jdbcType=VARCHAR},</if>
-                <if test="storageType != null"> #{storageType,jdbcType=VARCHAR},</if>
                 <if test="url != null"> #{url,jdbcType=VARCHAR},</if>
                 <if test="authorInfo != null"> #{authorInfo,jdbcType=VARCHAR},</if>
                 <if test="bookInfo != null"> #{bookInfo,jdbcType=VARCHAR},</if>
@@ -87,9 +84,6 @@
                 </if>
                 <if test="authorName != null">
                     author_name = #{authorName,jdbcType=VARCHAR},
-                </if>
-                <if test="storageType != null">
-                    storage_type = #{storageType,jdbcType=VARCHAR},
                 </if>
                 <if test="url != null">
                     url = #{url,jdbcType=VARCHAR},
@@ -118,7 +112,6 @@
             book_name =  #{bookName,jdbcType=VARCHAR},
             book_cover =  #{bookCover,jdbcType=VARCHAR},
             author_name =  #{authorName,jdbcType=VARCHAR},
-            storage_type =  #{storageType,jdbcType=VARCHAR},
             url =  #{url,jdbcType=VARCHAR},
             author_info =  #{authorInfo,jdbcType=VARCHAR},
             book_info =  #{bookInfo,jdbcType=VARCHAR},

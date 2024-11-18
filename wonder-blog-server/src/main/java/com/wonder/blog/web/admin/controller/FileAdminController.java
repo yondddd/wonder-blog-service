@@ -1,10 +1,15 @@
 package com.wonder.blog.web.admin.controller;
 
+import com.wonder.blog.util.web.PathUtils;
+import com.wonder.blog.web.admin.req.FileSpaceReq;
+import com.wonder.blog.web.admin.vo.FileVO;
 import com.wonder.blog.web.admin.vo.UploadVO;
 import com.wonder.common.annotation.OperationLogger;
+import com.wonder.common.resp.PageResponse;
 import com.wonder.common.resp.Response;
 import com.wonder.common.utils.env.env.EnvConstant;
 import com.wonder.common.utils.env.env.Environment;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.PathResource;
@@ -21,7 +26,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author yond
@@ -65,9 +75,11 @@ public class FileAdminController {
         }
     }
 
-    @GetMapping("/download/{filePath}")
-    public ResponseEntity<Resource> download(@PathVariable String filePath) {
-        String path = PREFIX + filePath;
+    @GetMapping("/download/{filePath}/**")
+    public ResponseEntity<Resource> download(HttpServletRequest request, @PathVariable String filePath) {
+        String requestURL = request.getRequestURI();
+        String fullPath = requestURL.substring(requestURL.indexOf("/download/") + "/download/".length());
+        String path = PREFIX + fullPath;
         Path file = Path.of(path);
 
         if (!Files.exists(file)) {
@@ -93,6 +105,35 @@ public class FileAdminController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Error while processing file", e);
         }
+    }
+
+    @PostMapping("/space")
+    public Response<List<FileVO>> space(@RequestBody FileSpaceReq req) {
+        String basePath = req.getPath();
+        File directory = new File(PathUtils.normalizePath(PREFIX, basePath));
+
+        if (!directory.exists() || !directory.isDirectory()) {
+            return Response.fail("Invalid directory path");
+        }
+
+        String domain = Environment.getValue(EnvConstant.BLOG_API_DOMAIN, Function.identity());
+        List<FileVO> files = new ArrayList<>();
+        File[] fileList = directory.listFiles();
+
+        if (fileList != null) {
+            List<File> collect = Arrays.stream(fileList).sorted(Comparator.comparing(File::isDirectory).reversed().thenComparing(File::getName))
+                    .toList();
+            for (File file : collect) {
+                FileVO vo = new FileVO();
+                vo.setFolder(file.isDirectory());
+                vo.setName(file.getName());
+                if (!file.isDirectory()) {
+                    vo.setUrl(PathUtils.normalizePath(domain, "admin/file/download", basePath, file.getName()));
+                }
+                files.add(vo);
+            }
+        }
+        return Response.success(files);
     }
 
 }

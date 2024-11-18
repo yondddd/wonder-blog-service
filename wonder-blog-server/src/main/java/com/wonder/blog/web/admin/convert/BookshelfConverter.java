@@ -16,7 +16,6 @@ public class BookshelfConverter {
         bookshelfVO.setBookName(from.getBookName());
         bookshelfVO.setBookCover(from.getBookCover());
         bookshelfVO.setAuthorName(from.getAuthorName());
-        bookshelfVO.setStorageType(from.getStorageType());
         bookshelfVO.setUrl(from.getUrl());
         bookshelfVO.setAuthorInfo(from.getAuthorInfo());
         bookshelfVO.setBookInfo(from.getBookInfo());
@@ -29,7 +28,6 @@ public class BookshelfConverter {
         to.setBookName(from.getBookName());
         to.setBookCover(from.getBookCover());
         to.setAuthorName(from.getAuthorName());
-        to.setStorageType(from.getStorageType());
         to.setUrl(from.getUrl());
         to.setAuthorInfo(from.getAuthorInfo());
         to.setBookInfo(from.getBookInfo());
